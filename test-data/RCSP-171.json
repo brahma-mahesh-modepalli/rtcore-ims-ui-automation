@@ -1,0 +1,224 @@
+{
+  "RCSP-171": {
+    "scenarioId": "RCSP-171",
+    "epic": "EPIC-RCSP-119",
+    "feature": "Stock Count \u2013 Unified Daily Shift Count",
+    "sourceSheet": "Sheet1",
+    "description": "Verify Spot/Daily Count menu consolidation into Daily Shift Count with AM/Mid/PM shifts, windows, pre-load, and add-item rules.",
+    "commonData": {
+      "prerequisites": [
+        "QA Backoffice is accessible",
+        "Admin credentials are valid",
+        "Store hierarchy is configured"
+      ],
+      "userRole": "admin",
+      "hierarchy": {
+        "region": "1700 San Antonio 4126314",
+        "market": "1708 E Central SA 4126393",
+        "store": "WB Unit 1034"
+      },
+      "createCount": {
+        "shiftDate": "2026-07-19",
+        "namePrefix": "RCSP-171"
+      },
+      "allowedShifts": [
+        "AM",
+        "Mid",
+        "PM"
+      ],
+      "forbiddenShifts": [
+        "Opening",
+        "Mid-Shift",
+        "Closing"
+      ],
+      "forbiddenMenus": [
+        "Spot Count",
+        "Daily Count"
+      ],
+      "requiredMenus": [
+        "Daily Shift Count",
+        "Weekly Count",
+        "Monthly Count"
+      ],
+      "activeItem": {
+        "name": "LARGE BUNS",
+        "plu": "11201"
+      },
+      "inactiveItem": {
+        "searchTerm": "INACTIVE-ITEM-DO-NOT-USE",
+        "note": "Set to a real inactive item/PLU in QA to enable TC_12"
+      },
+      "shiftWindows": {
+        "AM": {
+          "start": "06:00",
+          "end": "08:00"
+        },
+        "Mid": {
+          "start": "14:00",
+          "end": "16:00"
+        },
+        "PM": {
+          "start": "22:00",
+          "end": "24:00"
+        }
+      }
+    },
+    "testCases": [
+      {
+        "testCaseId": "TC_RCSP-171_01",
+        "testName": "Verify Spot Count and Daily Count removed; Daily Shift Count unified menu present",
+        "testType": "Positive",
+        "testData": {
+          "action": "verifyUnifiedMenu",
+          "forbiddenMenus": [
+            "Spot Count",
+            "Daily Count"
+          ],
+          "requiredMenus": [
+            "Daily Shift Count",
+            "Weekly Count",
+            "Monthly Count"
+          ]
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-171_02",
+        "testName": "Create Daily Shift Count with AM shift",
+        "testType": "Positive",
+        "testData": {
+          "action": "createShiftSession",
+          "shift": "AM",
+          "expectedHeaderFragment": "AM"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-171_03",
+        "testName": "Create Daily Shift Count with Mid shift",
+        "testType": "Positive",
+        "testData": {
+          "action": "createShiftSession",
+          "shift": "Mid",
+          "expectedHeaderFragment": "Mid"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-171_04",
+        "testName": "Create Daily Shift Count with PM shift",
+        "testType": "Positive",
+        "testData": {
+          "action": "createShiftSession",
+          "shift": "PM",
+          "expectedHeaderFragment": "PM"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-171_05",
+        "testName": "Old Opening / Mid-Shift / Closing labels removed from shift dropdown",
+        "testType": "Negative",
+        "testData": {
+          "action": "verifyShiftLabels",
+          "allowedShifts": [
+            "AM",
+            "Mid",
+            "PM"
+          ],
+          "forbiddenShifts": [
+            "Opening",
+            "Mid-Shift",
+            "Closing"
+          ]
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-171_06",
+        "testName": "AM shift submission associated with 6:00 AM\u20138:00 AM window",
+        "testType": "Positive",
+        "testData": {
+          "action": "submitInShiftWindow",
+          "shift": "AM",
+          "windowStart": "06:00",
+          "windowEnd": "08:00"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-171_07",
+        "testName": "Mid shift submission associated with 2:00 PM\u20134:00 PM window",
+        "testType": "Positive",
+        "testData": {
+          "action": "submitInShiftWindow",
+          "shift": "Mid",
+          "windowStart": "14:00",
+          "windowEnd": "16:00"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-171_08",
+        "testName": "PM shift submission associated with 10:00 PM\u201312:00 AM window",
+        "testType": "Positive",
+        "testData": {
+          "action": "submitInShiftWindow",
+          "shift": "PM",
+          "windowStart": "22:00",
+          "windowEnd": "24:00"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-171_09",
+        "testName": "Submission outside configured shift windows is restricted or validated",
+        "testType": "Negative",
+        "testData": {
+          "action": "submitOutsideWindow",
+          "shifts": [
+            "AM",
+            "Mid",
+            "PM"
+          ]
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-171_10",
+        "testName": "Configured count-list items are pre-loaded on new Daily Shift Count",
+        "testType": "Positive",
+        "testData": {
+          "action": "verifyPreloadedItems"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-171_11",
+        "testName": "Add additional active inventory item to Daily Shift Count",
+        "testType": "Positive",
+        "testData": {
+          "action": "addActiveItem",
+          "searchTerm": "LARGE BUNS",
+          "preferredItem": "LARGE BUNS"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-171_12",
+        "testName": "Inactive items excluded from Add Item search on Daily Shift Count",
+        "testType": "Negative",
+        "testData": {
+          "action": "excludeInactive",
+          "inactiveSearchTerm": "INACTIVE-ITEM-DO-NOT-USE"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-171_13",
+        "testName": "Submitted Daily Shift Count shows shift, date, and employee ID",
+        "testType": "Positive",
+        "testData": {
+          "action": "verifySubmittedRecord",
+          "shift": "AM"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-171_14",
+        "testName": "Empty store count list shows empty state and still allows Add Item",
+        "testType": "Edge Case",
+        "testData": {
+          "action": "emptyCountListBehavior"
+        }
+      }
+    ]
+  }
+}

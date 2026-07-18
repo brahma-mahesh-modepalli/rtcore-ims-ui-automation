@@ -1,0 +1,160 @@
+{
+  "RCSP-169": {
+    "scenarioId": "RCSP-169",
+    "epic": "EPIC-RCSP-120",
+    "feature": "Ordering – Credit Requests",
+    "sourceSheet": "Credit Request Rename TCs",
+    "description": "Verify Credit Memos rename to Credit Requests across menu, listing page, CTA, grid terminology, access control, and label persistence.",
+    "commonData": {
+      "prerequisites": [
+        "QA Backoffice (qa-backoffice.wbhq.com) is accessible",
+        "User has valid credentials with Ordering access",
+        "A unit is available (e.g., WB Unit 1034)"
+      ],
+      "userRole": "admin",
+      "hierarchy": {
+        "region": "1700 San Antonio 4126314",
+        "market": "1708 E Central SA 4126393",
+        "store": "WB Unit 1034"
+      },
+      "labels": {
+        "menuCreditRequests": "Credit Requests",
+        "menuCreditMemos": "Credit Memos",
+        "pageTitle": "Credit Requests",
+        "pageDescription": "Track vendor claims tied to purchases and shortages.",
+        "newCreditRequest": "NEW CREDIT REQUEST",
+        "newCreditMemo": "NEW CREDIT MEMO",
+        "summaryDraftClaimValue": "Draft Claim Value",
+        "summarySubmitted": "Submitted"
+      },
+      "statusTabs": ["All", "Draft", "Submitted"],
+      "legacyUrlSegment": "credit-memos",
+      "alternateOrderingItem": "Order History",
+      "authorizedUser": {
+        "role": "admin",
+        "useConfigCredentials": true
+      },
+      "unauthorizedUser": {
+        "username": "",
+        "password": "",
+        "note": "Set unauthorized Ordering credentials here to enable TC_RCSP-169_004"
+      }
+    },
+    "testCases": [
+      {
+        "testCaseId": "TC_RCSP-169_001",
+        "module": "Ordering – Credit Requests",
+        "testName": "Verify whether in Whataburger IMS QA Backoffice, under Operations → Ordering, the left submenu shows Credit Requests (not Credit Memos), and opening it lands on the Credit Requests page with title Credit Requests and description Track vendor claims tied to purchases and shortages.",
+        "description": "Verify Ordering submenu rename and Credit Requests page landing content.",
+        "preCondition": "1. QA Backoffice is accessible. 2. User has Ordering access. 3. A unit is available (e.g., WB Unit 1034).",
+        "testSteps": [
+          { "step": 1, "description": "Launch QA Backoffice Dashboard and log in with valid credentials." },
+          { "step": 2, "description": "Select unit if prompted (e.g., WB Unit 1034)." },
+          { "step": 3, "description": "Expand Ordering under Operations." },
+          { "step": 4, "description": "Confirm submenu shows Credit Requests and does not show Credit Memos." },
+          { "step": 5, "description": "Click Credit Requests and verify page heading and supporting description." }
+        ],
+        "rawTestData": "Valid Backoffice user; Unit: WB Unit 1034",
+        "expectedResult": "Ordering submenu displays Credit Requests only; page heading and description match Credit Requests rename.",
+        "testData": {
+          "store": "WB Unit 1034",
+          "expectedMenuLabel": "Credit Requests",
+          "forbiddenMenuLabel": "Credit Memos",
+          "expectedPageTitle": "Credit Requests",
+          "expectedPageDescription": "Track vendor claims tied to purchases and shortages."
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-169_002",
+        "module": "Ordering – Credit Requests",
+        "testName": "Verify whether on the Credit Requests listing page (Ordering → Credit Requests), the primary action button is labeled + NEW CREDIT REQUEST, and summary widgets Draft Claim Value and Submitted plus filter tabs All / Draft / Submitted are visible with no Credit Memo CTA wording.",
+        "description": "Verify primary CTA rename and listing summary cards/tabs.",
+        "preCondition": "1. User is logged into QA Backoffice with Ordering access. 2. User can open Ordering → Credit Requests.",
+        "testSteps": [
+          { "step": 1, "description": "Navigate to Ordering → Credit Requests." },
+          { "step": 2, "description": "Locate the top-right primary action button and read its label." },
+          { "step": 3, "description": "Confirm summary cards Draft Claim Value and Submitted are shown." },
+          { "step": 4, "description": "Confirm filter tabs All, Draft, and Submitted are shown." },
+          { "step": 5, "description": "Confirm no button/label uses NEW CREDIT MEMO / Credit Memo." }
+        ],
+        "rawTestData": "N/A (UI label verification)",
+        "expectedResult": "+ NEW CREDIT REQUEST, summary cards, and All/Draft/Submitted tabs are visible; no Credit Memo CTA wording.",
+        "testData": {
+          "expectedPrimaryButton": "NEW CREDIT REQUEST",
+          "forbiddenPrimaryButton": "NEW CREDIT MEMO",
+          "summaryCards": ["Draft Claim Value", "Submitted"],
+          "statusTabs": ["All", "Draft", "Submitted"]
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-169_003",
+        "module": "Ordering – Credit Requests",
+        "testName": "Verify whether on the Credit Requests grid (All tab), user-facing credit terminology uses Credit Request(s) for page/menu/CTA, while checking that any remaining MEMO # column header or CM- ID pattern is either intentionally retained as an ID format or flagged if rename scope required full removal of Memo.",
+        "description": "Verify grid terminology vs technical ID format (MEMO # / CM-).",
+        "preCondition": "1. User is on Ordering → Credit Requests. 2. At least one draft/submitted row exists (preferred).",
+        "testSteps": [
+          { "step": 1, "description": "Open Credit Requests with All selected." },
+          { "step": 2, "description": "Review page title, menu label, and + NEW CREDIT REQUEST." },
+          { "step": 3, "description": "Review grid column headers, especially the first ID column." },
+          { "step": 4, "description": "Review row ID values (e.g., CM-0013)." },
+          { "step": 5, "description": "Compare against rename acceptance: UI product name vs technical ID." }
+        ],
+        "rawTestData": "Existing records such as CM-0013 / Flowers Baking Company / Draft or Submitted",
+        "expectedResult": "Menu, page title, and CTA use Credit Request(s). MEMO # / CM- may remain as approved ID exception.",
+        "testData": {
+          "statusTab": "All",
+          "expectedPageTitle": "Credit Requests",
+          "expectedPrimaryButton": "NEW CREDIT REQUEST",
+          "acceptedIdPattern": "CM-",
+          "preferredIdColumnHeaders": ["Request #", "Credit Request #", "REQUEST #", "CREDIT REQUEST #"],
+          "legacyIdColumnHeader": "MEMO #"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-169_004",
+        "module": "Ordering – Credit Requests",
+        "testName": "Verify whether a user without Ordering / Credit Requests access cannot see or open Credit Requests (and also cannot reach it via legacy Credit Memos naming), while an authorized user sees only the renamed Credit Requests submenu and can open the page.",
+        "description": "Verify unauthorized users cannot access Credit Requests / Credit Memos; authorized users see renamed submenu.",
+        "preCondition": "1. Unauthorized user (no Ordering/Credit Requests permission) exists. 2. Authorized user with Ordering access exists.",
+        "testSteps": [
+          { "step": 1, "description": "Log in as unauthorized user." },
+          { "step": 2, "description": "Check Ordering (if visible) for Credit Requests and Credit Memos." },
+          { "step": 3, "description": "Attempt direct navigation to the credit requests route if known." },
+          { "step": 4, "description": "Log out; log in as authorized user." },
+          { "step": 5, "description": "Expand Ordering and open Credit Requests." }
+        ],
+        "rawTestData": "Unauthorized credentials; authorized credentials",
+        "expectedResult": "Unauthorized user cannot use Credit Requests/Credit Memos; authorized user sees only Credit Requests and can open the page.",
+        "testData": {
+          "legacyRoute": "/credit-memos",
+          "authorizedExpectedMenuLabel": "Credit Requests",
+          "forbiddenMenuLabel": "Credit Memos"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-169_005",
+        "module": "Ordering – Credit Requests",
+        "testName": "Verify whether after browser refresh, collapsing/re-expanding Ordering, and leaving/returning to the page, labels remain Credit Requests / + NEW CREDIT REQUEST and do not revert to Credit Memos, including when the browser URL still contains the legacy path segment credit-memos.",
+        "description": "Verify rename persistence after refresh and re-navigation; legacy URL must not revert UI text.",
+        "preCondition": "1. Authorized user is on Ordering → Credit Requests. 2. Note current URL (may show /credit-memos).",
+        "testSteps": [
+          { "step": 1, "description": "Confirm UI labels: menu Credit Requests, page title Credit Requests, button + NEW CREDIT REQUEST." },
+          { "step": 2, "description": "Collapse and re-expand Ordering; re-check submenu label." },
+          { "step": 3, "description": "Refresh the browser; re-check menu, title, and button." },
+          { "step": 4, "description": "Navigate to another Ordering item (e.g., Order History), then return to Credit Requests." },
+          { "step": 5, "description": "Confirm UI still shows renamed labels even if URL path remains credit-memos." }
+        ],
+        "rawTestData": "Same unit/session (e.g., WB Unit 1034)",
+        "expectedResult": "Labels stay renamed after expand/collapse, refresh, and re-navigation; legacy URL does not revert UI text.",
+        "testData": {
+          "expectedMenuLabel": "Credit Requests",
+          "expectedPageTitle": "Credit Requests",
+          "expectedPrimaryButton": "NEW CREDIT REQUEST",
+          "forbiddenLabels": ["Credit Memos", "NEW CREDIT MEMO"],
+          "alternateOrderingItem": "Order History",
+          "legacyUrlSegment": "credit-memos"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,134 @@
+{
+  "RCSP-115": {
+    "scenarioId": "RCSP-115",
+    "epic": "EPIC-RCSP-119",
+    "feature": "Stock Count",
+    "commonData": {
+      "prerequisites": [
+        "User is logged in to the backoffice dashboard",
+        "User has admin privileges"
+      ],
+      "userRole": "admin"
+    },
+    "testCases": [
+      {
+        "testCaseId": "TC_RCSP-115_01",
+        "testName": "Verify user can navigate to Daily Shift Count, Weekly Count, and Monthly Count pages from STOCK COUNT menu",
+        "description": "Test navigation to Daily Shift Count, Weekly Count, and Monthly Count pages from STOCK COUNT menu",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Launch the dashboard URL",
+            "expectedResult": "Dashboard page is displayed"
+          },
+          {
+            "step": 2,
+            "description": "Login with valid admin credentials",
+            "expectedResult": "User is successfully logged in and dashboard is displayed"
+          },
+          {
+            "step": 3,
+            "description": "Expand STOCK COUNT menu from left navigation panel",
+            "expectedResult": "STOCK COUNT menu expands showing submenu items"
+          },
+          {
+            "step": 4,
+            "description": "Click on Daily Shift Count",
+            "expectedResult": "Daily Shift Count page is displayed"
+          },
+          {
+            "step": 5,
+            "description": "Navigate back to STOCK COUNT menu",
+            "expectedResult": "STOCK COUNT menu is expanded again"
+          },
+          {
+            "step": 6,
+            "description": "Click on Weekly Count",
+            "expectedResult": "Weekly Count page is displayed"
+          },
+          {
+            "step": 7,
+            "description": "Navigate back to STOCK COUNT menu",
+            "expectedResult": "STOCK COUNT menu is expanded again"
+          },
+          {
+            "step": 8,
+            "description": "Click on Monthly Count",
+            "expectedResult": "Monthly Count page is displayed"
+          }
+        ],
+        "testData": {
+          "navigationItems": [
+            "Daily Shift Count",
+            "Weekly Count",
+            "Monthly Count"
+          ]
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-115_02",
+        "testName": "Verify whether the + NEW DAILY SHIFT COUNT, + NEW WEEKLY COUNT, and + NEW MONTHLY COUNT buttons are visible and enabled on their respective listing pages",
+        "description": "Validate the create-count entry points are visible and enabled across Daily Shift Count, Weekly Count, and Monthly Count listing pages.",
+        "testData": {
+          "expectedButtons": {
+            "dailyShiftCount": "+ NEW DAILY SHIFT COUNT",
+            "weeklyCount": "+ NEW WEEKLY COUNT",
+            "monthlyCount": "+ NEW MONTHLY COUNT"
+          }
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-115_03",
+        "testName": "Verify Weekly Count listing, detail, filter, export, and add item features using JSON-driven test data",
+        "description": "Validate Weekly Count listing, create dialog, detail screen, filters, export, and add-item interactions.",
+        "testData": {
+          "filters": {
+            "defaultLocation": "All Items",
+            "detailLocation": "Walk-In Cooler"
+          },
+          "search": {
+            "existingItemNameOrSku": "LARGE BUNS-M",
+            "missingItemNameOrSku": "ZZZZ-NO-MATCH-ITEM"
+          },
+          "itemUpdate": {
+            "itemNameOrSku": "LARGE BUNS-M",
+            "unit": "pk",
+            "value": "1"
+          },
+          "createCount": {
+            "shift": "AM"
+          }
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-115_04",
+        "testName": "Verify Monthly Count listing, detail, filter, add item, and delete confirmation features using JSON-driven test data",
+        "description": "Validate Monthly Count listing, create dialog, detail screen, filters, add-item interactions, and delete confirmation.",
+        "testData": {
+          "filters": {
+            "defaultLocation": "All Items",
+            "detailLocation": "Walk-In Cooler"
+          },
+          "search": {
+            "missingItemNameOrSku": "ZZZZ-NO-MATCH-ITEM"
+          },
+          "createCount": {
+            "shift": "AM"
+          }
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-115_05",
+        "testName": "Verify whether the user is able to create Daily Shift Count, Weekly Count, and Monthly Count sessions successfully using valid AM, Mid-Shift, and PM shift values",
+        "description": "Provide test-case-specific shift inputs for Daily Shift Count, Weekly Count, and Monthly Count session creation coverage.",
+        "testData": {
+          "shifts": {
+            "dailyShiftCount": "AM",
+            "weeklyCount": "Mid-Shift",
+            "monthlyCount": "PM"
+          }
+        }
+      }
+    ]
+  }
+}

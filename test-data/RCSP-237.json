@@ -1,0 +1,2361 @@
+{
+  "RCSP-237": {
+    "scenarioId": "RCSP-237",
+    "epic": "EPIC-RCSP-139",
+    "feature": "Transfers",
+    "sourceSheet": "RCSP-237",
+    "description": "End-to-end Transfers workflow covering My Hierarchy store selection, Inventory Balances validation, transfer create/submit/approve/reject, and Dashboard stock movements.",
+    "commonData": {
+      "prerequisites": [
+        "User is logged in to QA Backoffice Dashboard as admin",
+        "User has access to My Hierarchy, Inventory Balances, Transfers, and Dashboard"
+      ],
+      "userRole": "admin",
+      "hierarchy": {
+        "region": "1700 San Antonio 4126314",
+        "market": "1708 E Central SA 4126393",
+        "sourceStore": "WB Unit 1034",
+        "destinationStore": "WB Unit 1025"
+      },
+      "item": {
+        "nameOrSku": "LARGE BUNS",
+        "displayName": "LARGE BUNS",
+        "uom": "EA",
+        "quantity": "1",
+        "invalidItem": "INVALID ITEM 99999",
+        "decimalQuantity": "1.5",
+        "zeroQuantity": "0",
+        "sku": "11201"
+      },
+      "transfer": {
+        "reason": "Excess Inventory + Shelf-Life",
+        "notes": "Automation transfer notes for RCSP-237",
+        "updatedNotes": "Updated draft notes for validation",
+        "rejectionReason": "Incorrect quantity",
+        "otherReason": "Other",
+        "otherNotes": "Ad-hoc transfer for testing",
+        "reasonCodes": [
+          "Excess Inventory + Shelf-Life",
+          "Other"
+        ]
+      },
+      "statusTabs": [
+        "All",
+        "Draft",
+        "Pending",
+        "Completed",
+        "Declined",
+        "Cancelled"
+      ],
+      "columnHeaders": [
+        "TRANSFER ID",
+        "FROM",
+        "TO",
+        "ITEMS",
+        "DATE",
+        "STATUS",
+        "ACTIONS"
+      ],
+      "buttons": {
+        "newTransfer": "NEW TRANSFER",
+        "addItem": "ADD ITEM",
+        "saveChanges": "SAVE CHANGES",
+        "submitTransfer": "SUBMIT TRANSFER",
+        "cancel": "CANCEL",
+        "approve": "Approve",
+        "reject": "Reject"
+      }
+    },
+    "testCases": [
+      {
+        "testCaseId": "TC_RCSP-237_001",
+        "module": "My Hierarchy",
+        "testName": "Verify whether the logged-in admin user can open the My Hierarchy page from the main navigation menu",
+        "description": "Verify whether the My Hierarchy page opens successfully from the main navigation menu and displays the Region, Market, and Store hierarchy selection controls.",
+        "preCondition": "1. User is logged in to QA Backoffice Dashboard as admin. 2. User is on the Home/Dashboard page.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "From the Home page, locate the main navigation menu on the left side or top navigation bar."
+          },
+          {
+            "step": 2,
+            "description": "Click on the \"My Hierarchy\" menu option from the main navigation."
+          },
+          {
+            "step": 3,
+            "description": "Wait for the My Hierarchy page/section to load completely."
+          },
+          {
+            "step": 4,
+            "description": "Verify the My Hierarchy page title or section header is displayed."
+          },
+          {
+            "step": 5,
+            "description": "Verify the hierarchy tree or selection controls for Region, Market, and Store are visible on the My Hierarchy page"
+          }
+        ],
+        "rawTestData": "User Role: Admin",
+        "expectedResult": "Verify whether the My Hierarchy page opens successfully from the main navigation menu and displays the Region, Market, and Store hierarchy selection controls.",
+        "testData": {
+          "menuItem": "My Hierarchy"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-237_002",
+        "module": "My Hierarchy",
+        "testName": "Verify whether the admin user can select Region, Market, and Store from the My Hierarchy page and view stores under the selected hierarchy path",
+        "description": "Verify whether the user is able to navigate the hierarchy path Region -> Market -> Store on the My Hierarchy page and view both WB Unit 1034 and WB Unit 1025 under the selected Market.",
+        "preCondition": "1. User is logged in as admin. 2. User is on the My Hierarchy page.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "On the My Hierarchy page, locate the Region list/tree section."
+          },
+          {
+            "step": 2,
+            "description": "Expand or select Region: \"1700 San Antonio 4126314\"."
+          },
+          {
+            "step": 3,
+            "description": "Verify the Market list under the selected Region is displayed."
+          },
+          {
+            "step": 4,
+            "description": "Expand or select Market: \"1708 E Central SA 4126393\"."
+          },
+          {
+            "step": 5,
+            "description": "Verify the Store list under the selected Market is displayed."
+          },
+          {
+            "step": 6,
+            "description": "Verify store \"WB Unit 1034\" is visible under Region -> Market -> Store hierarchy."
+          },
+          {
+            "step": 7,
+            "description": "Verify store \"WB Unit 1025\" is visible under Region -> Market -> Store hierarchy."
+          },
+          {
+            "step": 8,
+            "description": "Click on store \"WB Unit 1034\" to select it."
+          },
+          {
+            "step": 9,
+            "description": "Wait for the application to apply the selected store context."
+          }
+        ],
+        "rawTestData": "Region: 1700 San Antonio 4126314 | Market: 1708 E Central SA 4126393 | Stores: WB Unit 1034, WB Unit 1025",
+        "expectedResult": "Verify whether the user is able to navigate the hierarchy path Region -> Market -> Store on the My Hierarchy page and view both WB Unit 1034 and WB Unit 1025 under the selected Market.",
+        "testData": {
+          "region": "1700 San Antonio 4126314",
+          "market": "1708 E Central SA 4126393",
+          "stores": [
+            "WB Unit 1034",
+            "WB Unit 1025"
+          ],
+          "selectStore": "WB Unit 1034"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-237_003",
+        "module": "My Hierarchy",
+        "testName": "Verify whether the currently selected store is displayed in the top-right corner of the Home page after selecting WB Unit 1034 from My Hierarchy",
+        "description": "Verify whether the top-right corner of the Home page displays \"WB Unit 1034\" as the active store after the user selects WB Unit 1034 from the My Hierarchy page.",
+        "preCondition": "1. User is logged in as admin. 2. User has selected WB Unit 1034 from My Hierarchy.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "After selecting WB Unit 1034 on the My Hierarchy page, navigate to the Home/Dashboard page if not already redirected."
+          },
+          {
+            "step": 2,
+            "description": "Locate the store context indicator in the top-right corner of the Home page header section."
+          },
+          {
+            "step": 3,
+            "description": "Read and verify the displayed store name in the top-right corner."
+          },
+          {
+            "step": 4,
+            "description": "Confirm the selected store context matches the store chosen in My Hierarchy."
+          }
+        ],
+        "rawTestData": "Selected Store: WB Unit 1034",
+        "expectedResult": "Verify whether the top-right corner of the Home page displays \"WB Unit 1034\" as the active store after the user selects WB Unit 1034 from the My Hierarchy page.",
+        "testData": {
+          "selectedStore": "WB Unit 1034"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-237_004",
+        "module": "My Hierarchy",
+        "testName": "Verify whether the admin user can switch the active store from WB Unit 1034 to WB Unit 1025 using the My Hierarchy page and the Home page reflects the change",
+        "description": "Verify whether the active store context in the top-right corner of the Home page changes from WB Unit 1034 to WB Unit 1025 after selecting WB Unit 1025 from the My Hierarchy page.",
+        "preCondition": "1. User is logged in as admin. 2. WB Unit 1034 is currently selected.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "From the Home page, open the My Hierarchy page from the main navigation menu."
+          },
+          {
+            "step": 2,
+            "description": "Navigate to Region: \"1700 San Antonio 4126314\"."
+          },
+          {
+            "step": 3,
+            "description": "Navigate to Market: \"1708 E Central SA 4126393\"."
+          },
+          {
+            "step": 4,
+            "description": "Select store \"WB Unit 1025\" from the Store list."
+          },
+          {
+            "step": 5,
+            "description": "Return to the Home/Dashboard page."
+          },
+          {
+            "step": 6,
+            "description": "Verify the top-right corner of the Home page header displays \"WB Unit 1025\"."
+          },
+          {
+            "step": 7,
+            "description": "Confirm the previous store context \"WB Unit 1034\" is no longer shown as active."
+          }
+        ],
+        "rawTestData": "From Store: WB Unit 1034 | To Store: WB Unit 1025",
+        "expectedResult": "Verify whether the active store context in the top-right corner of the Home page changes from WB Unit 1034 to WB Unit 1025 after selecting WB Unit 1025 from the My Hierarchy page.",
+        "testData": {
+          "fromStore": "WB Unit 1034",
+          "toStore": "WB Unit 1025"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-237_005",
+        "module": "Inventory Balances",
+        "testName": "Verify whether the admin user can navigate to Inventory > Inventory Balances page from the main menu while WB Unit 1034 is selected",
+        "description": "Verify whether the Inventory Balances page opens successfully under Inventory menu and displays the search field and inventory data grid with ON HAND and FIFO COST columns for WB Unit 1034.",
+        "preCondition": "1. User is logged in as admin. 2. WB Unit 1034 is selected and displayed in the top-right corner of the Home page.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "From the Home page, locate the \"Inventory\" menu in the main navigation."
+          },
+          {
+            "step": 2,
+            "description": "Click on the \"Inventory\" menu to expand the Inventory submenu section."
+          },
+          {
+            "step": 3,
+            "description": "Click on the \"Inventory Balances\" submenu option under the Inventory menu."
+          },
+          {
+            "step": 4,
+            "description": "Wait for the Inventory Balances page to load completely."
+          },
+          {
+            "step": 5,
+            "description": "Verify the page title or breadcrumb shows Inventory > Inventory Balances."
+          },
+          {
+            "step": 6,
+            "description": "Verify the item search field is visible on the Inventory Balances page."
+          },
+          {
+            "step": 7,
+            "description": "Verify the inventory grid/table with ON HAND and FIFO COST columns is visible."
+          }
+        ],
+        "rawTestData": "Active Store: WB Unit 1034",
+        "expectedResult": "Verify whether the Inventory Balances page opens successfully under Inventory menu and displays the search field and inventory data grid with ON HAND and FIFO COST columns for WB Unit 1034.",
+        "testData": {
+          "activeStore": "WB Unit 1034",
+          "menuPath": [
+            "Inventory",
+            "Inventory Balances"
+          ]
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-237_006",
+        "module": "Inventory Balances",
+        "testName": "Verify whether the ON HAND quantity and FIFO COST values are displayed correctly for item LARGE BUNS 11201 on WB Unit 1034 Inventory Balances page",
+        "description": "Verify whether the Inventory Balances page for WB Unit 1034 displays the item LARGE BUNS 11201 with valid ON HAND quantity and FIFO COST values in the inventory grid.",
+        "preCondition": "1. User is logged in as admin. 2. WB Unit 1034 is selected. 3. User is on Inventory > Inventory Balances page.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "On the Inventory Balances page, locate the item search field in the search/filter section."
+          },
+          {
+            "step": 2,
+            "description": "Enter item name/code \"LARGE BUNS 11201\" in the search field."
+          },
+          {
+            "step": 3,
+            "description": "Execute the search by pressing Enter or clicking the Search button."
+          },
+          {
+            "step": 4,
+            "description": "Wait for the search results to load in the inventory grid."
+          },
+          {
+            "step": 5,
+            "description": "Locate the row for item \"LARGE BUNS 11201\" in the results table."
+          },
+          {
+            "step": 6,
+            "description": "Read and record the ON HAND value displayed for LARGE BUNS"
+          },
+          {
+            "step": 1,
+            "description": ""
+          },
+          {
+            "step": 7,
+            "description": "Read and record the FIFO COST value displayed for LARGE BUNS"
+          },
+          {
+            "step": 1,
+            "description": ""
+          },
+          {
+            "step": 8,
+            "description": "Verify both ON HAND and FIFO COST values are populated and visible (not blank or null)."
+          }
+        ],
+        "rawTestData": "Store: WB Unit 1034 | Item: LARGE BUNS 11201",
+        "expectedResult": "Verify whether the Inventory Balances page for WB Unit 1034 displays the item LARGE BUNS 11201 with valid ON HAND quantity and FIFO COST values in the inventory grid.",
+        "testData": {
+          "store": "WB Unit 1034",
+          "item": "LARGE BUNS",
+          "sku": "11201"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-237_007",
+        "module": "Inventory Balances",
+        "testName": "Verify whether the ON HAND quantity and FIFO COST values are displayed correctly for item LARGE BUNS 11201 on WB Unit 1025 Inventory Balances page",
+        "description": "Verify whether the Inventory Balances page for WB Unit 1025 displays the item LARGE BUNS 11201 with valid ON HAND quantity and FIFO COST values in the inventory grid.",
+        "preCondition": "1. User is logged in as admin. 2. WB Unit 1025 is selected in the top-right corner of the Home page. 3. User navigates to Inventory > Inventory Balances.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Confirm WB Unit 1025 is displayed in the top-right corner of the Home page header."
+          },
+          {
+            "step": 2,
+            "description": "From the Home page, navigate to Inventory > Inventory Balances."
+          },
+          {
+            "step": 3,
+            "description": "On the Inventory Balances page, search for item \"LARGE BUNS 11201\" using the search field."
+          },
+          {
+            "step": 4,
+            "description": "Wait for the search results to load."
+          },
+          {
+            "step": 5,
+            "description": "Locate item \"LARGE BUNS 11201\" in the inventory results grid."
+          },
+          {
+            "step": 6,
+            "description": "Read and record the ON HAND value for LARGE BUNS 11201 on WB Unit"
+          },
+          {
+            "step": 5,
+            "description": ""
+          },
+          {
+            "step": 7,
+            "description": "Read and record the FIFO COST value for LARGE BUNS 11201 on WB Unit"
+          },
+          {
+            "step": 5,
+            "description": ""
+          },
+          {
+            "step": 8,
+            "description": "Compare values with previously recorded WB Unit 1034 values if needed for baseline reference."
+          }
+        ],
+        "rawTestData": "Store: WB Unit 1025 | Item: LARGE BUNS 11201",
+        "expectedResult": "Verify whether the Inventory Balances page for WB Unit 1025 displays the item LARGE BUNS 11201 with valid ON HAND quantity and FIFO COST values in the inventory grid.",
+        "testData": {
+          "store": "WB Unit 1025",
+          "item": "LARGE BUNS",
+          "sku": "11201"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-237_008",
+        "module": "Inventory Balances",
+        "testName": "Verify whether the Inventory Balances page displays no records or an appropriate message when searching for a non-existent item on WB Unit 1034",
+        "description": "Verify whether the Inventory Balances page does not display invalid item data and shows an empty result set or a clear \"No stock balances found.\" message when a non-existent item is searched.",
+        "preCondition": "1. User is logged in as admin. 2. WB Unit 1034 is selected. 3. User is on Inventory > Inventory Balances page.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "On the Inventory Balances page, locate the item search field."
+          },
+          {
+            "step": 2,
+            "description": "Enter a non-existent item name/code \"INVALID ITEM 99999\" in the search field."
+          },
+          {
+            "step": 3,
+            "description": "Execute the search."
+          },
+          {
+            "step": 4,
+            "description": "Observe the search results section/grid on the Inventory Balances page."
+          },
+          {
+            "step": 5,
+            "description": "Verify whether a \"No stock balances found.\" message or empty results state is displayed."
+          }
+        ],
+        "rawTestData": "Store: WB Unit 1034 | Item: INVALID ITEM 99999",
+        "expectedResult": "Verify whether the Inventory Balances page does not display invalid item data and shows an empty result set or a clear \"No stock balances found.\" message when a non-existent item is searched.",
+        "testData": {
+          "store": "WB Unit 1034",
+          "item": "INVALID ITEM 99999",
+          "emptyMessage": "No stock balances found."
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-237_009",
+        "module": "Transfers",
+        "testName": "Verify whether the admin user can navigate to the Transfers page from the main menu while WB Unit 1034 is selected",
+        "description": "Verify whether the Transfers page opens successfully from the main navigation menu and displays the NEW TRANSFER button and transfer listing sections for WB Unit 1034.",
+        "preCondition": "1. User is logged in as admin. 2. WB Unit 1034 is selected and displayed in the top-right corner.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "From the Home page, locate the \"Transfers\" menu option in the main navigation."
+          },
+          {
+            "step": 2,
+            "description": "Click on the \"Transfers\" menu."
+          },
+          {
+            "step": 3,
+            "description": "Wait for the Transfers page to load completely."
+          },
+          {
+            "step": 4,
+            "description": "Verify the Transfers page header/title is displayed."
+          },
+          {
+            "step": 5,
+            "description": "Verify the \"NEW TRANSFER\" button is visible on the Transfers page."
+          },
+          {
+            "step": 6,
+            "description": "Verify the Transfers page sections/tabs such as All, Draft, Pending are visible if applicable."
+          }
+        ],
+        "rawTestData": "Active Store: WB Unit 1034",
+        "expectedResult": "Verify whether the Transfers page opens successfully from the main navigation menu and displays the NEW TRANSFER button and transfer listing sections for WB Unit 1034.",
+        "testData": {
+          "activeStore": "WB Unit 1034"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-237_010",
+        "module": "Transfers",
+        "testName": "Verify whether the admin user can open the New Transfer form by clicking the NEW TRANSFER button on the Transfers page",
+        "description": "Verify whether clicking the NEW TRANSFER button on the Transfers page opens the New Transfer form with all mandatory fields (From Store, To Store, Transfer Reason) and the ADD ITEM button visible.",
+        "preCondition": "1. User is logged in as admin. 2. WB Unit 1034 is selected. 3. User is on the Transfers page.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "On the Transfers page, locate the \"NEW TRANSFER\" button in the page header/action area."
+          },
+          {
+            "step": 2,
+            "description": "Click the \"NEW TRANSFER\" button."
+          },
+          {
+            "step": 3,
+            "description": "Wait for the New Transfer form/page to load."
+          },
+          {
+            "step": 4,
+            "description": "Verify the \"Select From Store *\" dropdown/field is visible on the New Transfer form."
+          },
+          {
+            "step": 5,
+            "description": "Verify the \"Select To Store *\" dropdown/field is visible on the New Transfer form."
+          },
+          {
+            "step": 6,
+            "description": "Verify the \"Transfer Reason *\" field is visible on the New Transfer form."
+          },
+          {
+            "step": 7,
+            "description": "Verify the \"Notes\" field is visible on the New Transfer form."
+          },
+          {
+            "step": 8,
+            "description": "Verify the \"ADD ITEM\" button is visible on the New Transfer form."
+          }
+        ],
+        "rawTestData": "Active Store: WB Unit 1034",
+        "expectedResult": "Verify whether clicking the NEW TRANSFER button on the Transfers page opens the New Transfer form with all mandatory fields (From Store, To Store, Transfer Reason) and the ADD ITEM button visible.",
+        "testData": {
+          "activeStore": "WB Unit 1034",
+          "formFields": [
+            "Select From Store *",
+            "Select To Store *",
+            "Transfer Reason *",
+            "Notes",
+            "ADD ITEM"
+          ]
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-237_011",
+        "module": "Transfers",
+        "testName": "Verify whether the admin user can create a new Transfer in Draft status by filling transfer header details and adding item LARGE BUNS 11201 with quantity 1 on WB Unit 1034",
+        "description": "Verify whether the new transfer from WB Unit 1034 to WB Unit 1025 with item LARGE BUNS 11201 (Qty 1 EA) is saved successfully without errors.",
+        "preCondition": "1. User is logged in as admin. 2. WB Unit 1034 is selected. 3. User is on the New Transfer form.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "On the New Transfer form, select \"WB Unit 1034\" in the \"Select From Store *\" field."
+          },
+          {
+            "step": 2,
+            "description": "Select \"WB Unit 1025\" in the \"Select To Store *\" field."
+          },
+          {
+            "step": 3,
+            "description": "Select a valid value in the \"Transfer Reason *\" dropdown/field."
+          },
+          {
+            "step": 4,
+            "description": "Enter relevant text in the \"Notes\" field."
+          },
+          {
+            "step": 5,
+            "description": "Click the \"ADD ITEM\" button on the New Transfer form."
+          },
+          {
+            "step": 6,
+            "description": "In the Add Item section/modal, search for item \"LARGE BUNS 11201\"."
+          },
+          {
+            "step": 7,
+            "description": "Select item \"LARGE BUNS 11201\" from the search results."
+          },
+          {
+            "step": 8,
+            "description": "Enter quantity \"1\" in the \"Qty to Order\" field with UOM \"EA\"."
+          },
+          {
+            "step": 9,
+            "description": "Click the \"SAVE CHANGES\" button on the New Transfer form."
+          },
+          {
+            "step": 0,
+            "description": "Wait for the save confirmation or redirect."
+          }
+        ],
+        "rawTestData": "From Store: WB Unit 1034 | To Store: WB Unit 1025 | Transfer Reason: <valid reason> | Notes: <valid notes> | Item: LARGE BUNS 11201 | Qty: 1 EA",
+        "expectedResult": "Verify whether the new transfer from WB Unit 1034 to WB Unit 1025 with item LARGE BUNS 11201 (Qty 1 EA) is saved successfully without errors.",
+        "testData": {
+          "fromStore": "WB Unit 1034",
+          "toStore": "WB Unit 1025",
+          "reason": "Excess Inventory + Shelf-Life",
+          "notes": "Automation transfer notes for RCSP-237",
+          "item": "LARGE BUNS",
+          "quantity": "1",
+          "uom": "EA",
+          "sku": "11201"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-237_012",
+        "module": "Transfers",
+        "testName": "Verify whether the recently created Transfer appears in the All section of the Transfers page with Draft status on WB Unit 1034",
+        "description": "Verify whether the recently created transfer is visible in the All section of the Transfers page on WB Unit 1034 with status displayed as Draft.",
+        "preCondition": "1. User is logged in as admin. 2. WB Unit 1034 is selected. 3. A new transfer has been saved using TC_TRF_003 steps.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "From the New Transfer form, navigate back to the Transfers page by clicking the \"Transfers\" menu or breadcrumb."
+          },
+          {
+            "step": 2,
+            "description": "On the Transfers page, verify the user lands on the \"All\" section/tab by default or select the \"All\" section."
+          },
+          {
+            "step": 3,
+            "description": "Locate the most recently created transfer record in the transfers list/grid."
+          },
+          {
+            "step": 4,
+            "description": "Verify the Transfer ID is displayed for the record."
+          },
+          {
+            "step": 5,
+            "description": "Verify the From Store shows \"WB Unit 1034\"."
+          },
+          {
+            "step": 6,
+            "description": "Verify the To Store shows \"WB Unit 1025\"."
+          },
+          {
+            "step": 7,
+            "description": "Verify the Status column shows \"Draft\" for the recently created transfer."
+          }
+        ],
+        "rawTestData": "Active Store: WB Unit 1034 | Expected Status: Draft",
+        "expectedResult": "Verify whether the recently created transfer is visible in the All section of the Transfers page on WB Unit 1034 with status displayed as Draft.",
+        "testData": {
+          "activeStore": "WB Unit 1034",
+          "expectedStatus": "Draft",
+          "section": "All"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-237_013",
+        "module": "Transfers",
+        "testName": "Verify whether the recently created Draft transfer is visible in the Draft section of the Transfers page on WB Unit 1034",
+        "description": "Verify whether the recently created transfer record is listed in the Draft section of the Transfers page on WB Unit 1034.",
+        "preCondition": "1. User is logged in as admin. 2. WB Unit 1034 is selected. 3. A draft transfer exists from TC_TRF_003.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "On the Transfers page for WB Unit 1034, locate the section/tab filters (All, Draft, Pending, etc.)."
+          },
+          {
+            "step": 2,
+            "description": "Click on the \"Draft\" section/tab on the Transfers page."
+          },
+          {
+            "step": 3,
+            "description": "Wait for the Draft transfers list to load."
+          },
+          {
+            "step": 4,
+            "description": "Locate the recently created transfer record in the Draft section list."
+          },
+          {
+            "step": 5,
+            "description": "Verify the Transfer ID matches the draft created in the previous step."
+          },
+          {
+            "step": 6,
+            "description": "Verify the status is displayed as \"Draft\"."
+          },
+          {
+            "step": 7,
+            "description": "Verify From Store and To Store values are correct."
+          }
+        ],
+        "rawTestData": "Active Store: WB Unit 1034 | Expected Status: Draft",
+        "expectedResult": "Verify whether the recently created transfer record is listed in the Draft section of the Transfers page on WB Unit 1034.",
+        "testData": {
+          "activeStore": "WB Unit 1034",
+          "expectedStatus": "Draft",
+          "section": "Draft"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-237_014",
+        "module": "Transfers",
+        "testName": "Verify whether clicking a Draft transfer record opens the Draft Details page with CANCEL, SAVE CHANGES, and SUBMIT TRANSFER action buttons on WB Unit 1034",
+        "description": "Verify whether the Draft Details page opens with complete transfer details and displays CANCEL, SAVE CHANGES, and SUBMIT TRANSFER buttons for the selected Draft transfer on WB Unit 1034.",
+        "preCondition": "1. User is logged in as admin. 2. WB Unit 1034 is selected. 3. A draft transfer is visible in the Draft section.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "On the Transfers page, switch to the \"Draft\" section/tab."
+          },
+          {
+            "step": 2,
+            "description": "Click on the recently created Draft transfer record from the list."
+          },
+          {
+            "step": 3,
+            "description": "Wait for the Draft Details page to load."
+          },
+          {
+            "step": 4,
+            "description": "Verify the Draft Details page displays transfer header information (From Store, To Store, Reason, Notes)."
+          },
+          {
+            "step": 5,
+            "description": "Verify the added item \"LARGE BUNS 11201\" with Qty 1 EA is displayed in the items section."
+          },
+          {
+            "step": 6,
+            "description": "Verify the \"CANCEL\" button is visible and enabled on the Draft Details page."
+          },
+          {
+            "step": 7,
+            "description": "Verify the \"SAVE CHANGES\" button is visible and enabled on the Draft Details page."
+          },
+          {
+            "step": 8,
+            "description": "Verify the \"SUBMIT TRANSFER\" button is visible and enabled on the Draft Details page."
+          }
+        ],
+        "rawTestData": "Active Store: WB Unit 1034 | Transfer Status: Draft",
+        "expectedResult": "Verify whether the Draft Details page opens with complete transfer details and displays CANCEL, SAVE CHANGES, and SUBMIT TRANSFER buttons for the selected Draft transfer on WB Unit 1034.",
+        "testData": {
+          "activeStore": "WB Unit 1034",
+          "expectedStatus": "Draft",
+          "actions": [
+            "CANCEL",
+            "SAVE CHANGES",
+            "SUBMIT TRANSFER"
+          ]
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-237_015",
+        "module": "Transfers",
+        "testName": "Verify whether the admin user can submit a Draft transfer and the transfer status changes to Pending on WB Unit 1034",
+        "description": "Verify whether clicking SUBMIT TRANSFER on the Draft Details page successfully submits the transfer and changes the status from Draft to Pending on the Transfers page for WB Unit 1034.",
+        "preCondition": "1. User is logged in as admin. 2. WB Unit 1034 is selected. 3. User is on the Draft Details page for a Draft transfer.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "On the Draft Details page, review the transfer details (From: WB Unit 1034, To: WB Unit 1025, Item: LARGE BUNS 11201, Qty: 1)."
+          },
+          {
+            "step": 2,
+            "description": "Click the \"SUBMIT TRANSFER\" button on the Draft Details page."
+          },
+          {
+            "step": 3,
+            "description": "Wait for the submission process to complete."
+          },
+          {
+            "step": 4,
+            "description": "Verify the user is redirected to the Transfers page."
+          },
+          {
+            "step": 5,
+            "description": "On the Transfers page, locate the submitted transfer record by Transfer ID."
+          },
+          {
+            "step": 6,
+            "description": "Verify the Status column shows \"Pending\" for the submitted transfer."
+          },
+          {
+            "step": 7,
+            "description": "Verify the transfer is no longer listed under the Draft section."
+          }
+        ],
+        "rawTestData": "Active Store: WB Unit 1034 | Expected Status after submit: Pending",
+        "expectedResult": "Verify whether clicking SUBMIT TRANSFER on the Draft Details page successfully submits the transfer and changes the status from Draft to Pending on the Transfers page for WB Unit 1034.",
+        "testData": {
+          "activeStore": "WB Unit 1034",
+          "expectedStatus": "Pending"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-237_016",
+        "module": "Transfers",
+        "testName": "Verify whether a Pending transfer sent from WB Unit 1034 is visible on the Transfers page when viewed from WB Unit 1025 with Reject and Approve action buttons",
+        "description": "Verify whether the Pending transfer initiated from WB Unit 1034 is visible on the Transfers page of WB Unit 1025 with Reject and Approve action buttons available.",
+        "preCondition": "1. User is logged in as admin. 2. A transfer from WB Unit 1034 to WB Unit 1025 is in Pending status.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Switch active store to WB Unit 1025 using My Hierarchy (confirm top-right corner shows WB Unit 1025)."
+          },
+          {
+            "step": 2,
+            "description": "From the Home page, click on the \"Transfers\" menu in the main navigation."
+          },
+          {
+            "step": 3,
+            "description": "On the Transfers page for WB Unit 1025, locate the Pending transfer by Transfer ID."
+          },
+          {
+            "step": 4,
+            "description": "Verify the transfer From Store shows \"WB Unit 1034\"."
+          },
+          {
+            "step": 5,
+            "description": "Verify the transfer To Store shows \"WB Unit 1025\"."
+          },
+          {
+            "step": 6,
+            "description": "Verify the Status shows \"Pending\"."
+          },
+          {
+            "step": 7,
+            "description": "Verify the ACTIONS column displays \"Reject\" and \"Approve\" buttons for the Pending transfer."
+          }
+        ],
+        "rawTestData": "Active Store: WB Unit 1025 | Transfer Status: Pending | From: WB Unit 1034 | To: WB Unit 1025",
+        "expectedResult": "Verify whether the Pending transfer initiated from WB Unit 1034 is visible on the Transfers page of WB Unit 1025 with Reject and Approve action buttons available.",
+        "testData": {
+          "activeStore": "WB Unit 1025",
+          "fromStore": "WB Unit 1034",
+          "toStore": "WB Unit 1025",
+          "expectedStatus": "Pending",
+          "actions": [
+            "Reject",
+            "Approve"
+          ]
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-237_017",
+        "module": "Transfers",
+        "testName": "Verify whether the destination store user can reject a Pending transfer with a reason and the transfer status changes to Declined on WB Unit 1025",
+        "description": "Verify whether rejecting a Pending transfer with a valid reason on WB Unit 1025 changes the transfer status to Declined and the rejection modal behaves as expected.",
+        "preCondition": "1. User is logged in as admin. 2. WB Unit 1025 is selected. 3. A Pending transfer from WB Unit 1034 to WB Unit 1025 exists.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "On the Transfers page for WB Unit 1025, locate the Pending transfer record."
+          },
+          {
+            "step": 2,
+            "description": "In the ACTIONS column, click the \"Reject\" button for the Pending transfer."
+          },
+          {
+            "step": 3,
+            "description": "Verify a confirmation modal opens with title/message \"Reject this transfer?\" and description \"This will mark the transfer as declined.\""
+          },
+          {
+            "step": 4,
+            "description": "Verify the modal contains a mandatory \"Reason *\" input field."
+          },
+          {
+            "step": 5,
+            "description": "Verify the modal displays \"NO\" and \"YES\" buttons."
+          },
+          {
+            "step": 6,
+            "description": "Enter a valid rejection reason in the \"Reason *\" field (e.g., \"Incorrect quantity\")."
+          },
+          {
+            "step": 7,
+            "description": "Click the \"YES\" button on the rejection modal."
+          },
+          {
+            "step": 8,
+            "description": "Wait for the rejection to process."
+          },
+          {
+            "step": 9,
+            "description": "On the Transfers page, locate the same Transfer ID."
+          },
+          {
+            "step": 0,
+            "description": "Verify the Status column shows \"Declined\"."
+          }
+        ],
+        "rawTestData": "Active Store: WB Unit 1025 | Rejection Reason: Incorrect quantity | Expected Status: Declined",
+        "expectedResult": "Verify whether rejecting a Pending transfer with a valid reason on WB Unit 1025 changes the transfer status to Declined and the rejection modal behaves as expected.",
+        "testData": {
+          "activeStore": "WB Unit 1025",
+          "rejectionReason": "Incorrect quantity",
+          "expectedStatus": "Declined",
+          "modalTitle": "Reject this transfer?",
+          "modalDescription": "This will mark the transfer as declined."
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-237_018",
+        "module": "Transfers",
+        "testName": "Verify whether the Reject Transfer modal prevents rejection when the mandatory Reason field is left blank on WB Unit 1025",
+        "description": "Verify whether the Reject Transfer modal displays mandatory field validation and does not change the transfer status to Declined when the Reason field is empty.",
+        "preCondition": "1. User is logged in as admin. 2. WB Unit 1025 is selected. 3. A Pending transfer exists on the Transfers page.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "On the Transfers page for WB Unit 1025, click the \"Reject\" button for a Pending transfer."
+          },
+          {
+            "step": 2,
+            "description": "Verify the \"Reject this transfer?\" modal opens."
+          },
+          {
+            "step": 3,
+            "description": "Leave the \"Reason *\" field blank."
+          },
+          {
+            "step": 4,
+            "description": "Click the \"YES\" button on the modal."
+          },
+          {
+            "step": 5,
+            "description": "Observe validation behavior on the modal."
+          },
+          {
+            "step": 6,
+            "description": "Verify the transfer status remains \"Pending\" if rejection is blocked."
+          }
+        ],
+        "rawTestData": "Active Store: WB Unit 1025 | Reason: (blank) | Expected Status: Pending",
+        "expectedResult": "Verify whether the Reject Transfer modal displays mandatory field validation and does not change the transfer status to Declined when the Reason field is empty.",
+        "testData": {
+          "activeStore": "WB Unit 1025",
+          "reason": "",
+          "expectedStatus": "Pending"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-237_019",
+        "module": "Transfers",
+        "testName": "Verify whether a Declined transfer status is reflected on the Transfers page when viewed from the source store WB Unit 1034",
+        "description": "Verify whether the transfer rejected on WB Unit 1025 is displayed with Declined status on the Transfers page when viewed from the source store WB Unit 1034.",
+        "preCondition": "1. User is logged in as admin. 2. A transfer from WB Unit 1034 to WB Unit 1025 was rejected and marked Declined on WB Unit 1025.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Switch active store to WB Unit 1034 using My Hierarchy (confirm top-right corner shows WB Unit 1034)."
+          },
+          {
+            "step": 2,
+            "description": "From the Home page, click on the \"Transfers\" menu."
+          },
+          {
+            "step": 3,
+            "description": "On the Transfers page for WB Unit 1034, search or locate the same Transfer ID that was rejected."
+          },
+          {
+            "step": 4,
+            "description": "Verify the Status column shows \"Declined\" for that transfer record."
+          },
+          {
+            "step": 5,
+            "description": "Verify From Store and To Store details remain correct."
+          }
+        ],
+        "rawTestData": "Active Store: WB Unit 1034 | Expected Status: Declined",
+        "expectedResult": "Verify whether the transfer rejected on WB Unit 1025 is displayed with Declined status on the Transfers page when viewed from the source store WB Unit 1034.",
+        "testData": {
+          "activeStore": "WB Unit 1034",
+          "expectedStatus": "Declined"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-237_020",
+        "module": "Transfers",
+        "testName": "Verify whether the admin user can create and directly submit a new Transfer from WB Unit 1034 to WB Unit 1025 without saving as Draft",
+        "description": "Verify whether a new transfer created on WB Unit 1034 can be submitted directly using SUBMIT TRANSFER and appears on the Transfers page with Pending status.",
+        "preCondition": "1. User is logged in as admin. 2. WB Unit 1034 is selected. 3. Previous declined transfer exists (does not block new transfer).",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "On the Transfers page for WB Unit 1034, click the \"NEW TRANSFER\" button."
+          },
+          {
+            "step": 2,
+            "description": "On the New Transfer form, select From Store: \"WB Unit 1034\"."
+          },
+          {
+            "step": 3,
+            "description": "Select To Store: \"WB Unit 1025\"."
+          },
+          {
+            "step": 4,
+            "description": "Select a valid Transfer Reason."
+          },
+          {
+            "step": 5,
+            "description": "Enter Notes."
+          },
+          {
+            "step": 6,
+            "description": "Click the \"ADD ITEM\" button."
+          },
+          {
+            "step": 7,
+            "description": "Search and select item \"LARGE BUNS 11201\"."
+          },
+          {
+            "step": 8,
+            "description": "Enter Qty to Order: \"1\" with UOM \"EA\"."
+          },
+          {
+            "step": 9,
+            "description": "Click the \"SUBMIT TRANSFER\" button directly (without clicking SAVE CHANGES)."
+          },
+          {
+            "step": 0,
+            "description": "Wait for submission to complete."
+          },
+          {
+            "step": 1,
+            "description": "Verify the user lands on the Transfers page."
+          },
+          {
+            "step": 2,
+            "description": "Locate the new transfer record and verify Status shows \"Pending\"."
+          }
+        ],
+        "rawTestData": "From Store: WB Unit 1034 | To Store: WB Unit 1025 | Item: LARGE BUNS 11201 | Qty: 1 EA | Expected Status: Pending",
+        "expectedResult": "Verify whether a new transfer created on WB Unit 1034 can be submitted directly using SUBMIT TRANSFER and appears on the Transfers page with Pending status.",
+        "testData": {
+          "fromStore": "WB Unit 1034",
+          "toStore": "WB Unit 1025",
+          "reason": "Excess Inventory + Shelf-Life",
+          "notes": "Automation transfer notes for RCSP-237",
+          "item": "LARGE BUNS",
+          "quantity": "1",
+          "uom": "EA",
+          "expectedStatus": "Pending",
+          "sku": "11201"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-237_021",
+        "module": "Transfers",
+        "testName": "Verify whether the destination store user can approve a Pending transfer and the transfer status changes to Completed on WB Unit 1025",
+        "description": "Verify whether approving a Pending transfer on WB Unit 1025 changes the transfer status to Completed after confirming the Approve modal.",
+        "preCondition": "1. User is logged in as admin. 2. WB Unit 1025 is selected. 3. A Pending transfer from WB Unit 1034 to WB Unit 1025 exists.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "On the Transfers page for WB Unit 1025, locate the Pending transfer by Transfer ID."
+          },
+          {
+            "step": 2,
+            "description": "In the ACTIONS column, click the \"Approve\" button."
+          },
+          {
+            "step": 3,
+            "description": "Verify a confirmation modal opens with message \"Approve this transfer?\" and description \"Completes the transfer and moves inventory to the destination.\""
+          },
+          {
+            "step": 4,
+            "description": "Verify the modal displays \"NO\" and \"YES\" buttons."
+          },
+          {
+            "step": 5,
+            "description": "Click the \"YES\" button on the approval modal."
+          },
+          {
+            "step": 6,
+            "description": "Wait for the approval process to complete."
+          },
+          {
+            "step": 7,
+            "description": "On the Transfers page, locate the same Transfer ID."
+          },
+          {
+            "step": 8,
+            "description": "Verify the Status column shows \"Completed\"."
+          }
+        ],
+        "rawTestData": "Active Store: WB Unit 1025 | Expected Status: Completed",
+        "expectedResult": "Verify whether approving a Pending transfer on WB Unit 1025 changes the transfer status to Completed after confirming the Approve modal.",
+        "testData": {
+          "activeStore": "WB Unit 1025",
+          "expectedStatus": "Completed",
+          "modalTitle": "Approve this transfer?",
+          "modalDescription": "Completes the transfer and moves inventory to the destination."
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-237_022",
+        "module": "Inventory Balances",
+        "testName": "Verify whether the ON HAND quantity for LARGE BUNS 11201 is incremented by 1 on WB Unit 1025 Inventory Balances page after transfer approval",
+        "description": "Verify whether the ON HAND quantity for LARGE BUNS 11201 on WB Unit 1025 Inventory Balances page is incremented by 1 after the approved transfer is completed.",
+        "preCondition": "1. User is logged in as admin. 2. WB Unit 1025 is selected. 3. A transfer of LARGE BUNS 11201 (Qty 1 EA) from WB Unit 1034 to WB Unit 1025 has been approved and completed. 4. Baseline ON HAND value for LARGE BUNS 11201 on WB Unit 1025 was recorded before transfer (from TC_INV_003).",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Confirm WB Unit 1025 is displayed in the top-right corner of the Home page."
+          },
+          {
+            "step": 2,
+            "description": "Navigate to Inventory > Inventory Balances from the main menu."
+          },
+          {
+            "step": 3,
+            "description": "Search for item \"LARGE BUNS 11201\" on the Inventory Balances page."
+          },
+          {
+            "step": 4,
+            "description": "Read the current ON HAND value for LARGE BUNS"
+          },
+          {
+            "step": 1,
+            "description": ""
+          },
+          {
+            "step": 5,
+            "description": "Compare the current ON HAND value with the baseline ON HAND value recorded before the transfer."
+          },
+          {
+            "step": 6,
+            "description": "Verify the ON HAND value has increased by"
+          },
+          {
+            "step": 1,
+            "description": ""
+          },
+          {
+            "step": 7,
+            "description": "Read and verify the FIFO COST value is displayed and updated appropriately if applicable."
+          }
+        ],
+        "rawTestData": "Store: WB Unit 1025 | Item: LARGE BUNS 11201 | Transfer Qty: +1 EA | Expected ON HAND Change: +1",
+        "expectedResult": "Verify whether the ON HAND quantity for LARGE BUNS 11201 on WB Unit 1025 Inventory Balances page is incremented by 1 after the approved transfer is completed.",
+        "testData": {
+          "store": "WB Unit 1025",
+          "item": "LARGE BUNS",
+          "expectedOnHandChange": 1,
+          "sku": "11201"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-237_023",
+        "module": "Dashboard",
+        "testName": "Verify whether the Recent Stock Movements section on the Dashboard displays a Transfer In record for LARGE BUNS with quantity +1 on WB Unit 1025 after transfer approval",
+        "description": "Verify whether the Dashboard > Recent Stock Movements section on WB Unit 1025 displays a Transfer In record for LARGE BUNS with quantity +1 and the correct date/time after transfer approval.",
+        "preCondition": "1. User is logged in as admin. 2. WB Unit 1025 is selected. 3. Transfer from WB Unit 1034 to WB Unit 1025 for LARGE BUNS 11201 (Qty 1) has been completed.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Confirm WB Unit 1025 is displayed in the top-right corner of the Home page."
+          },
+          {
+            "step": 2,
+            "description": "From the main navigation menu, click on the \"Dashboard\" menu option."
+          },
+          {
+            "step": 3,
+            "description": "On the Dashboard page, scroll to the \"Recent Stock Movements\" section."
+          },
+          {
+            "step": 4,
+            "description": "Locate the most recent stock movement record in the Recent Stock Movements table."
+          },
+          {
+            "step": 5,
+            "description": "Verify the TYPE column shows \"Transfer In\"."
+          },
+          {
+            "step": 6,
+            "description": "Verify the ITEM column shows \"LARGE BUNS\"."
+          },
+          {
+            "step": 7,
+            "description": "Verify the QTY column shows \"+1\"."
+          },
+          {
+            "step": 8,
+            "description": "Verify the DATE column displays the current transfer completion date and time (e.g., Jul 9, 2026, 7:13 PM)."
+          }
+        ],
+        "rawTestData": "Store: WB Unit 1025 | Section: Dashboard > Recent Stock Movements | TYPE: Transfer In | ITEM: LARGE BUNS | QTY: +1",
+        "expectedResult": "Verify whether the Dashboard > Recent Stock Movements section on WB Unit 1025 displays a Transfer In record for LARGE BUNS with quantity +1 and the correct date/time after transfer approval.",
+        "testData": {
+          "store": "WB Unit 1025",
+          "movementType": "Transfer In",
+          "item": "LARGE BUNS",
+          "qty": "+1",
+          "sku": "11201"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-237_024",
+        "module": "Inventory Balances",
+        "testName": "Verify whether the ON HAND quantity for LARGE BUNS 11201 is decremented by 1 on WB Unit 1034 Inventory Balances page after transfer approval",
+        "description": "Verify whether the ON HAND quantity for LARGE BUNS 11201 on WB Unit 1034 Inventory Balances page is decremented by 1 after the transfer is approved and completed.",
+        "preCondition": "1. User is logged in as admin. 2. Transfer from WB Unit 1034 to WB Unit 1025 for LARGE BUNS 11201 (Qty 1 EA) has been completed. 3. Baseline ON HAND value for LARGE BUNS 11201 on WB Unit 1034 was recorded before transfer (from TC_INV_002).",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Switch active store to WB Unit 1034 using My Hierarchy (confirm top-right corner shows WB Unit 1034)."
+          },
+          {
+            "step": 2,
+            "description": "Navigate to Inventory > Inventory Balances from the main menu."
+          },
+          {
+            "step": 3,
+            "description": "Search for item \"LARGE BUNS 11201\" on the Inventory Balances page."
+          },
+          {
+            "step": 4,
+            "description": "Read the current ON HAND value for LARGE BUNS"
+          },
+          {
+            "step": 1,
+            "description": ""
+          },
+          {
+            "step": 5,
+            "description": "Compare the current ON HAND value with the baseline ON HAND value recorded before the transfer."
+          },
+          {
+            "step": 6,
+            "description": "Verify the ON HAND value has decreased by"
+          },
+          {
+            "step": 1,
+            "description": ""
+          },
+          {
+            "step": 7,
+            "description": "Read and verify the FIFO COST value is displayed correctly."
+          }
+        ],
+        "rawTestData": "Store: WB Unit 1034 | Item: LARGE BUNS 11201 | Transfer Qty: -1 EA | Expected ON HAND Change: -1",
+        "expectedResult": "Verify whether the ON HAND quantity for LARGE BUNS 11201 on WB Unit 1034 Inventory Balances page is decremented by 1 after the transfer is approved and completed.",
+        "testData": {
+          "store": "WB Unit 1034",
+          "item": "LARGE BUNS",
+          "expectedOnHandChange": -1,
+          "sku": "11201"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-237_025",
+        "module": "Dashboard",
+        "testName": "Verify whether the Recent Stock Movements section on the Dashboard displays a Transfer Out record for LARGE BUNS with quantity -1 on WB Unit 1034 after transfer approval",
+        "description": "Verify whether the Dashboard > Recent Stock Movements section on WB Unit 1034 displays a Transfer Out record for LARGE BUNS with quantity -1 and the correct date/time after transfer completion.",
+        "preCondition": "1. User is logged in as admin. 2. WB Unit 1034 is selected. 3. Transfer from WB Unit 1034 to WB Unit 1025 for LARGE BUNS 11201 (Qty 1) has been completed.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Confirm WB Unit 1034 is displayed in the top-right corner of the Home page."
+          },
+          {
+            "step": 2,
+            "description": "From the main navigation menu, click on the \"Dashboard\" menu option."
+          },
+          {
+            "step": 3,
+            "description": "On the Dashboard page, scroll to the \"Recent Stock Movements\" section."
+          },
+          {
+            "step": 4,
+            "description": "Locate the most recent stock movement record in the Recent Stock Movements table."
+          },
+          {
+            "step": 5,
+            "description": "Verify the TYPE column shows \"Transfer Out\"."
+          },
+          {
+            "step": 6,
+            "description": "Verify the ITEM column shows \"LARGE BUNS\"."
+          },
+          {
+            "step": 7,
+            "description": "Verify the QTY column shows \"-1\"."
+          },
+          {
+            "step": 8,
+            "description": "Verify the DATE column displays the current transfer completion date and time (e.g., Jul 9, 2026, 7:13 PM)."
+          }
+        ],
+        "rawTestData": "Store: WB Unit 1034 | Section: Dashboard > Recent Stock Movements | TYPE: Transfer Out | ITEM: LARGE BUNS | QTY: -1",
+        "expectedResult": "Verify whether the Dashboard > Recent Stock Movements section on WB Unit 1034 displays a Transfer Out record for LARGE BUNS with quantity -1 and the correct date/time after transfer completion.",
+        "testData": {
+          "store": "WB Unit 1034",
+          "movementType": "Transfer Out",
+          "item": "LARGE BUNS",
+          "qty": "-1",
+          "sku": "11201"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-237_026",
+        "module": "Transfers",
+        "testName": "Verify whether the New Transfer form displays validation when mandatory From Store field is not selected on WB Unit 1034",
+        "description": "Verify whether the New Transfer form displays mandatory field validation for From Store and does not allow save/submit when From Store is not selected.",
+        "preCondition": "1. User is logged in as admin. 2. WB Unit 1034 is selected. 3. User is on the New Transfer form.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "On the New Transfer form, leave \"Select From Store *\" blank."
+          },
+          {
+            "step": 2,
+            "description": "Select To Store: \"WB Unit 1025\"."
+          },
+          {
+            "step": 3,
+            "description": "Select a valid Transfer Reason."
+          },
+          {
+            "step": 4,
+            "description": "Click ADD ITEM and add LARGE BUNS 11201 with Qty 1 EA."
+          },
+          {
+            "step": 5,
+            "description": "Click SUBMIT TRANSFER or SAVE CHANGES."
+          },
+          {
+            "step": 6,
+            "description": "Observe validation messages on the New Transfer form."
+          }
+        ],
+        "rawTestData": "From Store: (blank) | To Store: WB Unit 1025",
+        "expectedResult": "Verify whether the New Transfer form displays mandatory field validation for From Store and does not allow save/submit when From Store is not selected.",
+        "testData": {
+          "fromStore": "",
+          "toStore": "WB Unit 1025"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-237_027",
+        "module": "Transfers",
+        "testName": "Verify whether the New Transfer form displays validation when mandatory To Store field is not selected on WB Unit 1034",
+        "description": "Verify whether the New Transfer form displays mandatory field validation for To Store and does not allow save/submit when To Store is not selected.",
+        "preCondition": "1. User is logged in as admin. 2. WB Unit 1034 is selected. 3. User is on the New Transfer form.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "On the New Transfer form, select From Store: \"WB Unit 1034\"."
+          },
+          {
+            "step": 2,
+            "description": "Leave \"Select To Store *\" blank."
+          },
+          {
+            "step": 3,
+            "description": "Select a valid Transfer Reason."
+          },
+          {
+            "step": 4,
+            "description": "Click ADD ITEM and add LARGE BUNS 11201 with Qty 1 EA."
+          },
+          {
+            "step": 5,
+            "description": "Click SUBMIT TRANSFER or SAVE CHANGES."
+          },
+          {
+            "step": 6,
+            "description": "Observe validation messages on the New Transfer form."
+          }
+        ],
+        "rawTestData": "From Store: WB Unit 1034 | To Store: (blank)",
+        "expectedResult": "Verify whether the New Transfer form displays mandatory field validation for To Store and does not allow save/submit when To Store is not selected.",
+        "testData": {
+          "fromStore": "WB Unit 1034",
+          "toStore": ""
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-237_028",
+        "module": "Transfers",
+        "testName": "Verify whether the New Transfer form displays validation when mandatory Transfer Reason field is not selected on WB Unit 1034",
+        "description": "Verify whether the New Transfer form displays mandatory field validation for Transfer Reason and does not allow save/submit when Transfer Reason is not provided.",
+        "preCondition": "1. User is logged in as admin. 2. WB Unit 1034 is selected. 3. User is on the New Transfer form.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "On the New Transfer form, select From Store: \"WB Unit 1034\"."
+          },
+          {
+            "step": 2,
+            "description": "Select To Store: \"WB Unit 1025\"."
+          },
+          {
+            "step": 3,
+            "description": "Leave \"Transfer Reason *\" blank."
+          },
+          {
+            "step": 4,
+            "description": "Click ADD ITEM and add LARGE BUNS 11201 with Qty 1 EA."
+          },
+          {
+            "step": 5,
+            "description": "Click SUBMIT TRANSFER or SAVE CHANGES."
+          },
+          {
+            "step": 6,
+            "description": "Observe validation messages on the New Transfer form."
+          }
+        ],
+        "rawTestData": "Transfer Reason: (blank)",
+        "expectedResult": "Verify whether the New Transfer form displays mandatory field validation for Transfer Reason and does not allow save/submit when Transfer Reason is not provided.",
+        "testData": {
+          "fromStore": "WB Unit 1034",
+          "toStore": "WB Unit 1025",
+          "reason": ""
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-237_029",
+        "module": "Transfers",
+        "testName": "Verify whether the New Transfer form prevents submission when no item is added to the transfer on WB Unit 1034",
+        "description": "Verify whether the New Transfer form prevents submission and displays an appropriate validation/error message when no items are added to the transfer.",
+        "preCondition": "1. User is logged in as admin. 2. WB Unit 1034 is selected. 3. User is on the New Transfer form.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "On the New Transfer form, select From Store: \"WB Unit 1034\"."
+          },
+          {
+            "step": 2,
+            "description": "Select To Store: \"WB Unit 1025\"."
+          },
+          {
+            "step": 3,
+            "description": "Select a valid Transfer Reason."
+          },
+          {
+            "step": 4,
+            "description": "Enter Notes."
+          },
+          {
+            "step": 5,
+            "description": "Do NOT click ADD ITEM \u201a\u00c4\u00ee leave the items section empty."
+          },
+          {
+            "step": 6,
+            "description": "Click SUBMIT TRANSFER."
+          },
+          {
+            "step": 7,
+            "description": "Observe validation or error message on the New Transfer form."
+          }
+        ],
+        "rawTestData": "Items: (none added)",
+        "expectedResult": "Verify whether the New Transfer form prevents submission and displays an appropriate validation/error message when no items are added to the transfer.",
+        "testData": {
+          "fromStore": "WB Unit 1034",
+          "toStore": "WB Unit 1025",
+          "items": []
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-237_030",
+        "module": "Transfers",
+        "testName": "Verify whether the New Transfer form prevents submission when item quantity is entered as 0 on WB Unit 1034",
+        "description": "Verify whether the New Transfer form displays validation and does not allow save/submit when item quantity is entered as 0.",
+        "preCondition": "1. User is logged in as admin. 2. WB Unit 1034 is selected. 3. User is on the New Transfer form with header details filled.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "On the New Transfer form, fill From Store, To Store, and Transfer Reason."
+          },
+          {
+            "step": 2,
+            "description": "Click ADD ITEM."
+          },
+          {
+            "step": 3,
+            "description": "Search and select item \"LARGE BUNS 11201\"."
+          },
+          {
+            "step": 4,
+            "description": "Enter Qty to Order as \"0\" with UOM \"EA\"."
+          },
+          {
+            "step": 5,
+            "description": "Click SUBMIT TRANSFER or SAVE CHANGES."
+          },
+          {
+            "step": 6,
+            "description": "Observe validation behavior on the quantity field or form."
+          }
+        ],
+        "rawTestData": "Item: LARGE BUNS 11201 | Qty: 0 EA",
+        "expectedResult": "Verify whether the New Transfer form displays validation and does not allow save/submit when item quantity is entered as 0.",
+        "testData": {
+          "item": "LARGE BUNS",
+          "quantity": "0",
+          "uom": "EA",
+          "sku": "11201"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-237_031",
+        "module": "Transfers",
+        "testName": "Verify whether the New Transfer form prevents creating a transfer when From Store and To Store are the same on WB Unit 1034",
+        "description": "Verify whether the New Transfer form prevents submission and displays an appropriate error when From Store and To Store are the same.",
+        "preCondition": "1. User is logged in as admin. 2. WB Unit 1034 is selected. 3. User is on the New Transfer form.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "On the New Transfer form, select From Store: \"WB Unit 1034\"."
+          },
+          {
+            "step": 2,
+            "description": "Select To Store: \"WB Unit 1034\" (same as From Store)."
+          },
+          {
+            "step": 3,
+            "description": "Select a valid Transfer Reason."
+          },
+          {
+            "step": 4,
+            "description": "Click ADD ITEM and add LARGE BUNS 11201 with Qty 1 EA."
+          },
+          {
+            "step": 5,
+            "description": "Click SUBMIT TRANSFER."
+          },
+          {
+            "step": 6,
+            "description": "Observe validation or error message on the New Transfer form."
+          }
+        ],
+        "rawTestData": "From Store: WB Unit 1034 | To Store: WB Unit 1034",
+        "expectedResult": "Verify whether the New Transfer form prevents submission and displays an appropriate error when From Store and To Store are the same.",
+        "testData": {
+          "fromStore": "WB Unit 1034",
+          "toStore": "WB Unit 1034"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-237_032",
+        "module": "Transfers",
+        "testName": "Verify whether the New Transfer form blocks submission and displays an insufficient stock message when Qty to Order exceeds ON HAND quantity on WB Unit 1034 Inventory Balances page",
+        "description": "Verify whether the system blocks transfer submission and displays an insufficient stock message when the requested transfer quantity exceeds the sending store's current ON HAND quantity, thereby preventing ON HAND from going negative on WB Unit 1034 Inventory Balances page.",
+        "preCondition": "1. User is logged in as admin. 2. WB Unit 1034 is selected. 3. ON HAND quantity for LARGE BUNS 11201 is known from Inventory Balances page.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Confirm WB Unit 1034 is displayed in the top-right corner of the Home page."
+          },
+          {
+            "step": 2,
+            "description": "Navigate to Inventory menu > Inventory Balances submenu and search for item \"LARGE BUNS 11201\"."
+          },
+          {
+            "step": 3,
+            "description": "Record the current ON HAND quantity displayed for LARGE BUNS 11201 on WB Unit"
+          },
+          {
+            "step": 4,
+            "description": ""
+          },
+          {
+            "step": 4,
+            "description": "Navigate to Transfers menu > Transfers page on WB Unit"
+          },
+          {
+            "step": 4,
+            "description": ""
+          },
+          {
+            "step": 5,
+            "description": "Click the \"NEW TRANSFER\" button on the Transfers page."
+          },
+          {
+            "step": 6,
+            "description": "On the New Transfer form, select From Store * as \"WB Unit 1034\"."
+          },
+          {
+            "step": 7,
+            "description": "Select To Store * as \"WB Unit 1025\"."
+          },
+          {
+            "step": 8,
+            "description": "Select a valid Transfer Reason * from the dropdown."
+          },
+          {
+            "step": 9,
+            "description": "Enter text in the Notes field."
+          },
+          {
+            "step": 0,
+            "description": "Click the \"ADD ITEM\" button on the New Transfer form."
+          },
+          {
+            "step": 1,
+            "description": "Search for item \"LARGE BUNS 11201\" in the Add Item section."
+          },
+          {
+            "step": 2,
+            "description": "Enter Qty to Order with UOM \"EA\" as a value MORE than the ON HAND quantity recorded in step"
+          },
+          {
+            "step": 3,
+            "description": ""
+          },
+          {
+            "step": 3,
+            "description": "Click the \"SUBMIT TRANSFER\" button."
+          },
+          {
+            "step": 4,
+            "description": "Observe the system response and any validation/error message displayed on the New Transfer form."
+          },
+          {
+            "step": 5,
+            "description": "Verify the transfer is NOT submitted."
+          },
+          {
+            "step": 6,
+            "description": "Navigate back to Inventory > Inventory Balances and verify ON HAND for LARGE BUNS 11201 has NOT decreased (preventing negative on-hand)."
+          }
+        ],
+        "rawTestData": "Store: WB Unit 1034 | Item: LARGE BUNS 11201 | Qty: (ON HAND + 1 or more) EA | From: WB Unit 1034 | To: WB Unit 1025",
+        "expectedResult": "Verify whether the system blocks transfer submission and displays an insufficient stock message when the requested transfer quantity exceeds the sending store's current ON HAND quantity, thereby preventing ON HAND from going negative on WB Unit 1034 Inventory Balances page.",
+        "testData": {
+          "store": "WB Unit 1034",
+          "item": "LARGE BUNS",
+          "fromStore": "WB Unit 1034",
+          "toStore": "WB Unit 1025",
+          "sku": "11201"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-237_033",
+        "module": "Transfers",
+        "testName": "Verify whether the admin user can cancel a Draft transfer from the Draft Details page on WB Unit 1034",
+        "description": "Verify whether clicking CANCEL on the Draft Details page successfully cancels the Draft transfer and the transfer is no longer available as an active Draft on WB Unit 1034.",
+        "preCondition": "1. User is logged in as admin. 2. WB Unit 1034 is selected. 3. A Draft transfer exists on the Draft Details page.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "On the Transfers page, open a Draft transfer record to reach the Draft Details page."
+          },
+          {
+            "step": 2,
+            "description": "On the Draft Details page, click the \"CANCEL\" button."
+          },
+          {
+            "step": 3,
+            "description": "If a confirmation modal appears, confirm the cancellation."
+          },
+          {
+            "step": 4,
+            "description": "Verify the user is redirected appropriately (Transfers page or previous page)."
+          },
+          {
+            "step": 5,
+            "description": "Search for the cancelled Transfer ID on the Transfers page."
+          },
+          {
+            "step": 6,
+            "description": "Verify the transfer is no longer in Draft status or is removed/cancelled as per application behavior."
+          }
+        ],
+        "rawTestData": "Active Store: WB Unit 1034 | Action: Cancel Draft",
+        "expectedResult": "Verify whether clicking CANCEL on the Draft Details page successfully cancels the Draft transfer and the transfer is no longer available as an active Draft on WB Unit 1034.",
+        "testData": {
+          "activeStore": "WB Unit 1034",
+          "action": "Cancel Draft"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-237_034",
+        "module": "Transfers",
+        "testName": "Verify whether clicking NO on the Reject Transfer confirmation modal keeps the transfer in Pending status on WB Unit 1025",
+        "description": "Verify whether clicking NO on the Reject Transfer modal closes the modal without changing the transfer status from Pending on WB Unit 1025.",
+        "preCondition": "1. User is logged in as admin. 2. WB Unit 1025 is selected. 3. A Pending transfer exists on the Transfers page.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "On the Transfers page for WB Unit 1025, click \"Reject\" for a Pending transfer."
+          },
+          {
+            "step": 2,
+            "description": "Verify the \"Reject this transfer?\" modal opens."
+          },
+          {
+            "step": 3,
+            "description": "Enter a reason in the Reason field (optional for this test)."
+          },
+          {
+            "step": 4,
+            "description": "Click the \"NO\" button on the modal."
+          },
+          {
+            "step": 5,
+            "description": "Verify the modal closes."
+          },
+          {
+            "step": 6,
+            "description": "Verify the transfer Status remains \"Pending\"."
+          },
+          {
+            "step": 7,
+            "description": "Verify Reject and Approve buttons are still available in ACTIONS column."
+          }
+        ],
+        "rawTestData": "Active Store: WB Unit 1025 | Modal Action: NO | Expected Status: Pending",
+        "expectedResult": "Verify whether clicking NO on the Reject Transfer modal closes the modal without changing the transfer status from Pending on WB Unit 1025.",
+        "testData": {
+          "activeStore": "WB Unit 1025",
+          "modalAction": "NO",
+          "expectedStatus": "Pending"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-237_035",
+        "module": "Transfers",
+        "testName": "Verify whether clicking NO on the Approve Transfer confirmation modal keeps the transfer in Pending status on WB Unit 1025",
+        "description": "Verify whether clicking NO on the Approve Transfer modal closes the modal without changing the transfer status from Pending on WB Unit 1025.",
+        "preCondition": "1. User is logged in as admin. 2. WB Unit 1025 is selected. 3. A Pending transfer exists on the Transfers page.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "On the Transfers page for WB Unit 1025, click \"Approve\" for a Pending transfer."
+          },
+          {
+            "step": 2,
+            "description": "Verify the \"Approve this transfer?\" modal opens."
+          },
+          {
+            "step": 3,
+            "description": "Click the \"NO\" button on the modal."
+          },
+          {
+            "step": 4,
+            "description": "Verify the modal closes."
+          },
+          {
+            "step": 5,
+            "description": "Verify the transfer Status remains \"Pending\"."
+          },
+          {
+            "step": 6,
+            "description": "Verify Reject and Approve buttons are still available in ACTIONS column."
+          }
+        ],
+        "rawTestData": "Active Store: WB Unit 1025 | Modal Action: NO | Expected Status: Pending",
+        "expectedResult": "Verify whether clicking NO on the Approve Transfer modal closes the modal without changing the transfer status from Pending on WB Unit 1025.",
+        "testData": {
+          "activeStore": "WB Unit 1025",
+          "modalAction": "NO",
+          "expectedStatus": "Pending"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-237_036",
+        "module": "Transfers",
+        "testName": "Verify whether a Completed transfer cannot be rejected or approved again on WB Unit 1025",
+        "description": "Verify whether a Completed transfer on WB Unit 1025 does not display Reject or Approve action buttons and cannot be modified further.",
+        "preCondition": "1. User is logged in as admin. 2. WB Unit 1025 is selected. 3. A transfer with Completed status exists on the Transfers page.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "On the Transfers page for WB Unit 1025, locate a transfer with Status \"Completed\"."
+          },
+          {
+            "step": 2,
+            "description": "Verify the ACTIONS column does NOT display Reject or Approve buttons for the Completed transfer."
+          },
+          {
+            "step": 3,
+            "description": "Attempt to open the transfer details if clickable."
+          },
+          {
+            "step": 4,
+            "description": "Verify no approve/reject actions are available on the Completed transfer details page."
+          }
+        ],
+        "rawTestData": "Active Store: WB Unit 1025 | Transfer Status: Completed",
+        "expectedResult": "Verify whether a Completed transfer on WB Unit 1025 does not display Reject or Approve action buttons and cannot be modified further.",
+        "testData": {
+          "activeStore": "WB Unit 1025",
+          "expectedStatus": "Completed"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-237_037",
+        "module": "Transfers",
+        "testName": "Verify whether a Declined transfer cannot be approved on WB Unit 1025",
+        "description": "Verify whether a Declined transfer on WB Unit 1025 does not allow Approve action and remains in Declined status.",
+        "preCondition": "1. User is logged in as admin. 2. WB Unit 1025 is selected. 3. A transfer with Declined status exists on the Transfers page.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "On the Transfers page for WB Unit 1025, locate a transfer with Status \"Declined\"."
+          },
+          {
+            "step": 2,
+            "description": "Verify the ACTIONS column does NOT display Approve button for the Declined transfer."
+          },
+          {
+            "step": 3,
+            "description": "Verify the transfer cannot be moved back to Pending or Completed status from the UI."
+          }
+        ],
+        "rawTestData": "Active Store: WB Unit 1025 | Transfer Status: Declined",
+        "expectedResult": "Verify whether a Declined transfer on WB Unit 1025 does not allow Approve action and remains in Declined status.",
+        "testData": {
+          "activeStore": "WB Unit 1025",
+          "expectedStatus": "Declined"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-237_038",
+        "module": "Transfers",
+        "testName": "Verify whether the admin user can save changes to a Draft transfer and the updated details are retained on WB Unit 1034",
+        "description": "Verify whether clicking SAVE CHANGES on the Draft Details page saves the updated transfer details and retains them when the Draft transfer is reopened on WB Unit 1034.",
+        "preCondition": "1. User is logged in as admin. 2. WB Unit 1034 is selected. 3. User is on the Draft Details page for a Draft transfer.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "On the Draft Details page, modify the Notes field with updated text."
+          },
+          {
+            "step": 2,
+            "description": "Optionally update item quantity if editable."
+          },
+          {
+            "step": 3,
+            "description": "Click the \"SAVE CHANGES\" button."
+          },
+          {
+            "step": 4,
+            "description": "Wait for save confirmation."
+          },
+          {
+            "step": 5,
+            "description": "Navigate away and reopen the same Draft transfer from the Draft section."
+          },
+          {
+            "step": 6,
+            "description": "Verify the updated Notes value is retained."
+          },
+          {
+            "step": 7,
+            "description": "Verify the transfer remains in Draft status."
+          }
+        ],
+        "rawTestData": "Active Store: WB Unit 1034 | Updated Notes: Updated draft notes for validation",
+        "expectedResult": "Verify whether clicking SAVE CHANGES on the Draft Details page saves the updated transfer details and retains them when the Draft transfer is reopened on WB Unit 1034.",
+        "testData": {
+          "activeStore": "WB Unit 1034",
+          "updatedNotes": "Updated draft notes for validation"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-237_039",
+        "module": "Transfers",
+        "testName": "Verify whether the Transfers page on WB Unit 1034 displays the NEW TRANSFER button, status section tabs, and correct column headers in the transfers grid",
+        "description": "Verify whether the Transfers page on WB Unit 1034 displays the NEW TRANSFER button, all status section tabs (All, Draft, Pending, Completed, Declined, Cancelled), and the transfers grid with column headers TRANSFER ID, FROM, TO, ITEMS, DATE, STATUS, and ACTIONS.",
+        "preCondition": "1. User is logged in as admin. 2. WB Unit 1034 is selected and displayed in the top-right corner of the Home page.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "From the Home page, click on the \"Transfers\" menu in the main navigation."
+          },
+          {
+            "step": 2,
+            "description": "Wait for the Transfers page to load completely on WB Unit"
+          },
+          {
+            "step": 4,
+            "description": ""
+          },
+          {
+            "step": 3,
+            "description": "Verify the \"NEW TRANSFER\" button is visible and enabled in the page header/action area."
+          },
+          {
+            "step": 4,
+            "description": "Verify the following status section tabs/filters are visible on the Transfers page: All, Draft, Pending, Completed, Declined, Cancelled."
+          },
+          {
+            "step": 5,
+            "description": "Click on each tab (All, Draft, Pending, Completed, Declined, Cancelled) and verify the transfers list/grid loads without error."
+          },
+          {
+            "step": 6,
+            "description": "Verify the transfers grid displays the following column headers: TRANSFER ID, FROM, TO, ITEMS, DATE, STATUS, ACTIONS."
+          },
+          {
+            "step": 7,
+            "description": "Verify each column header is properly aligned and readable in the transfers list table."
+          }
+        ],
+        "rawTestData": "Active Store: WB Unit 1034 | Page: Transfers | Expected Tabs: All, Draft, Pending, Completed, Declined, Cancelled | Expected Columns: TRANSFER ID, FROM, TO, ITEMS, DATE, STATUS, ACTIONS",
+        "expectedResult": "Verify whether the Transfers page on WB Unit 1034 displays the NEW TRANSFER button, all status section tabs (All, Draft, Pending, Completed, Declined, Cancelled), and the transfers grid with column headers TRANSFER ID, FROM, TO, ITEMS, DATE, STATUS, and ACTIONS.",
+        "testData": {
+          "activeStore": "WB Unit 1034",
+          "statusTabs": [
+            "All",
+            "Draft",
+            "Pending",
+            "Completed",
+            "Declined",
+            "Cancelled"
+          ],
+          "columnHeaders": [
+            "TRANSFER ID",
+            "FROM",
+            "TO",
+            "ITEMS",
+            "DATE",
+            "STATUS",
+            "ACTIONS"
+          ]
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-237_040",
+        "module": "Transfers",
+        "testName": "Verify whether the New Transfer form rejects decimal/fractional Qty to Order and accepts only whole number quantities on WB Unit 1034",
+        "description": "Verify whether transfer quantities must be whole numbers only and the New Transfer form rejects fractional/decimal quantities with appropriate validation, while accepting valid whole number quantities on WB Unit 1034.",
+        "preCondition": "1. User is logged in as admin. 2. WB Unit 1034 is selected. 3. User is on the Transfers page.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "On the Transfers page for WB Unit 1034, click the \"NEW TRANSFER\" button."
+          },
+          {
+            "step": 2,
+            "description": "On the New Transfer form, select From Store * as \"WB Unit 1034\"."
+          },
+          {
+            "step": 3,
+            "description": "Select To Store * as \"WB Unit 1025\"."
+          },
+          {
+            "step": 4,
+            "description": "Select a valid Transfer Reason * from the dropdown."
+          },
+          {
+            "step": 5,
+            "description": "Enter text in the Notes field."
+          },
+          {
+            "step": 6,
+            "description": "Click the \"ADD ITEM\" button on the New Transfer form."
+          },
+          {
+            "step": 7,
+            "description": "Search for item \"LARGE BUNS 11201\" in the Add Item section."
+          },
+          {
+            "step": 8,
+            "description": "Enter a decimal/fractional value in the Qty to Order field (e.g., 1.5 or 0.5) with UOM \"EA\"."
+          },
+          {
+            "step": 9,
+            "description": "Attempt to click \"SUBMIT TRANSFER\" or \"SAVE CHANGES\"."
+          },
+          {
+            "step": 0,
+            "description": "Observe field-level validation or error message on the Qty to Order field."
+          },
+          {
+            "step": 1,
+            "description": "Verify the system does not accept the decimal quantity."
+          },
+          {
+            "step": 2,
+            "description": "Clear the Qty field and enter a whole number quantity (e.g., 1) and verify it is accepted."
+          }
+        ],
+        "rawTestData": "Store: WB Unit 1034 | Item: LARGE BUNS 11201 | Invalid Qty: 1.5 EA (decimal) | Valid Qty: 1 EA (whole number)",
+        "expectedResult": "Verify whether transfer quantities must be whole numbers only and the New Transfer form rejects fractional/decimal quantities with appropriate validation, while accepting valid whole number quantities on WB Unit 1034.",
+        "testData": {
+          "item": "LARGE BUNS",
+          "invalidQuantity": "1.5",
+          "validQuantity": "1",
+          "uom": "EA",
+          "sku": "11201"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-237_041",
+        "module": "Transfers",
+        "testName": "Verify whether a transfer can be initiated only by the sending unit and users logged into the receiving unit cannot create a transfer on behalf of another store on WB Unit 1025",
+        "description": "Verify whether the transfer can be initiated only by the sending unit (WB Unit 1034) and users on the receiving unit (WB Unit 1025) cannot request or initiate a transfer to be sent from another unit.",
+        "preCondition": "1. User is logged in as admin. 2. WB Unit 1025 is selected and displayed in the top-right corner of the Home page. 3. User intends to transfer inventory FROM WB Unit 1034 TO WB Unit 1025.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Confirm WB Unit 1025 is displayed in the top-right corner of the Home page (receiving unit context)."
+          },
+          {
+            "step": 2,
+            "description": "From the Home page, click on the \"Transfers\" menu in the main navigation."
+          },
+          {
+            "step": 3,
+            "description": "On the Transfers page for WB Unit 1025, click the \"NEW TRANSFER\" button if available."
+          },
+          {
+            "step": 4,
+            "description": "On the New Transfer form, attempt to select From Store * as \"WB Unit 1034\" (a store other than the currently active WB Unit 1025)."
+          },
+          {
+            "step": 5,
+            "description": "Select To Store * as \"WB Unit 1025\"."
+          },
+          {
+            "step": 6,
+            "description": "Observe whether the system allows or restricts selecting a From Store that is not the currently active/sending unit."
+          },
+          {
+            "step": 7,
+            "description": "If the form allows selection, attempt to complete the transfer with item LARGE BUNS 11201 and click SUBMIT TRANSFER."
+          },
+          {
+            "step": 8,
+            "description": "Observe system behavior \u201a\u00c4\u00ee restriction message, disabled field, or blocked submission."
+          },
+          {
+            "step": 9,
+            "description": "Switch active store to WB Unit 1034 and verify the same transfer CAN be initiated from the sending unit."
+          }
+        ],
+        "rawTestData": "Active Store (Receiving): WB Unit 1025 | Attempted From Store: WB Unit 1034 | To Store: WB Unit 1025 | Business Rule: Only sending unit can initiate transfer",
+        "expectedResult": "Verify whether the transfer can be initiated only by the sending unit (WB Unit 1034) and users on the receiving unit (WB Unit 1025) cannot request or initiate a transfer to be sent from another unit.",
+        "testData": {
+          "activeStore": "WB Unit 1025",
+          "attemptedFromStore": "WB Unit 1034",
+          "toStore": "WB Unit 1025"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-237_042",
+        "module": "Transfers",
+        "testName": "Verify whether the Transfer Reason dropdown on the New Transfer form displays all valid reason codes with correct labels on WB Unit 1034",
+        "description": "Verify whether the Transfer Reason * dropdown on the New Transfer form displays all valid reason codes: Shortage, Overstock, Demand, Quality, Emergency, Inventory Correction, and Other (Comment Required).",
+        "preCondition": "1. User is logged in as admin. 2. WB Unit 1034 is selected. 3. User is on the New Transfer form.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "On the Transfers page for WB Unit 1034, click the \"NEW TRANSFER\" button."
+          },
+          {
+            "step": 2,
+            "description": "On the New Transfer form, locate the \"Transfer Reason *\" dropdown field."
+          },
+          {
+            "step": 3,
+            "description": "Click the Transfer Reason dropdown to expand the list of available reason codes."
+          },
+          {
+            "step": 4,
+            "description": "Verify the following reason code \"Shortage\" is available (covers: Product Shortage, Delivery Issue, Ordering Error)."
+          },
+          {
+            "step": 5,
+            "description": "Verify the reason code \"Overstock\" is available (covers: Excess Inventory, Shelf-Life)."
+          },
+          {
+            "step": 6,
+            "description": "Verify the reason code \"Demand\" is available (covers: Sales Demand, Special Event)."
+          },
+          {
+            "step": 7,
+            "description": "Verify the reason code \"Quality\" is available (covers: Quality Issue)."
+          },
+          {
+            "step": 8,
+            "description": "Verify the reason code \"Emergency\" is available (covers: Operational Disruption / Unit Closure)."
+          },
+          {
+            "step": 9,
+            "description": "Verify the reason code \"Inventory Correction\" is available (covers: inventory-related adjustments)."
+          },
+          {
+            "step": 0,
+            "description": "Verify the reason code \"Other\" is available (Comment Required)."
+          },
+          {
+            "step": 1,
+            "description": "Select each reason code one by one and verify it can be selected without error."
+          }
+        ],
+        "rawTestData": "Active Store: WB Unit 1034 | Expected Reason Codes: Shortage, Overstock, Demand, Quality, Emergency, Inventory Correction, Other",
+        "expectedResult": "Verify whether the Transfer Reason * dropdown on the New Transfer form displays all valid reason codes: Shortage, Overstock, Demand, Quality, Emergency, Inventory Correction, and Other (Comment Required).",
+        "testData": {
+          "reasonCodes": [
+            "Shortage",
+            "Overstock",
+            "Demand",
+            "Quality",
+            "Emergency",
+            "Inventory Correction",
+            "Other"
+          ]
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-237_043",
+        "module": "Transfers",
+        "testName": "Verify whether selecting Transfer Reason \"Other\" requires a mandatory comment in the Notes field before submission on WB Unit 1034",
+        "description": "Verify whether selecting Transfer Reason \"Other\" enforces a mandatory comment in the Notes field and blocks submission until a comment is provided on WB Unit 1034 New Transfer form.",
+        "preCondition": "1. User is logged in as admin. 2. WB Unit 1034 is selected. 3. User is on the New Transfer form.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "On the New Transfer form, select From Store * as \"WB Unit 1034\"."
+          },
+          {
+            "step": 2,
+            "description": "Select To Store * as \"WB Unit 1025\"."
+          },
+          {
+            "step": 3,
+            "description": "Select Transfer Reason * as \"Other\" from the dropdown."
+          },
+          {
+            "step": 4,
+            "description": "Leave the Notes field blank."
+          },
+          {
+            "step": 5,
+            "description": "Click ADD ITEM, search for \"LARGE BUNS 11201\", enter Qty 1 EA."
+          },
+          {
+            "step": 6,
+            "description": "Click SUBMIT TRANSFER and observe validation on the Notes/comment field."
+          },
+          {
+            "step": 7,
+            "description": "Enter a valid comment in the Notes field (e.g., \"Ad-hoc transfer for testing\")."
+          },
+          {
+            "step": 8,
+            "description": "Click SUBMIT TRANSFER again and verify submission proceeds or saves successfully."
+          }
+        ],
+        "rawTestData": "Transfer Reason: Other | Notes (blank): validation expected | Notes (filled): \"Ad-hoc transfer for testing\"",
+        "expectedResult": "Verify whether selecting Transfer Reason \"Other\" enforces a mandatory comment in the Notes field and blocks submission until a comment is provided on WB Unit 1034 New Transfer form.",
+        "testData": {
+          "reason": "Other",
+          "blankNotes": "",
+          "filledNotes": "Ad-hoc transfer for testing"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-237_044",
+        "module": "Transfers",
+        "testName": "Verify whether the admin user can create, submit, and approve a transfer end-to-end from WB Unit 1034 to WB Unit 1025 with Pending and Completed status transitions",
+        "description": "Verify whether the complete transfer workflow from creation on WB Unit 1034 through approval on WB Unit 1025 executes successfully with status transitioning from Pending to Completed.",
+        "preCondition": "1. User is logged in as admin. 2. WB Unit 1034 is selected. 3. Sufficient ON HAND exists for LARGE BUNS 11201 on WB Unit 1034.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Confirm WB Unit 1034 is displayed in the top-right corner of the Home page."
+          },
+          {
+            "step": 2,
+            "description": "Navigate to Transfers menu > Transfers page and click \"NEW TRANSFER\" button."
+          },
+          {
+            "step": 3,
+            "description": "Fill From Store * as \"WB Unit 1034\", To Store * as \"WB Unit 1025\", select Transfer Reason *, enter Notes."
+          },
+          {
+            "step": 4,
+            "description": "Click \"ADD ITEM\" button, search for item \"LARGE BUNS 11201\", enter Qty to Order as 1 EA."
+          },
+          {
+            "step": 5,
+            "description": "Click \"SUBMIT TRANSFER\" button."
+          },
+          {
+            "step": 6,
+            "description": "Verify user lands on the Transfers page and the transfer record shows Status \"Pending\"."
+          },
+          {
+            "step": 7,
+            "description": "Switch to WB Unit 1025 store (confirm top-right corner shows WB Unit 1025)."
+          },
+          {
+            "step": 8,
+            "description": "Click Transfers menu and locate the Transfer ID from step"
+          },
+          {
+            "step": 6,
+            "description": ""
+          },
+          {
+            "step": 9,
+            "description": "Verify ACTIONS column shows Reject and Approve buttons."
+          },
+          {
+            "step": 0,
+            "description": "Click \"Approve\" button."
+          },
+          {
+            "step": 1,
+            "description": "Verify modal displays \"Approve this transfer?\" with message \"Completes the transfer and moves inventory to the destination.\" and NO/YES buttons."
+          },
+          {
+            "step": 2,
+            "description": "Click \"YES\" button on the approval modal."
+          },
+          {
+            "step": 3,
+            "description": "Verify Status changes to \"Completed\" on WB Unit 1025 Transfers page."
+          }
+        ],
+        "rawTestData": "From: WB Unit 1034 | To: WB Unit 1025 | Item: LARGE BUNS 11201 | Qty: 1 EA | Status Flow: Pending \u201a\u00dc\u00ed Completed",
+        "expectedResult": "Verify whether the complete transfer workflow from creation on WB Unit 1034 through approval on WB Unit 1025 executes successfully with status transitioning from Pending to Completed.",
+        "testData": {
+          "fromStore": "WB Unit 1034",
+          "toStore": "WB Unit 1025",
+          "item": "LARGE BUNS",
+          "quantity": "1",
+          "uom": "EA",
+          "statusFlow": [
+            "Pending",
+            "Completed"
+          ],
+          "sku": "11201"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-237_045",
+        "module": "Transfers",
+        "testName": "Verify whether the system creates a financial record when a transfer is completed from WB Unit 1034 to WB Unit 1025",
+        "description": "Verify whether the system creates a financial record capturing transfer details (Transfer ID, stores, items, quantities, costs, date) when a transfer is completed from WB Unit 1034 to WB Unit 1025.",
+        "preCondition": "1. User is logged in as admin. 2. A transfer from WB Unit 1034 to WB Unit 1025 for LARGE BUNS 11201 has been approved and status is Completed. 3. User has access to financial/transfer detail views.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "On WB Unit 1025 (or WB Unit 1034), navigate to Transfers menu > Transfers page."
+          },
+          {
+            "step": 2,
+            "description": "Switch to the \"Completed\" section/tab on the Transfers page."
+          },
+          {
+            "step": 3,
+            "description": "Click on the Completed transfer record to open the Transfer Details page."
+          },
+          {
+            "step": 4,
+            "description": "On the Transfer Details page, locate the financial summary or financial record section."
+          },
+          {
+            "step": 5,
+            "description": "Verify a financial record is created and displayed for the completed transfer."
+          },
+          {
+            "step": 6,
+            "description": "Verify the financial record captures relevant transfer details: Transfer ID, From Store, To Store, Item(s), Quantity, FIFO COST values, and completion date."
+          },
+          {
+            "step": 7,
+            "description": "Verify the financial values correspond to the item LARGE BUNS 11201 transferred with Qty 1 EA."
+          }
+        ],
+        "rawTestData": "Transfer Status: Completed | From: WB Unit 1034 | To: WB Unit 1025 | Item: LARGE BUNS 11201 | Qty: 1 EA",
+        "expectedResult": "Verify whether the system creates a financial record capturing transfer details (Transfer ID, stores, items, quantities, costs, date) when a transfer is completed from WB Unit 1034 to WB Unit 1025.",
+        "testData": {
+          "expectedStatus": "Completed",
+          "fromStore": "WB Unit 1034",
+          "toStore": "WB Unit 1025",
+          "item": "LARGE BUNS",
+          "quantity": "1",
+          "sku": "11201"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-237_046",
+        "module": "Transfers",
+        "testName": "Verify whether the transfer details and summary are exportable and printable as a transfer receipt from the individual Completed transfer record page",
+        "description": "Verify whether the transfer details and summary are exportable and printable as a transfer receipt from the individual Completed transfer record page with accurate transfer information.",
+        "preCondition": "1. User is logged in as admin. 2. A Completed transfer exists from WB Unit 1034 to WB Unit 1025. 3. User is on the Transfer Details page for the Completed transfer.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Navigate to Transfers menu > Transfers page."
+          },
+          {
+            "step": 2,
+            "description": "Switch to the \"Completed\" section/tab."
+          },
+          {
+            "step": 3,
+            "description": "Click on the Completed transfer record to open the individual Transfer Details page."
+          },
+          {
+            "step": 4,
+            "description": "On the Transfer Details page, locate the Export and/or Print option for the transfer receipt."
+          },
+          {
+            "step": 5,
+            "description": "Click the Export button and verify a transfer receipt file is generated (PDF or applicable format)."
+          },
+          {
+            "step": 6,
+            "description": "Open the exported file and verify it contains: Transfer ID, From Store (WB Unit 1034), To Store (WB Unit 1025), Item details (LARGE BUNS 11201), Quantity, Status (Completed), and Date."
+          },
+          {
+            "step": 7,
+            "description": "Click the Print button and verify the print preview displays the transfer receipt with complete transfer details and summary."
+          },
+          {
+            "step": 8,
+            "description": "Verify the printed/exported receipt is readable and matches the data shown on the Transfer Details page."
+          }
+        ],
+        "rawTestData": "Transfer Status: Completed | Export Source: Individual Transfer Record page | Expected Content: Transfer ID, From, To, Items, Qty, Status, Date",
+        "expectedResult": "Verify whether the transfer details and summary are exportable and printable as a transfer receipt from the individual Completed transfer record page with accurate transfer information.",
+        "testData": {
+          "expectedStatus": "Completed",
+          "expectedContent": [
+            "Transfer ID",
+            "From",
+            "To",
+            "Items",
+            "Qty",
+            "Status",
+            "Date"
+          ]
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-237_047",
+        "module": "Transfers",
+        "testName": "Verify whether the transfer receipt is exportable and printable from the Dashboard page for a recently completed transfer on WB Unit 1025",
+        "description": "Verify whether the transfer details and summary are exportable and printable as a transfer receipt from the Dashboard page for a recently completed transfer on WB Unit 1025.",
+        "preCondition": "1. User is logged in as admin. 2. WB Unit 1025 is selected. 3. A transfer from WB Unit 1034 has been completed and appears in Dashboard Recent Stock Movements.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Confirm WB Unit 1025 is displayed in the top-right corner of the Home page."
+          },
+          {
+            "step": 2,
+            "description": "Navigate to Dashboard menu from the main navigation."
+          },
+          {
+            "step": 3,
+            "description": "On the Dashboard page, scroll to the \"Recent Stock Movements\" section."
+          },
+          {
+            "step": 4,
+            "description": "Locate the Transfer In record for LARGE BUNS with Qty +"
+          },
+          {
+            "step": 1,
+            "description": ""
+          },
+          {
+            "step": 5,
+            "description": "Verify an Export and/or Print option is available for the transfer from the Dashboard."
+          },
+          {
+            "step": 6,
+            "description": "Click Export and verify a transfer receipt is generated with correct transfer details."
+          },
+          {
+            "step": 7,
+            "description": "Click Print and verify the print preview shows the transfer receipt."
+          },
+          {
+            "step": 8,
+            "description": "Verify the exported/printed receipt from Dashboard matches the transfer details on the individual Transfer Details page."
+          }
+        ],
+        "rawTestData": "Active Store: WB Unit 1025 | Section: Dashboard > Recent Stock Movements | TYPE: Transfer In | ITEM: LARGE BUNS | Qty: +1",
+        "expectedResult": "Verify whether the transfer details and summary are exportable and printable as a transfer receipt from the Dashboard page for a recently completed transfer on WB Unit 1025.",
+        "testData": {
+          "activeStore": "WB Unit 1025",
+          "movementType": "Transfer In",
+          "item": "LARGE BUNS",
+          "qty": "+1",
+          "sku": "11201"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,3192 @@
+{
+  "RCSP-227": {
+    "scenarioId": "RCSP-227",
+    "epic": "EPIC-RCSP-9",
+    "feature": "Waste Management",
+    "sourceSheet": "Sheet1",
+    "description": "Waste Management: Raw/Completed waste create-save-lock-apply, validations, reason filters, FIFO cost, history, inventory, admin, and mobile.",
+    "commonData": {
+      "prerequisites": [
+        "QA Backoffice is accessible",
+        "User has Waste / Log Waste access",
+        "Unit WB Unit 1034 is available"
+      ],
+      "userRole": "admin",
+      "hierarchy": {
+        "region": "1700 San Antonio 4126314",
+        "market": "1708 E Central SA 4126393",
+        "store": "WB Unit 1034"
+      },
+      "shiftOptions": [
+        "AM",
+        "Mid-Shift",
+        "PM"
+      ],
+      "defaultShift": "AM",
+      "wasteCategories": [
+        "Raw Waste",
+        "Completed Waste"
+      ],
+      "types": [
+        "Item",
+        "Recipe"
+      ],
+      "item": {
+        "name": "LARGE BUNS",
+        "sku": "11201",
+        "uom": "EA",
+        "quantity": "1",
+        "quantityGtOne": "2",
+        "decimalQuantity": "0.5"
+      },
+      "recipe": {
+        "name": "CHEESEBURGER",
+        "uom": "EA",
+        "quantity": "1",
+        "quantityGtOne": "2"
+      },
+      "employeeId": "E12345",
+      "notes": "RCSP-227 automation waste notes",
+      "rawWasteReason": "Over-Prep Production",
+      "completedWasteReason": "Quality Issue (Spoilage / Expired / Temp Abuse)",
+      "rawWasteReasons": [
+        "Over-Prep Production",
+        "Spillage/Dropped",
+        "Equipment Failure / Training & Test",
+        "Product Discontinued"
+      ],
+      "completedWasteReasons": [
+        "Quality Issue (Spoilage / Expired / Temp Abuse)",
+        "Overcooked for Production (PHU)",
+        "Recook"
+      ],
+      "newReasonCode": {
+        "code": "AUTO_REASON_RCSP227",
+        "category": "Raw Waste"
+      },
+      "unauthorizedUser": {
+        "username": "",
+        "password": ""
+      },
+      "nonAdminUser": {
+        "username": "",
+        "password": ""
+      },
+      "mobileViewport": {
+        "width": 390,
+        "height": 844
+      },
+      "routes": {
+        "logWaste": "/waste/log",
+        "wasteHistory": "/waste/history"
+      }
+    },
+    "testCases": [
+      {
+        "testCaseId": "TC_RCSP-227_01",
+        "module": "Waste Management",
+        "testName": "Verify whether a user can successfully create, save, lock, and apply a Raw Waste entry for an Item when all mandatory fields are completed",
+        "description": "Verify whether a user can successfully create, save, lock, and apply a Raw Waste entry for an Item when all mandatory fields are completed",
+        "preCondition": "1. Launch the QA Backoffice Dashboard application. 2. Log in using valid credentials. 3. Expand the Inventory menu. 4. Click on Inventory Balances. 5. Search for an Item that has a FIFO Cost configured. 6. Note down the FIFO Cost value. 7. Verify that the Item is active and available for waste logging.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "1"
+          },
+          {
+            "step": 2,
+            "description": "Expand the Waste menu"
+          },
+          {
+            "step": 3,
+            "description": "2"
+          },
+          {
+            "step": 4,
+            "description": "Click Log Waste Item"
+          },
+          {
+            "step": 5,
+            "description": "3"
+          },
+          {
+            "step": 6,
+            "description": "Click + LOG WASTE"
+          },
+          {
+            "step": 7,
+            "description": "4"
+          },
+          {
+            "step": 8,
+            "description": "Select a Shift/Daypart"
+          },
+          {
+            "step": 9,
+            "description": "5"
+          },
+          {
+            "step": 10,
+            "description": "Click CREATE WASTE LOG"
+          },
+          {
+            "step": 11,
+            "description": "6"
+          },
+          {
+            "step": 12,
+            "description": "Select Waste Category = Raw Waste"
+          },
+          {
+            "step": 13,
+            "description": "7"
+          },
+          {
+            "step": 14,
+            "description": "Select Type = Item"
+          },
+          {
+            "step": 15,
+            "description": "8"
+          },
+          {
+            "step": 16,
+            "description": "Select the Item identified in the precondition"
+          },
+          {
+            "step": 17,
+            "description": "9"
+          },
+          {
+            "step": 18,
+            "description": "Select a valid Reason Code"
+          },
+          {
+            "step": 19,
+            "description": "10"
+          },
+          {
+            "step": 20,
+            "description": "Select UOM"
+          },
+          {
+            "step": 21,
+            "description": "11"
+          },
+          {
+            "step": 22,
+            "description": "Enter Quantity"
+          },
+          {
+            "step": 23,
+            "description": "12"
+          },
+          {
+            "step": 24,
+            "description": "Enter Notes"
+          },
+          {
+            "step": 25,
+            "description": "13"
+          },
+          {
+            "step": 26,
+            "description": "Enter Employee ID"
+          },
+          {
+            "step": 27,
+            "description": "14"
+          },
+          {
+            "step": 28,
+            "description": "Click SAVE"
+          },
+          {
+            "step": 29,
+            "description": "15"
+          },
+          {
+            "step": 30,
+            "description": "Click LOCK"
+          },
+          {
+            "step": 31,
+            "description": "16"
+          },
+          {
+            "step": 32,
+            "description": "Click APPLY TO STOCK"
+          },
+          {
+            "step": 33,
+            "description": "17"
+          },
+          {
+            "step": 34,
+            "description": "Click OK on confirmation popup"
+          }
+        ],
+        "rawTestData": "Valid Item, Valid Quantity",
+        "expectedResult": "Waste Log should be created successfully and inventory should be reduced by the entered quantity.",
+        "testData": {
+          "rawTestData": "Valid Item, Valid Quantity",
+          "expectedResult": "Waste Log should be created successfully and inventory should be reduced by the entered quantity.",
+          "wasteCategory": "Raw Waste",
+          "type": "Item",
+          "quantity": "1",
+          "flow": "happyPathItem"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-227_02",
+        "module": "Waste Management",
+        "testName": "Verify whether a user can successfully create, save, lock, and apply a Completed Waste entry for a Recipe when all mandatory fields are completed",
+        "description": "Verify whether a user can successfully create, save, lock, and apply a Completed Waste entry for a Recipe when all mandatory fields are completed",
+        "preCondition": "1. Launch the QA Backoffice Dashboard application. 2. Log in using valid credentials. 3. Expand the Inventory Setup menu. 4. Click on Recipe. 5. Search for a Recipe having at least 3 Ingredient Items mapped. 6. Verify all Ingredient Items have FIFO Cost values in Inventory Balances. 7. Verify the Recipe is active and available for waste logging.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "1"
+          },
+          {
+            "step": 2,
+            "description": "Navigate to Waste \u2192 Log Waste Item"
+          },
+          {
+            "step": 3,
+            "description": "2"
+          },
+          {
+            "step": 4,
+            "description": "Click + LOG WASTE"
+          },
+          {
+            "step": 5,
+            "description": "3"
+          },
+          {
+            "step": 6,
+            "description": "Select Daypart"
+          },
+          {
+            "step": 7,
+            "description": "4"
+          },
+          {
+            "step": 8,
+            "description": "Click CREATE WASTE LOG"
+          },
+          {
+            "step": 9,
+            "description": "5"
+          },
+          {
+            "step": 10,
+            "description": "Select Waste Category = Completed Waste"
+          },
+          {
+            "step": 11,
+            "description": "6"
+          },
+          {
+            "step": 12,
+            "description": "Select Type = Recipe"
+          },
+          {
+            "step": 13,
+            "description": "7"
+          },
+          {
+            "step": 14,
+            "description": "Select the Recipe identified in the precondition"
+          },
+          {
+            "step": 15,
+            "description": "8"
+          },
+          {
+            "step": 16,
+            "description": "Select a valid Reason Code"
+          },
+          {
+            "step": 17,
+            "description": "9"
+          },
+          {
+            "step": 18,
+            "description": "Select UOM"
+          },
+          {
+            "step": 19,
+            "description": "10"
+          },
+          {
+            "step": 20,
+            "description": "Enter Quantity"
+          },
+          {
+            "step": 21,
+            "description": "11"
+          },
+          {
+            "step": 22,
+            "description": "Enter Notes"
+          },
+          {
+            "step": 23,
+            "description": "12"
+          },
+          {
+            "step": 24,
+            "description": "Enter Employee ID"
+          },
+          {
+            "step": 25,
+            "description": "13"
+          },
+          {
+            "step": 26,
+            "description": "Click SAVE"
+          },
+          {
+            "step": 27,
+            "description": "14"
+          },
+          {
+            "step": 28,
+            "description": "Click LOCK"
+          },
+          {
+            "step": 29,
+            "description": "15"
+          },
+          {
+            "step": 30,
+            "description": "Click APPLY TO STOCK"
+          },
+          {
+            "step": 31,
+            "description": "16"
+          },
+          {
+            "step": 32,
+            "description": "Confirm submission"
+          }
+        ],
+        "rawTestData": "Valid Recipe, Valid Quantity",
+        "expectedResult": "Waste Log should be successfully submitted and inventory should be adjusted accordingly.",
+        "testData": {
+          "rawTestData": "Valid Recipe, Valid Quantity",
+          "expectedResult": "Waste Log should be successfully submitted and inventory should be adjusted accordingly.",
+          "wasteCategory": "Completed Waste",
+          "type": "Recipe",
+          "quantity": "1",
+          "flow": "happyPathRecipe"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-227_03",
+        "module": "Waste Management",
+        "testName": "Verify whether the system prevents saving a Waste Log when Waste Category is not selected",
+        "description": "Verify whether the system prevents saving a Waste Log when Waste Category is not selected",
+        "preCondition": "1. Launch the QA Backoffice Dashboard application. 2. Log in using valid credentials. 3. Navigate to Waste \u2192 Log Waste Item.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "1"
+          },
+          {
+            "step": 2,
+            "description": "Create a new Waste Log"
+          },
+          {
+            "step": 3,
+            "description": "2"
+          },
+          {
+            "step": 4,
+            "description": "Leave Waste Category blank"
+          },
+          {
+            "step": 5,
+            "description": "3"
+          },
+          {
+            "step": 6,
+            "description": "Select Item"
+          },
+          {
+            "step": 7,
+            "description": "4"
+          },
+          {
+            "step": 8,
+            "description": "Enter Quantity"
+          },
+          {
+            "step": 9,
+            "description": "5"
+          },
+          {
+            "step": 10,
+            "description": "Select UOM"
+          },
+          {
+            "step": 11,
+            "description": "6"
+          },
+          {
+            "step": 12,
+            "description": "Select Reason Code"
+          },
+          {
+            "step": 13,
+            "description": "7"
+          },
+          {
+            "step": 14,
+            "description": "Enter Employee ID"
+          },
+          {
+            "step": 15,
+            "description": "8"
+          },
+          {
+            "step": 16,
+            "description": "Click SAVE"
+          }
+        ],
+        "rawTestData": "Waste Category Blank",
+        "expectedResult": "System should display a validation message and prevent saving the Waste Log.",
+        "testData": {
+          "rawTestData": "Waste Category Blank",
+          "expectedResult": "System should display a validation message and prevent saving the Waste Log.",
+          "omitField": "wasteCategory",
+          "flow": "validation"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-227_04",
+        "module": "Waste Management",
+        "testName": "Verify whether the system prevents saving a Waste Log when Item or Recipe is not selected",
+        "description": "Verify whether the system prevents saving a Waste Log when Item or Recipe is not selected",
+        "preCondition": "1. Launch the QA Backoffice Dashboard application. 2. Log in using valid credentials. 3. Navigate to Waste \u2192 Log Waste Item.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "1"
+          },
+          {
+            "step": 2,
+            "description": "Create a new Waste Log"
+          },
+          {
+            "step": 3,
+            "description": "2"
+          },
+          {
+            "step": 4,
+            "description": "Select Waste Category"
+          },
+          {
+            "step": 5,
+            "description": "3"
+          },
+          {
+            "step": 6,
+            "description": "Leave Item/Recipe field blank"
+          },
+          {
+            "step": 7,
+            "description": "4"
+          },
+          {
+            "step": 8,
+            "description": "Complete all remaining mandatory fields"
+          },
+          {
+            "step": 9,
+            "description": "5"
+          },
+          {
+            "step": 10,
+            "description": "Click SAVE"
+          }
+        ],
+        "rawTestData": "Item/Recipe Blank",
+        "expectedResult": "System should display a validation message and prevent saving the Waste Log.",
+        "testData": {
+          "rawTestData": "Item/Recipe Blank",
+          "expectedResult": "System should display a validation message and prevent saving the Waste Log.",
+          "omitField": "itemOrRecipe",
+          "flow": "validation"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-227_05",
+        "module": "Waste Management",
+        "testName": "Verify whether the system prevents saving a Waste Log when Quantity is left blank",
+        "description": "Verify whether the system prevents saving a Waste Log when Quantity is left blank",
+        "preCondition": "1. Launch the QA Backoffice Dashboard application. 2. Log in using valid credentials. 3. Navigate to Waste \u2192 Log Waste Item.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "1"
+          },
+          {
+            "step": 2,
+            "description": "Create a new Waste Log"
+          },
+          {
+            "step": 3,
+            "description": "2"
+          },
+          {
+            "step": 4,
+            "description": "Select Waste Category"
+          },
+          {
+            "step": 5,
+            "description": "3"
+          },
+          {
+            "step": 6,
+            "description": "Select Item or Recipe"
+          },
+          {
+            "step": 7,
+            "description": "4"
+          },
+          {
+            "step": 8,
+            "description": "Leave Quantity blank"
+          },
+          {
+            "step": 9,
+            "description": "5"
+          },
+          {
+            "step": 10,
+            "description": "Complete all remaining mandatory fields"
+          },
+          {
+            "step": 11,
+            "description": "6"
+          },
+          {
+            "step": 12,
+            "description": "Click SAVE"
+          }
+        ],
+        "rawTestData": "Quantity Blank",
+        "expectedResult": "System should display a validation message and prevent saving the Waste Log.",
+        "testData": {
+          "rawTestData": "Quantity Blank",
+          "expectedResult": "System should display a validation message and prevent saving the Waste Log.",
+          "omitField": "quantity",
+          "flow": "validation"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-227_06",
+        "module": "Waste Management",
+        "testName": "Verify whether the system prevents saving a Waste Log when Unit of Measure is not selected",
+        "description": "Verify whether the system prevents saving a Waste Log when Unit of Measure is not selected",
+        "preCondition": "1. Launch the QA Backoffice Dashboard application. 2. Log in using valid credentials. 3. Navigate to Waste \u2192 Log Waste Item.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "1"
+          },
+          {
+            "step": 2,
+            "description": "Create a new Waste Log"
+          },
+          {
+            "step": 3,
+            "description": "2"
+          },
+          {
+            "step": 4,
+            "description": "Select Waste Category"
+          },
+          {
+            "step": 5,
+            "description": "3"
+          },
+          {
+            "step": 6,
+            "description": "Select Item or Recipe"
+          },
+          {
+            "step": 7,
+            "description": "4"
+          },
+          {
+            "step": 8,
+            "description": "Enter Quantity"
+          },
+          {
+            "step": 9,
+            "description": "5"
+          },
+          {
+            "step": 10,
+            "description": "Leave UOM blank"
+          },
+          {
+            "step": 11,
+            "description": "6"
+          },
+          {
+            "step": 12,
+            "description": "Complete remaining mandatory fields"
+          },
+          {
+            "step": 13,
+            "description": "7"
+          },
+          {
+            "step": 14,
+            "description": "Click SAVE"
+          }
+        ],
+        "rawTestData": "UOM Blank",
+        "expectedResult": "System should display a validation message and prevent saving the Waste Log.",
+        "testData": {
+          "rawTestData": "UOM Blank",
+          "expectedResult": "System should display a validation message and prevent saving the Waste Log.",
+          "omitField": "uom",
+          "flow": "validation"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-227_07",
+        "module": "Waste Management",
+        "testName": "Verify whether the system prevents saving a Waste Log when Reason Code is not selected",
+        "description": "Verify whether the system prevents saving a Waste Log when Reason Code is not selected",
+        "preCondition": "1. Launch the QA Backoffice Dashboard application. 2. Log in using valid credentials. 3. Navigate to Waste \u2192 Log Waste Item.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "1"
+          },
+          {
+            "step": 2,
+            "description": "Create a new Waste Log"
+          },
+          {
+            "step": 3,
+            "description": "2"
+          },
+          {
+            "step": 4,
+            "description": "Select Waste Category"
+          },
+          {
+            "step": 5,
+            "description": "3"
+          },
+          {
+            "step": 6,
+            "description": "Select Item or Recipe"
+          },
+          {
+            "step": 7,
+            "description": "4"
+          },
+          {
+            "step": 8,
+            "description": "Enter Quantity"
+          },
+          {
+            "step": 9,
+            "description": "5"
+          },
+          {
+            "step": 10,
+            "description": "Select UOM"
+          },
+          {
+            "step": 11,
+            "description": "6"
+          },
+          {
+            "step": 12,
+            "description": "Leave Reason Code blank"
+          },
+          {
+            "step": 13,
+            "description": "7"
+          },
+          {
+            "step": 14,
+            "description": "Enter Employee ID"
+          },
+          {
+            "step": 15,
+            "description": "8"
+          },
+          {
+            "step": 16,
+            "description": "Click SAVE"
+          }
+        ],
+        "rawTestData": "Reason Code Blank",
+        "expectedResult": "System should display a validation message and prevent saving the Waste Log.",
+        "testData": {
+          "rawTestData": "Reason Code Blank",
+          "expectedResult": "System should display a validation message and prevent saving the Waste Log.",
+          "omitField": "reason",
+          "flow": "validation"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-227_08",
+        "module": "Waste Management",
+        "testName": "Verify whether the system prevents saving a Waste Log when Employee ID is not entered",
+        "description": "Verify whether the system prevents saving a Waste Log when Employee ID is not entered",
+        "preCondition": "1. Launch the QA Backoffice Dashboard application. 2. Log in using valid credentials. 3. Navigate to Waste \u2192 Log Waste Item.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "1"
+          },
+          {
+            "step": 2,
+            "description": "Create a new Waste Log"
+          },
+          {
+            "step": 3,
+            "description": "2"
+          },
+          {
+            "step": 4,
+            "description": "Populate all mandatory fields except Employee ID"
+          },
+          {
+            "step": 5,
+            "description": "3"
+          },
+          {
+            "step": 6,
+            "description": "Click SAVE"
+          }
+        ],
+        "rawTestData": "Employee ID Blank",
+        "expectedResult": "System should display a validation message and prevent saving the Waste Log.",
+        "testData": {
+          "rawTestData": "Employee ID Blank",
+          "expectedResult": "System should display a validation message and prevent saving the Waste Log.",
+          "omitField": "employeeId",
+          "flow": "validation"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-227_09",
+        "module": "Waste Management",
+        "testName": "Verify whether the system prevents saving a Waste Log when Daypart is not selected",
+        "description": "Verify whether the system prevents saving a Waste Log when Daypart is not selected",
+        "preCondition": "1. Launch the QA Backoffice Dashboard application. 2. Log in using valid credentials. 3. Navigate to Waste \u2192 Log Waste Item.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "1"
+          },
+          {
+            "step": 2,
+            "description": "Click + LOG WASTE"
+          },
+          {
+            "step": 3,
+            "description": "2"
+          },
+          {
+            "step": 4,
+            "description": "Do not select Daypart"
+          },
+          {
+            "step": 5,
+            "description": "3"
+          },
+          {
+            "step": 6,
+            "description": "Attempt to create Waste Log"
+          }
+        ],
+        "rawTestData": "Daypart Blank",
+        "expectedResult": "System should display a validation message and prevent Waste Log creation.",
+        "testData": {
+          "rawTestData": "Daypart Blank",
+          "expectedResult": "System should display a validation message and prevent Waste Log creation.",
+          "omitField": "daypart",
+          "flow": "validation"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-227_10",
+        "module": "Waste Management",
+        "testName": "Verify whether only Reason Codes mapped to Raw Waste category are displayed when Raw Waste is selected",
+        "description": "Verify whether only Reason Codes mapped to Raw Waste category are displayed when Raw Waste is selected",
+        "preCondition": "1. Launch the QA Backoffice Dashboard application. 2. Log in using valid credentials. 3. Verify Waste Reason Codes are configured by Admin.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "1"
+          },
+          {
+            "step": 2,
+            "description": "Create a Waste Log"
+          },
+          {
+            "step": 3,
+            "description": "2"
+          },
+          {
+            "step": 4,
+            "description": "Select Waste Category = Raw Waste"
+          },
+          {
+            "step": 5,
+            "description": "3"
+          },
+          {
+            "step": 6,
+            "description": "Open the Reason Code dropdown"
+          }
+        ],
+        "rawTestData": "Raw Waste Category",
+        "expectedResult": "Only Reason Codes mapped to Raw Waste should be displayed.",
+        "testData": {
+          "rawTestData": "Raw Waste Category",
+          "expectedResult": "Only Reason Codes mapped to Raw Waste should be displayed.",
+          "wasteCategory": "Raw Waste",
+          "flow": "reasonFilter"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-227_11",
+        "module": "Waste Management",
+        "testName": "Verify whether only Reason Codes mapped to Completed Waste category are displayed when Completed Waste is selected",
+        "description": "Verify whether only Reason Codes mapped to Completed Waste category are displayed when Completed Waste is selected",
+        "preCondition": "1. Launch the QA Backoffice Dashboard application. 2. Log in using valid credentials. 3. Verify Waste Reason Codes are configured by Admin.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "1"
+          },
+          {
+            "step": 2,
+            "description": "Create a Waste Log"
+          },
+          {
+            "step": 3,
+            "description": "2"
+          },
+          {
+            "step": 4,
+            "description": "Select Waste Category = Completed Waste"
+          },
+          {
+            "step": 5,
+            "description": "3"
+          },
+          {
+            "step": 6,
+            "description": "Open the Reason Code dropdown"
+          }
+        ],
+        "rawTestData": "Completed Waste Category",
+        "expectedResult": "Only Reason Codes mapped to Completed Waste should be displayed.",
+        "testData": {
+          "rawTestData": "Completed Waste Category",
+          "expectedResult": "Only Reason Codes mapped to Completed Waste should be displayed.",
+          "wasteCategory": "Completed Waste",
+          "flow": "reasonFilter"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-227_12",
+        "module": "Waste Management",
+        "testName": "Verify whether a newly configured Reason Code is available for selection in Waste Entry after Admin configuration",
+        "description": "Verify whether a newly configured Reason Code is available for selection in Waste Entry after Admin configuration",
+        "preCondition": "1. Launch the QA Backoffice Dashboard application. 2. Log in as Admin. 3. Navigate to Reason Code configuration.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "1"
+          },
+          {
+            "step": 2,
+            "description": "Create a new Reason Code"
+          },
+          {
+            "step": 3,
+            "description": "2"
+          },
+          {
+            "step": 4,
+            "description": "Assign it to a Waste Category"
+          },
+          {
+            "step": 5,
+            "description": "3"
+          },
+          {
+            "step": 6,
+            "description": "Save configuration"
+          },
+          {
+            "step": 7,
+            "description": "4"
+          },
+          {
+            "step": 8,
+            "description": "Login as standard user"
+          },
+          {
+            "step": 9,
+            "description": "5"
+          },
+          {
+            "step": 10,
+            "description": "Create a Waste Log"
+          },
+          {
+            "step": 11,
+            "description": "6"
+          },
+          {
+            "step": 12,
+            "description": "Open Reason Code dropdown"
+          }
+        ],
+        "rawTestData": "New Reason Code",
+        "expectedResult": "Newly configured Reason Code should be displayed and available for selection.",
+        "testData": {
+          "rawTestData": "New Reason Code",
+          "expectedResult": "Newly configured Reason Code should be displayed and available for selection.",
+          "flow": "newReasonCode"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-227_13",
+        "module": "Waste Management",
+        "testName": "Verify whether Estimated Cost equals FIFO Cost when an Item waste entry is submitted with quantity equal to 1",
+        "description": "Verify whether Estimated Cost equals FIFO Cost when an Item waste entry is submitted with quantity equal to 1",
+        "preCondition": "1. Launch the QA Backoffice Dashboard application. 2. Log in using valid credentials. 3. Expand Inventory menu. 4. Click Inventory Balances. 5. Search for an Item having FIFO Cost configured. 6. Note the FIFO Cost value.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "1"
+          },
+          {
+            "step": 2,
+            "description": "Create a Waste Log"
+          },
+          {
+            "step": 3,
+            "description": "2"
+          },
+          {
+            "step": 4,
+            "description": "Select Raw Waste"
+          },
+          {
+            "step": 5,
+            "description": "3"
+          },
+          {
+            "step": 6,
+            "description": "Select Type = Item"
+          },
+          {
+            "step": 7,
+            "description": "4"
+          },
+          {
+            "step": 8,
+            "description": "Select the Item identified in the precondition"
+          },
+          {
+            "step": 9,
+            "description": "5"
+          },
+          {
+            "step": 10,
+            "description": "Enter Quantity = 1"
+          },
+          {
+            "step": 11,
+            "description": "6"
+          },
+          {
+            "step": 12,
+            "description": "Complete remaining mandatory fields"
+          },
+          {
+            "step": 13,
+            "description": "7"
+          },
+          {
+            "step": 14,
+            "description": "Save, Lock and Apply the Waste Log"
+          },
+          {
+            "step": 15,
+            "description": "8"
+          },
+          {
+            "step": 16,
+            "description": "Open Waste History"
+          }
+        ],
+        "rawTestData": "Quantity = 1",
+        "expectedResult": "Estimated Cost should exactly match the FIFO Cost value configured for the Item in Inventory Balances.",
+        "testData": {
+          "rawTestData": "Quantity = 1",
+          "expectedResult": "Estimated Cost should exactly match the FIFO Cost value configured for the Item in Inventory Balances.",
+          "wasteCategory": "Raw Waste",
+          "type": "Item",
+          "quantity": "1",
+          "flow": "fifoCostQty1"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-227_14",
+        "module": "Waste Management",
+        "testName": "Verify whether Estimated Cost is calculated correctly when an Item waste entry is submitted with quantity greater than 1",
+        "description": "Verify whether Estimated Cost is calculated correctly when an Item waste entry is submitted with quantity greater than 1",
+        "preCondition": "1. Launch the QA Backoffice Dashboard application. 2. Log in using valid credentials. 3. Expand Inventory menu. 4. Click Inventory Balances. 5. Search for an Item having FIFO Cost configured. 6. Note the FIFO Cost value.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "1"
+          },
+          {
+            "step": 2,
+            "description": "Create a Waste Log"
+          },
+          {
+            "step": 3,
+            "description": "2"
+          },
+          {
+            "step": 4,
+            "description": "Select Raw Waste"
+          },
+          {
+            "step": 5,
+            "description": "3"
+          },
+          {
+            "step": 6,
+            "description": "Select Type = Item"
+          },
+          {
+            "step": 7,
+            "description": "4"
+          },
+          {
+            "step": 8,
+            "description": "Select the Item identified in the precondition"
+          },
+          {
+            "step": 9,
+            "description": "5"
+          },
+          {
+            "step": 10,
+            "description": "Enter a quantity greater than 1"
+          },
+          {
+            "step": 11,
+            "description": "6"
+          },
+          {
+            "step": 12,
+            "description": "Complete all mandatory fields"
+          },
+          {
+            "step": 13,
+            "description": "7"
+          },
+          {
+            "step": 14,
+            "description": "Save, Lock and Apply the Waste Log"
+          },
+          {
+            "step": 15,
+            "description": "8"
+          },
+          {
+            "step": 16,
+            "description": "Open Waste History"
+          }
+        ],
+        "rawTestData": "Quantity > 1",
+        "expectedResult": "Estimated Cost should equal Quantity \u00d7 FIFO Cost from Inventory Balances.",
+        "testData": {
+          "rawTestData": "Quantity > 1",
+          "expectedResult": "Estimated Cost should equal Quantity \u00d7 FIFO Cost from Inventory Balances.",
+          "wasteCategory": "Raw Waste",
+          "type": "Item",
+          "quantity": "2",
+          "flow": "fifoCostQtyGt1"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-227_15",
+        "module": "Waste Management",
+        "testName": "Verify whether Estimated Cost for a Recipe waste entry is calculated using the FIFO Cost of all mapped Ingredient Items",
+        "description": "Verify whether Estimated Cost for a Recipe waste entry is calculated using the FIFO Cost of all mapped Ingredient Items",
+        "preCondition": "1. Launch the QA Backoffice Dashboard application. 2. Log in using valid credentials. 3. Expand Inventory Setup menu. 4. Click Recipe. 5. Search for a Recipe having at least 3 Ingredient Items mapped. 6. Verify all mapped Ingredient Items have FIFO Cost values configured in Inventory Balances. 7. Note the ingredient FIFO Cost values.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "1"
+          },
+          {
+            "step": 2,
+            "description": "Create a Waste Log"
+          },
+          {
+            "step": 3,
+            "description": "2"
+          },
+          {
+            "step": 4,
+            "description": "Select Completed Waste"
+          },
+          {
+            "step": 5,
+            "description": "3"
+          },
+          {
+            "step": 6,
+            "description": "Select Type = Recipe"
+          },
+          {
+            "step": 7,
+            "description": "4"
+          },
+          {
+            "step": 8,
+            "description": "Select the Recipe identified in the precondition"
+          },
+          {
+            "step": 9,
+            "description": "5"
+          },
+          {
+            "step": 10,
+            "description": "Enter Quantity = 1"
+          },
+          {
+            "step": 11,
+            "description": "6"
+          },
+          {
+            "step": 12,
+            "description": "Complete all mandatory fields"
+          },
+          {
+            "step": 13,
+            "description": "7"
+          },
+          {
+            "step": 14,
+            "description": "Save, Lock and Apply the Waste Log"
+          },
+          {
+            "step": 15,
+            "description": "8"
+          },
+          {
+            "step": 16,
+            "description": "Open Waste History"
+          }
+        ],
+        "rawTestData": "Recipe with FIFO Cost ingredients",
+        "expectedResult": "Estimated Cost should be calculated using the FIFO Cost values of all mapped Ingredient Items and should match the expected Recipe cost calculation.",
+        "testData": {
+          "rawTestData": "Recipe with FIFO Cost ingredients",
+          "expectedResult": "Estimated Cost should be calculated using the FIFO Cost values of all mapped Ingredient Items and should match the expected Recipe cost calculation.",
+          "wasteCategory": "Completed Waste",
+          "type": "Recipe",
+          "quantity": "1",
+          "flow": "recipeCost"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-227_16",
+        "module": "Waste Management",
+        "testName": "Verify whether Estimated Cost for a Recipe waste entry is multiplied correctly when quantity greater than 1 is entered",
+        "description": "Verify whether Estimated Cost for a Recipe waste entry is multiplied correctly when quantity greater than 1 is entered",
+        "preCondition": "1. Launch the QA Backoffice Dashboard application. 2. Log in using valid credentials. 3. Expand Inventory Setup menu. 4. Click Recipe. 5. Search for a Recipe having at least 3 Ingredient Items mapped. 6. Verify all ingredients have FIFO Cost values configured in Inventory Balances. 7. Note the Recipe cost derived from ingredient FIFO Costs.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "1"
+          },
+          {
+            "step": 2,
+            "description": "Navigate to Waste \u2192 Log Waste Item"
+          },
+          {
+            "step": 3,
+            "description": "2"
+          },
+          {
+            "step": 4,
+            "description": "Create a Waste Log"
+          },
+          {
+            "step": 5,
+            "description": "3"
+          },
+          {
+            "step": 6,
+            "description": "Select Completed Waste"
+          },
+          {
+            "step": 7,
+            "description": "4"
+          },
+          {
+            "step": 8,
+            "description": "Select Type = Recipe"
+          },
+          {
+            "step": 9,
+            "description": "5"
+          },
+          {
+            "step": 10,
+            "description": "Select the Recipe identified in the precondition"
+          },
+          {
+            "step": 11,
+            "description": "6"
+          },
+          {
+            "step": 12,
+            "description": "Enter quantity greater than 1"
+          },
+          {
+            "step": 13,
+            "description": "7"
+          },
+          {
+            "step": 14,
+            "description": "Complete all mandatory fields"
+          },
+          {
+            "step": 15,
+            "description": "8"
+          },
+          {
+            "step": 16,
+            "description": "Save, Lock and Apply the Waste Log"
+          },
+          {
+            "step": 17,
+            "description": "9"
+          },
+          {
+            "step": 18,
+            "description": "Open Waste History"
+          }
+        ],
+        "rawTestData": "Recipe, Quantity > 1",
+        "expectedResult": "Estimated Cost should equal Recipe FIFO Cost \u00d7 Quantity entered.",
+        "testData": {
+          "rawTestData": "Recipe, Quantity > 1",
+          "expectedResult": "Estimated Cost should equal Recipe FIFO Cost \u00d7 Quantity entered.",
+          "flow": "generic"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-227_17",
+        "module": "Waste Management",
+        "testName": "Verify whether Estimated Cost is calculated correctly when Item and Recipe are added together in the same Waste Log",
+        "description": "Verify whether Estimated Cost is calculated correctly when Item and Recipe are added together in the same Waste Log",
+        "preCondition": "Item and Recipe preconditions are satisfied.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "1"
+          },
+          {
+            "step": 2,
+            "description": "Create a Waste Log"
+          },
+          {
+            "step": 3,
+            "description": "2"
+          },
+          {
+            "step": 4,
+            "description": "Add first line as Item"
+          },
+          {
+            "step": 5,
+            "description": "3"
+          },
+          {
+            "step": 6,
+            "description": "Add second line as Recipe"
+          },
+          {
+            "step": 7,
+            "description": "4"
+          },
+          {
+            "step": 8,
+            "description": "Enter valid quantities for both lines"
+          },
+          {
+            "step": 9,
+            "description": "5"
+          },
+          {
+            "step": 10,
+            "description": "Complete mandatory fields for each line"
+          },
+          {
+            "step": 11,
+            "description": "6"
+          },
+          {
+            "step": 12,
+            "description": "Save, Lock and Apply the Waste Log"
+          },
+          {
+            "step": 13,
+            "description": "7"
+          },
+          {
+            "step": 14,
+            "description": "Open Waste History"
+          }
+        ],
+        "rawTestData": "One Item and One Recipe",
+        "expectedResult": "Estimated Cost should be calculated correctly for each line and total cost should equal the sum of all line item costs.",
+        "testData": {
+          "rawTestData": "One Item and One Recipe",
+          "expectedResult": "Estimated Cost should be calculated correctly for each line and total cost should equal the sum of all line item costs.",
+          "flow": "generic"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-227_18",
+        "module": "Waste Management",
+        "testName": "Verify whether Estimated Cost is calculated correctly when multiple Item entries are added within the same Waste Log",
+        "description": "Verify whether Estimated Cost is calculated correctly when multiple Item entries are added within the same Waste Log",
+        "preCondition": "1. Launch the application. 2. Log in. 3. Identify multiple Items having FIFO Cost values configured in Inventory Balances.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "1"
+          },
+          {
+            "step": 2,
+            "description": "Create a Waste Log"
+          },
+          {
+            "step": 3,
+            "description": "2"
+          },
+          {
+            "step": 4,
+            "description": "Add multiple Item rows"
+          },
+          {
+            "step": 5,
+            "description": "3"
+          },
+          {
+            "step": 6,
+            "description": "Enter different quantities for each row"
+          },
+          {
+            "step": 7,
+            "description": "4"
+          },
+          {
+            "step": 8,
+            "description": "Complete all mandatory fields"
+          },
+          {
+            "step": 9,
+            "description": "5"
+          },
+          {
+            "step": 10,
+            "description": "Save, Lock and Apply"
+          },
+          {
+            "step": 11,
+            "description": "6"
+          },
+          {
+            "step": 12,
+            "description": "Open Waste History"
+          }
+        ],
+        "rawTestData": "Multiple Items",
+        "expectedResult": "Each Item line should calculate Estimated Cost using its FIFO Cost and quantity. Total cost should equal the sum of all Item line costs.",
+        "testData": {
+          "rawTestData": "Multiple Items",
+          "expectedResult": "Each Item line should calculate Estimated Cost using its FIFO Cost and quantity. Total cost should equal the sum of all Item line costs.",
+          "flow": "generic"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-227_19",
+        "module": "Waste Management",
+        "testName": "Verify whether Estimated Cost is calculated correctly when multiple Recipe entries are added within the same Waste Log",
+        "description": "Verify whether Estimated Cost is calculated correctly when multiple Recipe entries are added within the same Waste Log",
+        "preCondition": "1. Launch the application. 2. Log in. 3. Identify multiple Recipes having ingredients with FIFO Cost values.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "1"
+          },
+          {
+            "step": 2,
+            "description": "Create a Waste Log"
+          },
+          {
+            "step": 3,
+            "description": "2"
+          },
+          {
+            "step": 4,
+            "description": "Add multiple Recipe rows"
+          },
+          {
+            "step": 5,
+            "description": "3"
+          },
+          {
+            "step": 6,
+            "description": "Enter quantities"
+          },
+          {
+            "step": 7,
+            "description": "4"
+          },
+          {
+            "step": 8,
+            "description": "Complete all mandatory fields"
+          },
+          {
+            "step": 9,
+            "description": "5"
+          },
+          {
+            "step": 10,
+            "description": "Save, Lock and Apply"
+          },
+          {
+            "step": 11,
+            "description": "6"
+          },
+          {
+            "step": 12,
+            "description": "Open Waste History"
+          }
+        ],
+        "rawTestData": "Multiple Recipes",
+        "expectedResult": "Each Recipe line should calculate Estimated Cost correctly and total cost should equal the sum of all Recipe line costs.",
+        "testData": {
+          "rawTestData": "Multiple Recipes",
+          "expectedResult": "Each Recipe line should calculate Estimated Cost correctly and total cost should equal the sum of all Recipe line costs.",
+          "flow": "generic"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-227_20",
+        "module": "Waste Management",
+        "testName": "Verify whether inventory on-hand quantity is reduced immediately after a Waste Log is applied to stock for an Item",
+        "description": "Verify whether inventory on-hand quantity is reduced immediately after a Waste Log is applied to stock for an Item",
+        "preCondition": "1. Launch the application. 2. Log in. 3. Navigate to Inventory Balances. 4. Identify an Item with available stock and FIFO Cost. 5. Note current on-hand quantity.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "1"
+          },
+          {
+            "step": 2,
+            "description": "Create Item Waste Log"
+          },
+          {
+            "step": 3,
+            "description": "2"
+          },
+          {
+            "step": 4,
+            "description": "Enter a valid quantity"
+          },
+          {
+            "step": 5,
+            "description": "3"
+          },
+          {
+            "step": 6,
+            "description": "Save, Lock and Apply"
+          },
+          {
+            "step": 7,
+            "description": "4"
+          },
+          {
+            "step": 8,
+            "description": "Return to Inventory Balances"
+          },
+          {
+            "step": 9,
+            "description": "5"
+          },
+          {
+            "step": 10,
+            "description": "Search for the same Item"
+          }
+        ],
+        "rawTestData": "Item with available inventory",
+        "expectedResult": "On-hand inventory quantity should be reduced by the exact waste quantity entered.",
+        "testData": {
+          "rawTestData": "Item with available inventory",
+          "expectedResult": "On-hand inventory quantity should be reduced by the exact waste quantity entered.",
+          "flow": "inventoryReduction"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-227_21",
+        "module": "Waste Management",
+        "testName": "Verify whether inventory is reduced correctly after a Recipe waste entry is applied to stock",
+        "description": "Verify whether inventory is reduced correctly after a Recipe waste entry is applied to stock",
+        "preCondition": "1. Launch the application. 2. Log in. 3. Identify a Recipe with mapped ingredients having FIFO Cost values. 4. Note current inventory quantities of mapped ingredients.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "1"
+          },
+          {
+            "step": 2,
+            "description": "Create Recipe Waste Log"
+          },
+          {
+            "step": 3,
+            "description": "2"
+          },
+          {
+            "step": 4,
+            "description": "Enter quantity"
+          },
+          {
+            "step": 5,
+            "description": "3"
+          },
+          {
+            "step": 6,
+            "description": "Save, Lock and Apply"
+          },
+          {
+            "step": 7,
+            "description": "4"
+          },
+          {
+            "step": 8,
+            "description": "Verify inventory balances of mapped ingredients"
+          }
+        ],
+        "rawTestData": "Recipe Waste",
+        "expectedResult": "Inventory should be reduced according to the ingredient quantities defined in the Recipe.",
+        "testData": {
+          "rawTestData": "Recipe Waste",
+          "expectedResult": "Inventory should be reduced according to the ingredient quantities defined in the Recipe.",
+          "flow": "inventoryReduction"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-227_22",
+        "module": "Waste Management",
+        "testName": "Verify whether a Waste Log cannot be applied to stock before it is locked",
+        "description": "Verify whether a Waste Log cannot be applied to stock before it is locked",
+        "preCondition": "General Waste Log Precondition.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "1"
+          },
+          {
+            "step": 2,
+            "description": "Create a Waste Log"
+          },
+          {
+            "step": 3,
+            "description": "2"
+          },
+          {
+            "step": 4,
+            "description": "Complete mandatory fields"
+          },
+          {
+            "step": 5,
+            "description": "3"
+          },
+          {
+            "step": 6,
+            "description": "Click SAVE"
+          },
+          {
+            "step": 7,
+            "description": "4"
+          },
+          {
+            "step": 8,
+            "description": "Attempt to click APPLY TO STOCK without clicking LOCK"
+          }
+        ],
+        "rawTestData": "Valid Waste Entry",
+        "expectedResult": "System should prevent Apply To Stock and display an appropriate validation message.",
+        "testData": {
+          "rawTestData": "Valid Waste Entry",
+          "expectedResult": "System should prevent Apply To Stock and display an appropriate validation message.",
+          "flow": "generic"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-227_23",
+        "module": "Waste Management",
+        "testName": "Verify whether a Waste Log can be successfully applied only after it has been saved and locked",
+        "description": "Verify whether a Waste Log can be successfully applied only after it has been saved and locked",
+        "preCondition": "General Waste Log Precondition.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "1"
+          },
+          {
+            "step": 2,
+            "description": "Create a Waste Log"
+          },
+          {
+            "step": 3,
+            "description": "2"
+          },
+          {
+            "step": 4,
+            "description": "Complete all mandatory fields"
+          },
+          {
+            "step": 5,
+            "description": "3"
+          },
+          {
+            "step": 6,
+            "description": "Click SAVE"
+          },
+          {
+            "step": 7,
+            "description": "4"
+          },
+          {
+            "step": 8,
+            "description": "Click LOCK"
+          },
+          {
+            "step": 9,
+            "description": "5"
+          },
+          {
+            "step": 10,
+            "description": "Click APPLY TO STOCK"
+          },
+          {
+            "step": 11,
+            "description": "6"
+          },
+          {
+            "step": 12,
+            "description": "Confirm submission"
+          }
+        ],
+        "rawTestData": "Valid Waste Entry",
+        "expectedResult": "Waste Log should be successfully applied after Save and Lock actions are completed.",
+        "testData": {
+          "rawTestData": "Valid Waste Entry",
+          "expectedResult": "Waste Log should be successfully applied after Save and Lock actions are completed.",
+          "flow": "generic"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-227_24",
+        "module": "Waste Management",
+        "testName": "Verify whether the system prevents entry of zero quantity in a Waste Log",
+        "description": "Verify whether the system prevents entry of zero quantity in a Waste Log",
+        "preCondition": "General Waste Log Precondition.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "1"
+          },
+          {
+            "step": 2,
+            "description": "Create a Waste Log"
+          },
+          {
+            "step": 3,
+            "description": "2"
+          },
+          {
+            "step": 4,
+            "description": "Select Item or Recipe"
+          },
+          {
+            "step": 5,
+            "description": "3"
+          },
+          {
+            "step": 6,
+            "description": "Enter Quantity = 0"
+          },
+          {
+            "step": 7,
+            "description": "4"
+          },
+          {
+            "step": 8,
+            "description": "Complete remaining mandatory fields"
+          },
+          {
+            "step": 9,
+            "description": "5"
+          },
+          {
+            "step": 10,
+            "description": "Click SAVE"
+          }
+        ],
+        "rawTestData": "Quantity = 0",
+        "expectedResult": "System should display validation message and prevent saving.",
+        "testData": {
+          "rawTestData": "Quantity = 0",
+          "expectedResult": "System should display validation message and prevent saving.",
+          "flow": "generic"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-227_25",
+        "module": "Waste Management",
+        "testName": "Verify whether the system prevents entry of negative quantity values in a Waste Log",
+        "description": "Verify whether the system prevents entry of negative quantity values in a Waste Log",
+        "preCondition": "General Waste Log Precondition.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "1"
+          },
+          {
+            "step": 2,
+            "description": "Create a Waste Log"
+          },
+          {
+            "step": 3,
+            "description": "2"
+          },
+          {
+            "step": 4,
+            "description": "Select Item or Recipe"
+          },
+          {
+            "step": 5,
+            "description": "3"
+          },
+          {
+            "step": 6,
+            "description": "Enter a negative quantity value"
+          },
+          {
+            "step": 7,
+            "description": "4"
+          },
+          {
+            "step": 8,
+            "description": "Complete remaining mandatory fields"
+          },
+          {
+            "step": 9,
+            "description": "5"
+          },
+          {
+            "step": 10,
+            "description": "Click SAVE"
+          }
+        ],
+        "rawTestData": "Negative Quantity",
+        "expectedResult": "System should reject negative quantity values and prevent saving.",
+        "testData": {
+          "rawTestData": "Negative Quantity",
+          "expectedResult": "System should reject negative quantity values and prevent saving.",
+          "flow": "generic"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-227_26",
+        "module": "Waste Management",
+        "testName": "Verify whether the system calculates Estimated Cost correctly when decimal quantities are entered",
+        "description": "Verify whether the system calculates Estimated Cost correctly when decimal quantities are entered",
+        "preCondition": "1. Launch the application. 2. Log in. 3. Identify an Item having FIFO Cost configured.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "1"
+          },
+          {
+            "step": 2,
+            "description": "Create an Item Waste Log"
+          },
+          {
+            "step": 3,
+            "description": "2"
+          },
+          {
+            "step": 4,
+            "description": "Enter a decimal quantity value supported by the selected UOM"
+          },
+          {
+            "step": 5,
+            "description": "3"
+          },
+          {
+            "step": 6,
+            "description": "Complete mandatory fields"
+          },
+          {
+            "step": 7,
+            "description": "4"
+          },
+          {
+            "step": 8,
+            "description": "Save, Lock and Apply"
+          },
+          {
+            "step": 9,
+            "description": "5"
+          },
+          {
+            "step": 10,
+            "description": "Open Waste History"
+          }
+        ],
+        "rawTestData": "Decimal Quantity",
+        "expectedResult": "Estimated Cost should be calculated accurately using decimal quantity \u00d7 FIFO Cost.",
+        "testData": {
+          "rawTestData": "Decimal Quantity",
+          "expectedResult": "Estimated Cost should be calculated accurately using decimal quantity \u00d7 FIFO Cost.",
+          "flow": "generic"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-227_27",
+        "module": "Waste Management",
+        "testName": "Verify whether changing the Reason Code does not affect FIFO-based Estimated Cost calculation",
+        "description": "Verify whether changing the Reason Code does not affect FIFO-based Estimated Cost calculation",
+        "preCondition": "Item precondition is satisfied.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "1"
+          },
+          {
+            "step": 2,
+            "description": "Create Waste Log for an Item using Reason Code A"
+          },
+          {
+            "step": 3,
+            "description": "2"
+          },
+          {
+            "step": 4,
+            "description": "Apply the Waste Log"
+          },
+          {
+            "step": 5,
+            "description": "3"
+          },
+          {
+            "step": 6,
+            "description": "Create another Waste Log for the same Item and quantity using Reason Code B"
+          },
+          {
+            "step": 7,
+            "description": "4"
+          },
+          {
+            "step": 8,
+            "description": "Apply the Waste Log"
+          },
+          {
+            "step": 9,
+            "description": "5"
+          },
+          {
+            "step": 10,
+            "description": "Compare Estimated Costs"
+          }
+        ],
+        "rawTestData": "Same Item, Same Quantity, Different Reasons",
+        "expectedResult": "Estimated Cost should remain the same because cost calculation is based on FIFO Cost and quantity, not Reason Code.",
+        "testData": {
+          "rawTestData": "Same Item, Same Quantity, Different Reasons",
+          "expectedResult": "Estimated Cost should remain the same because cost calculation is based on FIFO Cost and quantity, not Reason Code.",
+          "flow": "generic"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-227_28",
+        "module": "Waste Management",
+        "testName": "Verify whether Waste History displays the same Estimated Cost that was calculated during Waste Log submission",
+        "description": "Verify whether Waste History displays the same Estimated Cost that was calculated during Waste Log submission",
+        "preCondition": "Item or Recipe precondition is satisfied.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "1"
+          },
+          {
+            "step": 2,
+            "description": "Create a Waste Log"
+          },
+          {
+            "step": 3,
+            "description": "2"
+          },
+          {
+            "step": 4,
+            "description": "Save, Lock and Apply"
+          },
+          {
+            "step": 5,
+            "description": "3"
+          },
+          {
+            "step": 6,
+            "description": "Open Waste History"
+          },
+          {
+            "step": 7,
+            "description": "4"
+          },
+          {
+            "step": 8,
+            "description": "Search for the submitted Waste Log"
+          }
+        ],
+        "rawTestData": "Valid Waste Entry",
+        "expectedResult": "Estimated Cost displayed in Waste History should match the cost calculated during submission.",
+        "testData": {
+          "rawTestData": "Valid Waste Entry",
+          "expectedResult": "Estimated Cost displayed in Waste History should match the cost calculated during submission.",
+          "flow": "wasteHistory"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-227_29",
+        "module": "Waste Management",
+        "testName": "Verify whether a submitted Waste Record cannot be edited after Apply To Stock is completed",
+        "description": "Verify whether a submitted Waste Record cannot be edited after Apply To Stock is completed",
+        "preCondition": "General Waste Log Precondition.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "1"
+          },
+          {
+            "step": 2,
+            "description": "Create a Waste Log"
+          },
+          {
+            "step": 3,
+            "description": "2"
+          },
+          {
+            "step": 4,
+            "description": "Save, Lock and Apply"
+          },
+          {
+            "step": 5,
+            "description": "3"
+          },
+          {
+            "step": 6,
+            "description": "Open the submitted Waste Record"
+          },
+          {
+            "step": 7,
+            "description": "4"
+          },
+          {
+            "step": 8,
+            "description": "Attempt to modify any field"
+          }
+        ],
+        "rawTestData": "Applied Waste Record",
+        "expectedResult": "System should not allow editing of the submitted Waste Record.",
+        "testData": {
+          "rawTestData": "Applied Waste Record",
+          "expectedResult": "System should not allow editing of the submitted Waste Record.",
+          "flow": "generic"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-227_30",
+        "module": "Waste Management",
+        "testName": "Verify whether a submitted Waste Record cannot be deleted after Apply To Stock is completed",
+        "description": "Verify whether a submitted Waste Record cannot be deleted after Apply To Stock is completed",
+        "preCondition": "General Waste Log Precondition.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "1"
+          },
+          {
+            "step": 2,
+            "description": "Create a Waste Log"
+          },
+          {
+            "step": 3,
+            "description": "2"
+          },
+          {
+            "step": 4,
+            "description": "Save, Lock and Apply"
+          },
+          {
+            "step": 5,
+            "description": "3"
+          },
+          {
+            "step": 6,
+            "description": "Locate the submitted Waste Record"
+          },
+          {
+            "step": 7,
+            "description": "4"
+          },
+          {
+            "step": 8,
+            "description": "Attempt to delete the record"
+          }
+        ],
+        "rawTestData": "Applied Waste Record",
+        "expectedResult": "System should not allow deletion of submitted Waste Records and the waste transaction should remain permanently available for audit purposes.",
+        "testData": {
+          "rawTestData": "Applied Waste Record",
+          "expectedResult": "System should not allow deletion of submitted Waste Records and the waste transaction should remain permanently available for audit purposes.",
+          "flow": "generic"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-227_31",
+        "module": "Waste Management",
+        "testName": "Verify whether a Waste Log can be submitted successfully while a stock count is in progress",
+        "description": "Verify whether a Waste Log can be submitted successfully while a stock count is in progress",
+        "preCondition": "1. Launch the QA Backoffice Dashboard application. 2. Log in using valid credentials. 3. Ensure a stock count session is currently in progress. 4. Identify an Item having FIFO Cost configured in Inventory Balances.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "1"
+          },
+          {
+            "step": 2,
+            "description": "Navigate to Waste \u2192 Log Waste Item"
+          },
+          {
+            "step": 3,
+            "description": "2"
+          },
+          {
+            "step": 4,
+            "description": "Create a new Waste Log"
+          },
+          {
+            "step": 5,
+            "description": "3"
+          },
+          {
+            "step": 6,
+            "description": "Select Raw Waste"
+          },
+          {
+            "step": 7,
+            "description": "4"
+          },
+          {
+            "step": 8,
+            "description": "Select Item"
+          },
+          {
+            "step": 9,
+            "description": "5"
+          },
+          {
+            "step": 10,
+            "description": "Enter all mandatory fields"
+          },
+          {
+            "step": 11,
+            "description": "6"
+          },
+          {
+            "step": 12,
+            "description": "Save, Lock and Apply the Waste Log"
+          }
+        ],
+        "rawTestData": "Valid Item",
+        "expectedResult": "Waste Log should be submitted successfully without requiring the stock count to be completed or closed.",
+        "testData": {
+          "rawTestData": "Valid Item",
+          "expectedResult": "Waste Log should be submitted successfully without requiring the stock count to be completed or closed.",
+          "flow": "generic"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-227_32",
+        "module": "Waste Management",
+        "testName": "Verify whether multiple Waste Logs can be created and submitted for the same Item on the same business day",
+        "description": "Verify whether multiple Waste Logs can be created and submitted for the same Item on the same business day",
+        "preCondition": "1. Launch the application. 2. Log in using valid credentials. 3. Identify an Item with FIFO Cost configured.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "1"
+          },
+          {
+            "step": 2,
+            "description": "Create and submit a Waste Log for the Item"
+          },
+          {
+            "step": 3,
+            "description": "2"
+          },
+          {
+            "step": 4,
+            "description": "Create a second Waste Log for the same Item on the same day"
+          },
+          {
+            "step": 5,
+            "description": "3"
+          },
+          {
+            "step": 6,
+            "description": "Submit the second Waste Log"
+          }
+        ],
+        "rawTestData": "Same Item, Same Day",
+        "expectedResult": "Both Waste Logs should be successfully submitted and inventory should be adjusted for each transaction.",
+        "testData": {
+          "rawTestData": "Same Item, Same Day",
+          "expectedResult": "Both Waste Logs should be successfully submitted and inventory should be adjusted for each transaction.",
+          "flow": "generic"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-227_33",
+        "module": "Waste Management",
+        "testName": "Verify whether the same Item can be added in multiple rows within a single Waste Log",
+        "description": "Verify whether the same Item can be added in multiple rows within a single Waste Log",
+        "preCondition": "1. Launch the application. 2. Log in using valid credentials. 3. Identify an Item with FIFO Cost configured.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "1"
+          },
+          {
+            "step": 2,
+            "description": "Create a Waste Log"
+          },
+          {
+            "step": 3,
+            "description": "2"
+          },
+          {
+            "step": 4,
+            "description": "Add the Item in the first row"
+          },
+          {
+            "step": 5,
+            "description": "3"
+          },
+          {
+            "step": 6,
+            "description": "Add the same Item again in a second row"
+          },
+          {
+            "step": 7,
+            "description": "4"
+          },
+          {
+            "step": 8,
+            "description": "Enter different quantities"
+          },
+          {
+            "step": 9,
+            "description": "5"
+          },
+          {
+            "step": 10,
+            "description": "Save, Lock and Apply"
+          }
+        ],
+        "rawTestData": "Same Item in Multiple Rows",
+        "expectedResult": "System should calculate each row independently and total cost should reflect the sum of both rows.",
+        "testData": {
+          "rawTestData": "Same Item in Multiple Rows",
+          "expectedResult": "System should calculate each row independently and total cost should reflect the sum of both rows.",
+          "flow": "generic"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-227_34",
+        "module": "Waste Management",
+        "testName": "Verify whether the same Recipe can be added in multiple rows within a single Waste Log",
+        "description": "Verify whether the same Recipe can be added in multiple rows within a single Waste Log",
+        "preCondition": "1. Launch the application. 2. Log in using valid credentials. 3. Identify a Recipe with ingredient Items having FIFO Cost configured.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "1"
+          },
+          {
+            "step": 2,
+            "description": "Create a Waste Log"
+          },
+          {
+            "step": 3,
+            "description": "2"
+          },
+          {
+            "step": 4,
+            "description": "Add the Recipe in multiple rows"
+          },
+          {
+            "step": 5,
+            "description": "3"
+          },
+          {
+            "step": 6,
+            "description": "Enter different quantities"
+          },
+          {
+            "step": 7,
+            "description": "4"
+          },
+          {
+            "step": 8,
+            "description": "Save, Lock and Apply"
+          }
+        ],
+        "rawTestData": "Same Recipe in Multiple Rows",
+        "expectedResult": "System should calculate each row independently and total cost should be calculated correctly.",
+        "testData": {
+          "rawTestData": "Same Recipe in Multiple Rows",
+          "expectedResult": "System should calculate each row independently and total cost should be calculated correctly.",
+          "flow": "generic"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-227_35",
+        "module": "Waste Management",
+        "testName": "Verify whether the total Estimated Cost displayed in the Waste Log equals the sum of all Item and Recipe line costs",
+        "description": "Verify whether the total Estimated Cost displayed in the Waste Log equals the sum of all Item and Recipe line costs",
+        "preCondition": "Item and Recipe preconditions are satisfied.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "1"
+          },
+          {
+            "step": 2,
+            "description": "Create a Waste Log"
+          },
+          {
+            "step": 3,
+            "description": "2"
+          },
+          {
+            "step": 4,
+            "description": "Add multiple Item and Recipe rows"
+          },
+          {
+            "step": 5,
+            "description": "3"
+          },
+          {
+            "step": 6,
+            "description": "Enter quantities"
+          },
+          {
+            "step": 7,
+            "description": "4"
+          },
+          {
+            "step": 8,
+            "description": "Save, Lock and Apply"
+          },
+          {
+            "step": 9,
+            "description": "5"
+          },
+          {
+            "step": 10,
+            "description": "Calculate expected total manually"
+          }
+        ],
+        "rawTestData": "Mixed Item and Recipe Entries",
+        "expectedResult": "Total Estimated Cost should equal the sum of all individual line-level Estimated Costs.",
+        "testData": {
+          "rawTestData": "Mixed Item and Recipe Entries",
+          "expectedResult": "Total Estimated Cost should equal the sum of all individual line-level Estimated Costs.",
+          "flow": "generic"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-227_36",
+        "module": "Waste Management",
+        "testName": "Verify whether the system correctly calculates Estimated Cost when Items have FIFO Costs containing decimal values",
+        "description": "Verify whether the system correctly calculates Estimated Cost when Items have FIFO Costs containing decimal values",
+        "preCondition": "1. Launch the application. 2. Log in. 3. Identify an Item with a FIFO Cost containing decimal values.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "1"
+          },
+          {
+            "step": 2,
+            "description": "Create an Item Waste Log"
+          },
+          {
+            "step": 3,
+            "description": "2"
+          },
+          {
+            "step": 4,
+            "description": "Enter quantity"
+          },
+          {
+            "step": 5,
+            "description": "3"
+          },
+          {
+            "step": 6,
+            "description": "Save, Lock and Apply"
+          },
+          {
+            "step": 7,
+            "description": "4"
+          },
+          {
+            "step": 8,
+            "description": "Open Waste History"
+          }
+        ],
+        "rawTestData": "Item with Decimal FIFO Cost",
+        "expectedResult": "Estimated Cost should be calculated accurately and follow the configured rounding rules.",
+        "testData": {
+          "rawTestData": "Item with Decimal FIFO Cost",
+          "expectedResult": "Estimated Cost should be calculated accurately and follow the configured rounding rules.",
+          "flow": "generic"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-227_37",
+        "module": "Waste Management",
+        "testName": "Verify whether the system correctly rounds Estimated Cost values when quantity contains decimal values",
+        "description": "Verify whether the system correctly rounds Estimated Cost values when quantity contains decimal values",
+        "preCondition": "1. Launch the application. 2. Log in. 3. Identify an Item with FIFO Cost configured.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "1"
+          },
+          {
+            "step": 2,
+            "description": "Create an Item Waste Log"
+          },
+          {
+            "step": 3,
+            "description": "2"
+          },
+          {
+            "step": 4,
+            "description": "Enter a decimal quantity"
+          },
+          {
+            "step": 5,
+            "description": "3"
+          },
+          {
+            "step": 6,
+            "description": "Save, Lock and Apply"
+          },
+          {
+            "step": 7,
+            "description": "4"
+          },
+          {
+            "step": 8,
+            "description": "Open Waste History"
+          }
+        ],
+        "rawTestData": "Decimal Quantity",
+        "expectedResult": "Estimated Cost should be calculated correctly and rounded according to system-defined precision rules.",
+        "testData": {
+          "rawTestData": "Decimal Quantity",
+          "expectedResult": "Estimated Cost should be calculated correctly and rounded according to system-defined precision rules.",
+          "flow": "generic"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-227_38",
+        "module": "Waste Management",
+        "testName": "Verify whether Waste History retains accurate cost information after multiple Waste Logs are submitted for different Items and Recipes",
+        "description": "Verify whether Waste History retains accurate cost information after multiple Waste Logs are submitted for different Items and Recipes",
+        "preCondition": "Item and Recipe preconditions are satisfied.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "1"
+          },
+          {
+            "step": 2,
+            "description": "Create and submit multiple Waste Logs"
+          },
+          {
+            "step": 3,
+            "description": "2"
+          },
+          {
+            "step": 4,
+            "description": "Include both Items and Recipes"
+          },
+          {
+            "step": 5,
+            "description": "3"
+          },
+          {
+            "step": 6,
+            "description": "Navigate to Waste History"
+          },
+          {
+            "step": 7,
+            "description": "4"
+          },
+          {
+            "step": 8,
+            "description": "Review submitted records"
+          }
+        ],
+        "rawTestData": "Multiple Waste Transactions",
+        "expectedResult": "Waste History should display accurate Estimated Cost values for all submitted transactions.",
+        "testData": {
+          "rawTestData": "Multiple Waste Transactions",
+          "expectedResult": "Waste History should display accurate Estimated Cost values for all submitted transactions.",
+          "flow": "wasteHistory"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-227_39",
+        "module": "Waste Management",
+        "testName": "Verify whether a Waste Log remains visible in Waste History after user logout and subsequent login",
+        "description": "Verify whether a Waste Log remains visible in Waste History after user logout and subsequent login",
+        "preCondition": "General Waste Log Precondition.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "1"
+          },
+          {
+            "step": 2,
+            "description": "Create and submit a Waste Log"
+          },
+          {
+            "step": 3,
+            "description": "2"
+          },
+          {
+            "step": 4,
+            "description": "Log out of the application"
+          },
+          {
+            "step": 5,
+            "description": "3"
+          },
+          {
+            "step": 6,
+            "description": "Log back in"
+          },
+          {
+            "step": 7,
+            "description": "4"
+          },
+          {
+            "step": 8,
+            "description": "Open Waste History"
+          },
+          {
+            "step": 9,
+            "description": "5"
+          },
+          {
+            "step": 10,
+            "description": "Search for the submitted record"
+          }
+        ],
+        "rawTestData": "Submitted Waste Log",
+        "expectedResult": "Waste Log should remain available and visible in Waste History after relogin.",
+        "testData": {
+          "rawTestData": "Submitted Waste Log",
+          "expectedResult": "Waste Log should remain available and visible in Waste History after relogin.",
+          "flow": "wasteHistory"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-227_40",
+        "module": "Waste Management",
+        "testName": "Verify whether inventory reduction is accurately reflected when multiple line items are submitted in a single Waste Log",
+        "description": "Verify whether inventory reduction is accurately reflected when multiple line items are submitted in a single Waste Log",
+        "preCondition": "Item and Recipe preconditions are satisfied.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "1"
+          },
+          {
+            "step": 2,
+            "description": "Note inventory balances before submission"
+          },
+          {
+            "step": 3,
+            "description": "2"
+          },
+          {
+            "step": 4,
+            "description": "Create Waste Log with multiple rows"
+          },
+          {
+            "step": 5,
+            "description": "3"
+          },
+          {
+            "step": 6,
+            "description": "Save, Lock and Apply"
+          },
+          {
+            "step": 7,
+            "description": "4"
+          },
+          {
+            "step": 8,
+            "description": "Review Inventory Balances after submission"
+          }
+        ],
+        "rawTestData": "Multiple Waste Entries",
+        "expectedResult": "Inventory quantities should decrease according to the waste quantities entered for all submitted lines.",
+        "testData": {
+          "rawTestData": "Multiple Waste Entries",
+          "expectedResult": "Inventory quantities should decrease according to the waste quantities entered for all submitted lines.",
+          "flow": "inventoryReduction"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-227_41",
+        "module": "Waste Management",
+        "testName": "Verify whether the system allows submission of Waste Logs using different valid Reason Codes configured for the selected Waste Category",
+        "description": "Verify whether the system allows submission of Waste Logs using different valid Reason Codes configured for the selected Waste Category",
+        "preCondition": "Reason Codes are configured by Admin.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "1"
+          },
+          {
+            "step": 2,
+            "description": "Create multiple Waste Logs"
+          },
+          {
+            "step": 3,
+            "description": "2"
+          },
+          {
+            "step": 4,
+            "description": "Select different valid Reason Codes for each log"
+          },
+          {
+            "step": 5,
+            "description": "3"
+          },
+          {
+            "step": 6,
+            "description": "Complete and submit each Waste Log"
+          }
+        ],
+        "rawTestData": "Multiple Valid Reason Codes",
+        "expectedResult": "Waste Logs should be submitted successfully using any valid configured Reason Code.",
+        "testData": {
+          "rawTestData": "Multiple Valid Reason Codes",
+          "expectedResult": "Waste Logs should be submitted successfully using any valid configured Reason Code.",
+          "flow": "generic"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-227_42",
+        "module": "Waste Management",
+        "testName": "Verify whether only authorized Admin users can configure Waste Reason Codes",
+        "description": "Verify whether only authorized Admin users can configure Waste Reason Codes",
+        "preCondition": "1. Launch the application. 2. Create one Admin user and one non-Admin user.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "1"
+          },
+          {
+            "step": 2,
+            "description": "Log in as non-Admin user"
+          },
+          {
+            "step": 3,
+            "description": "2"
+          },
+          {
+            "step": 4,
+            "description": "Attempt to access Reason Code configuration"
+          },
+          {
+            "step": 5,
+            "description": "3"
+          },
+          {
+            "step": 6,
+            "description": "Log in as Admin user"
+          },
+          {
+            "step": 7,
+            "description": "4"
+          },
+          {
+            "step": 8,
+            "description": "Access Reason Code configuration"
+          }
+        ],
+        "rawTestData": "Admin and Non-Admin Users",
+        "expectedResult": "Non-Admin users should be denied access while Admin users should be allowed to configure Reason Codes.",
+        "testData": {
+          "rawTestData": "Admin and Non-Admin Users",
+          "expectedResult": "Non-Admin users should be denied access while Admin users should be allowed to configure Reason Codes.",
+          "flow": "adminReasonAccess"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-227_43",
+        "module": "Waste Management",
+        "testName": "Verify whether the system supports waste logging for all configured Waste Reason Codes listed in the master configuration",
+        "description": "Verify whether the system supports waste logging for all configured Waste Reason Codes listed in the master configuration",
+        "preCondition": "Reason Codes have been configured in the application.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "1"
+          },
+          {
+            "step": 2,
+            "description": "Create Waste Logs using each configured Reason Code"
+          },
+          {
+            "step": 3,
+            "description": "2"
+          },
+          {
+            "step": 4,
+            "description": "Complete mandatory fields"
+          },
+          {
+            "step": 5,
+            "description": "3"
+          },
+          {
+            "step": 6,
+            "description": "Submit the Waste Logs"
+          }
+        ],
+        "rawTestData": "All Configured Reason Codes",
+        "expectedResult": "System should successfully allow waste logging for all configured Reason Codes assigned to the selected Waste Category.",
+        "testData": {
+          "rawTestData": "All Configured Reason Codes",
+          "expectedResult": "System should successfully allow waste logging for all configured Reason Codes assigned to the selected Waste Category.",
+          "flow": "generic"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-227_44",
+        "module": "Waste Management",
+        "testName": "Verify whether a submitted Waste Record maintains an audit trail including Item/Recipe, quantity, UOM, Reason Code, Daypart, Employee ID, and Estimated Cost",
+        "description": "Verify whether a submitted Waste Record maintains an audit trail including Item/Recipe, quantity, UOM, Reason Code, Daypart, Employee ID, and Estimated Cost",
+        "preCondition": "General Waste Log Precondition.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "1"
+          },
+          {
+            "step": 2,
+            "description": "Create and submit a Waste Log"
+          },
+          {
+            "step": 3,
+            "description": "2"
+          },
+          {
+            "step": 4,
+            "description": "Open Waste History"
+          },
+          {
+            "step": 5,
+            "description": "3"
+          },
+          {
+            "step": 6,
+            "description": "Review the submitted record details"
+          }
+        ],
+        "rawTestData": "Submitted Waste Record",
+        "expectedResult": "Waste History should retain all submitted transaction details for audit and reporting purposes.",
+        "testData": {
+          "rawTestData": "Submitted Waste Record",
+          "expectedResult": "Waste History should retain all submitted transaction details for audit and reporting purposes.",
+          "flow": "generic"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-227_45",
+        "module": "Waste Management",
+        "testName": "Verify whether historical Estimated Cost remains unchanged when FIFO Cost values are modified after Waste Log submission",
+        "description": "Verify whether historical Estimated Cost remains unchanged when FIFO Cost values are modified after Waste Log submission",
+        "preCondition": "1. Launch the application. 2. Log in. 3. Identify an Item with FIFO Cost configured. 4. Note the current FIFO Cost.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "1"
+          },
+          {
+            "step": 2,
+            "description": "Create and submit a Waste Log"
+          },
+          {
+            "step": 3,
+            "description": "2"
+          },
+          {
+            "step": 4,
+            "description": "Record the Estimated Cost"
+          },
+          {
+            "step": 5,
+            "description": "3"
+          },
+          {
+            "step": 6,
+            "description": "Navigate to Inventory Balances and update the FIFO Cost"
+          },
+          {
+            "step": 7,
+            "description": "4"
+          },
+          {
+            "step": 8,
+            "description": "Return to Waste History and review the previously submitted Waste Log"
+          }
+        ],
+        "rawTestData": "Submitted Waste Log and Updated FIFO Cost",
+        "expectedResult": "Historical Waste Records should retain the original Estimated Cost calculated at the time of submission and should not be recalculated using the new FIFO Cost.",
+        "testData": {
+          "rawTestData": "Submitted Waste Log and Updated FIFO Cost",
+          "expectedResult": "Historical Waste Records should retain the original Estimated Cost calculated at the time of submission and should not be recalculated using the new FIFO Cost.",
+          "flow": "generic"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-227_46",
+        "module": "Waste Management",
+        "testName": "Verify whether the Waste Entry workflow is supported on a mobile device without UI distortion",
+        "description": "Verify whether the Waste Entry workflow is supported on a mobile device without UI distortion",
+        "preCondition": "1. Launch the QA Backoffice Dashboard application on a supported mobile device. 2. Log in using valid credentials. 3. Verify application loads correctly. 4. Ensure user has permission to create Waste Logs.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "1"
+          },
+          {
+            "step": 2,
+            "description": "Open Waste module on mobile"
+          },
+          {
+            "step": 3,
+            "description": "2"
+          },
+          {
+            "step": 4,
+            "description": "Click Log Waste Item"
+          },
+          {
+            "step": 5,
+            "description": "3"
+          },
+          {
+            "step": 6,
+            "description": "Click + LOG WASTE"
+          },
+          {
+            "step": 7,
+            "description": "4"
+          },
+          {
+            "step": 8,
+            "description": "Select Daypart"
+          },
+          {
+            "step": 9,
+            "description": "5"
+          },
+          {
+            "step": 10,
+            "description": "Create Waste Log"
+          },
+          {
+            "step": 11,
+            "description": "6"
+          },
+          {
+            "step": 12,
+            "description": "Select Waste Category"
+          },
+          {
+            "step": 13,
+            "description": "7"
+          },
+          {
+            "step": 14,
+            "description": "Select Item/Recipe"
+          },
+          {
+            "step": 15,
+            "description": "8"
+          },
+          {
+            "step": 16,
+            "description": "Enter all mandatory fields"
+          },
+          {
+            "step": 17,
+            "description": "9"
+          },
+          {
+            "step": 18,
+            "description": "Save, Lock and Apply"
+          }
+        ],
+        "rawTestData": "Valid Item/Recipe",
+        "expectedResult": "Waste Entry screens should be fully responsive and usable on mobile without UI alignment or usability issues.",
+        "testData": {
+          "rawTestData": "Valid Item/Recipe",
+          "expectedResult": "Waste Entry screens should be fully responsive and usable on mobile without UI alignment or usability issues.",
+          "flow": "mobile",
+          "mobile": true
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-227_47",
+        "module": "Waste Management",
+        "testName": "Verify whether mobile users can successfully create and submit Raw Waste entries for Items",
+        "description": "Verify whether mobile users can successfully create and submit Raw Waste entries for Items",
+        "preCondition": "Mobile precondition is satisfied and user has access.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "1"
+          },
+          {
+            "step": 2,
+            "description": "Open Waste module on mobile"
+          },
+          {
+            "step": 3,
+            "description": "2"
+          },
+          {
+            "step": 4,
+            "description": "Create Waste Log"
+          },
+          {
+            "step": 5,
+            "description": "3"
+          },
+          {
+            "step": 6,
+            "description": "Select Raw Waste"
+          },
+          {
+            "step": 7,
+            "description": "4"
+          },
+          {
+            "step": 8,
+            "description": "Select Item with FIFO Cost"
+          },
+          {
+            "step": 9,
+            "description": "5"
+          },
+          {
+            "step": 10,
+            "description": "Enter Quantity"
+          },
+          {
+            "step": 11,
+            "description": "6"
+          },
+          {
+            "step": 12,
+            "description": "Select Reason Code"
+          },
+          {
+            "step": 13,
+            "description": "7"
+          },
+          {
+            "step": 14,
+            "description": "Enter UOM, Daypart, Employee ID"
+          },
+          {
+            "step": 15,
+            "description": "8"
+          },
+          {
+            "step": 16,
+            "description": "Save, Lock and Apply"
+          }
+        ],
+        "rawTestData": "Valid Item, Quantity",
+        "expectedResult": "Raw Waste entry should be successfully submitted and inventory should be reduced accordingly.",
+        "testData": {
+          "rawTestData": "Valid Item, Quantity",
+          "expectedResult": "Raw Waste entry should be successfully submitted and inventory should be reduced accordingly.",
+          "wasteCategory": "Raw Waste",
+          "type": "Item",
+          "quantity": "1",
+          "flow": "happyPathItem"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-227_48",
+        "module": "Waste Management",
+        "testName": "Verify whether mobile users can successfully create and submit Completed Waste entries for Recipes",
+        "description": "Verify whether mobile users can successfully create and submit Completed Waste entries for Recipes",
+        "preCondition": "Mobile precondition is satisfied and Recipe exists with FIFO ingredients.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "1"
+          },
+          {
+            "step": 2,
+            "description": "Open Waste module on mobile"
+          },
+          {
+            "step": 3,
+            "description": "2"
+          },
+          {
+            "step": 4,
+            "description": "Create Waste Log"
+          },
+          {
+            "step": 5,
+            "description": "3"
+          },
+          {
+            "step": 6,
+            "description": "Select Completed Waste"
+          },
+          {
+            "step": 7,
+            "description": "4"
+          },
+          {
+            "step": 8,
+            "description": "Select Recipe"
+          },
+          {
+            "step": 9,
+            "description": "5"
+          },
+          {
+            "step": 10,
+            "description": "Enter Quantity"
+          },
+          {
+            "step": 11,
+            "description": "6"
+          },
+          {
+            "step": 12,
+            "description": "Select Reason Code"
+          },
+          {
+            "step": 13,
+            "description": "7"
+          },
+          {
+            "step": 14,
+            "description": "Complete all mandatory fields"
+          },
+          {
+            "step": 15,
+            "description": "8"
+          },
+          {
+            "step": 16,
+            "description": "Save, Lock and Apply"
+          }
+        ],
+        "rawTestData": "Valid Recipe",
+        "expectedResult": "Completed Waste entry should be successfully submitted and inventory should be adjusted based on recipe ingredients.",
+        "testData": {
+          "rawTestData": "Valid Recipe",
+          "expectedResult": "Completed Waste entry should be successfully submitted and inventory should be adjusted based on recipe ingredients.",
+          "wasteCategory": "Completed Waste",
+          "type": "Recipe",
+          "quantity": "1",
+          "flow": "happyPathRecipe"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-227_49",
+        "module": "Waste Management",
+        "testName": "Verify whether mobile Waste Entries enforce mandatory field validation before submission",
+        "description": "Verify whether mobile Waste Entries enforce mandatory field validation before submission",
+        "preCondition": "Mobile precondition is satisfied.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "1"
+          },
+          {
+            "step": 2,
+            "description": "Open Waste module on mobile"
+          },
+          {
+            "step": 3,
+            "description": "2"
+          },
+          {
+            "step": 4,
+            "description": "Create Waste Log"
+          },
+          {
+            "step": 5,
+            "description": "3"
+          },
+          {
+            "step": 6,
+            "description": "Leave mandatory fields blank one by one (Item/Recipe, Quantity, Reason Code, UOM, Employee ID, Daypart)"
+          },
+          {
+            "step": 7,
+            "description": "4"
+          },
+          {
+            "step": 8,
+            "description": "Attempt to Save"
+          }
+        ],
+        "rawTestData": "Blank Mandatory Fields",
+        "expectedResult": "System should prevent submission and display appropriate validation messages for missing fields.",
+        "testData": {
+          "rawTestData": "Blank Mandatory Fields",
+          "expectedResult": "System should prevent submission and display appropriate validation messages for missing fields.",
+          "flow": "mobile",
+          "mobile": true
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-227_50",
+        "module": "Waste Management",
+        "testName": "Verify whether Waste Logs created on mobile are visible and consistent in desktop Waste History after submission",
+        "description": "Verify whether Waste Logs created on mobile are visible and consistent in desktop Waste History after submission",
+        "preCondition": "Mobile and Desktop access are available.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "1"
+          },
+          {
+            "step": 2,
+            "description": "Create Waste Log on mobile device"
+          },
+          {
+            "step": 3,
+            "description": "2"
+          },
+          {
+            "step": 4,
+            "description": "Save, Lock and Apply"
+          },
+          {
+            "step": 5,
+            "description": "3"
+          },
+          {
+            "step": 6,
+            "description": "Log into desktop application"
+          },
+          {
+            "step": 7,
+            "description": "4"
+          },
+          {
+            "step": 8,
+            "description": "Navigate to Waste History"
+          },
+          {
+            "step": 9,
+            "description": "5"
+          },
+          {
+            "step": 10,
+            "description": "Search for the same Waste Record"
+          },
+          {
+            "step": 11,
+            "description": "6"
+          },
+          {
+            "step": 12,
+            "description": "Validate all details"
+          }
+        ],
+        "rawTestData": "Mobile Submitted Waste Record",
+        "expectedResult": "Waste Log created on mobile should be visible on desktop with identical details including Item/Recipe, Quantity, Reason Code, and Estimated Cost.",
+        "testData": {
+          "rawTestData": "Mobile Submitted Waste Record",
+          "expectedResult": "Waste Log created on mobile should be visible on desktop with identical details including Item/Recipe, Quantity, Reason Code, and Estimated Cost.",
+          "flow": "mobile",
+          "mobile": true
+        }
+      }
+    ]
+  }
+}

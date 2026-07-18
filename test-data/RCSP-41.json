@@ -1,0 +1,292 @@
+{
+  "RCSP-41": {
+    "scenarioId": "RCSP-41",
+    "epic": "EPIC-RCSP-9",
+    "feature": "Wastage – Log Waste",
+    "sourceSheet": "Log Waste Test Cases",
+    "description": "End-to-end Log Waste coverage: navigation, create modal, ITEM/RECIPE save, validation, lock, apply to stock, multi-row, edge values, and permissions.",
+    "commonData": {
+      "prerequisites": [
+        "QA Backoffice (qa-backoffice.wbhq.com) is accessible",
+        "User has valid credentials with Wastage / Log Waste access",
+        "A unit is available (e.g., WB Unit 1034)"
+      ],
+      "userRole": "admin",
+      "hierarchy": {
+        "region": "1700 San Antonio 4126314",
+        "market": "1708 E Central SA 4126393",
+        "store": "WB Unit 1034"
+      },
+      "labels": {
+        "menuWastage": "Wastage",
+        "menuLogWaste": "Log Waste",
+        "pageTitle": "Waste Logs",
+        "pageDescription": "Grouped waste submissions by date and shift",
+        "logWasteButton": "LOG WASTE",
+        "createWasteLog": "CREATE WASTE LOG",
+        "cancel": "CANCEL",
+        "save": "SAVE",
+        "lock": "LOCK",
+        "applyToStock": "APPLY TO STOCK",
+        "addRow": "ADD ROW"
+      },
+      "columnHeaders": [
+        "WASTE ID",
+        "WASTE LOG",
+        "DATE",
+        "SHIFT",
+        "STATUS",
+        "SUBMITTED",
+        "Actions"
+      ],
+      "shiftOptions": ["AM", "Mid-Shift", "PM"],
+      "defaultShift": "AM",
+      "wasteReasons": [
+        "Over-Prep Production",
+        "Quality Issue (Spoilage / Expired / Temp Abuse)",
+        "Spillage/Dropped",
+        "Overcooked for Production (PHU)",
+        "Recook",
+        "Equipment Failure / Training & Test",
+        "Product Discontinued"
+      ],
+      "itemEntry": {
+        "type": "ITEM",
+        "item": "LARGE BUNS",
+        "sku": "11201",
+        "reason": "Over-Prep Production",
+        "uom": "EA",
+        "quantity": "1",
+        "notes": "Test waste entry – morning shift"
+      },
+      "recipeEntry": {
+        "type": "RECIPE",
+        "recipe": "CHEESEBURGER",
+        "reason": "Quality Issue (Spoilage / Expired / Temp Abuse)",
+        "uom": "EA",
+        "quantity": "1",
+        "notes": "Recipe waste – QA test"
+      },
+      "edgeValues": {
+        "decimalQuantity": "0.5",
+        "largeQuantity": "99999",
+        "notesSpecial": "QA notes !@#$%^&*()_+ long-text-abcdefghijklmnopqrstuvwxyz-0123456789"
+      },
+      "legacyRoute": "/waste/log",
+      "unauthorizedUser": {
+        "username": "",
+        "password": "",
+        "note": "Set unauthorized Wastage credentials here to enable TC_RCSP-41_010 unauthorized path"
+      }
+    },
+    "testCases": [
+      {
+        "testCaseId": "TC_RCSP-41_001",
+        "module": "Wastage – Log Waste",
+        "testName": "Verify whether clicking Log Waste opens the Waste Logs page with title, subtitle, + LOG WASTE button, and grid columns",
+        "description": "Verify Wastage → Log Waste navigation and Waste Logs page chrome.",
+        "preCondition": "1. QA Backoffice is accessible. 2. User has Log Waste access. 3. Unit available (WB Unit 1034).",
+        "testSteps": [
+          { "step": 1, "description": "Launch QA Backoffice and log in." },
+          { "step": 2, "description": "Select unit WB Unit 1034." },
+          { "step": 3, "description": "Expand Wastage and click Log Waste." },
+          { "step": 4, "description": "Verify title, subtitle, + LOG WASTE, and grid columns." }
+        ],
+        "rawTestData": "Unit: WB Unit 1034",
+        "expectedResult": "User lands on Waste Logs with expected title, subtitle, CTA, and columns.",
+        "testData": {
+          "expectedPageTitle": "Waste Logs",
+          "expectedPageDescription": "Grouped waste submissions by date and shift",
+          "expectedPrimaryButton": "LOG WASTE"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-41_002",
+        "module": "Wastage – Log Waste",
+        "testName": "Verify whether + LOG WASTE modal Shift options AM/Mid-Shift/PM work, CANCEL closes without create, CREATE WASTE LOG opens detail page",
+        "description": "Verify Log Waste create modal Shift options and CANCEL vs CREATE.",
+        "preCondition": "User is on Wastage → Log Waste (Waste Logs page).",
+        "testSteps": [
+          { "step": 1, "description": "Click + LOG WASTE and verify modal + Shift options." },
+          { "step": 2, "description": "Click CANCEL and confirm no new log." },
+          { "step": 3, "description": "Create waste log with Shift AM." }
+        ],
+        "rawTestData": "Shift options: AM / Mid-Shift / PM. Preferred: AM.",
+        "expectedResult": "Modal lists AM/Mid-Shift/PM; CANCEL creates nothing; CREATE opens detail page.",
+        "testData": {
+          "shift": "AM",
+          "shiftOptions": ["AM", "Mid-Shift", "PM"]
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-41_003",
+        "module": "Wastage – Log Waste",
+        "testName": "Verify whether Type ITEM mandatory fields save successfully and log remains editable",
+        "description": "Verify ITEM waste line SAVE with all mandatory fields.",
+        "preCondition": "User is on a newly created waste log detail page.",
+        "testSteps": [
+          { "step": 1, "description": "Set Type ITEM and fill Item, Reason, UOM, Quantity, Notes." },
+          { "step": 2, "description": "Click SAVE and confirm values retained." }
+        ],
+        "rawTestData": "Type ITEM; Item LARGE BUNS; Reason Over-Prep Production; Qty 1",
+        "expectedResult": "SAVE succeeds; line retained; LOCK available.",
+        "testData": {
+          "type": "ITEM",
+          "item": "LARGE BUNS",
+          "sku": "11201",
+          "reason": "Over-Prep Production",
+          "uom": "EA",
+          "quantity": "1",
+          "notes": "Test waste entry – morning shift"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-41_004",
+        "module": "Wastage – Log Waste",
+        "testName": "Verify whether Type RECIPE mandatory fields save successfully",
+        "description": "Verify RECIPE waste line SAVE with all mandatory fields.",
+        "preCondition": "User is on an editable waste log detail page.",
+        "testSteps": [
+          { "step": 1, "description": "Set Type RECIPE and fill Recipe, Reason, UOM, Quantity, Notes." },
+          { "step": 2, "description": "Click SAVE and confirm recipe line retained." }
+        ],
+        "rawTestData": "Type RECIPE; valid recipe; Quality Issue reason",
+        "expectedResult": "RECIPE SAVE succeeds and line is retained.",
+        "testData": {
+          "type": "RECIPE",
+          "recipe": "CHEESEBURGER",
+          "reason": "Quality Issue (Spoilage / Expired / Temp Abuse)",
+          "uom": "EA",
+          "quantity": "1",
+          "notes": "Recipe waste – QA test"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-41_005",
+        "module": "Wastage – Log Waste",
+        "testName": "Verify whether SAVE without mandatory fields is blocked with clear validation",
+        "description": "Verify mandatory-field validation on SAVE.",
+        "preCondition": "User is on an editable waste log detail page with blank/partial row.",
+        "testSteps": [
+          { "step": 1, "description": "Attempt SAVE with missing Item/Reason/UOM/Quantity/Notes combinations." },
+          { "step": 2, "description": "Confirm validation messages and no persist." }
+        ],
+        "rawTestData": "Incomplete combinations for mandatory fields",
+        "expectedResult": "Incomplete SAVE is blocked with clear validation; page stays editable.",
+        "testData": {
+          "validationPattern": "required|mandatory|select|invalid|must|enter|missing"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-41_006",
+        "module": "Wastage – Log Waste",
+        "testName": "Verify whether LOCK after successful SAVE makes lines non-editable and enables APPLY TO STOCK",
+        "description": "Verify LOCK after SAVE and APPLY readiness.",
+        "preCondition": "At least one valid waste line has been saved; LOCK is enabled.",
+        "testSteps": [
+          { "step": 1, "description": "Click LOCK." },
+          { "step": 2, "description": "Confirm fields not editable and APPLY TO STOCK available." }
+        ],
+        "rawTestData": "Previously saved valid ITEM or RECIPE waste line",
+        "expectedResult": "LOCK succeeds; lines not editable; APPLY TO STOCK available.",
+        "testData": {}
+      },
+      {
+        "testCaseId": "TC_RCSP-41_007",
+        "module": "Wastage – Log Waste",
+        "testName": "Verify whether APPLY TO STOCK with OK confirmation posts waste and prevents duplicate apply",
+        "description": "Verify APPLY TO STOCK → OK and duplicate-apply prevention.",
+        "preCondition": "Waste log locked successfully; APPLY TO STOCK available.",
+        "testSteps": [
+          { "step": 1, "description": "Click APPLY TO STOCK and confirm OK." },
+          { "step": 2, "description": "Confirm success and duplicate apply blocked." }
+        ],
+        "rawTestData": "Locked waste log; Unit WB Unit 1034",
+        "expectedResult": "Confirmation shown; apply succeeds; duplicate apply prevented.",
+        "testData": {}
+      },
+      {
+        "testCaseId": "TC_RCSP-41_008",
+        "module": "Wastage – Log Waste",
+        "testName": "Verify whether + ADD ROW supports multiple ITEM/RECIPE lines then SAVE → LOCK → APPLY",
+        "description": "Verify multi-row add/delete then SAVE → LOCK → APPLY.",
+        "preCondition": "User is on an editable waste log detail page.",
+        "testSteps": [
+          { "step": 1, "description": "Add ITEM row and RECIPE row via + ADD ROW." },
+          { "step": 2, "description": "SAVE, LOCK, APPLY TO STOCK." }
+        ],
+        "rawTestData": "Row1 ITEM LARGE BUNS; Row2 RECIPE CHEESEBURGER",
+        "expectedResult": "Multiple rows saved; LOCK/APPLY succeed for multi-line log.",
+        "testData": {
+          "row1": {
+            "type": "ITEM",
+            "item": "LARGE BUNS",
+            "sku": "11201",
+            "reason": "Over-Prep Production",
+            "uom": "EA",
+            "quantity": "1",
+            "notes": "Multi-row ITEM"
+          },
+          "row2": {
+            "type": "RECIPE",
+            "recipe": "CHEESEBURGER",
+            "reason": "Spillage/Dropped",
+            "uom": "EA",
+            "quantity": "1",
+            "notes": "Multi-row RECIPE"
+          }
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-41_009",
+        "module": "Wastage – Log Waste",
+        "testName": "Verify whether Reason list is complete and Quantity/Notes edge values are handled without breaking SAVE",
+        "description": "Verify Reason list + Quantity/Notes boundary values.",
+        "preCondition": "User is on an editable waste log detail page with a valid item available.",
+        "testSteps": [
+          { "step": 1, "description": "Open Reason dropdown and confirm all approved reasons." },
+          { "step": 2, "description": "Try decimal and large Quantity; special Notes; observe SAVE behavior." }
+        ],
+        "rawTestData": "Qty 0.5; 99999; special notes; full reason list",
+        "expectedResult": "All reasons listed; valid edges save; invalid edges blocked clearly; UI stable.",
+        "testData": {
+          "expectedReasons": [
+            "Over-Prep Production",
+            "Quality Issue (Spoilage / Expired / Temp Abuse)",
+            "Spillage/Dropped",
+            "Overcooked for Production (PHU)",
+            "Recook",
+            "Equipment Failure / Training & Test",
+            "Product Discontinued"
+          ],
+          "decimalQuantity": "0.5",
+          "largeQuantity": "99999",
+          "notesSpecial": "QA notes !@#$%^&*()_+ long-text-abcdefghijklmnopqrstuvwxyz-0123456789"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-41_010",
+        "module": "Wastage – Log Waste",
+        "testName": "Verify whether unauthorized users cannot access Log Waste while authorized users complete full happy path",
+        "description": "Permission denial + full happy path SAVE → LOCK → APPLY.",
+        "preCondition": "Unauthorized and authorized users exist; valid item/reason data available.",
+        "testSteps": [
+          { "step": 1, "description": "Unauthorized user cannot access Log Waste." },
+          { "step": 2, "description": "Authorized user completes create → fill → SAVE → LOCK → APPLY → OK." }
+        ],
+        "rawTestData": "Unauthorized credentials; authorized happy path ITEM AM",
+        "expectedResult": "Unauthorized blocked; authorized completes end-to-end apply to stock.",
+        "testData": {
+          "shift": "AM",
+          "type": "ITEM",
+          "item": "LARGE BUNS",
+          "sku": "11201",
+          "reason": "Over-Prep Production",
+          "uom": "EA",
+          "quantity": "1",
+          "notes": "E2E happy path waste entry"
+        }
+      }
+    ]
+  }
+}

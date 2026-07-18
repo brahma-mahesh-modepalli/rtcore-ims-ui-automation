@@ -1,0 +1,20 @@
+{
+  "BACKOFFICE_ADMIN": {
+    "username": "admin@whataburger-ims.com",
+    "password": "admin123",
+    "role": "admin",
+    "description": "Backoffice admin user with full permissions"
+  },
+  "BACKOFFICE_MANAGER": {
+    "username": "manager@whataburger-ims.com",
+    "password": "manager123",
+    "role": "manager",
+    "description": "Backoffice manager user"
+  },
+  "BACKOFFICE_USER": {
+    "username": "user@whataburger-ims.com",
+    "password": "user123",
+    "role": "user",
+    "description": "Regular backoffice user"
+  }
+}

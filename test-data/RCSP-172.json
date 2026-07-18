@@ -1,0 +1,199 @@
+{
+  "RCSP-172": {
+    "scenarioId": "RCSP-172",
+    "epic": "EPIC-RCSP-119",
+    "feature": "Stock Count \u2013 Add Item searchable type-ahead",
+    "sourceSheet": "Sheet1",
+    "description": "Verify Add Item searchable type-ahead across Daily Shift Count, Weekly Count, and Monthly Count.",
+    "commonData": {
+      "prerequisites": [
+        "QA Backoffice is accessible",
+        "Admin credentials are valid",
+        "Store hierarchy and inventory items are configured"
+      ],
+      "userRole": "admin",
+      "hierarchy": {
+        "region": "1700 San Antonio 4126314",
+        "market": "1708 E Central SA 4126393",
+        "store": "WB Unit 1034"
+      },
+      "createCount": {
+        "shift": "AM",
+        "shiftDate": "2026-07-19",
+        "dailyName": "RCSP-172 Daily 2026-07-19",
+        "weeklyName": "RCSP-172 Weekly 2026-07-19"
+      },
+      "countTypes": [
+        "Daily Shift Count",
+        "Weekly Count",
+        "Monthly Count"
+      ],
+      "activeItem": {
+        "partialName": "egg",
+        "plu": "11201",
+        "name": "LARGE BUNS"
+      },
+      "inactiveItem": {
+        "searchTerm": "INACTIVE-ITEM-DO-NOT-USE",
+        "note": "Update to a real inactive item/PLU in QA when available"
+      }
+    },
+    "testCases": [
+      {
+        "testCaseId": "TC_RCSP-172_01",
+        "testName": "Verify navigate to Daily/Weekly/Monthly Count and open Add Item popup",
+        "description": "Navigate to all Stock Count pages, create counts, and open Add Item popup.",
+        "testType": "Positive",
+        "preCondition": "Valid QA access, admin credentials, store hierarchy and inventory configured.",
+        "testData": {
+          "action": "openAddItemOnAllCountTypes",
+          "countTypes": [
+            "Daily Shift Count",
+            "Weekly Count",
+            "Monthly Count"
+          ]
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-172_02",
+        "testName": "Verify type-ahead returns matches for partial item name across count types",
+        "description": "Partial name search (e.g. egg) returns matching active items on all count pages.",
+        "testType": "Positive",
+        "testData": {
+          "action": "searchPartialName",
+          "searchTerm": "egg",
+          "countTypes": [
+            "Daily Shift Count",
+            "Weekly Count",
+            "Monthly Count"
+          ]
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-172_03",
+        "testName": "Verify type-ahead returns matches for PLU search across count types",
+        "description": "PLU search returns matching items with name/PLU/UOM on all count pages.",
+        "testType": "Positive",
+        "testData": {
+          "action": "searchByPlu",
+          "searchTerm": "11201",
+          "countTypes": [
+            "Daily Shift Count",
+            "Weekly Count",
+            "Monthly Count"
+          ]
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-172_04",
+        "testName": "Verify inactive items are excluded from type-ahead results",
+        "description": "Inactive inventory items must not appear in Add Item search results.",
+        "testType": "Negative",
+        "testData": {
+          "action": "excludeInactive",
+          "inactiveSearchTerm": "INACTIVE-ITEM-DO-NOT-USE",
+          "countTypes": [
+            "Daily Shift Count",
+            "Weekly Count",
+            "Monthly Count"
+          ],
+          "note": "Set inactiveSearchTerm to a known inactive item/PLU in QA to fully assert exclusion."
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-172_05",
+        "testName": "Verify item name, PLU, and UOM auto-populate after selection",
+        "description": "Selecting an item auto-populates name, PLU, and UOM on all count pages.",
+        "testType": "Positive",
+        "testData": {
+          "action": "verifyAutoPopulate",
+          "searchTerm": "LARGE BUNS",
+          "preferredItem": "LARGE BUNS",
+          "countTypes": [
+            "Daily Shift Count",
+            "Weekly Count",
+            "Monthly Count"
+          ]
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-172_06",
+        "testName": "Verify UOM remains read-only after item selection",
+        "description": "UOM cannot be manually edited after selecting an item.",
+        "testType": "Positive",
+        "testData": {
+          "action": "verifyUomReadOnly",
+          "searchTerm": "LARGE BUNS",
+          "preferredItem": "LARGE BUNS",
+          "countTypes": [
+            "Daily Shift Count",
+            "Weekly Count",
+            "Monthly Count"
+          ]
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-172_07",
+        "testName": "Verify no matches for invalid item search text",
+        "description": "Invalid search shows no matching inventory items without crashing.",
+        "testType": "Negative",
+        "testData": {
+          "action": "searchInvalid",
+          "searchTerm": "XYZINVALID123",
+          "countTypes": [
+            "Daily Shift Count",
+            "Weekly Count",
+            "Monthly Count"
+          ]
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-172_08",
+        "testName": "Verify special character handling in item search",
+        "description": "Special characters do not crash the app or return unrelated items.",
+        "testType": "Edge Case",
+        "testData": {
+          "action": "searchSpecialChars",
+          "searchTerm": "@#$%^&*",
+          "countTypes": [
+            "Daily Shift Count",
+            "Weekly Count",
+            "Monthly Count"
+          ]
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-172_09",
+        "testName": "Verify leading/trailing spaces are trimmed in item search",
+        "description": "Search with padded spaces still returns relevant matches.",
+        "testType": "Edge Case",
+        "testData": {
+          "action": "searchWithSpaces",
+          "searchTerm": "  egg  ",
+          "expectedMatchFragment": "egg",
+          "countTypes": [
+            "Daily Shift Count",
+            "Weekly Count",
+            "Monthly Count"
+          ]
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-172_10",
+        "testName": "Verify case-insensitive item search",
+        "description": "Uppercase and lowercase searches return the same matching items.",
+        "testType": "Edge Case",
+        "testData": {
+          "action": "searchCaseInsensitive",
+          "upperSearchTerm": "EGG",
+          "lowerSearchTerm": "egg",
+          "countTypes": [
+            "Daily Shift Count",
+            "Weekly Count",
+            "Monthly Count"
+          ]
+        }
+      }
+    ]
+  }
+}

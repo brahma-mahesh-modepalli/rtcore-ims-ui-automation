@@ -1,0 +1,200 @@
+{
+  "RCSP-162": {
+    "scenarioId": "RCSP-162",
+    "epic": "EPIC-RCSP-8",
+    "feature": "Ordering",
+    "description": "Validate Unit Price visibility rules and UOM read-only behavior across Scheduled Orders and Order History",
+    "commonData": {
+      "storeUser": {
+        "username": "admin@whataburger-ims.com",
+        "password": "admin123"
+      },
+      "fieldNames": {
+        "unitPrice": "Unit Price",
+        "uom": "UOM"
+      }
+    },
+    "testCases": [
+      {
+        "testCaseId": "TC_RCSP-162_01",
+        "testName": "Verify Unit Price field is removed from New Scheduled Order for store users",
+        "description": "Validate that Unit Price is not displayed on the New Scheduled Order screen.",
+        "testData": {}
+      },
+      {
+        "testCaseId": "TC_RCSP-162_02",
+        "testName": "Verify Unit Price field is hidden for all item categories",
+        "description": "Validate that Unit Price stays hidden after adding inventory items across categories in Scheduled Orders.",
+        "testData": {
+          "vendors": [
+            "McLane",
+            "Flowers Baking Company",
+            "RTI Oil"
+          ],
+          "inventoryItems": [
+            {
+              "itemName": "LARGE BUNS-M",
+              "category": "Bakery",
+              "purchasingUom": "cs"
+            },
+            {
+              "itemName": "M-JAL WHOLE",
+              "category": "Produce",
+              "purchasingUom": "ea"
+            },
+            {
+              "itemName": "AIOLI CHIPOTLE",
+              "category": "Condiments",
+              "purchasingUom": "pk"
+            }
+          ]
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-162_03",
+        "testName": "Verify Unit Price cannot be accessed via keyboard or DOM inspection",
+        "description": "Validate that Unit Price is not reachable through keyboard navigation or present in DOM checks.",
+        "testData": {}
+      },
+      {
+        "testCaseId": "TC_RCSP-162_04",
+        "testName": "Verify Unit Price field visibility matches the active role on Order History screen",
+        "description": "Validate that Order History shows or hides Unit Price based on the active role.",
+        "testData": {}
+      },
+      {
+        "testCaseId": "TC_RCSP-162_05",
+        "testName": "Verify Unit Price remains unavailable after adding items in Order History",
+        "description": "Validate that Unit Price remains unavailable after attempting to add inventory items in Order History.",
+        "testData": {
+          "inventoryItems": [
+            {
+              "itemName": "LARGE BUNS-M",
+              "category": "Bakery",
+              "purchasingUom": "cs"
+            },
+            {
+              "itemName": "M-JAL WHOLE",
+              "category": "Produce",
+              "purchasingUom": "ea"
+            },
+            {
+              "itemName": "AIOLI CHIPOTLE",
+              "category": "Condiments",
+              "purchasingUom": "pk"
+            }
+          ]
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-162_06",
+        "testName": "Verify UOM field is read-only in New Scheduled Order",
+        "description": "Validate that the UOM control remains non-editable for a Scheduled Order item.",
+        "testData": {
+          "vendors": [
+            "McLane",
+            "Flowers Baking Company",
+            "RTI Oil"
+          ],
+          "inventoryItems": [
+            {
+              "itemName": "LARGE BUNS-M",
+              "category": "Bakery",
+              "purchasingUom": "cs"
+            }
+          ]
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-162_07",
+        "testName": "Verify UOM field is read-only in Order History",
+        "description": "Validate that the UOM control remains non-editable in Order History.",
+        "testData": {}
+      },
+      {
+        "testCaseId": "TC_RCSP-162_08",
+        "testName": "Verify only one purchasing UOM per item in Scheduled Orders",
+        "description": "Validate that each requested Scheduled Order item exposes a single non-editable purchasing UOM.",
+        "testData": {
+          "vendors": [
+            "McLane",
+            "Flowers Baking Company",
+            "RTI Oil"
+          ],
+          "inventoryItems": [
+            {
+              "itemName": "LARGE BUNS-M",
+              "category": "Bakery",
+              "purchasingUom": "cs"
+            },
+            {
+              "itemName": "M-JAL WHOLE",
+              "category": "Produce",
+              "purchasingUom": "ea"
+            },
+            {
+              "itemName": "AIOLI CHIPOTLE",
+              "category": "Condiments",
+              "purchasingUom": "pk"
+            }
+          ]
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-162_09",
+        "testName": "Verify only one purchasing UOM is displayed in Order History",
+        "description": "Validate that Order History exposes only one non-editable purchasing UOM.",
+        "testData": {}
+      },
+      {
+        "testCaseId": "TC_RCSP-162_10",
+        "testName": "Verify Unit Price visible after scheduled order is received and invoiced",
+        "description": "Validate that Unit Price becomes visible after a Scheduled Order is received and invoiced.",
+        "testData": {
+          "vendors": [
+            "McLane",
+            "Flowers Baking Company",
+            "RTI Oil"
+          ],
+          "inventoryItems": [
+            {
+              "itemName": "LARGE BUNS-M",
+              "category": "Bakery",
+              "purchasingUom": "cs"
+            }
+          ]
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-162_11",
+        "testName": "Verify Unit Price visible after Order History request is received and invoiced",
+        "description": "Validate that Unit Price becomes visible in Order History after receiving and invoicing.",
+        "testData": {}
+      },
+      {
+        "testCaseId": "TC_RCSP-162_12",
+        "testName": "Verify Unit Price read-only in Order History for Scheduled Orders",
+        "description": "Validate that Unit Price remains visible and read-only for Scheduled Orders opened from Order History.",
+        "testData": {}
+      },
+      {
+        "testCaseId": "TC_RCSP-162_13",
+        "testName": "Verify Unit Price read-only in Order History orders",
+        "description": "Validate that Unit Price remains visible and read-only for Order History orders.",
+        "testData": {}
+      },
+      {
+        "testCaseId": "TC_RCSP-162_14",
+        "testName": "Verify Unit Price hidden for orders not yet received",
+        "description": "Validate that Unit Price remains hidden before the order is received.",
+        "testData": {}
+      },
+      {
+        "testCaseId": "TC_RCSP-162_15",
+        "testName": "Verify Unit Price hidden consistency after refresh, relogin, and relaunch",
+        "description": "Validate that Unit Price remains hidden after refresh, relogin, and browser relaunch.",
+        "testData": {}
+      }
+    ]
+  }
+}

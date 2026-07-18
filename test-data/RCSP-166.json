@@ -1,0 +1,119 @@
+{
+  "RCSP-166": {
+    "scenarioId": "RCSP-166",
+    "epic": "EPIC-RCSP-8",
+    "feature": "Ordering",
+    "description": "Validate Notes field availability, persistence, Order History visibility, multiline handling, and max-length validation across Scheduled Orders and Hot Shot Order",
+    "commonData": {
+      "storeUser": {
+        "username": "admin@whataburger-ims.com",
+        "password": "admin123"
+      },
+      "fieldNames": {
+        "notes": "Notes"
+      },
+      "orderCreation": {
+        "vendors": [
+          "McLane",
+          "Flowers Baking Company",
+          "RTI Oil"
+        ],
+        "inventoryItems": []
+      }
+    },
+    "testCases": [
+      {
+        "testCaseId": "TC_RCSP-166_01",
+        "testName": "Verify that the Notes text field is available on the Create New Scheduled Order page",
+        "description": "Validate that the Notes field is visible and editable on the New Scheduled Order screen.",
+        "testData": {}
+      },
+      {
+        "testCaseId": "TC_RCSP-166_02",
+        "testName": "Verify that the Notes text field is available on the Hot Shot Order page",
+        "description": "Validate that the Notes field is visible and editable on the Hot Shot Order screen.",
+        "testData": {}
+      },
+      {
+        "testCaseId": "TC_RCSP-166_03",
+        "testName": "Verify Notes entered on Create New Scheduled Order are saved successfully after clicking Save as Draft",
+        "description": "Create a Scheduled Order draft, reopen it from the grid, and verify the Notes value persists exactly.",
+        "testData": {
+          "notes": "Need urgent approval from regional manager."
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-166_04",
+        "testName": "Verify that user can update Notes for a Draft Scheduled Order from the Scheduled Orders result grid",
+        "description": "Create a Scheduled Order draft, update its Notes value, and verify the new value persists after reopening the draft.",
+        "testData": {
+          "initialNotes": "Deliver before noon.",
+          "updatedNotes": "Deliver before noon and notify store manager."
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-166_05",
+        "testName": "Verify that user is restricted from editing Notes after Scheduled Order is created using Create and Submit",
+        "description": "Create and submit a Scheduled Order, then verify Notes cannot be edited or the edit path is unavailable for the submitted order.",
+        "testData": {
+          "notes": "Final approved emergency shipment."
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-166_06",
+        "testName": "Verify that Notes entered on Hot Shot Order page are saved successfully after clicking Create and Submit",
+        "description": "Create and submit a Hot Shot order, then open its details and verify the Notes value persists exactly.",
+        "testData": {
+          "notes": "Emergency restock required within 2 hours."
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-166_07",
+        "testName": "Verify that Notes entered while saving Scheduled Order as Draft are visible correctly in Order History",
+        "description": "Create a Scheduled Order draft, open it from Order History, and verify the Notes value matches exactly.",
+        "testData": {
+          "notes": "Awaiting warehouse confirmation."
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-166_08",
+        "testName": "Verify that Notes entered for Submitted Scheduled Order are visible correctly in Order History after submission",
+        "description": "Create a Scheduled Order draft, submit it from the grid, then verify the submitted order shows the exact Notes value in Order History.",
+        "testData": {
+          "notes": "Approved for same-day delivery."
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-166_09",
+        "testName": "Verify that Notes entered while creating Hot Shot Order are visible correctly in Order History",
+        "description": "Create and submit a Hot Shot order, then verify the same Notes value in Order History.",
+        "testData": {
+          "notes": "Temperature-sensitive shipment."
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-166_10",
+        "testName": "Verify that Notes field on Scheduled Order creation page accepts special characters, multiline text, and numeric values",
+        "description": "Create a Scheduled Order draft with multiline Notes containing special characters and verify the value is retained exactly after reopening the draft.",
+        "testData": {
+          "notes": "Deliver ASAP!\nPriority #456\n@Warehouse Team"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-166_11",
+        "testName": "Verify system validates maximum allowed character limit for Notes field on Scheduled Order creation page",
+        "description": "Enter an overlong Notes value and verify the application restricts characters, prevents save, or surfaces a validation state.",
+        "testData": {
+          "notesSeed": "Notes exceeding configured maximum limit.",
+          "repeatCount": 40,
+          "validationPatterns": [
+            "max",
+            "character",
+            "limit",
+            "too long"
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "qa": {
+    "name": "qa",
+    "backofficeLoginUrl": "https://qa-backoffice.wbhq.com/login",
+    "backofficeUrl": "https://qa-backoffice.wbhq.com",
+    "backofficeUrlDashboard": "https://qa-backoffice.wbhq.com/dashboard",
+    "description": "QA environment for testing"
+  },
+  "prod": {
+    "name": "prod",
+    "backofficeLoginUrl": "https://prod-backoffice.wbhq.com/login",
+    "backofficeUrl": "https://prod-backoffice.wbhq.com",
+    "backofficeUrlDashboard": "https://prod-backoffice.wbhq.com/dashboard",
+    "description": "Production environment"
+  },
+  "staging": {
+    "name": "staging",
+    "backofficeLoginUrl": "https://staging-backoffice.wbhq.com/login",
+    "backofficeUrl": "https://staging-backoffice.wbhq.com",
+    "backofficeUrlDashboard": "https://staging-backoffice.wbhq.com/dashboard",
+    "description": "Staging environment"
+  }
+}

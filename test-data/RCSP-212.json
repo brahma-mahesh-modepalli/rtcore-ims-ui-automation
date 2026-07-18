@@ -1,0 +1,295 @@
+{
+  "RCSP-212": {
+    "scenarioId": "RCSP-212",
+    "epic": "EPIC-RCSP-119",
+    "feature": "Stock Count \u2013 Counted Quantity Rules & Summary",
+    "sourceSheet": "Sheet1",
+    "description": "Verify positive/zero/blank counted quantity rules, summary cards, validation, persistence, and active-only Add Item across Daily/Weekly/Monthly counts.",
+    "commonData": {
+      "prerequisites": [
+        "QA Backoffice is accessible",
+        "Admin credentials are valid",
+        "Active inventory items are available for the store"
+      ],
+      "userRole": "admin",
+      "hierarchy": {
+        "region": "1700 San Antonio 4126314",
+        "market": "1708 E Central SA 4126393",
+        "store": "WB Unit 1034"
+      },
+      "createCount": {
+        "shift": "AM",
+        "shiftDate": "2026-07-19",
+        "namePrefix": "RCSP-212"
+      },
+      "location": "Walk-In Cooler",
+      "activeItem": {
+        "name": "LARGE BUNS",
+        "plu": "1000063",
+        "searchTerm": "LARGE BUNS"
+      },
+      "secondaryItem": {
+        "name": "EGG",
+        "searchTerm": "egg"
+      },
+      "tertiaryItem": {
+        "name": "CHEESE",
+        "searchTerm": "cheese"
+      },
+      "inactiveItem": {
+        "searchTerm": "INACTIVE-ITEM-DO-NOT-USE",
+        "note": "Set to a real inactive item/PLU in QA to fully assert active-only dropdown"
+      },
+      "positiveQuantity": "5",
+      "invalidInputs": [
+        "-1",
+        "abc",
+        "@#$",
+        "12.3456",
+        "999999999999"
+      ]
+    },
+    "testCases": [
+      {
+        "testCaseId": "TC_RCSP-212_01",
+        "testName": "Verify Save session with valid positive counted quantity on Daily Shift Count",
+        "testType": "Positive",
+        "preCondition": "User should have valid login credentials and access to Daily Shift Count module",
+        "testData": {
+          "action": "savePositiveCount",
+          "countType": "Daily Shift Count"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-212_02",
+        "testName": "Verify Blank Counted treated as Not Counted on Daily Shift Count",
+        "testType": "Positive",
+        "preCondition": "User should have valid login credentials and access to Daily Shift Count module",
+        "testData": {
+          "action": "blankAsNotCounted",
+          "countType": "Daily Shift Count"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-212_03",
+        "testName": "Verify Zero treated as valid counted quantity on Daily Shift Count",
+        "testType": "Positive",
+        "preCondition": "User should have valid login credentials and access to Daily Shift Count module",
+        "testData": {
+          "action": "zeroAsCounted",
+          "countType": "Daily Shift Count"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-212_04",
+        "testName": "Verify TOTAL ITEMS / Counted / Remaining update dynamically on Daily Shift Count",
+        "testType": "Positive",
+        "preCondition": "User should have valid login credentials and access to Daily Shift Count module",
+        "testData": {
+          "action": "summaryCardsUpdate",
+          "countType": "Daily Shift Count"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-212_05",
+        "testName": "Verify Prevent invalid Counted textbox inputs on Daily Shift Count",
+        "testType": "Negative",
+        "preCondition": "User should have valid login credentials and access to Daily Shift Count module",
+        "testData": {
+          "action": "rejectInvalidInputs",
+          "countType": "Daily Shift Count"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-212_06",
+        "testName": "Verify Values persist after refresh or reopen on Daily Shift Count",
+        "testType": "Positive",
+        "preCondition": "User should have valid login credentials and access to Daily Shift Count module",
+        "testData": {
+          "action": "persistAfterReload",
+          "countType": "Daily Shift Count"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-212_07",
+        "testName": "Verify Blank Counted does not auto-fill with zero on Daily Shift Count",
+        "testType": "Positive",
+        "preCondition": "User should have valid login credentials and access to Daily Shift Count module",
+        "testData": {
+          "action": "blankNotAutofillZero",
+          "countType": "Daily Shift Count"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-212_08",
+        "testName": "Verify Only active inventory items in Add Item dropdown on Daily Shift Count",
+        "testType": "Positive",
+        "preCondition": "User should have valid login credentials and access to Daily Shift Count module",
+        "testData": {
+          "action": "activeItemsOnly",
+          "countType": "Daily Shift Count"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-212_11",
+        "testName": "Verify Save session with valid positive counted quantity on Weekly Count",
+        "testType": "Positive",
+        "preCondition": "User should have valid login credentials and access to Weekly Count module",
+        "testData": {
+          "action": "savePositiveCount",
+          "countType": "Weekly Count"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-212_12",
+        "testName": "Verify Blank Counted treated as Not Counted on Weekly Count",
+        "testType": "Positive",
+        "preCondition": "User should have valid login credentials and access to Weekly Count module",
+        "testData": {
+          "action": "blankAsNotCounted",
+          "countType": "Weekly Count"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-212_13",
+        "testName": "Verify Zero treated as valid counted quantity on Weekly Count",
+        "testType": "Positive",
+        "preCondition": "User should have valid login credentials and access to Weekly Count module",
+        "testData": {
+          "action": "zeroAsCounted",
+          "countType": "Weekly Count"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-212_14",
+        "testName": "Verify TOTAL ITEMS / Counted / Remaining update dynamically on Weekly Count",
+        "testType": "Positive",
+        "preCondition": "User should have valid login credentials and access to Weekly Count module",
+        "testData": {
+          "action": "summaryCardsUpdate",
+          "countType": "Weekly Count"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-212_15",
+        "testName": "Verify Prevent invalid Counted textbox inputs on Weekly Count",
+        "testType": "Negative",
+        "preCondition": "User should have valid login credentials and access to Weekly Count module",
+        "testData": {
+          "action": "rejectInvalidInputs",
+          "countType": "Weekly Count"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-212_16",
+        "testName": "Verify Values persist after refresh or reopen on Weekly Count",
+        "testType": "Positive",
+        "preCondition": "User should have valid login credentials and access to Weekly Count module",
+        "testData": {
+          "action": "persistAfterReload",
+          "countType": "Weekly Count"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-212_17",
+        "testName": "Verify Blank Counted does not auto-fill with zero on Weekly Count",
+        "testType": "Positive",
+        "preCondition": "User should have valid login credentials and access to Weekly Count module",
+        "testData": {
+          "action": "blankNotAutofillZero",
+          "countType": "Weekly Count"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-212_18",
+        "testName": "Verify Only active inventory items in Add Item dropdown on Weekly Count",
+        "testType": "Positive",
+        "preCondition": "User should have valid login credentials and access to Weekly Count module",
+        "testData": {
+          "action": "activeItemsOnly",
+          "countType": "Weekly Count"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-212_21",
+        "testName": "Verify Save session with valid positive counted quantity on Monthly Count",
+        "testType": "Positive",
+        "preCondition": "User should have valid login credentials and access to Monthly Count module",
+        "testData": {
+          "action": "savePositiveCount",
+          "countType": "Monthly Count"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-212_22",
+        "testName": "Verify Blank Counted treated as Not Counted on Monthly Count",
+        "testType": "Positive",
+        "preCondition": "User should have valid login credentials and access to Monthly Count module",
+        "testData": {
+          "action": "blankAsNotCounted",
+          "countType": "Monthly Count"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-212_23",
+        "testName": "Verify Zero treated as valid counted quantity on Monthly Count",
+        "testType": "Positive",
+        "preCondition": "User should have valid login credentials and access to Monthly Count module",
+        "testData": {
+          "action": "zeroAsCounted",
+          "countType": "Monthly Count"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-212_24",
+        "testName": "Verify TOTAL ITEMS / Counted / Remaining update dynamically on Monthly Count",
+        "testType": "Positive",
+        "preCondition": "User should have valid login credentials and access to Monthly Count module",
+        "testData": {
+          "action": "summaryCardsUpdate",
+          "countType": "Monthly Count"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-212_25",
+        "testName": "Verify Prevent invalid Counted textbox inputs on Monthly Count",
+        "testType": "Negative",
+        "preCondition": "User should have valid login credentials and access to Monthly Count module",
+        "testData": {
+          "action": "rejectInvalidInputs",
+          "countType": "Monthly Count"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-212_26",
+        "testName": "Verify Values persist after refresh or reopen on Monthly Count",
+        "testType": "Positive",
+        "preCondition": "User should have valid login credentials and access to Monthly Count module",
+        "testData": {
+          "action": "persistAfterReload",
+          "countType": "Monthly Count"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-212_27",
+        "testName": "Verify Blank Counted does not auto-fill with zero on Monthly Count",
+        "testType": "Positive",
+        "preCondition": "User should have valid login credentials and access to Monthly Count module",
+        "testData": {
+          "action": "blankNotAutofillZero",
+          "countType": "Monthly Count"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-212_28",
+        "testName": "Verify Only active inventory items in Add Item dropdown on Monthly Count",
+        "testType": "Positive",
+        "preCondition": "User should have valid login credentials and access to Monthly Count module",
+        "testData": {
+          "action": "activeItemsOnly",
+          "countType": "Monthly Count"
+        }
+      }
+    ]
+  }
+}

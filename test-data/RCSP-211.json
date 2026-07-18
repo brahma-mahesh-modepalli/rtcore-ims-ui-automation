@@ -1,0 +1,274 @@
+{
+  "RCSP-211": {
+    "scenarioId": "RCSP-211",
+    "epic": "EPIC-RCSP-119",
+    "feature": "Stock Count \u2013 Color-coded Variance Indicator",
+    "sourceSheet": "Sheet1",
+    "description": "Verify Green/Red/Yellow variance indicators and unrestricted SAVE COUNTS / LOCK COUNT across Daily Shift, Weekly, and Monthly counts.",
+    "commonData": {
+      "prerequisites": [
+        "QA Backoffice is accessible",
+        "Admin credentials are valid",
+        "Item has Expected Quantity and Variance Threshold configured"
+      ],
+      "userRole": "admin",
+      "hierarchy": {
+        "region": "1700 San Antonio 4126314",
+        "market": "1708 E Central SA 4126393",
+        "store": "WB Unit 1034"
+      },
+      "createCount": {
+        "shift": "AM",
+        "shiftDate": "2026-07-19",
+        "namePrefix": "RCSP-211"
+      },
+      "item": {
+        "name": "LARGE BUNS",
+        "plu": "1000063",
+        "searchTerm": "LARGE BUNS"
+      },
+      "locations": {
+        "primary": "Walk-In Cooler",
+        "secondary": "Dry Storage"
+      },
+      "fallbackVarianceThresholdPercent": 10,
+      "fallbackExpectedQuantity": 100
+    },
+    "testCases": [
+      {
+        "testCaseId": "TC_RCSP-211_001",
+        "testName": "Verify color-coded variance indicator is displayed in Green on Daily Shift Count",
+        "testType": "Positive",
+        "module": "Daily Shift Count \u2013 Variance Indicator",
+        "testData": {
+          "action": "varianceIndicator",
+          "countType": "Daily Shift Count",
+          "expectedColor": "green",
+          "assertSaveAndLock": false,
+          "multiLocation": false
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-211_002",
+        "testName": "Verify color-coded variance indicator is displayed in Red on Daily Shift Count",
+        "testType": "Positive",
+        "module": "Daily Shift Count \u2013 Variance Indicator",
+        "testData": {
+          "action": "varianceIndicator",
+          "countType": "Daily Shift Count",
+          "expectedColor": "red",
+          "assertSaveAndLock": false,
+          "multiLocation": false
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-211_003",
+        "testName": "Verify color-coded variance indicator is displayed in Yellow (partial locations) on Daily Shift Count",
+        "testType": "Positive",
+        "module": "Daily Shift Count \u2013 Variance Indicator",
+        "testData": {
+          "action": "varianceIndicator",
+          "countType": "Daily Shift Count",
+          "expectedColor": "yellow",
+          "assertSaveAndLock": false,
+          "multiLocation": true
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-211_004",
+        "testName": "Verify color-coded variance indicator is displayed in Green on Weekly Count",
+        "testType": "Positive",
+        "module": "Weekly Count \u2013 Variance Indicator",
+        "testData": {
+          "action": "varianceIndicator",
+          "countType": "Weekly Count",
+          "expectedColor": "green",
+          "assertSaveAndLock": false,
+          "multiLocation": false
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-211_005",
+        "testName": "Verify color-coded variance indicator is displayed in Red on Weekly Count",
+        "testType": "Positive",
+        "module": "Weekly Count \u2013 Variance Indicator",
+        "testData": {
+          "action": "varianceIndicator",
+          "countType": "Weekly Count",
+          "expectedColor": "red",
+          "assertSaveAndLock": false,
+          "multiLocation": false
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-211_006",
+        "testName": "Verify color-coded variance indicator is displayed in Yellow (partial locations) on Weekly Count",
+        "testType": "Positive",
+        "module": "Weekly Count \u2013 Variance Indicator",
+        "testData": {
+          "action": "varianceIndicator",
+          "countType": "Weekly Count",
+          "expectedColor": "yellow",
+          "assertSaveAndLock": false,
+          "multiLocation": true
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-211_007",
+        "testName": "Verify color-coded variance indicator is displayed in Green on Monthly Count",
+        "testType": "Positive",
+        "module": "Monthly Count \u2013 Variance Indicator",
+        "testData": {
+          "action": "varianceIndicator",
+          "countType": "Monthly Count",
+          "expectedColor": "green",
+          "assertSaveAndLock": false,
+          "multiLocation": false
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-211_008",
+        "testName": "Verify color-coded variance indicator is displayed in Red on Monthly Count",
+        "testType": "Positive",
+        "module": "Monthly Count \u2013 Variance Indicator",
+        "testData": {
+          "action": "varianceIndicator",
+          "countType": "Monthly Count",
+          "expectedColor": "red",
+          "assertSaveAndLock": false,
+          "multiLocation": false
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-211_009",
+        "testName": "Verify color-coded variance indicator is displayed in Yellow (partial locations) on Monthly Count",
+        "testType": "Positive",
+        "module": "Monthly Count \u2013 Variance Indicator",
+        "testData": {
+          "action": "varianceIndicator",
+          "countType": "Monthly Count",
+          "expectedColor": "yellow",
+          "assertSaveAndLock": false,
+          "multiLocation": true
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-211_010",
+        "testName": "Verify SAVE COUNTS and LOCK COUNT allowed when indicator is Green on Daily Shift Count",
+        "testType": "Positive",
+        "module": "Daily Shift Count \u2013 Submission Validation",
+        "testData": {
+          "action": "submissionValidation",
+          "countType": "Daily Shift Count",
+          "expectedColor": "green",
+          "assertSaveAndLock": true,
+          "multiLocation": false
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-211_011",
+        "testName": "Verify SAVE COUNTS and LOCK COUNT allowed when indicator is Red on Daily Shift Count",
+        "testType": "Positive",
+        "module": "Daily Shift Count \u2013 Submission Validation",
+        "testData": {
+          "action": "submissionValidation",
+          "countType": "Daily Shift Count",
+          "expectedColor": "red",
+          "assertSaveAndLock": true,
+          "multiLocation": false
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-211_012",
+        "testName": "Verify SAVE COUNTS and LOCK COUNT allowed when indicator is Yellow on Daily Shift Count",
+        "testType": "Positive",
+        "module": "Daily Shift Count \u2013 Submission Validation",
+        "testData": {
+          "action": "submissionValidation",
+          "countType": "Daily Shift Count",
+          "expectedColor": "yellow",
+          "assertSaveAndLock": true,
+          "multiLocation": true
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-211_013",
+        "testName": "Verify SAVE COUNTS and LOCK COUNT allowed when indicator is Green on Weekly Count",
+        "testType": "Positive",
+        "module": "Weekly Count \u2013 Submission Validation",
+        "testData": {
+          "action": "submissionValidation",
+          "countType": "Weekly Count",
+          "expectedColor": "green",
+          "assertSaveAndLock": true,
+          "multiLocation": false
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-211_014",
+        "testName": "Verify SAVE COUNTS and LOCK COUNT allowed when indicator is Red on Weekly Count",
+        "testType": "Positive",
+        "module": "Weekly Count \u2013 Submission Validation",
+        "testData": {
+          "action": "submissionValidation",
+          "countType": "Weekly Count",
+          "expectedColor": "red",
+          "assertSaveAndLock": true,
+          "multiLocation": false
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-211_015",
+        "testName": "Verify SAVE COUNTS and LOCK COUNT allowed when indicator is Yellow on Weekly Count",
+        "testType": "Positive",
+        "module": "Weekly Count \u2013 Submission Validation",
+        "testData": {
+          "action": "submissionValidation",
+          "countType": "Weekly Count",
+          "expectedColor": "yellow",
+          "assertSaveAndLock": true,
+          "multiLocation": true
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-211_016",
+        "testName": "Verify SAVE COUNTS and LOCK COUNT allowed when indicator is Green on Monthly Count",
+        "testType": "Positive",
+        "module": "Monthly Count \u2013 Submission Validation",
+        "testData": {
+          "action": "submissionValidation",
+          "countType": "Monthly Count",
+          "expectedColor": "green",
+          "assertSaveAndLock": true,
+          "multiLocation": false
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-211_017",
+        "testName": "Verify SAVE COUNTS and LOCK COUNT allowed when indicator is Red on Monthly Count",
+        "testType": "Positive",
+        "module": "Monthly Count \u2013 Submission Validation",
+        "testData": {
+          "action": "submissionValidation",
+          "countType": "Monthly Count",
+          "expectedColor": "red",
+          "assertSaveAndLock": true,
+          "multiLocation": false
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-211_018",
+        "testName": "Verify SAVE COUNTS and LOCK COUNT allowed when indicator is Yellow on Monthly Count",
+        "testType": "Positive",
+        "module": "Monthly Count \u2013 Submission Validation",
+        "testData": {
+          "action": "submissionValidation",
+          "countType": "Monthly Count",
+          "expectedColor": "yellow",
+          "assertSaveAndLock": true,
+          "multiLocation": true
+        }
+      }
+    ]
+  }
+}

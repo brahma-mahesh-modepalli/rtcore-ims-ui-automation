@@ -1,0 +1,2479 @@
+{
+  "RCSP-595": {
+    "scenarioId": "RCSP-595",
+    "epic": "EPIC-RCSP-120",
+    "feature": "Ordering \u2013 Credit Requests Damaged Items UOM (Flowers / McLane)",
+    "sourceSheet": "Credit-Request-Damaged-Items-UO",
+    "description": "Verify Credit Request damaged-item UOM flows for Flowers and McLane received purchase orders, including positive, negative, and edge scenarios.",
+    "commonData": {
+      "prerequisites": [
+        "QA Backoffice is accessible",
+        "Admin user has Ordering > Credit Requests access",
+        "At least one Flowers PO in Received status with received items",
+        "At least one McLane PO in Received status with received items"
+      ],
+      "userRole": "admin",
+      "hierarchy": {
+        "region": "1700 San Antonio 4126314",
+        "market": "1708 E Central SA 4126393",
+        "store": "WB Unit 1034"
+      },
+      "labels": {
+        "pageTitle": "Credit Requests",
+        "newCreditRequest": "NEW CREDIT REQUEST",
+        "startCreditRequest": "Start Credit Request",
+        "damagedItemsPageTitle": "Damaged Items From Order",
+        "purchaseOrderSearch": "Purchase Order with Received Items"
+      },
+      "damagedFields": [
+        "Incident Type",
+        "Qty",
+        "UOM",
+        "Can you use this product?",
+        "enough good product",
+        "Images"
+      ],
+      "flowers": {
+        "orderType": "Flowers",
+        "receivedPoSearch": "",
+        "nonReceivedPoSearch": "",
+        "emptyReceivedPoSearch": "",
+        "itemName": "",
+        "itemSku": "",
+        "expectedUoms": [
+          "EA",
+          "CS",
+          "TR",
+          "PK"
+        ],
+        "alternateUom": "",
+        "incidentType": "Damaged",
+        "qty": "1",
+        "canUseProduct": "No",
+        "enoughGoodProductOrIut": "Yes",
+        "note": "Set receivedPoSearch to a Flowers Received PO number/name available in QA"
+      },
+      "mclane": {
+        "orderType": "McLane",
+        "receivedPoSearch": "",
+        "nonReceivedPoSearch": "",
+        "emptyReceivedPoSearch": "",
+        "itemName": "",
+        "itemSku": "",
+        "expectedUoms": [
+          "EA",
+          "CS",
+          "TR",
+          "PK"
+        ],
+        "alternateUom": "",
+        "incidentType": "Damaged",
+        "qty": "1",
+        "canUseProduct": "No",
+        "enoughGoodProductOrIut": "Yes",
+        "note": "Set receivedPoSearch to a McLane Received PO number/name available in QA"
+      },
+      "imageFixturePath": "test-data/fixtures/credit-request-damage.png",
+      "itemMasterPathHint": "Inventory Setup > Item Master",
+      "stockCountPathHint": "Inventory Setup > Stock Count"
+    },
+    "testCases": [
+      {
+        "testCaseId": "TC_RCSP-595_001",
+        "module": "Ordering > Credit Requests (Flowers)",
+        "testName": "Verify whether the admin user can navigate from QA Backoffice Dashboard Home page to Ordering menu > Credit Requests page and view the Credit Requests listing for Flowers orders",
+        "description": "Verify whether the admin user can navigate from QA Backoffice Dashboard Home page to Ordering menu > Credit Requests page and view the Credit Requests listing for Flowers orders",
+        "preCondition": "1. User has access to QA Backoffice Dashboard URL. 2. Valid admin credentials are available. 3. User has permission to access Ordering > Credit Requests. 4. At least one Flowers Purchase Order exists in Received status with one or more received items.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Launch the application: QA Backoffice Dashboard."
+          },
+          {
+            "step": 2,
+            "description": "On the Login page, enter Username and Password, then click Sign In / Login."
+          },
+          {
+            "step": 3,
+            "description": "Verify the user lands on the Home/Dashboard page after successful login."
+          },
+          {
+            "step": 4,
+            "description": "From the left/main navigation menu, locate and expand the Ordering menu."
+          },
+          {
+            "step": 5,
+            "description": "Under the Ordering menu, click on Credit Requests."
+          },
+          {
+            "step": 6,
+            "description": "Wait for the Credit Requests page to load completely."
+          },
+          {
+            "step": 7,
+            "description": "Verify the Credit Requests page title/header is displayed."
+          },
+          {
+            "step": 8,
+            "description": "Verify the + New Credit Request / START CREDIT REQUEST button is visible on the Credit Requests page."
+          }
+        ],
+        "rawTestData": "Application: QA Backoffice Dashboard | Username: admin@whataburger-ims.com | Password: admin123 | Menu Path: Ordering > Credit Requests | Order Type: Flowers",
+        "expectedResult": "Verify whether the user successfully navigates to Ordering > Credit Requests page and the Credit Requests listing page loads with the New Credit Request / START CREDIT REQUEST action button visible for Flowers-related credit workflows.",
+        "testData": {
+          "orderType": "Flowers",
+          "action": "navigateListing",
+          "requiresPo": false
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-595_002",
+        "module": "Ordering > Credit Requests (Flowers)",
+        "testName": "Verify whether clicking + New Credit Request / START CREDIT REQUEST on the Credit Requests page opens the Purchase Order with Received Items search section for Flowers Purchase Orders",
+        "description": "Verify whether clicking + New Credit Request / START CREDIT REQUEST on the Credit Requests page opens the Purchase Order with Received Items search section for Flowers Purchase Orders",
+        "preCondition": "1. User is logged in to QA Backoffice Dashboard as admin. 2. User is on Ordering > Credit Requests page. 3. A Flowers Purchase Order in Received status with at least one received item exists.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "On the Credit Requests page under Ordering menu, locate the + New Credit Request or START CREDIT REQUEST button."
+          },
+          {
+            "step": 2,
+            "description": "Click the + New Credit Request / START CREDIT REQUEST button."
+          },
+          {
+            "step": 3,
+            "description": "Wait for the New Credit Request selection screen/modal to load."
+          },
+          {
+            "step": 4,
+            "description": "Verify the Purchase Order with Received Items search field is displayed."
+          },
+          {
+            "step": 5,
+            "description": "Verify the user can search/select a Purchase Order from the search field."
+          },
+          {
+            "step": 6,
+            "description": "Verify the Start Credit Request button is visible (enabled only after a valid PO selection as applicable)."
+          }
+        ],
+        "rawTestData": "Menu Path: Ordering > Credit Requests | Action: + New Credit Request / START CREDIT REQUEST | PO Type: Flowers | PO Status: Received",
+        "expectedResult": "Verify whether the New Credit Request flow displays the Purchase Order with Received Items search field so the user can select a Flowers Purchase Order in Received status before starting the credit request.",
+        "testData": {
+          "orderType": "Flowers",
+          "action": "openNewCreditRequestPoSearch",
+          "requiresPo": false
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-595_003",
+        "module": "Ordering > Credit Requests (Flowers) \u201a\u00c4\u00ee Scenario 1: Create Credit Request",
+        "testName": "Verify whether selecting a Flowers Purchase Order in Received status from the Purchase Order with Received Items search field and clicking Start Credit Request navigates the user to the Damaged Items From Order page",
+        "description": "Verify whether selecting a Flowers Purchase Order in Received status from the Purchase Order with Received Items search field and clicking Start Credit Request navigates the user to the Damaged Items From Order page",
+        "preCondition": "1. User is logged in as admin. 2. User is on Ordering > Credit Requests > New Credit Request selection screen. 3. A Flowers Purchase Order (PO) exists in Received status. 4. The Flowers PO contains at least one received item.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Launch QA Backoffice Dashboard and login with valid admin credentials."
+          },
+          {
+            "step": 2,
+            "description": "Expand the Ordering menu and click Credit Requests."
+          },
+          {
+            "step": 3,
+            "description": "Click + New Credit Request / START CREDIT REQUEST button."
+          },
+          {
+            "step": 4,
+            "description": "In the Purchase Order with Received Items search field, search for the prerequisite Flowers Purchase Order that is in Received status."
+          },
+          {
+            "step": 5,
+            "description": "Select the Flowers Purchase Order from the search results."
+          },
+          {
+            "step": 6,
+            "description": "Click the Start Credit Request button."
+          },
+          {
+            "step": 7,
+            "description": "Wait for navigation to complete."
+          },
+          {
+            "step": 8,
+            "description": "Verify the page title/header shows Damaged Items From Order."
+          },
+          {
+            "step": 9,
+            "description": "Verify the selected Flowers PO details and received item list are displayed on the Damaged Items From Order page."
+          }
+        ],
+        "rawTestData": "Username: admin@whataburger-ims.com | Password: admin123 | PO Type: Flowers | PO Status: Received | Page: Damaged Items From Order",
+        "expectedResult": "Verify whether after selecting a Received Flowers Purchase Order and clicking Start Credit Request, the user lands on the Damaged Items From Order page with the selected PO's received items listed.",
+        "testData": {
+          "orderType": "Flowers",
+          "action": "startCreditRequestDamagedPage",
+          "requiresPo": true
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-595_004",
+        "module": "Ordering > Credit Requests (Flowers) \u201a\u00c4\u00ee Scenario 2: Display Damaged Item Fields",
+        "testName": "Verify whether selecting the Damaged checkbox for a received item on the Damaged Items From Order page (Flowers) displays all mandatory damaged-item fields: Incident Type, Qty, UOM, Can you use this product?, Do you have enough good product until your next delivery? / Can you IUT from another unit?, and Images",
+        "description": "Verify whether selecting the Damaged checkbox for a received item on the Damaged Items From Order page (Flowers) displays all mandatory damaged-item fields: Incident Type, Qty, UOM, Can you use this product?, Do you have enough good product until your next delivery? / Can you IUT from another unit?, and Images",
+        "preCondition": "1. User is logged in as admin. 2. User has started a Credit Request for a Flowers PO in Received status. 3. User is on the Damaged Items From Order page. 4. At least one received item is listed from the Flowers PO.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "On the Damaged Items From Order page for the Flowers Credit Request, locate a received item row in the items section."
+          },
+          {
+            "step": 2,
+            "description": "Select/check the Damaged checkbox for that item."
+          },
+          {
+            "step": 3,
+            "description": "Observe the fields that appear for the selected damaged item."
+          },
+          {
+            "step": 4,
+            "description": "Verify field Incident Type * is displayed and marked mandatory."
+          },
+          {
+            "step": 5,
+            "description": "Verify field Qty * is displayed and marked mandatory."
+          },
+          {
+            "step": 6,
+            "description": "Verify field UOM * is displayed and marked mandatory."
+          },
+          {
+            "step": 7,
+            "description": "Verify field Can you use this product? * is displayed and marked mandatory."
+          },
+          {
+            "step": 8,
+            "description": "Verify field Do you have enough good product until your next delivery? / Can you IUT from another unit? * is displayed and marked mandatory."
+          },
+          {
+            "step": 9,
+            "description": "Verify field Images * is displayed and marked mandatory (as applicable per business rules)."
+          },
+          {
+            "step": 10,
+            "description": "1"
+          },
+          {
+            "step": 0,
+            "description": "Verify all listed fields are editable at this Draft stage."
+          }
+        ],
+        "rawTestData": "Order Type: Flowers | Page: Damaged Items From Order | Action: Select Damaged checkbox | Expected Fields: Incident Type *, Qty *, UOM *, Can you use this product? *, Do you have enough good product until your next delivery? / Can you IUT from another unit? *, Images *",
+        "expectedResult": "Verify whether selecting the Damaged checkbox on the Damaged Items From Order page for a Flowers Credit Request displays all required damaged-item fields (Incident Type, Qty, UOM, Can you use this product?, enough good product / IUT question, and Images) as mandatory.",
+        "testData": {
+          "orderType": "Flowers",
+          "action": "damagedFieldsVisible",
+          "requiresPo": true
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-595_005",
+        "module": "Ordering > Credit Requests (Flowers) \u201a\u00c4\u00ee Scenario 3: Validate UOM Values",
+        "testName": "Verify whether the UOM dropdown values displayed for a damaged item on the Damaged Items From Order page (Flowers Credit Request) match the UOM configuration defined for the same item in Inventory Setup > Item Master",
+        "description": "Verify whether the UOM dropdown values displayed for a damaged item on the Damaged Items From Order page (Flowers Credit Request) match the UOM configuration defined for the same item in Inventory Setup > Item Master",
+        "preCondition": "1. User is logged in as admin. 2. Prerequisite item exists on a Flowers Received PO and also exists in Inventory Setup > Item Master with configured UOM values. 3. User is on Damaged Items From Order page for the Flowers Credit Request. 4. Damaged checkbox is selected for the prerequisite item.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Note the Item Code/Name of the prerequisite item on the Damaged Items From Order page (Flowers)."
+          },
+          {
+            "step": 2,
+            "description": "Select the Damaged checkbox for that item if not already selected."
+          },
+          {
+            "step": 3,
+            "description": "Click/open the UOM * dropdown for the damaged item and record all available UOM values."
+          },
+          {
+            "step": 4,
+            "description": "Navigate to Inventory Setup > Item Master (open in another tab or after noting values)."
+          },
+          {
+            "step": 5,
+            "description": "Search for the same prerequisite item in Item Master."
+          },
+          {
+            "step": 6,
+            "description": "Open the item details and record the configured UOM values for the item."
+          },
+          {
+            "step": 7,
+            "description": "Navigate back to Ordering > Credit Requests > Damaged Items From Order (Flowers Credit Request Draft)."
+          },
+          {
+            "step": 8,
+            "description": "Compare the UOM dropdown values on Credit Request with Item Master UOM configuration."
+          },
+          {
+            "step": 9,
+            "description": "Verify every UOM option in Credit Request exists in Item Master."
+          },
+          {
+            "step": 10,
+            "description": "1"
+          },
+          {
+            "step": 0,
+            "description": "Verify no extra/invalid UOM option appears in Credit Request that is not in Item Master."
+          }
+        ],
+        "rawTestData": "Order Type: Flowers | Page: Damaged Items From Order | Section: Damaged Item Fields > UOM * | Comparison Source: Inventory Setup > Item Master | Item: <Prerequisite Item from Flowers PO>",
+        "expectedResult": "Verify whether the UOM dropdown values on the Flowers Credit Request Damaged Items From Order page exactly match the UOM configuration for the same item in Inventory Setup > Item Master.",
+        "testData": {
+          "orderType": "Flowers",
+          "action": "uomMatchesItemMaster",
+          "requiresPo": true
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-595_006",
+        "module": "Ordering > Credit Requests (Flowers) \u201a\u00c4\u00ee Scenario 4: Validate UOM Profile",
+        "testName": "Verify whether the UOM profile for a damaged item on the Flowers Credit Request matches the item's Stock Count configuration (Daily / Weekly / Monthly) as configured in Inventory Setup for the same prerequisite item",
+        "description": "Verify whether the UOM profile for a damaged item on the Flowers Credit Request matches the item's Stock Count configuration (Daily / Weekly / Monthly) as configured in Inventory Setup for the same prerequisite item",
+        "preCondition": "1. User is logged in as admin. 2. Prerequisite item exists on Flowers Received PO. 3. Same item has Stock Count configuration set to Daily or Weekly or Monthly in Inventory Setup. 4. User has started a Credit Request for the Flowers PO and selected Damaged for the item.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Navigate to Inventory Setup and open the Stock Count configuration (Daily / Weekly / Monthly) for the prerequisite item; record the Stock Count frequency and associated UOM profile."
+          },
+          {
+            "step": 2,
+            "description": "Navigate to Ordering > Credit Requests and open/create the Flowers Credit Request for the Received PO containing the same item."
+          },
+          {
+            "step": 3,
+            "description": "On Damaged Items From Order page, select Damaged checkbox for the prerequisite item."
+          },
+          {
+            "step": 4,
+            "description": "Observe the default/selected UOM and UOM profile behavior for the item."
+          },
+          {
+            "step": 5,
+            "description": "Compare the Credit Request UOM profile with the Stock Count UOM profile recorded from Inventory Setup."
+          },
+          {
+            "step": 6,
+            "description": "Verify the UOM profile on Credit Request matches Stock Count configuration (Daily/Weekly/Monthly) for that item."
+          }
+        ],
+        "rawTestData": "Order Type: Flowers | Item: <Prerequisite Item> | Stock Count Path: Inventory Setup > Stock Count (Daily/Weekly/Monthly) | Credit Request Path: Ordering > Credit Requests > Damaged Items From Order",
+        "expectedResult": "Verify whether the UOM profile on the Flowers Credit Request for the damaged item matches the Stock Count (Daily/Weekly/Monthly) UOM profile configured for the same item in Inventory Setup.",
+        "testData": {
+          "orderType": "Flowers",
+          "action": "uomProfileMatchesStockCount",
+          "requiresPo": true
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-595_007",
+        "module": "Ordering > Credit Requests (Flowers) \u201a\u00c4\u00ee Scenario 5: Update UOM Before Submission",
+        "testName": "Verify whether the user can change/update the UOM dropdown value on a Draft Flowers Credit Request on the Damaged Items From Order page, save successfully, and see the updated UOM reflected when the Draft is reopened",
+        "description": "Verify whether the user can change/update the UOM dropdown value on a Draft Flowers Credit Request on the Damaged Items From Order page, save successfully, and see the updated UOM reflected when the Draft is reopened",
+        "preCondition": "1. User is logged in as admin. 2. A Flowers Credit Request exists in Draft status. 3. Damaged checkbox is selected for an item with multiple UOM options available. 4. User is on Damaged Items From Order page for the Draft Credit Request.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Open the Draft Flowers Credit Request from Ordering > Credit Requests listing (Draft section/filter if available)."
+          },
+          {
+            "step": 2,
+            "description": "On Damaged Items From Order page, locate the UOM * dropdown for the damaged item."
+          },
+          {
+            "step": 3,
+            "description": "Note the currently selected UOM value."
+          },
+          {
+            "step": 4,
+            "description": "Change the UOM dropdown to a different valid UOM value from the list."
+          },
+          {
+            "step": 5,
+            "description": "Complete any other mandatory damaged fields if not already filled (Incident Type, Qty, Can you use this product?, enough good product/IUT, Images as applicable)."
+          },
+          {
+            "step": 6,
+            "description": "Click Save (or Save Draft / equivalent save action) on the Credit Request."
+          },
+          {
+            "step": 7,
+            "description": "Verify a success confirmation is displayed and status remains Draft."
+          },
+          {
+            "step": 8,
+            "description": "Navigate away from the Damaged Items From Order page back to Credit Requests listing."
+          },
+          {
+            "step": 9,
+            "description": "Reopen the same Draft Credit Request."
+          },
+          {
+            "step": 10,
+            "description": "1"
+          },
+          {
+            "step": 0,
+            "description": "Verify the UOM dropdown shows the updated UOM value that was saved."
+          },
+          {
+            "step": 12,
+            "description": "1"
+          },
+          {
+            "step": 1,
+            "description": "Verify Draft record values reflect the updated UOM."
+          }
+        ],
+        "rawTestData": "Order Type: Flowers | Status: Draft | Page: Damaged Items From Order | Field: UOM * | Action: Change UOM > Save > Reopen Draft",
+        "expectedResult": "Verify whether updating the UOM dropdown on a Draft Flowers Credit Request saves successfully, Draft record values update with the new UOM, and the updated UOM persists when the Draft Credit Request is reopened.",
+        "testData": {
+          "orderType": "Flowers",
+          "action": "updateUomDraftPersist",
+          "requiresPo": true
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-595_008",
+        "module": "Ordering > Credit Requests (Flowers) \u201a\u00c4\u00ee Scenario 6: Submit Credit Request",
+        "testName": "Verify whether the user can submit a Draft Flowers Credit Request from the Damaged Items From Order page with all mandatory damaged fields completed including the selected UOM, and the Credit Request status changes to Submitted",
+        "description": "Verify whether the user can submit a Draft Flowers Credit Request from the Damaged Items From Order page with all mandatory damaged fields completed including the selected UOM, and the Credit Request status changes to Submitted",
+        "preCondition": "1. User is logged in as admin. 2. A Flowers Credit Request exists in Draft status with Damaged item fields completed including a selected UOM. 3. All mandatory fields are valid.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Open the Draft Flowers Credit Request from Ordering > Credit Requests."
+          },
+          {
+            "step": 2,
+            "description": "On Damaged Items From Order page, verify Damaged checkbox is selected."
+          },
+          {
+            "step": 3,
+            "description": "Verify Incident Type * is filled."
+          },
+          {
+            "step": 4,
+            "description": "Verify Qty * is filled with a valid quantity."
+          },
+          {
+            "step": 5,
+            "description": "Verify UOM * has the intended UOM value selected."
+          },
+          {
+            "step": 6,
+            "description": "Verify Can you use this product? * is answered."
+          },
+          {
+            "step": 7,
+            "description": "Verify Do you have enough good product until your next delivery? / Can you IUT from another unit? * is answered."
+          },
+          {
+            "step": 8,
+            "description": "Verify Images * has required image(s) uploaded (if applicable)."
+          },
+          {
+            "step": 9,
+            "description": "Click Submit / Submit Credit Request button."
+          },
+          {
+            "step": 10,
+            "description": "1"
+          },
+          {
+            "step": 0,
+            "description": "Wait for submission to complete."
+          },
+          {
+            "step": 12,
+            "description": "1"
+          },
+          {
+            "step": 1,
+            "description": "Verify success confirmation is displayed."
+          },
+          {
+            "step": 14,
+            "description": "1"
+          },
+          {
+            "step": 2,
+            "description": "On Credit Requests listing, locate the Credit Request by ID."
+          },
+          {
+            "step": 16,
+            "description": "1"
+          },
+          {
+            "step": 3,
+            "description": "Verify status is Submitted (or equivalent submitted status)."
+          }
+        ],
+        "rawTestData": "Order Type: Flowers | Status Before: Draft | Status After: Submitted | Page: Damaged Items From Order | UOM: <selected UOM value>",
+        "expectedResult": "Verify whether submitting a fully completed Draft Flowers Credit Request succeeds and the Credit Request is saved in Submitted status with the selected UOM value retained.",
+        "testData": {
+          "orderType": "Flowers",
+          "action": "submitCreditRequest",
+          "requiresPo": true
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-595_009",
+        "module": "Ordering > Credit Requests (Flowers) \u201a\u00c4\u00ee Scenario 7: Restrict UOM Updates After Submission",
+        "testName": "Verify whether the UOM field on a Submitted Flowers Credit Request is read-only on the Damaged Items From Order / Credit Request details page and the user cannot change or update the UOM value after submission",
+        "description": "Verify whether the UOM field on a Submitted Flowers Credit Request is read-only on the Damaged Items From Order / Credit Request details page and the user cannot change or update the UOM value after submission",
+        "preCondition": "1. User is logged in as admin. 2. A Flowers Credit Request has been submitted successfully (from TC_CR_FLW_POS_006). 3. User can open the submitted Credit Request from Ordering > Credit Requests.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Navigate to Ordering > Credit Requests."
+          },
+          {
+            "step": 2,
+            "description": "Locate and open the Submitted Flowers Credit Request."
+          },
+          {
+            "step": 3,
+            "description": "Navigate to the Damaged Items From Order / submitted details section for the damaged item."
+          },
+          {
+            "step": 4,
+            "description": "Locate the UOM field for the damaged item."
+          },
+          {
+            "step": 5,
+            "description": "Verify the UOM field is displayed as read-only / disabled / non-editable."
+          },
+          {
+            "step": 6,
+            "description": "Attempt to click the UOM dropdown or change the UOM value."
+          },
+          {
+            "step": 7,
+            "description": "Verify the UOM value cannot be modified."
+          },
+          {
+            "step": 8,
+            "description": "Verify no Save action updates UOM for the submitted record."
+          },
+          {
+            "step": 9,
+            "description": "Verify the submitted UOM value remains unchanged and matches the value at submission time."
+          }
+        ],
+        "rawTestData": "Order Type: Flowers | Status: Submitted | Page: Credit Request Details / Damaged Items From Order | Field: UOM | Expected Behavior: Read-only",
+        "expectedResult": "Verify whether after submission of a Flowers Credit Request the UOM field is read-only, the user cannot change the UOM, and the submitted UOM value remains unchanged.",
+        "testData": {
+          "orderType": "Flowers",
+          "action": "uomReadOnlyAfterSubmit",
+          "requiresPo": true
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-595_010",
+        "module": "Ordering > Credit Requests (Flowers) \u201a\u00c4\u00ee Negative",
+        "testName": "Verify whether the Start Credit Request button does not navigate to Damaged Items From Order page when no Flowers Purchase Order is selected in the Purchase Order with Received Items search field",
+        "description": "Verify whether the Start Credit Request button does not navigate to Damaged Items From Order page when no Flowers Purchase Order is selected in the Purchase Order with Received Items search field",
+        "preCondition": "1. User is logged in as admin. 2. User is on Ordering > Credit Requests > New Credit Request selection screen.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Expand Ordering menu and click Credit Requests."
+          },
+          {
+            "step": 2,
+            "description": "Click + New Credit Request / START CREDIT REQUEST."
+          },
+          {
+            "step": 3,
+            "description": "Do NOT select any Purchase Order in the Purchase Order with Received Items search field."
+          },
+          {
+            "step": 4,
+            "description": "Attempt to click Start Credit Request."
+          },
+          {
+            "step": 5,
+            "description": "Observe validation/error behavior."
+          },
+          {
+            "step": 6,
+            "description": "Verify the user does not land on Damaged Items From Order page."
+          }
+        ],
+        "rawTestData": "Order Type: Flowers | PO Selection: (none) | Action: Start Credit Request",
+        "expectedResult": "Verify whether the system blocks Start Credit Request and displays a validation message requiring Purchase Order selection when no Flowers PO is selected.",
+        "testData": {
+          "orderType": "Flowers",
+          "action": "startWithoutPoBlocked",
+          "requiresPo": false
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-595_011",
+        "module": "Ordering > Credit Requests (Flowers) \u201a\u00c4\u00ee Negative",
+        "testName": "Verify whether a Flowers Purchase Order that is NOT in Received status does not appear as selectable (or cannot be used) in the Purchase Order with Received Items search field for creating a Credit Request",
+        "description": "Verify whether a Flowers Purchase Order that is NOT in Received status does not appear as selectable (or cannot be used) in the Purchase Order with Received Items search field for creating a Credit Request",
+        "preCondition": "1. User is logged in as admin. 2. A Flowers Purchase Order exists in a non-Received status (e.g., Open, In Transit, Cancelled, or Draft \u201a\u00c4\u00ee as applicable). 3. User is on New Credit Request PO search screen.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Navigate to Ordering > Credit Requests and click + New Credit Request / START CREDIT REQUEST."
+          },
+          {
+            "step": 2,
+            "description": "In Purchase Order with Received Items search field, search for the Flowers PO that is not in Received status."
+          },
+          {
+            "step": 3,
+            "description": "Observe whether the non-Received PO appears in search results."
+          },
+          {
+            "step": 4,
+            "description": "If it appears, attempt to select it and click Start Credit Request."
+          },
+          {
+            "step": 5,
+            "description": "Verify the system does not allow creating a Credit Request from a non-Received Flowers PO."
+          }
+        ],
+        "rawTestData": "Order Type: Flowers | PO Status: Not Received (Open/In Transit/Cancelled/etc.) | Search Field: Purchase Order with Received Items",
+        "expectedResult": "Verify whether only Flowers Purchase Orders in Received status are eligible for Credit Request creation and non-Received POs cannot be started as Credit Requests.",
+        "testData": {
+          "orderType": "Flowers",
+          "action": "nonReceivedPoNotEligible",
+          "requiresPo": false,
+          "requiresNonReceivedPo": true
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-595_012",
+        "module": "Ordering > Credit Requests (Flowers) \u201a\u00c4\u00ee Negative",
+        "testName": "Verify whether the mandatory damaged-item fields (Incident Type, Qty, UOM, Can you use this product?, enough good product/IUT, Images) do NOT appear on Damaged Items From Order page (Flowers) when the Damaged checkbox is not selected",
+        "description": "Verify whether the mandatory damaged-item fields (Incident Type, Qty, UOM, Can you use this product?, enough good product/IUT, Images) do NOT appear on Damaged Items From Order page (Flowers) when the Damaged checkbox is not selected",
+        "preCondition": "1. User is logged in as admin. 2. User is on Damaged Items From Order page for a Flowers Credit Request. 3. Damaged checkbox is unchecked for the item.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Open Damaged Items From Order page for Flowers Credit Request."
+          },
+          {
+            "step": 2,
+            "description": "Ensure Damaged checkbox for the item is NOT selected."
+          },
+          {
+            "step": 3,
+            "description": "Observe the item row/section."
+          },
+          {
+            "step": 4,
+            "description": "Verify Incident Type * is not displayed."
+          },
+          {
+            "step": 5,
+            "description": "Verify Qty * is not displayed."
+          },
+          {
+            "step": 6,
+            "description": "Verify UOM * is not displayed."
+          },
+          {
+            "step": 7,
+            "description": "Verify Can you use this product? * is not displayed."
+          },
+          {
+            "step": 8,
+            "description": "Verify Do you have enough good product until your next delivery? / Can you IUT from another unit? * is not displayed."
+          },
+          {
+            "step": 9,
+            "description": "Verify Images * is not displayed."
+          }
+        ],
+        "rawTestData": "Order Type: Flowers | Page: Damaged Items From Order | Damaged Checkbox: Unchecked",
+        "expectedResult": "Verify whether damaged-item mandatory fields remain hidden on the Flowers Damaged Items From Order page until the Damaged checkbox is selected.",
+        "testData": {
+          "orderType": "Flowers",
+          "action": "fieldsHiddenWhenNotDamaged",
+          "requiresPo": true
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-595_013",
+        "module": "Ordering > Credit Requests (Flowers) \u201a\u00c4\u00ee Negative",
+        "testName": "Verify whether saving/submitting a Flowers Credit Request is blocked when Damaged checkbox is selected but Incident Type * is left blank on Damaged Items From Order page",
+        "description": "Verify whether saving/submitting a Flowers Credit Request is blocked when Damaged checkbox is selected but Incident Type * is left blank on Damaged Items From Order page",
+        "preCondition": "1. User is logged in as admin. 2. User is on Damaged Items From Order page for Flowers Credit Request. 3. Damaged checkbox is selected.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Select Damaged checkbox for an item."
+          },
+          {
+            "step": 2,
+            "description": "Leave Incident Type * blank."
+          },
+          {
+            "step": 3,
+            "description": "Fill Qty *, UOM *, Can you use this product? *, enough good product/IUT *, and Images * with valid data."
+          },
+          {
+            "step": 4,
+            "description": "Click Save and/or Submit."
+          },
+          {
+            "step": 5,
+            "description": "Observe validation message on Incident Type *."
+          },
+          {
+            "step": 6,
+            "description": "Verify Credit Request is not submitted."
+          }
+        ],
+        "rawTestData": "Order Type: Flowers | Field: Incident Type * | Value: (blank)",
+        "expectedResult": "Verify whether the system displays mandatory validation for Incident Type * and prevents save/submit of the Flowers Credit Request when Incident Type is empty.",
+        "testData": {
+          "orderType": "Flowers",
+          "action": "blankIncidentTypeBlocked",
+          "requiresPo": true
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-595_014",
+        "module": "Ordering > Credit Requests (Flowers) \u201a\u00c4\u00ee Negative",
+        "testName": "Verify whether saving/submitting a Flowers Credit Request is blocked when Qty * is left blank or invalid after selecting Damaged on Damaged Items From Order page",
+        "description": "Verify whether saving/submitting a Flowers Credit Request is blocked when Qty * is left blank or invalid after selecting Damaged on Damaged Items From Order page",
+        "preCondition": "1. User is logged in as admin. 2. Damaged checkbox is selected for a Flowers item on Damaged Items From Order page.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Select Damaged checkbox."
+          },
+          {
+            "step": 2,
+            "description": "Fill Incident Type * with a valid value."
+          },
+          {
+            "step": 3,
+            "description": "Leave Qty * blank (or enter invalid value 0 / negative as separate observation)."
+          },
+          {
+            "step": 4,
+            "description": "Select a valid UOM *."
+          },
+          {
+            "step": 5,
+            "description": "Fill remaining mandatory fields."
+          },
+          {
+            "step": 6,
+            "description": "Click Save and/or Submit."
+          },
+          {
+            "step": 7,
+            "description": "Observe Qty * field validation."
+          },
+          {
+            "step": 8,
+            "description": "Verify Credit Request is not submitted with blank/invalid Qty."
+          }
+        ],
+        "rawTestData": "Order Type: Flowers | Field: Qty * | Invalid Data: blank / 0 / negative",
+        "expectedResult": "Verify whether Qty * mandatory/validity rules block save/submit of the Flowers Credit Request when quantity is blank, zero, or negative.",
+        "testData": {
+          "orderType": "Flowers",
+          "action": "blankQtyBlocked",
+          "requiresPo": true
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-595_015",
+        "module": "Ordering > Credit Requests (Flowers) \u201a\u00c4\u00ee Negative",
+        "testName": "Verify whether saving/submitting a Flowers Credit Request is blocked when UOM * is not selected after Damaged checkbox is selected on Damaged Items From Order page",
+        "description": "Verify whether saving/submitting a Flowers Credit Request is blocked when UOM * is not selected after Damaged checkbox is selected on Damaged Items From Order page",
+        "preCondition": "1. User is logged in as admin. 2. Damaged checkbox is selected on Damaged Items From Order page (Flowers).",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Select Damaged checkbox for an item."
+          },
+          {
+            "step": 2,
+            "description": "Fill Incident Type * and Qty * with valid values."
+          },
+          {
+            "step": 3,
+            "description": "Leave UOM * unselected/blank."
+          },
+          {
+            "step": 4,
+            "description": "Fill Can you use this product? *, enough good product/IUT *, and Images *."
+          },
+          {
+            "step": 5,
+            "description": "Click Save and/or Submit."
+          },
+          {
+            "step": 6,
+            "description": "Observe UOM * validation."
+          },
+          {
+            "step": 7,
+            "description": "Verify Credit Request is not submitted."
+          }
+        ],
+        "rawTestData": "Order Type: Flowers | Field: UOM * | Value: (blank)",
+        "expectedResult": "Verify whether UOM * mandatory validation blocks save/submit of the Flowers Credit Request when UOM is not selected.",
+        "testData": {
+          "orderType": "Flowers",
+          "action": "blankUomBlocked",
+          "requiresPo": true
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-595_016",
+        "module": "Ordering > Credit Requests (Flowers) \u201a\u00c4\u00ee Negative",
+        "testName": "Verify whether saving/submitting a Flowers Credit Request is blocked when Can you use this product? * is left unanswered after Damaged is selected",
+        "description": "Verify whether saving/submitting a Flowers Credit Request is blocked when Can you use this product? * is left unanswered after Damaged is selected",
+        "preCondition": "1. User is logged in as admin. 2. Damaged checkbox is selected on Damaged Items From Order page (Flowers).",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Select Damaged checkbox."
+          },
+          {
+            "step": 2,
+            "description": "Fill Incident Type *, Qty *, and UOM *."
+          },
+          {
+            "step": 3,
+            "description": "Leave Can you use this product? * unanswered."
+          },
+          {
+            "step": 4,
+            "description": "Fill enough good product/IUT * and Images *."
+          },
+          {
+            "step": 5,
+            "description": "Click Save and/or Submit."
+          },
+          {
+            "step": 6,
+            "description": "Observe mandatory validation on Can you use this product? *."
+          },
+          {
+            "step": 7,
+            "description": "Verify Credit Request is not submitted."
+          }
+        ],
+        "rawTestData": "Order Type: Flowers | Field: Can you use this product? * | Value: (blank)",
+        "expectedResult": "Verify whether Can you use this product? * mandatory validation blocks save/submit of the Flowers Credit Request when the field is unanswered.",
+        "testData": {
+          "orderType": "Flowers",
+          "action": "blankCanUseProductBlocked",
+          "requiresPo": true
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-595_017",
+        "module": "Ordering > Credit Requests (Flowers) \u201a\u00c4\u00ee Negative",
+        "testName": "Verify whether saving/submitting a Flowers Credit Request is blocked when Do you have enough good product until your next delivery? / Can you IUT from another unit? * is left unanswered after Damaged is selected",
+        "description": "Verify whether saving/submitting a Flowers Credit Request is blocked when Do you have enough good product until your next delivery? / Can you IUT from another unit? * is left unanswered after Damaged is selected",
+        "preCondition": "1. User is logged in as admin. 2. Damaged checkbox is selected on Damaged Items From Order page (Flowers).",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Select Damaged checkbox."
+          },
+          {
+            "step": 2,
+            "description": "Fill Incident Type *, Qty *, UOM *, and Can you use this product? *."
+          },
+          {
+            "step": 3,
+            "description": "Leave Do you have enough good product until your next delivery? / Can you IUT from another unit? * unanswered."
+          },
+          {
+            "step": 4,
+            "description": "Upload Images * if required."
+          },
+          {
+            "step": 5,
+            "description": "Click Save and/or Submit."
+          },
+          {
+            "step": 6,
+            "description": "Observe mandatory validation on the enough good product / IUT field."
+          },
+          {
+            "step": 7,
+            "description": "Verify Credit Request is not submitted."
+          }
+        ],
+        "rawTestData": "Order Type: Flowers | Field: Do you have enough good product until your next delivery? / Can you IUT from another unit? * | Value: (blank)",
+        "expectedResult": "Verify whether the enough good product / IUT mandatory field validation blocks save/submit of the Flowers Credit Request when unanswered.",
+        "testData": {
+          "orderType": "Flowers",
+          "action": "blankIutBlocked",
+          "requiresPo": true
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-595_018",
+        "module": "Ordering > Credit Requests (Flowers) \u201a\u00c4\u00ee Negative",
+        "testName": "Verify whether saving/submitting a Flowers Credit Request is blocked when Images * are not uploaded (when Images are mandatory per business rules) after Damaged is selected on Damaged Items From Order page",
+        "description": "Verify whether saving/submitting a Flowers Credit Request is blocked when Images * are not uploaded (when Images are mandatory per business rules) after Damaged is selected on Damaged Items From Order page",
+        "preCondition": "1. User is logged in as admin. 2. Damaged checkbox is selected. 3. Business rule requires Images as mandatory for damaged credit items.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Select Damaged checkbox for a Flowers item."
+          },
+          {
+            "step": 2,
+            "description": "Fill all other mandatory fields: Incident Type *, Qty *, UOM *, Can you use this product? *, enough good product/IUT *."
+          },
+          {
+            "step": 3,
+            "description": "Do NOT upload any image under Images *."
+          },
+          {
+            "step": 4,
+            "description": "Click Save and/or Submit."
+          },
+          {
+            "step": 5,
+            "description": "Observe Images * validation message."
+          },
+          {
+            "step": 6,
+            "description": "Verify Credit Request is not submitted without required images."
+          }
+        ],
+        "rawTestData": "Order Type: Flowers | Field: Images * | Value: (no upload)",
+        "expectedResult": "Verify whether Images * mandatory validation (when applicable) blocks save/submit of the Flowers Credit Request when no image is uploaded.",
+        "testData": {
+          "orderType": "Flowers",
+          "action": "blankImagesBlocked",
+          "requiresPo": true
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-595_019",
+        "module": "Ordering > Credit Requests (Flowers) \u201a\u00c4\u00ee Negative",
+        "testName": "Verify whether the user cannot modify the UOM value on a Submitted Flowers Credit Request and any attempted edit does not update the Draft/submitted record values",
+        "description": "Verify whether the user cannot modify the UOM value on a Submitted Flowers Credit Request and any attempted edit does not update the Draft/submitted record values",
+        "preCondition": "1. User is logged in as admin. 2. Flowers Credit Request is in Submitted status.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Open the Submitted Flowers Credit Request from Ordering > Credit Requests."
+          },
+          {
+            "step": 2,
+            "description": "Attempt to change the UOM field (click, keyboard, inspect if editable)."
+          },
+          {
+            "step": 3,
+            "description": "If any Save button is visible, attempt to save after trying to change UOM."
+          },
+          {
+            "step": 4,
+            "description": "Refresh/reopen the Submitted Credit Request."
+          },
+          {
+            "step": 5,
+            "description": "Verify UOM value is unchanged from the submitted value."
+          },
+          {
+            "step": 6,
+            "description": "Verify no Draft-style editable UOM update is allowed on Submitted records."
+          }
+        ],
+        "rawTestData": "Order Type: Flowers | Status: Submitted | Field: UOM",
+        "expectedResult": "Verify whether Submitted Flowers Credit Requests lock UOM and do not allow UOM updates that would change the submitted record values.",
+        "testData": {
+          "orderType": "Flowers",
+          "action": "submittedUomLocked",
+          "requiresPo": true
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-595_020",
+        "module": "Ordering > Credit Requests (Flowers) \u201a\u00c4\u00ee Edge",
+        "testName": "Verify whether unchecking the Damaged checkbox on Damaged Items From Order page (Flowers) hides the damaged-item fields again and clears or discards incomplete damaged field entries as per application behavior",
+        "description": "Verify whether unchecking the Damaged checkbox on Damaged Items From Order page (Flowers) hides the damaged-item fields again and clears or discards incomplete damaged field entries as per application behavior",
+        "preCondition": "1. User is logged in as admin. 2. User is on Damaged Items From Order page for Flowers. 3. Damaged checkbox was previously selected and fields were displayed.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Select Damaged checkbox and observe fields appear."
+          },
+          {
+            "step": 2,
+            "description": "Optionally enter partial data in Qty and Incident Type."
+          },
+          {
+            "step": 3,
+            "description": "Uncheck the Damaged checkbox."
+          },
+          {
+            "step": 4,
+            "description": "Verify damaged fields are hidden."
+          },
+          {
+            "step": 5,
+            "description": "Re-select Damaged checkbox."
+          },
+          {
+            "step": 6,
+            "description": "Observe whether previously entered values are cleared or retained per designed behavior."
+          },
+          {
+            "step": 7,
+            "description": "Document actual behavior against expected product rule."
+          }
+        ],
+        "rawTestData": "Order Type: Flowers | Action: Uncheck Damaged checkbox",
+        "expectedResult": "Verify whether unchecking Damaged on Flowers Damaged Items From Order page hides the damaged fields and follows the expected clear/retain behavior for previously entered values.",
+        "testData": {
+          "orderType": "Flowers",
+          "action": "uncheckDamagedHidesFields",
+          "requiresPo": true
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-595_021",
+        "module": "Ordering > Credit Requests (Flowers) \u201a\u00c4\u00ee Edge",
+        "testName": "Verify whether Qty entered on Flowers Damaged Items From Order page cannot exceed the received quantity of the item on the Flowers Purchase Order (or system validates against received qty per business rules)",
+        "description": "Verify whether Qty entered on Flowers Damaged Items From Order page cannot exceed the received quantity of the item on the Flowers Purchase Order (or system validates against received qty per business rules)",
+        "preCondition": "1. User is logged in as admin. 2. Flowers Received PO has a known received quantity for the prerequisite item. 3. User is on Damaged Items From Order page with Damaged selected.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Note the received quantity of the item from the Flowers PO / Damaged Items From Order page."
+          },
+          {
+            "step": 2,
+            "description": "Select Damaged checkbox."
+          },
+          {
+            "step": 3,
+            "description": "Enter Qty * greater than the received quantity."
+          },
+          {
+            "step": 4,
+            "description": "Select valid UOM and complete other mandatory fields."
+          },
+          {
+            "step": 5,
+            "description": "Click Save and/or Submit."
+          },
+          {
+            "step": 6,
+            "description": "Observe whether system blocks with validation that Qty cannot exceed received quantity."
+          }
+        ],
+        "rawTestData": "Order Type: Flowers | Field: Qty * | Test Data: Received Qty + 1",
+        "expectedResult": "Verify whether the system validates damaged Qty against the Flowers PO received quantity and blocks invalid over-quantity credit requests (per business rules).",
+        "testData": {
+          "orderType": "Flowers",
+          "action": "qtyExceedReceivedBlocked",
+          "requiresPo": true
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-595_022",
+        "module": "Ordering > Credit Requests (Flowers) \u201a\u00c4\u00ee Edge",
+        "testName": "Verify whether changing UOM on a Draft Flowers Credit Request updates only the Draft record and does not affect already Submitted Credit Requests for the same or different Flowers PO",
+        "description": "Verify whether changing UOM on a Draft Flowers Credit Request updates only the Draft record and does not affect already Submitted Credit Requests for the same or different Flowers PO",
+        "preCondition": "1. User is logged in as admin. 2. One Draft Flowers Credit Request and one Submitted Flowers Credit Request exist.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Open the Submitted Flowers Credit Request and record its UOM value."
+          },
+          {
+            "step": 2,
+            "description": "Open the Draft Flowers Credit Request and change UOM to a different valid value."
+          },
+          {
+            "step": 3,
+            "description": "Save the Draft Credit Request."
+          },
+          {
+            "step": 4,
+            "description": "Reopen the Submitted Credit Request."
+          },
+          {
+            "step": 5,
+            "description": "Verify Submitted UOM is unchanged."
+          },
+          {
+            "step": 6,
+            "description": "Reopen Draft and verify updated UOM is retained."
+          }
+        ],
+        "rawTestData": "Order Type: Flowers | Draft UOM: Updated | Submitted UOM: Unchanged",
+        "expectedResult": "Verify whether UOM updates on Draft Flowers Credit Requests are isolated to the Draft record and do not alter Submitted Credit Request UOM values.",
+        "testData": {
+          "orderType": "Flowers",
+          "action": "draftUomIsolatedFromSubmitted",
+          "requiresPo": true
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-595_023",
+        "module": "Ordering > Credit Requests (Flowers) \u201a\u00c4\u00ee Edge",
+        "testName": "Verify whether a Flowers Purchase Order with Received status but zero received items (or no eligible items) cannot proceed to a usable Damaged Items From Order credit flow",
+        "description": "Verify whether a Flowers Purchase Order with Received status but zero received items (or no eligible items) cannot proceed to a usable Damaged Items From Order credit flow",
+        "preCondition": "1. User is logged in as admin. 2. A Flowers PO is Received but has no received/eligible items (if such data can be prepared).",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Navigate to Ordering > Credit Requests > + New Credit Request."
+          },
+          {
+            "step": 2,
+            "description": "Search for the Flowers PO with no received items."
+          },
+          {
+            "step": 3,
+            "description": "Attempt to select and Start Credit Request."
+          },
+          {
+            "step": 4,
+            "description": "Observe system behavior (PO not listed, empty items page, or validation message)."
+          },
+          {
+            "step": 5,
+            "description": "Verify user cannot create a meaningful damaged credit request without received items."
+          }
+        ],
+        "rawTestData": "Order Type: Flowers | PO Status: Received | Received Items: 0",
+        "expectedResult": "Verify whether Credit Request creation for Flowers requires at least one received item and does not allow a valid damaged credit flow when no received items exist.",
+        "testData": {
+          "orderType": "Flowers",
+          "action": "zeroReceivedItemsBlocked",
+          "requiresPo": true,
+          "requiresEmptyReceivedPo": true
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-595_024",
+        "module": "Ordering > Credit Requests (Flowers) \u201a\u00c4\u00ee Edge",
+        "testName": "Verify whether selecting Damaged for multiple received items on the same Flowers Credit Request displays independent mandatory field sets (including independent UOM dropdowns) for each damaged item",
+        "description": "Verify whether selecting Damaged for multiple received items on the same Flowers Credit Request displays independent mandatory field sets (including independent UOM dropdowns) for each damaged item",
+        "preCondition": "1. User is logged in as admin. 2. Flowers Received PO contains at least two received items. 3. User is on Damaged Items From Order page.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Select Damaged checkbox for Item A."
+          },
+          {
+            "step": 2,
+            "description": "Verify mandatory fields including UOM * appear for Item A."
+          },
+          {
+            "step": 3,
+            "description": "Select Damaged checkbox for Item B."
+          },
+          {
+            "step": 4,
+            "description": "Verify mandatory fields including UOM * appear for Item B."
+          },
+          {
+            "step": 5,
+            "description": "Change UOM for Item A to one valid value."
+          },
+          {
+            "step": 6,
+            "description": "Change UOM for Item B to a different valid value (if available)."
+          },
+          {
+            "step": 7,
+            "description": "Save Draft."
+          },
+          {
+            "step": 8,
+            "description": "Reopen Draft and verify each item retained its own UOM value independently."
+          }
+        ],
+        "rawTestData": "Order Type: Flowers | Items: Item A and Item B | Field: UOM * per item",
+        "expectedResult": "Verify whether multiple damaged items on a Flowers Credit Request each show their own mandatory fields and independent UOM values that save correctly on Draft.",
+        "testData": {
+          "orderType": "Flowers",
+          "action": "multiItemIndependentUom",
+          "requiresPo": true
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-595_025",
+        "module": "Ordering > Credit Requests (Flowers) \u201a\u00c4\u00ee Edge",
+        "testName": "Verify whether UOM dropdown on Flowers Credit Request does not display UOM values that belong to a different item in Item Master (cross-item UOM leakage check)",
+        "description": "Verify whether UOM dropdown on Flowers Credit Request does not display UOM values that belong to a different item in Item Master (cross-item UOM leakage check)",
+        "preCondition": "1. User is logged in as admin. 2. Two items exist in Item Master with different UOM configurations. 3. Both items are on the Flowers Received PO (or one is on PO and comparison item is known).",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Open Damaged Items From Order for Flowers Credit Request."
+          },
+          {
+            "step": 2,
+            "description": "Select Damaged for Item A and open UOM dropdown; record values."
+          },
+          {
+            "step": 3,
+            "description": "Compare against Item Master UOMs for Item A only."
+          },
+          {
+            "step": 4,
+            "description": "Verify no UOM unique to Item B appears in Item A's dropdown."
+          },
+          {
+            "step": 5,
+            "description": "If Item B is also on PO, select Damaged for Item B and confirm its UOM list matches Item B Item Master only."
+          }
+        ],
+        "rawTestData": "Order Type: Flowers | Comparison: Inventory Setup > Item Master per item",
+        "expectedResult": "Verify whether each damaged item's UOM dropdown on Flowers Credit Request is item-specific and matches only that item's Item Master UOM configuration.",
+        "testData": {
+          "orderType": "Flowers",
+          "action": "crossItemUomNoLeakage",
+          "requiresPo": true
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-595_026",
+        "module": "Ordering > Credit Requests (McLane)",
+        "testName": "Verify whether the admin user can navigate from QA Backoffice Dashboard Home page to Ordering menu > Credit Requests page and view the Credit Requests listing for McLane orders",
+        "description": "Verify whether the admin user can navigate from QA Backoffice Dashboard Home page to Ordering menu > Credit Requests page and view the Credit Requests listing for McLane orders",
+        "preCondition": "1. User has access to QA Backoffice Dashboard URL. 2. Valid admin credentials are available. 3. User has permission to access Ordering > Credit Requests. 4. At least one McLane Purchase Order exists in Received status with one or more received items.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Launch the application: QA Backoffice Dashboard."
+          },
+          {
+            "step": 2,
+            "description": "On the Login page, enter Username and Password, then click Sign In / Login."
+          },
+          {
+            "step": 3,
+            "description": "Verify the user lands on the Home/Dashboard page after successful login."
+          },
+          {
+            "step": 4,
+            "description": "From the left/main navigation menu, locate and expand the Ordering menu."
+          },
+          {
+            "step": 5,
+            "description": "Under the Ordering menu, click on Credit Requests."
+          },
+          {
+            "step": 6,
+            "description": "Wait for the Credit Requests page to load completely."
+          },
+          {
+            "step": 7,
+            "description": "Verify the Credit Requests page title/header is displayed."
+          },
+          {
+            "step": 8,
+            "description": "Verify the + New Credit Request / START CREDIT REQUEST button is visible on the Credit Requests page."
+          }
+        ],
+        "rawTestData": "Application: QA Backoffice Dashboard | Username: admin@whataburger-ims.com | Password: admin123 | Menu Path: Ordering > Credit Requests | Order Type: McLane",
+        "expectedResult": "Verify whether the user successfully navigates to Ordering > Credit Requests page and the Credit Requests listing page loads with the New Credit Request / START CREDIT REQUEST action button visible for McLane-related credit workflows.",
+        "testData": {
+          "orderType": "McLane",
+          "action": "navigateListing",
+          "requiresPo": false
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-595_027",
+        "module": "Ordering > Credit Requests (McLane)",
+        "testName": "Verify whether clicking + New Credit Request / START CREDIT REQUEST on the Credit Requests page opens the Purchase Order with Received Items search section for McLane Purchase Orders",
+        "description": "Verify whether clicking + New Credit Request / START CREDIT REQUEST on the Credit Requests page opens the Purchase Order with Received Items search section for McLane Purchase Orders",
+        "preCondition": "1. User is logged in to QA Backoffice Dashboard as admin. 2. User is on Ordering > Credit Requests page. 3. A McLane Purchase Order in Received status with at least one received item exists.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "On the Credit Requests page under Ordering menu, locate the + New Credit Request or START CREDIT REQUEST button."
+          },
+          {
+            "step": 2,
+            "description": "Click the + New Credit Request / START CREDIT REQUEST button."
+          },
+          {
+            "step": 3,
+            "description": "Wait for the New Credit Request selection screen/modal to load."
+          },
+          {
+            "step": 4,
+            "description": "Verify the Purchase Order with Received Items search field is displayed."
+          },
+          {
+            "step": 5,
+            "description": "Verify the user can search/select a McLane Purchase Order from the search field."
+          },
+          {
+            "step": 6,
+            "description": "Verify the Start Credit Request button is visible (enabled only after a valid PO selection as applicable)."
+          }
+        ],
+        "rawTestData": "Menu Path: Ordering > Credit Requests | Action: + New Credit Request / START CREDIT REQUEST | PO Type: McLane | PO Status: Received",
+        "expectedResult": "Verify whether the New Credit Request flow displays the Purchase Order with Received Items search field so the user can select a McLane Purchase Order in Received status before starting the credit request.",
+        "testData": {
+          "orderType": "McLane",
+          "action": "openNewCreditRequestPoSearch",
+          "requiresPo": false
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-595_028",
+        "module": "Ordering > Credit Requests (McLane) \u201a\u00c4\u00ee Scenario 1: Create Credit Request",
+        "testName": "Verify whether selecting a McLane Purchase Order in Received status from the Purchase Order with Received Items search field and clicking Start Credit Request navigates the user to the Damaged Items From Order page",
+        "description": "Verify whether selecting a McLane Purchase Order in Received status from the Purchase Order with Received Items search field and clicking Start Credit Request navigates the user to the Damaged Items From Order page",
+        "preCondition": "1. User is logged in as admin. 2. User is on Ordering > Credit Requests > New Credit Request selection screen. 3. A McLane Purchase Order (PO) exists in Received status. 4. The McLane PO contains at least one received item.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Launch QA Backoffice Dashboard and login with valid admin credentials."
+          },
+          {
+            "step": 2,
+            "description": "Expand the Ordering menu and click Credit Requests."
+          },
+          {
+            "step": 3,
+            "description": "Click + New Credit Request / START CREDIT REQUEST button."
+          },
+          {
+            "step": 4,
+            "description": "In the Purchase Order with Received Items search field, search for the prerequisite McLane Purchase Order that is in Received status."
+          },
+          {
+            "step": 5,
+            "description": "Select the McLane Purchase Order from the search results."
+          },
+          {
+            "step": 6,
+            "description": "Click the Start Credit Request button."
+          },
+          {
+            "step": 7,
+            "description": "Wait for navigation to complete."
+          },
+          {
+            "step": 8,
+            "description": "Verify the page title/header shows Damaged Items From Order."
+          },
+          {
+            "step": 9,
+            "description": "Verify the selected McLane PO details and received item list are displayed on the Damaged Items From Order page."
+          }
+        ],
+        "rawTestData": "Username: admin@whataburger-ims.com | Password: admin123 | PO Type: McLane | PO Status: Received | Page: Damaged Items From Order",
+        "expectedResult": "Verify whether after selecting a Received McLane Purchase Order and clicking Start Credit Request, the user lands on the Damaged Items From Order page with the selected PO's received items listed.",
+        "testData": {
+          "orderType": "McLane",
+          "action": "startCreditRequestDamagedPage",
+          "requiresPo": true
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-595_029",
+        "module": "Ordering > Credit Requests (McLane) \u201a\u00c4\u00ee Scenario 2: Display Damaged Item Fields",
+        "testName": "Verify whether selecting the Damaged checkbox for a received item on the Damaged Items From Order page (McLane) displays all mandatory damaged-item fields: Incident Type, Qty, UOM, Can you use this product?, Do you have enough good product until your next delivery? / Can you IUT from another unit?, and Images",
+        "description": "Verify whether selecting the Damaged checkbox for a received item on the Damaged Items From Order page (McLane) displays all mandatory damaged-item fields: Incident Type, Qty, UOM, Can you use this product?, Do you have enough good product until your next delivery? / Can you IUT from another unit?, and Images",
+        "preCondition": "1. User is logged in as admin. 2. User has started a Credit Request for a McLane PO in Received status. 3. User is on the Damaged Items From Order page. 4. At least one received item is listed from the McLane PO.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "On the Damaged Items From Order page for the McLane Credit Request, locate a received item row in the items section."
+          },
+          {
+            "step": 2,
+            "description": "Select/check the Damaged checkbox for that item."
+          },
+          {
+            "step": 3,
+            "description": "Observe the fields that appear for the selected damaged item."
+          },
+          {
+            "step": 4,
+            "description": "Verify field Incident Type * is displayed and marked mandatory."
+          },
+          {
+            "step": 5,
+            "description": "Verify field Qty * is displayed and marked mandatory."
+          },
+          {
+            "step": 6,
+            "description": "Verify field UOM * is displayed and marked mandatory."
+          },
+          {
+            "step": 7,
+            "description": "Verify field Can you use this product? * is displayed and marked mandatory."
+          },
+          {
+            "step": 8,
+            "description": "Verify field Do you have enough good product until your next delivery? / Can you IUT from another unit? * is displayed and marked mandatory."
+          },
+          {
+            "step": 9,
+            "description": "Verify field Images * is displayed and marked mandatory (as applicable per business rules)."
+          },
+          {
+            "step": 10,
+            "description": "1"
+          },
+          {
+            "step": 0,
+            "description": "Verify all listed fields are editable at this Draft stage."
+          }
+        ],
+        "rawTestData": "Order Type: McLane | Page: Damaged Items From Order | Action: Select Damaged checkbox | Expected Fields: Incident Type *, Qty *, UOM *, Can you use this product? *, Do you have enough good product until your next delivery? / Can you IUT from another unit? *, Images *",
+        "expectedResult": "Verify whether selecting the Damaged checkbox on the Damaged Items From Order page for a McLane Credit Request displays all required damaged-item fields (Incident Type, Qty, UOM, Can you use this product?, enough good product / IUT question, and Images) as mandatory.",
+        "testData": {
+          "orderType": "McLane",
+          "action": "damagedFieldsVisible",
+          "requiresPo": true
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-595_030",
+        "module": "Ordering > Credit Requests (McLane) \u201a\u00c4\u00ee Scenario 3: Validate UOM Values",
+        "testName": "Verify whether the UOM dropdown values displayed for a damaged item on the Damaged Items From Order page (McLane Credit Request) match the UOM configuration defined for the same item in Inventory Setup > Item Master",
+        "description": "Verify whether the UOM dropdown values displayed for a damaged item on the Damaged Items From Order page (McLane Credit Request) match the UOM configuration defined for the same item in Inventory Setup > Item Master",
+        "preCondition": "1. User is logged in as admin. 2. Prerequisite item exists on a McLane Received PO and also exists in Inventory Setup > Item Master with configured UOM values. 3. User is on Damaged Items From Order page for the McLane Credit Request. 4. Damaged checkbox is selected for the prerequisite item.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Note the Item Code/Name of the prerequisite item on the Damaged Items From Order page (McLane)."
+          },
+          {
+            "step": 2,
+            "description": "Select the Damaged checkbox for that item if not already selected."
+          },
+          {
+            "step": 3,
+            "description": "Click/open the UOM * dropdown for the damaged item and record all available UOM values."
+          },
+          {
+            "step": 4,
+            "description": "Navigate to Inventory Setup > Item Master (open in another tab or after noting values)."
+          },
+          {
+            "step": 5,
+            "description": "Search for the same prerequisite item in Item Master."
+          },
+          {
+            "step": 6,
+            "description": "Open the item details and record the configured UOM values for the item."
+          },
+          {
+            "step": 7,
+            "description": "Navigate back to Ordering > Credit Requests > Damaged Items From Order (McLane Credit Request Draft)."
+          },
+          {
+            "step": 8,
+            "description": "Compare the UOM dropdown values on Credit Request with Item Master UOM configuration."
+          },
+          {
+            "step": 9,
+            "description": "Verify every UOM option in Credit Request exists in Item Master."
+          },
+          {
+            "step": 10,
+            "description": "1"
+          },
+          {
+            "step": 0,
+            "description": "Verify no extra/invalid UOM option appears in Credit Request that is not in Item Master."
+          }
+        ],
+        "rawTestData": "Order Type: McLane | Page: Damaged Items From Order | Section: Damaged Item Fields > UOM * | Comparison Source: Inventory Setup > Item Master | Item: <Prerequisite Item from McLane PO>",
+        "expectedResult": "Verify whether the UOM dropdown values on the McLane Credit Request Damaged Items From Order page exactly match the UOM configuration for the same item in Inventory Setup > Item Master.",
+        "testData": {
+          "orderType": "McLane",
+          "action": "uomMatchesItemMaster",
+          "requiresPo": true
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-595_031",
+        "module": "Ordering > Credit Requests (McLane) \u201a\u00c4\u00ee Scenario 4: Validate UOM Profile",
+        "testName": "Verify whether the UOM profile for a damaged item on the McLane Credit Request matches the item's Stock Count configuration (Daily / Weekly / Monthly) as configured in Inventory Setup for the same prerequisite item",
+        "description": "Verify whether the UOM profile for a damaged item on the McLane Credit Request matches the item's Stock Count configuration (Daily / Weekly / Monthly) as configured in Inventory Setup for the same prerequisite item",
+        "preCondition": "1. User is logged in as admin. 2. Prerequisite item exists on McLane Received PO. 3. Same item has Stock Count configuration set to Daily or Weekly or Monthly in Inventory Setup. 4. User has started a Credit Request for the McLane PO and selected Damaged for the item.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Navigate to Inventory Setup and open the Stock Count configuration (Daily / Weekly / Monthly) for the prerequisite item; record the Stock Count frequency and associated UOM profile."
+          },
+          {
+            "step": 2,
+            "description": "Navigate to Ordering > Credit Requests and open/create the McLane Credit Request for the Received PO containing the same item."
+          },
+          {
+            "step": 3,
+            "description": "On Damaged Items From Order page, select Damaged checkbox for the prerequisite item."
+          },
+          {
+            "step": 4,
+            "description": "Observe the default/selected UOM and UOM profile behavior for the item."
+          },
+          {
+            "step": 5,
+            "description": "Compare the Credit Request UOM profile with the Stock Count UOM profile recorded from Inventory Setup."
+          },
+          {
+            "step": 6,
+            "description": "Verify the UOM profile on Credit Request matches Stock Count configuration (Daily/Weekly/Monthly) for that item."
+          }
+        ],
+        "rawTestData": "Order Type: McLane | Item: <Prerequisite Item> | Stock Count Path: Inventory Setup > Stock Count (Daily/Weekly/Monthly) | Credit Request Path: Ordering > Credit Requests > Damaged Items From Order",
+        "expectedResult": "Verify whether the UOM profile on the McLane Credit Request for the damaged item matches the Stock Count (Daily/Weekly/Monthly) UOM profile configured for the same item in Inventory Setup.",
+        "testData": {
+          "orderType": "McLane",
+          "action": "uomProfileMatchesStockCount",
+          "requiresPo": true
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-595_032",
+        "module": "Ordering > Credit Requests (McLane) \u201a\u00c4\u00ee Scenario 5: Update UOM Before Submission",
+        "testName": "Verify whether the user can change/update the UOM dropdown value on a Draft McLane Credit Request on the Damaged Items From Order page, save successfully, and see the updated UOM reflected when the Draft is reopened",
+        "description": "Verify whether the user can change/update the UOM dropdown value on a Draft McLane Credit Request on the Damaged Items From Order page, save successfully, and see the updated UOM reflected when the Draft is reopened",
+        "preCondition": "1. User is logged in as admin. 2. A McLane Credit Request exists in Draft status. 3. Damaged checkbox is selected for an item with multiple UOM options available. 4. User is on Damaged Items From Order page for the Draft Credit Request.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Open the Draft McLane Credit Request from Ordering > Credit Requests listing (Draft section/filter if available)."
+          },
+          {
+            "step": 2,
+            "description": "On Damaged Items From Order page, locate the UOM * dropdown for the damaged item."
+          },
+          {
+            "step": 3,
+            "description": "Note the currently selected UOM value."
+          },
+          {
+            "step": 4,
+            "description": "Change the UOM dropdown to a different valid UOM value from the list."
+          },
+          {
+            "step": 5,
+            "description": "Complete any other mandatory damaged fields if not already filled (Incident Type, Qty, Can you use this product?, enough good product/IUT, Images as applicable)."
+          },
+          {
+            "step": 6,
+            "description": "Click Save (or Save Draft / equivalent save action) on the Credit Request."
+          },
+          {
+            "step": 7,
+            "description": "Verify a success confirmation is displayed and status remains Draft."
+          },
+          {
+            "step": 8,
+            "description": "Navigate away from the Damaged Items From Order page back to Credit Requests listing."
+          },
+          {
+            "step": 9,
+            "description": "Reopen the same Draft Credit Request."
+          },
+          {
+            "step": 10,
+            "description": "1"
+          },
+          {
+            "step": 0,
+            "description": "Verify the UOM dropdown shows the updated UOM value that was saved."
+          },
+          {
+            "step": 12,
+            "description": "1"
+          },
+          {
+            "step": 1,
+            "description": "Verify Draft record values reflect the updated UOM."
+          }
+        ],
+        "rawTestData": "Order Type: McLane | Status: Draft | Page: Damaged Items From Order | Field: UOM * | Action: Change UOM > Save > Reopen Draft",
+        "expectedResult": "Verify whether updating the UOM dropdown on a Draft McLane Credit Request saves successfully, Draft record values update with the new UOM, and the updated UOM persists when the Draft Credit Request is reopened.",
+        "testData": {
+          "orderType": "McLane",
+          "action": "updateUomDraftPersist",
+          "requiresPo": true
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-595_033",
+        "module": "Ordering > Credit Requests (McLane) \u201a\u00c4\u00ee Scenario 6: Submit Credit Request",
+        "testName": "Verify whether the user can submit a Draft McLane Credit Request from the Damaged Items From Order page with all mandatory damaged fields completed including the selected UOM, and the Credit Request status changes to Submitted",
+        "description": "Verify whether the user can submit a Draft McLane Credit Request from the Damaged Items From Order page with all mandatory damaged fields completed including the selected UOM, and the Credit Request status changes to Submitted",
+        "preCondition": "1. User is logged in as admin. 2. A McLane Credit Request exists in Draft status with Damaged item fields completed including a selected UOM. 3. All mandatory fields are valid.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Open the Draft McLane Credit Request from Ordering > Credit Requests."
+          },
+          {
+            "step": 2,
+            "description": "On Damaged Items From Order page, verify Damaged checkbox is selected."
+          },
+          {
+            "step": 3,
+            "description": "Verify Incident Type * is filled."
+          },
+          {
+            "step": 4,
+            "description": "Verify Qty * is filled with a valid quantity."
+          },
+          {
+            "step": 5,
+            "description": "Verify UOM * has the intended UOM value selected."
+          },
+          {
+            "step": 6,
+            "description": "Verify Can you use this product? * is answered."
+          },
+          {
+            "step": 7,
+            "description": "Verify Do you have enough good product until your next delivery? / Can you IUT from another unit? * is answered."
+          },
+          {
+            "step": 8,
+            "description": "Verify Images * has required image(s) uploaded (if applicable)."
+          },
+          {
+            "step": 9,
+            "description": "Click Submit / Submit Credit Request button."
+          },
+          {
+            "step": 10,
+            "description": "1"
+          },
+          {
+            "step": 0,
+            "description": "Wait for submission to complete."
+          },
+          {
+            "step": 12,
+            "description": "1"
+          },
+          {
+            "step": 1,
+            "description": "Verify success confirmation is displayed."
+          },
+          {
+            "step": 14,
+            "description": "1"
+          },
+          {
+            "step": 2,
+            "description": "On Credit Requests listing, locate the Credit Request by ID."
+          },
+          {
+            "step": 16,
+            "description": "1"
+          },
+          {
+            "step": 3,
+            "description": "Verify status is Submitted (or equivalent submitted status)."
+          }
+        ],
+        "rawTestData": "Order Type: McLane | Status Before: Draft | Status After: Submitted | Page: Damaged Items From Order | UOM: <selected UOM value>",
+        "expectedResult": "Verify whether submitting a fully completed Draft McLane Credit Request succeeds and the Credit Request is saved in Submitted status with the selected UOM value retained.",
+        "testData": {
+          "orderType": "McLane",
+          "action": "submitCreditRequest",
+          "requiresPo": true
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-595_034",
+        "module": "Ordering > Credit Requests (McLane) \u201a\u00c4\u00ee Scenario 7: Restrict UOM Updates After Submission",
+        "testName": "Verify whether the UOM field on a Submitted McLane Credit Request is read-only on the Damaged Items From Order / Credit Request details page and the user cannot change or update the UOM value after submission",
+        "description": "Verify whether the UOM field on a Submitted McLane Credit Request is read-only on the Damaged Items From Order / Credit Request details page and the user cannot change or update the UOM value after submission",
+        "preCondition": "1. User is logged in as admin. 2. A McLane Credit Request has been submitted successfully (from TC_CR_MCL_POS_006). 3. User can open the submitted Credit Request from Ordering > Credit Requests.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Navigate to Ordering > Credit Requests."
+          },
+          {
+            "step": 2,
+            "description": "Locate and open the Submitted McLane Credit Request."
+          },
+          {
+            "step": 3,
+            "description": "Navigate to the Damaged Items From Order / submitted details section for the damaged item."
+          },
+          {
+            "step": 4,
+            "description": "Locate the UOM field for the damaged item."
+          },
+          {
+            "step": 5,
+            "description": "Verify the UOM field is displayed as read-only / disabled / non-editable."
+          },
+          {
+            "step": 6,
+            "description": "Attempt to click the UOM dropdown or change the UOM value."
+          },
+          {
+            "step": 7,
+            "description": "Verify the UOM value cannot be modified."
+          },
+          {
+            "step": 8,
+            "description": "Verify no Save action updates UOM for the submitted record."
+          },
+          {
+            "step": 9,
+            "description": "Verify the submitted UOM value remains unchanged and matches the value at submission time."
+          }
+        ],
+        "rawTestData": "Order Type: McLane | Status: Submitted | Page: Credit Request Details / Damaged Items From Order | Field: UOM | Expected Behavior: Read-only",
+        "expectedResult": "Verify whether after submission of a McLane Credit Request the UOM field is read-only, the user cannot change the UOM, and the submitted UOM value remains unchanged.",
+        "testData": {
+          "orderType": "McLane",
+          "action": "uomReadOnlyAfterSubmit",
+          "requiresPo": true
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-595_035",
+        "module": "Ordering > Credit Requests (McLane) \u201a\u00c4\u00ee Negative",
+        "testName": "Verify whether the Start Credit Request button does not navigate to Damaged Items From Order page when no McLane Purchase Order is selected in the Purchase Order with Received Items search field",
+        "description": "Verify whether the Start Credit Request button does not navigate to Damaged Items From Order page when no McLane Purchase Order is selected in the Purchase Order with Received Items search field",
+        "preCondition": "1. User is logged in as admin. 2. User is on Ordering > Credit Requests > New Credit Request selection screen.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Expand Ordering menu and click Credit Requests."
+          },
+          {
+            "step": 2,
+            "description": "Click + New Credit Request / START CREDIT REQUEST."
+          },
+          {
+            "step": 3,
+            "description": "Do NOT select any Purchase Order in the Purchase Order with Received Items search field."
+          },
+          {
+            "step": 4,
+            "description": "Attempt to click Start Credit Request."
+          },
+          {
+            "step": 5,
+            "description": "Observe validation/error behavior."
+          },
+          {
+            "step": 6,
+            "description": "Verify the user does not land on Damaged Items From Order page."
+          }
+        ],
+        "rawTestData": "Order Type: McLane | PO Selection: (none) | Action: Start Credit Request",
+        "expectedResult": "Verify whether the system blocks Start Credit Request and displays a validation message requiring Purchase Order selection when no McLane PO is selected.",
+        "testData": {
+          "orderType": "McLane",
+          "action": "startWithoutPoBlocked",
+          "requiresPo": false
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-595_036",
+        "module": "Ordering > Credit Requests (McLane) \u201a\u00c4\u00ee Negative",
+        "testName": "Verify whether a McLane Purchase Order that is NOT in Received status does not appear as selectable (or cannot be used) in the Purchase Order with Received Items search field for creating a Credit Request",
+        "description": "Verify whether a McLane Purchase Order that is NOT in Received status does not appear as selectable (or cannot be used) in the Purchase Order with Received Items search field for creating a Credit Request",
+        "preCondition": "1. User is logged in as admin. 2. A McLane Purchase Order exists in a non-Received status (e.g., Open, In Transit, Cancelled, or Draft \u201a\u00c4\u00ee as applicable). 3. User is on New Credit Request PO search screen.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Navigate to Ordering > Credit Requests and click + New Credit Request / START CREDIT REQUEST."
+          },
+          {
+            "step": 2,
+            "description": "In Purchase Order with Received Items search field, search for the McLane PO that is not in Received status."
+          },
+          {
+            "step": 3,
+            "description": "Observe whether the non-Received PO appears in search results."
+          },
+          {
+            "step": 4,
+            "description": "If it appears, attempt to select it and click Start Credit Request."
+          },
+          {
+            "step": 5,
+            "description": "Verify the system does not allow creating a Credit Request from a non-Received McLane PO."
+          }
+        ],
+        "rawTestData": "Order Type: McLane | PO Status: Not Received (Open/In Transit/Cancelled/etc.) | Search Field: Purchase Order with Received Items",
+        "expectedResult": "Verify whether only McLane Purchase Orders in Received status are eligible for Credit Request creation and non-Received POs cannot be started as Credit Requests.",
+        "testData": {
+          "orderType": "McLane",
+          "action": "nonReceivedPoNotEligible",
+          "requiresPo": false,
+          "requiresNonReceivedPo": true
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-595_037",
+        "module": "Ordering > Credit Requests (McLane) \u201a\u00c4\u00ee Negative",
+        "testName": "Verify whether the mandatory damaged-item fields (Incident Type, Qty, UOM, Can you use this product?, enough good product/IUT, Images) do NOT appear on Damaged Items From Order page (McLane) when the Damaged checkbox is not selected",
+        "description": "Verify whether the mandatory damaged-item fields (Incident Type, Qty, UOM, Can you use this product?, enough good product/IUT, Images) do NOT appear on Damaged Items From Order page (McLane) when the Damaged checkbox is not selected",
+        "preCondition": "1. User is logged in as admin. 2. User is on Damaged Items From Order page for a McLane Credit Request. 3. Damaged checkbox is unchecked for the item.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Open Damaged Items From Order page for McLane Credit Request."
+          },
+          {
+            "step": 2,
+            "description": "Ensure Damaged checkbox for the item is NOT selected."
+          },
+          {
+            "step": 3,
+            "description": "Observe the item row/section."
+          },
+          {
+            "step": 4,
+            "description": "Verify Incident Type * is not displayed."
+          },
+          {
+            "step": 5,
+            "description": "Verify Qty * is not displayed."
+          },
+          {
+            "step": 6,
+            "description": "Verify UOM * is not displayed."
+          },
+          {
+            "step": 7,
+            "description": "Verify Can you use this product? * is not displayed."
+          },
+          {
+            "step": 8,
+            "description": "Verify Do you have enough good product until your next delivery? / Can you IUT from another unit? * is not displayed."
+          },
+          {
+            "step": 9,
+            "description": "Verify Images * is not displayed."
+          }
+        ],
+        "rawTestData": "Order Type: McLane | Page: Damaged Items From Order | Damaged Checkbox: Unchecked",
+        "expectedResult": "Verify whether damaged-item mandatory fields remain hidden on the McLane Damaged Items From Order page until the Damaged checkbox is selected.",
+        "testData": {
+          "orderType": "McLane",
+          "action": "fieldsHiddenWhenNotDamaged",
+          "requiresPo": true
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-595_038",
+        "module": "Ordering > Credit Requests (McLane) \u201a\u00c4\u00ee Negative",
+        "testName": "Verify whether saving/submitting a McLane Credit Request is blocked when Damaged checkbox is selected but Incident Type * is left blank on Damaged Items From Order page",
+        "description": "Verify whether saving/submitting a McLane Credit Request is blocked when Damaged checkbox is selected but Incident Type * is left blank on Damaged Items From Order page",
+        "preCondition": "1. User is logged in as admin. 2. User is on Damaged Items From Order page for McLane Credit Request. 3. Damaged checkbox is selected.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Select Damaged checkbox for an item."
+          },
+          {
+            "step": 2,
+            "description": "Leave Incident Type * blank."
+          },
+          {
+            "step": 3,
+            "description": "Fill Qty *, UOM *, Can you use this product? *, enough good product/IUT *, and Images * with valid data."
+          },
+          {
+            "step": 4,
+            "description": "Click Save and/or Submit."
+          },
+          {
+            "step": 5,
+            "description": "Observe validation message on Incident Type *."
+          },
+          {
+            "step": 6,
+            "description": "Verify Credit Request is not submitted."
+          }
+        ],
+        "rawTestData": "Order Type: McLane | Field: Incident Type * | Value: (blank)",
+        "expectedResult": "Verify whether the system displays mandatory validation for Incident Type * and prevents save/submit of the McLane Credit Request when Incident Type is empty.",
+        "testData": {
+          "orderType": "McLane",
+          "action": "blankIncidentTypeBlocked",
+          "requiresPo": true
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-595_039",
+        "module": "Ordering > Credit Requests (McLane) \u201a\u00c4\u00ee Negative",
+        "testName": "Verify whether saving/submitting a McLane Credit Request is blocked when Qty * is left blank or invalid after selecting Damaged on Damaged Items From Order page",
+        "description": "Verify whether saving/submitting a McLane Credit Request is blocked when Qty * is left blank or invalid after selecting Damaged on Damaged Items From Order page",
+        "preCondition": "1. User is logged in as admin. 2. Damaged checkbox is selected for a McLane item on Damaged Items From Order page.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Select Damaged checkbox."
+          },
+          {
+            "step": 2,
+            "description": "Fill Incident Type * with a valid value."
+          },
+          {
+            "step": 3,
+            "description": "Leave Qty * blank (or enter invalid value 0 / negative as separate observation)."
+          },
+          {
+            "step": 4,
+            "description": "Select a valid UOM *."
+          },
+          {
+            "step": 5,
+            "description": "Fill remaining mandatory fields."
+          },
+          {
+            "step": 6,
+            "description": "Click Save and/or Submit."
+          },
+          {
+            "step": 7,
+            "description": "Observe Qty * field validation."
+          },
+          {
+            "step": 8,
+            "description": "Verify Credit Request is not submitted with blank/invalid Qty."
+          }
+        ],
+        "rawTestData": "Order Type: McLane | Field: Qty * | Invalid Data: blank / 0 / negative",
+        "expectedResult": "Verify whether Qty * mandatory/validity rules block save/submit of the McLane Credit Request when quantity is blank, zero, or negative.",
+        "testData": {
+          "orderType": "McLane",
+          "action": "blankQtyBlocked",
+          "requiresPo": true
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-595_040",
+        "module": "Ordering > Credit Requests (McLane) \u201a\u00c4\u00ee Negative",
+        "testName": "Verify whether saving/submitting a McLane Credit Request is blocked when UOM * is not selected after Damaged checkbox is selected on Damaged Items From Order page",
+        "description": "Verify whether saving/submitting a McLane Credit Request is blocked when UOM * is not selected after Damaged checkbox is selected on Damaged Items From Order page",
+        "preCondition": "1. User is logged in as admin. 2. Damaged checkbox is selected on Damaged Items From Order page (McLane).",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Select Damaged checkbox for an item."
+          },
+          {
+            "step": 2,
+            "description": "Fill Incident Type * and Qty * with valid values."
+          },
+          {
+            "step": 3,
+            "description": "Leave UOM * unselected/blank."
+          },
+          {
+            "step": 4,
+            "description": "Fill Can you use this product? *, enough good product/IUT *, and Images *."
+          },
+          {
+            "step": 5,
+            "description": "Click Save and/or Submit."
+          },
+          {
+            "step": 6,
+            "description": "Observe UOM * validation."
+          },
+          {
+            "step": 7,
+            "description": "Verify Credit Request is not submitted."
+          }
+        ],
+        "rawTestData": "Order Type: McLane | Field: UOM * | Value: (blank)",
+        "expectedResult": "Verify whether UOM * mandatory validation blocks save/submit of the McLane Credit Request when UOM is not selected.",
+        "testData": {
+          "orderType": "McLane",
+          "action": "blankUomBlocked",
+          "requiresPo": true
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-595_041",
+        "module": "Ordering > Credit Requests (McLane) \u201a\u00c4\u00ee Negative",
+        "testName": "Verify whether saving/submitting a McLane Credit Request is blocked when Can you use this product? * is left unanswered after Damaged is selected",
+        "description": "Verify whether saving/submitting a McLane Credit Request is blocked when Can you use this product? * is left unanswered after Damaged is selected",
+        "preCondition": "1. User is logged in as admin. 2. Damaged checkbox is selected on Damaged Items From Order page (McLane).",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Select Damaged checkbox."
+          },
+          {
+            "step": 2,
+            "description": "Fill Incident Type *, Qty *, and UOM *."
+          },
+          {
+            "step": 3,
+            "description": "Leave Can you use this product? * unanswered."
+          },
+          {
+            "step": 4,
+            "description": "Fill enough good product/IUT * and Images *."
+          },
+          {
+            "step": 5,
+            "description": "Click Save and/or Submit."
+          },
+          {
+            "step": 6,
+            "description": "Observe mandatory validation on Can you use this product? *."
+          },
+          {
+            "step": 7,
+            "description": "Verify Credit Request is not submitted."
+          }
+        ],
+        "rawTestData": "Order Type: McLane | Field: Can you use this product? * | Value: (blank)",
+        "expectedResult": "Verify whether Can you use this product? * mandatory validation blocks save/submit of the McLane Credit Request when the field is unanswered.",
+        "testData": {
+          "orderType": "McLane",
+          "action": "blankCanUseProductBlocked",
+          "requiresPo": true
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-595_042",
+        "module": "Ordering > Credit Requests (McLane) \u201a\u00c4\u00ee Negative",
+        "testName": "Verify whether saving/submitting a McLane Credit Request is blocked when Do you have enough good product until your next delivery? / Can you IUT from another unit? * is left unanswered after Damaged is selected",
+        "description": "Verify whether saving/submitting a McLane Credit Request is blocked when Do you have enough good product until your next delivery? / Can you IUT from another unit? * is left unanswered after Damaged is selected",
+        "preCondition": "1. User is logged in as admin. 2. Damaged checkbox is selected on Damaged Items From Order page (McLane).",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Select Damaged checkbox."
+          },
+          {
+            "step": 2,
+            "description": "Fill Incident Type *, Qty *, UOM *, and Can you use this product? *."
+          },
+          {
+            "step": 3,
+            "description": "Leave Do you have enough good product until your next delivery? / Can you IUT from another unit? * unanswered."
+          },
+          {
+            "step": 4,
+            "description": "Upload Images * if required."
+          },
+          {
+            "step": 5,
+            "description": "Click Save and/or Submit."
+          },
+          {
+            "step": 6,
+            "description": "Observe mandatory validation on the enough good product / IUT field."
+          },
+          {
+            "step": 7,
+            "description": "Verify Credit Request is not submitted."
+          }
+        ],
+        "rawTestData": "Order Type: McLane | Field: Do you have enough good product until your next delivery? / Can you IUT from another unit? * | Value: (blank)",
+        "expectedResult": "Verify whether the enough good product / IUT mandatory field validation blocks save/submit of the McLane Credit Request when unanswered.",
+        "testData": {
+          "orderType": "McLane",
+          "action": "blankIutBlocked",
+          "requiresPo": true
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-595_043",
+        "module": "Ordering > Credit Requests (McLane) \u201a\u00c4\u00ee Negative",
+        "testName": "Verify whether saving/submitting a McLane Credit Request is blocked when Images * are not uploaded (when Images are mandatory per business rules) after Damaged is selected on Damaged Items From Order page",
+        "description": "Verify whether saving/submitting a McLane Credit Request is blocked when Images * are not uploaded (when Images are mandatory per business rules) after Damaged is selected on Damaged Items From Order page",
+        "preCondition": "1. User is logged in as admin. 2. Damaged checkbox is selected. 3. Business rule requires Images as mandatory for damaged credit items.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Select Damaged checkbox for a McLane item."
+          },
+          {
+            "step": 2,
+            "description": "Fill all other mandatory fields: Incident Type *, Qty *, UOM *, Can you use this product? *, enough good product/IUT *."
+          },
+          {
+            "step": 3,
+            "description": "Do NOT upload any image under Images *."
+          },
+          {
+            "step": 4,
+            "description": "Click Save and/or Submit."
+          },
+          {
+            "step": 5,
+            "description": "Observe Images * validation message."
+          },
+          {
+            "step": 6,
+            "description": "Verify Credit Request is not submitted without required images."
+          }
+        ],
+        "rawTestData": "Order Type: McLane | Field: Images * | Value: (no upload)",
+        "expectedResult": "Verify whether Images * mandatory validation (when applicable) blocks save/submit of the McLane Credit Request when no image is uploaded.",
+        "testData": {
+          "orderType": "McLane",
+          "action": "blankImagesBlocked",
+          "requiresPo": true
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-595_044",
+        "module": "Ordering > Credit Requests (McLane) \u201a\u00c4\u00ee Negative",
+        "testName": "Verify whether the user cannot modify the UOM value on a Submitted McLane Credit Request and any attempted edit does not update the Draft/submitted record values",
+        "description": "Verify whether the user cannot modify the UOM value on a Submitted McLane Credit Request and any attempted edit does not update the Draft/submitted record values",
+        "preCondition": "1. User is logged in as admin. 2. McLane Credit Request is in Submitted status.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Open the Submitted McLane Credit Request from Ordering > Credit Requests."
+          },
+          {
+            "step": 2,
+            "description": "Attempt to change the UOM field (click, keyboard, inspect if editable)."
+          },
+          {
+            "step": 3,
+            "description": "If any Save button is visible, attempt to save after trying to change UOM."
+          },
+          {
+            "step": 4,
+            "description": "Refresh/reopen the Submitted Credit Request."
+          },
+          {
+            "step": 5,
+            "description": "Verify UOM value is unchanged from the submitted value."
+          },
+          {
+            "step": 6,
+            "description": "Verify no Draft-style editable UOM update is allowed on Submitted records."
+          }
+        ],
+        "rawTestData": "Order Type: McLane | Status: Submitted | Field: UOM",
+        "expectedResult": "Verify whether Submitted McLane Credit Requests lock UOM and do not allow UOM updates that would change the submitted record values.",
+        "testData": {
+          "orderType": "McLane",
+          "action": "submittedUomLocked",
+          "requiresPo": true
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-595_045",
+        "module": "Ordering > Credit Requests (McLane) \u201a\u00c4\u00ee Edge",
+        "testName": "Verify whether unchecking the Damaged checkbox on Damaged Items From Order page (McLane) hides the damaged-item fields again and clears or discards incomplete damaged field entries as per application behavior",
+        "description": "Verify whether unchecking the Damaged checkbox on Damaged Items From Order page (McLane) hides the damaged-item fields again and clears or discards incomplete damaged field entries as per application behavior",
+        "preCondition": "1. User is logged in as admin. 2. User is on Damaged Items From Order page for McLane. 3. Damaged checkbox was previously selected and fields were displayed.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Select Damaged checkbox and observe fields appear."
+          },
+          {
+            "step": 2,
+            "description": "Optionally enter partial data in Qty and Incident Type."
+          },
+          {
+            "step": 3,
+            "description": "Uncheck the Damaged checkbox."
+          },
+          {
+            "step": 4,
+            "description": "Verify damaged fields are hidden."
+          },
+          {
+            "step": 5,
+            "description": "Re-select Damaged checkbox."
+          },
+          {
+            "step": 6,
+            "description": "Observe whether previously entered values are cleared or retained per designed behavior."
+          },
+          {
+            "step": 7,
+            "description": "Document actual behavior against expected product rule."
+          }
+        ],
+        "rawTestData": "Order Type: McLane | Action: Uncheck Damaged checkbox",
+        "expectedResult": "Verify whether unchecking Damaged on McLane Damaged Items From Order page hides the damaged fields and follows the expected clear/retain behavior for previously entered values.",
+        "testData": {
+          "orderType": "McLane",
+          "action": "uncheckDamagedHidesFields",
+          "requiresPo": true
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-595_046",
+        "module": "Ordering > Credit Requests (McLane) \u201a\u00c4\u00ee Edge",
+        "testName": "Verify whether Qty entered on McLane Damaged Items From Order page cannot exceed the received quantity of the item on the McLane Purchase Order (or system validates against received qty per business rules)",
+        "description": "Verify whether Qty entered on McLane Damaged Items From Order page cannot exceed the received quantity of the item on the McLane Purchase Order (or system validates against received qty per business rules)",
+        "preCondition": "1. User is logged in as admin. 2. McLane Received PO has a known received quantity for the prerequisite item. 3. User is on Damaged Items From Order page with Damaged selected.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Note the received quantity of the item from the McLane PO / Damaged Items From Order page."
+          },
+          {
+            "step": 2,
+            "description": "Select Damaged checkbox."
+          },
+          {
+            "step": 3,
+            "description": "Enter Qty * greater than the received quantity."
+          },
+          {
+            "step": 4,
+            "description": "Select valid UOM and complete other mandatory fields."
+          },
+          {
+            "step": 5,
+            "description": "Click Save and/or Submit."
+          },
+          {
+            "step": 6,
+            "description": "Observe whether system blocks with validation that Qty cannot exceed received quantity."
+          }
+        ],
+        "rawTestData": "Order Type: McLane | Field: Qty * | Test Data: Received Qty + 1",
+        "expectedResult": "Verify whether the system validates damaged Qty against the McLane PO received quantity and blocks invalid over-quantity credit requests (per business rules).",
+        "testData": {
+          "orderType": "McLane",
+          "action": "qtyExceedReceivedBlocked",
+          "requiresPo": true
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-595_047",
+        "module": "Ordering > Credit Requests (McLane) \u201a\u00c4\u00ee Edge",
+        "testName": "Verify whether changing UOM on a Draft McLane Credit Request updates only the Draft record and does not affect already Submitted Credit Requests for the same or different McLane PO",
+        "description": "Verify whether changing UOM on a Draft McLane Credit Request updates only the Draft record and does not affect already Submitted Credit Requests for the same or different McLane PO",
+        "preCondition": "1. User is logged in as admin. 2. One Draft McLane Credit Request and one Submitted McLane Credit Request exist.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Open the Submitted McLane Credit Request and record its UOM value."
+          },
+          {
+            "step": 2,
+            "description": "Open the Draft McLane Credit Request and change UOM to a different valid value."
+          },
+          {
+            "step": 3,
+            "description": "Save the Draft Credit Request."
+          },
+          {
+            "step": 4,
+            "description": "Reopen the Submitted Credit Request."
+          },
+          {
+            "step": 5,
+            "description": "Verify Submitted UOM is unchanged."
+          },
+          {
+            "step": 6,
+            "description": "Reopen Draft and verify updated UOM is retained."
+          }
+        ],
+        "rawTestData": "Order Type: McLane | Draft UOM: Updated | Submitted UOM: Unchanged",
+        "expectedResult": "Verify whether UOM updates on Draft McLane Credit Requests are isolated to the Draft record and do not alter Submitted Credit Request UOM values.",
+        "testData": {
+          "orderType": "McLane",
+          "action": "draftUomIsolatedFromSubmitted",
+          "requiresPo": true
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-595_048",
+        "module": "Ordering > Credit Requests (McLane) \u201a\u00c4\u00ee Edge",
+        "testName": "Verify whether a McLane Purchase Order with Received status but zero received items (or no eligible items) cannot proceed to a usable Damaged Items From Order credit flow",
+        "description": "Verify whether a McLane Purchase Order with Received status but zero received items (or no eligible items) cannot proceed to a usable Damaged Items From Order credit flow",
+        "preCondition": "1. User is logged in as admin. 2. A McLane PO is Received but has no received/eligible items (if such data can be prepared).",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Navigate to Ordering > Credit Requests > + New Credit Request."
+          },
+          {
+            "step": 2,
+            "description": "Search for the McLane PO with no received items."
+          },
+          {
+            "step": 3,
+            "description": "Attempt to select and Start Credit Request."
+          },
+          {
+            "step": 4,
+            "description": "Observe system behavior (PO not listed, empty items page, or validation message)."
+          },
+          {
+            "step": 5,
+            "description": "Verify user cannot create a meaningful damaged credit request without received items."
+          }
+        ],
+        "rawTestData": "Order Type: McLane | PO Status: Received | Received Items: 0",
+        "expectedResult": "Verify whether Credit Request creation for McLane requires at least one received item and does not allow a valid damaged credit flow when no received items exist.",
+        "testData": {
+          "orderType": "McLane",
+          "action": "zeroReceivedItemsBlocked",
+          "requiresPo": true,
+          "requiresEmptyReceivedPo": true
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-595_049",
+        "module": "Ordering > Credit Requests (McLane) \u201a\u00c4\u00ee Edge",
+        "testName": "Verify whether selecting Damaged for multiple received items on the same McLane Credit Request displays independent mandatory field sets (including independent UOM dropdowns) for each damaged item",
+        "description": "Verify whether selecting Damaged for multiple received items on the same McLane Credit Request displays independent mandatory field sets (including independent UOM dropdowns) for each damaged item",
+        "preCondition": "1. User is logged in as admin. 2. McLane Received PO contains at least two received items. 3. User is on Damaged Items From Order page.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Select Damaged checkbox for Item A."
+          },
+          {
+            "step": 2,
+            "description": "Verify mandatory fields including UOM * appear for Item A."
+          },
+          {
+            "step": 3,
+            "description": "Select Damaged checkbox for Item B."
+          },
+          {
+            "step": 4,
+            "description": "Verify mandatory fields including UOM * appear for Item B."
+          },
+          {
+            "step": 5,
+            "description": "Change UOM for Item A to one valid value."
+          },
+          {
+            "step": 6,
+            "description": "Change UOM for Item B to a different valid value (if available)."
+          },
+          {
+            "step": 7,
+            "description": "Save Draft."
+          },
+          {
+            "step": 8,
+            "description": "Reopen Draft and verify each item retained its own UOM value independently."
+          }
+        ],
+        "rawTestData": "Order Type: McLane | Items: Item A and Item B | Field: UOM * per item",
+        "expectedResult": "Verify whether multiple damaged items on a McLane Credit Request each show their own mandatory fields and independent UOM values that save correctly on Draft.",
+        "testData": {
+          "orderType": "McLane",
+          "action": "multiItemIndependentUom",
+          "requiresPo": true
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-595_050",
+        "module": "Ordering > Credit Requests (McLane) \u201a\u00c4\u00ee Edge",
+        "testName": "Verify whether UOM dropdown on McLane Credit Request does not display UOM values that belong to a different item in Item Master (cross-item UOM leakage check)",
+        "description": "Verify whether UOM dropdown on McLane Credit Request does not display UOM values that belong to a different item in Item Master (cross-item UOM leakage check)",
+        "preCondition": "1. User is logged in as admin. 2. Two items exist in Item Master with different UOM configurations. 3. Both items are on the McLane Received PO (or one is on PO and comparison item is known).",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Open Damaged Items From Order for McLane Credit Request."
+          },
+          {
+            "step": 2,
+            "description": "Select Damaged for Item A and open UOM dropdown; record values."
+          },
+          {
+            "step": 3,
+            "description": "Compare against Item Master UOMs for Item A only."
+          },
+          {
+            "step": 4,
+            "description": "Verify no UOM unique to Item B appears in Item A's dropdown."
+          },
+          {
+            "step": 5,
+            "description": "If Item B is also on PO, select Damaged for Item B and confirm its UOM list matches Item B Item Master only."
+          }
+        ],
+        "rawTestData": "Order Type: McLane | Comparison: Inventory Setup > Item Master per item",
+        "expectedResult": "Verify whether each damaged item's UOM dropdown on McLane Credit Request is item-specific and matches only that item's Item Master UOM configuration.",
+        "testData": {
+          "orderType": "McLane",
+          "action": "crossItemUomNoLeakage",
+          "requiresPo": true
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-595_051",
+        "module": "Prerequisites \u201a\u00c4\u00ee Data Setup",
+        "testName": "Verify whether prerequisite Flowers and McLane Purchase Orders exist in Received status with at least one received item before executing Credit Request Damaged Items UOM test suites",
+        "description": "Verify whether prerequisite Flowers and McLane Purchase Orders exist in Received status with at least one received item before executing Credit Request Damaged Items UOM test suites",
+        "preCondition": "1. QA Backoffice Dashboard is accessible. 2. Admin credentials are available. 3. Inventory Setup Item Master and Stock Count (Daily/Weekly/Monthly) configurations exist for prerequisite items.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Login to QA Backoffice Dashboard using admin credentials."
+          },
+          {
+            "step": 2,
+            "description": "Confirm a Flowers Purchase Order is available in Received status with \u201a\u00e2\u20221 received item; record PO Number and Item."
+          },
+          {
+            "step": 3,
+            "description": "Confirm a McLane Purchase Order is available in Received status with \u201a\u00e2\u20221 received item; record PO Number and Item."
+          },
+          {
+            "step": 4,
+            "description": "In Inventory Setup > Item Master, confirm UOM list for each prerequisite item."
+          },
+          {
+            "step": 5,
+            "description": "In Inventory Setup > Stock Count (Daily/Weekly/Monthly), confirm UOM profile for each prerequisite item."
+          },
+          {
+            "step": 6,
+            "description": "Use these recorded values as baseline data for Flowers and McLane Credit Request UOM test cases."
+          }
+        ],
+        "rawTestData": "Username: admin@whataburger-ims.com | Password: admin123 | Flowers PO: Received + \u201a\u00e2\u20221 item | McLane PO: Received + \u201a\u00e2\u20221 item",
+        "expectedResult": "Verify whether all prerequisite data (Received Flowers PO, Received McLane PO, Item Master UOMs, Stock Count UOM profiles) is available and documented before executing the Credit Request test suites.",
+        "testData": {
+          "orderType": "Both",
+          "action": "prerequisites",
+          "requiresPo": false
+        }
+      }
+    ]
+  }
+}

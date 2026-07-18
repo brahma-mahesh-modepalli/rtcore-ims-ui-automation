@@ -1,0 +1,22 @@
+{
+  "common": {
+    "timeout": 5000,
+    "defaultWaitTime": 500,
+    "networkIdleTimeout": 10000
+  },
+  "browser": {
+    "headless": false,
+    "slowMo": 0,
+    "screenshot": "only-on-failure"
+  },
+  "features": {
+    "stockCount": {
+      "name": "Stock Count",
+      "submenu": [
+        "Daily Shift Count",
+        "Weekly Count",
+        "Monthly Count"
+      ]
+    }
+  }
+}
