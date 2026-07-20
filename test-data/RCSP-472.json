@@ -1,0 +1,331 @@
+{
+  "RCSP-472": {
+    "scenarioId": "RCSP-472",
+    "epic": "EPIC-RCSP-131",
+    "feature": "Admin – Roles & Permissions (Operations Admin)",
+    "sourceSheet": "Operations Admin - Roles TC",
+    "description": "Optimised set (max 5) for Operations Admin visibility and integrity on Admin → Roles & Permissions. Create/Edit role, permission catalog CRUD, and full RBAC matrix flows are assumed covered by other stories.",
+    "commonData": {
+      "prerequisites": [
+        "User is logged into Whataburger Inventory Management System (IMS) Backoffice with valid credentials having Admin access",
+        "User has access to the ADMIN module",
+        "Application URL is accessible (e.g., qa-backoffice.wbhq.com)",
+        "Operations Admin role exists in the system as an Active role"
+      ],
+      "userRole": "admin",
+      "menuPath": {
+        "section": "ADMIN",
+        "item": "Roles & Permissions",
+        "urlSegment": "/admin/roles"
+      },
+      "labels": {
+        "pageTitle": "Roles & Permissions",
+        "pageSubtitle": "Manage user roles and their permission assignments",
+        "newRoleButton": "NEW ROLE",
+        "rolesTab": "Roles",
+        "permissionsCatalogTab": "Permissions Catalog",
+        "searchPlaceholder": "Search roles..."
+      },
+      "columnHeaders": [
+        "ROLE",
+        "DESCRIPTION",
+        "PERMISSIONS",
+        "USERS",
+        "STATUS",
+        "ACTIONS"
+      ],
+      "operationsAdmin": {
+        "displayName": "Operations Admin",
+        "roleKey": "operations_admin",
+        "description": "Full operational and configuration access except RBAC, audit logs, Entra/API clients, and EDH integrations.",
+        "expectedPermissions": 99,
+        "expectedUsers": 0,
+        "expectedStatus": "Active"
+      },
+      "baselineRoles": [
+        "Administrator",
+        "Region Director",
+        "Shift Lead",
+        "Operating Partner",
+        "Operations Admin"
+      ],
+      "lockedRole": "Administrator",
+      "search": {
+        "validFullName": "Operations Admin",
+        "partial": "Operations",
+        "roleKey": "operations_admin",
+        "invalid": "XYZ_InvalidRole_999",
+        "mixedCase": "oPeRaTiOnS aDmIn",
+        "whitespace": "   "
+      },
+      "assignment": {
+        "roleToSelect": "Operations Admin",
+        "assignmentScreenHint": "User management / role assignment",
+        "inactiveStatus": "Inactive"
+      }
+    },
+    "testCases": [
+      {
+        "testCaseId": "TC_RCSP-472_001",
+        "sourceTestCaseId": "TC-OA-001",
+        "module": "Admin > Roles & Permissions",
+        "testName": "Verify whether the Roles & Permissions page under Admin menu loads successfully and displays the Roles tab UI without layout or alignment issues",
+        "description": "Page load + UI verification for Admin → Roles & Permissions (Roles tab default).",
+        "preCondition": "1. User is logged into Whataburger Inventory Management System (IMS) Backoffice with valid credentials having Admin access. 2. User has access to the ADMIN module. 3. Application URL is accessible (e.g., qa-backoffice.wbhq.com).",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Launch the IMS Backoffice application and log in with Admin credentials."
+          },
+          {
+            "step": 2,
+            "description": "From the left sidebar, locate and expand/select the ADMIN menu section."
+          },
+          {
+            "step": 3,
+            "description": "Click on the Roles & Permissions menu item under ADMIN."
+          },
+          {
+            "step": 4,
+            "description": "Observe that the Roles & Permissions page loads."
+          },
+          {
+            "step": 5,
+            "description": "Verify the page header title, subtitle, + NEW ROLE button, Roles / Permissions Catalog tabs, and Search roles field are visible."
+          },
+          {
+            "step": 6,
+            "description": "Verify overall page layout, alignment, and display on desktop viewport."
+          }
+        ],
+        "rawTestData": "URL: /admin/roles | Menu path: Sidebar → ADMIN → Roles & Permissions | Tab: Roles (default)",
+        "expectedResult": "Roles & Permissions page loads successfully; title, subtitle, NEW ROLE button, Roles tab (active), Permissions Catalog tab, Search roles field, and roles table columns are visible without layout issues.",
+        "testData": {
+          "pageTitle": "Roles & Permissions",
+          "pageSubtitle": "Manage user roles and their permission assignments",
+          "newRoleButton": "NEW ROLE",
+          "activeTab": "Roles",
+          "secondaryTab": "Permissions Catalog",
+          "searchPlaceholder": "Search roles...",
+          "columnHeaders": [
+            "ROLE",
+            "DESCRIPTION",
+            "PERMISSIONS",
+            "USERS",
+            "STATUS",
+            "ACTIONS"
+          ]
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-472_002",
+        "sourceTestCaseId": "TC-OA-002",
+        "module": "Admin > Roles & Permissions",
+        "testName": "Verify whether the Operations Admin role is displayed correctly on the Roles tab under Roles & Permissions with accurate name, description, permission count, user count, Active status, and action icons",
+        "description": "Validate Operations Admin row details on the Roles tab.",
+        "preCondition": "1. User is logged into IMS Backoffice with Admin access. 2. Operations Admin role exists in the system as an Active role. 3. User navigates to ADMIN → Roles & Permissions → Roles tab.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Navigate to Sidebar → ADMIN → Roles & Permissions."
+          },
+          {
+            "step": 2,
+            "description": "Ensure the Roles tab is selected."
+          },
+          {
+            "step": 3,
+            "description": "Locate the row for Operations Admin in the roles table (scroll if required)."
+          },
+          {
+            "step": 4,
+            "description": "Verify the role display name in the ROLE column."
+          },
+          {
+            "step": 5,
+            "description": "Verify the machine/key badge next to the role name."
+          },
+          {
+            "step": 6,
+            "description": "Verify the DESCRIPTION column text."
+          },
+          {
+            "step": 7,
+            "description": "Verify the PERMISSIONS column count."
+          },
+          {
+            "step": 8,
+            "description": "Verify the USERS column count."
+          },
+          {
+            "step": 9,
+            "description": "Verify the STATUS column value and styling."
+          },
+          {
+            "step": 10,
+            "description": "Verify action icons available for the Operations Admin row (Manage Permissions / Key icon and Edit / Pencil icon)."
+          }
+        ],
+        "rawTestData": "Role display name: Operations Admin | Role key/badge: operations_admin | Expected description: Full operational and configuration access except RBAC, audit logs, Entra/API clients, and EDH integrations. | Expected permissions: 99 | Expected users: 0 | Expected status: Active",
+        "expectedResult": "Operations Admin is present with correct name, operations_admin badge, description, permission/user counts, Active status, and Manage Permissions / Edit action icons.",
+        "testData": {
+          "displayName": "Operations Admin",
+          "roleKey": "operations_admin",
+          "description": "Full operational and configuration access except RBAC, audit logs, Entra/API clients, and EDH integrations.",
+          "expectedPermissions": 99,
+          "expectedUsers": 0,
+          "expectedStatus": "Active"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-472_003",
+        "sourceTestCaseId": "TC-OA-003",
+        "module": "Admin > Roles & Permissions",
+        "testName": "Verify whether searching for Operations Admin on the Roles tab under Roles & Permissions returns the correct role and whether invalid/empty/partial search inputs behave correctly (positive, negative, and edge)",
+        "description": "Search positive / negative / edge coverage for Roles tab search.",
+        "preCondition": "1. User is logged into IMS Backoffice with Admin access. 2. Multiple roles including Operations Admin exist on ADMIN → Roles & Permissions → Roles tab. 3. Search roles field is available above the roles table.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Navigate to Sidebar → ADMIN → Roles & Permissions → Roles tab."
+          },
+          {
+            "step": 2,
+            "description": "Note the full list of existing roles before searching."
+          },
+          {
+            "step": 3,
+            "description": "In the \"Search roles...\" field, enter \"Operations Admin\" and observe results."
+          },
+          {
+            "step": 4,
+            "description": "Clear the search and enter partial text \"Operations\"."
+          },
+          {
+            "step": 5,
+            "description": "Clear the search and enter role key \"operations_admin\"."
+          },
+          {
+            "step": 6,
+            "description": "Enter an invalid search value that matches no role (e.g., \"XYZ_InvalidRole_999\")."
+          },
+          {
+            "step": 7,
+            "description": "Clear the search field completely / enter only spaces and observe list restore behavior."
+          },
+          {
+            "step": 8,
+            "description": "Enter mixed-case text \"oPeRaTiOnS aDmIn\" and observe case-handling behavior."
+          }
+        ],
+        "rawTestData": "Valid full name: Operations Admin | Partial: Operations | Role key: operations_admin | Invalid: XYZ_InvalidRole_999 | Edge: empty / whitespace / mixed case",
+        "expectedResult": "Valid/partial/mixed-case searches return Operations Admin; invalid search shows empty results; clearing/whitespace restores the full roles list without UI errors.",
+        "testData": {
+          "validFullName": "Operations Admin",
+          "partial": "Operations",
+          "roleKey": "operations_admin",
+          "invalid": "XYZ_InvalidRole_999",
+          "mixedCase": "oPeRaTiOnS aDmIn",
+          "whitespace": "   "
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-472_004",
+        "sourceTestCaseId": "TC-OA-004",
+        "module": "Admin > Roles & Permissions / User Role Assignment",
+        "testName": "Verify whether the Operations Admin role is available for selection in the user role assignment dropdown/screen (if applicable) and is not selectable when the role is Inactive or the user lacks assignment permission (negative/edge)",
+        "description": "Role assignment dropdown availability + negative/edge checks for Operations Admin.",
+        "preCondition": "1. User is logged into IMS Backoffice with permission to view/assign roles (or Admin access). 2. Operations Admin role exists and is Active. 3. A user management / role assignment screen with role dropdown is available in the application (if feature exists for this story).",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Navigate to the user creation/edit or role assignment screen where roles can be assigned to users."
+          },
+          {
+            "step": 2,
+            "description": "Open the Role dropdown / role selection control."
+          },
+          {
+            "step": 3,
+            "description": "Search or scroll to find \"Operations Admin\"."
+          },
+          {
+            "step": 4,
+            "description": "Select Operations Admin and save/assign (positive path) if assignment is in scope."
+          },
+          {
+            "step": 5,
+            "description": "Negative: Using a user without role-assignment permission, attempt to open assignment and select Operations Admin."
+          },
+          {
+            "step": 6,
+            "description": "Edge: If Operations Admin is set to Inactive, reopen the role assignment dropdown and check availability."
+          },
+          {
+            "step": 7,
+            "description": "Return to ADMIN → Roles & Permissions → Roles tab and confirm Operations Admin still appears with correct status after checks."
+          }
+        ],
+        "rawTestData": "Role to select: Operations Admin | Assignment screen: User management / role assignment (as applicable) | Edge status: Inactive (if test environment allows)",
+        "expectedResult": "When Active, Operations Admin is listed/selectable in assignment UI (if available). After checks, Roles & Permissions still shows Operations Admin as Active with unchanged details.",
+        "testData": {
+          "roleToSelect": "Operations Admin",
+          "expectedStatusAfterChecks": "Active",
+          "skipAssignmentWhenUnavailable": true
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-472_005",
+        "sourceTestCaseId": "TC-OA-005",
+        "module": "Admin > Roles & Permissions",
+        "testName": "Verify whether existing roles remain unchanged on the Roles tab under Roles & Permissions after viewing Operations Admin details, and whether restricted actions for locked/system roles still behave correctly (regression and edge)",
+        "description": "Existing roles regression + locked role edge after viewing Operations Admin without saving.",
+        "preCondition": "1. User is logged into IMS Backoffice with Admin access. 2. Multiple roles exist (e.g., Administrator, Region Director, Shift Lead, Operating Partner, Operations Admin). 3. Administrator is a locked/system role (lock icon) as shown on the Roles list.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Navigate to Sidebar → ADMIN → Roles & Permissions → Roles tab."
+          },
+          {
+            "step": 2,
+            "description": "Capture baseline details for existing roles (name, permission count, status) including Administrator, Region Director, Shift Lead, Operating Partner, and Operations Admin."
+          },
+          {
+            "step": 3,
+            "description": "Open Manage Permissions (Key) and/or Edit (Pencil) for Operations Admin, then cancel/return without saving changes."
+          },
+          {
+            "step": 4,
+            "description": "Return to the Roles list and compare all role rows against the baseline."
+          },
+          {
+            "step": 5,
+            "description": "Verify locked Administrator role still shows lock indicator and does not expose unauthorized delete/edit behavior."
+          },
+          {
+            "step": 6,
+            "description": "Verify Operations Admin still shows Active status, correct description, permission count, and action icons."
+          },
+          {
+            "step": 7,
+            "description": "Optionally refresh the page and re-verify the Roles list integrity."
+          }
+        ],
+        "rawTestData": "Baseline roles: Administrator, Region Director, Shift Lead, Operating Partner, Operations Admin | Action: View/open Operations Admin permissions or edit, then cancel without save | Locked role: Administrator",
+        "expectedResult": "All baseline roles remain unchanged; Operations Admin details stay accurate; locked Administrator retains restricted actions; no layout or data corruption after cancel/return.",
+        "testData": {
+          "baselineRoles": [
+            "Administrator",
+            "Region Director",
+            "Shift Lead",
+            "Operating Partner",
+            "Operations Admin"
+          ],
+          "operationsAdmin": "Operations Admin",
+          "lockedRole": "Administrator",
+          "expectedStatus": "Active"
+        }
+      }
+    ]
+  }
+}

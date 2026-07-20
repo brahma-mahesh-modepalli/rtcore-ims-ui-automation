@@ -652,6 +652,78 @@ export interface Rcsp227JsonData {
   testCases: Rcsp227TestCase[];
 }
 
+export interface Rcsp472MenuPathData {
+  section: string;
+  item: string;
+  urlSegment: string;
+}
+
+export interface Rcsp472LabelsData {
+  pageTitle: string;
+  pageSubtitle: string;
+  newRoleButton: string;
+  rolesTab: string;
+  permissionsCatalogTab: string;
+  searchPlaceholder: string;
+}
+
+export interface Rcsp472OperationsAdminData {
+  displayName: string;
+  roleKey: string;
+  description: string;
+  expectedPermissions: number;
+  expectedUsers: number;
+  expectedStatus: string;
+}
+
+export interface Rcsp472SearchData {
+  validFullName: string;
+  partial: string;
+  roleKey: string;
+  invalid: string;
+  mixedCase: string;
+  whitespace: string;
+}
+
+export interface Rcsp472AssignmentData {
+  roleToSelect: string;
+  assignmentScreenHint: string;
+  inactiveStatus: string;
+}
+
+export interface Rcsp472CommonData {
+  prerequisites?: string[];
+  userRole?: string;
+  menuPath: Rcsp472MenuPathData;
+  labels: Rcsp472LabelsData;
+  columnHeaders: string[];
+  operationsAdmin: Rcsp472OperationsAdminData;
+  baselineRoles: string[];
+  lockedRole: string;
+  search: Rcsp472SearchData;
+  assignment: Rcsp472AssignmentData;
+}
+
+export type Rcsp472TestCaseData = Record<string, unknown>;
+
+export type Rcsp472TestCase = TestCaseJsonData<Rcsp472TestCaseData> & {
+  sourceTestCaseId?: string;
+  module?: string;
+  preCondition?: string;
+  expectedResult?: string;
+  rawTestData?: string;
+};
+
+export interface Rcsp472JsonData {
+  scenarioId: string;
+  epic: string;
+  feature: string;
+  sourceSheet?: string;
+  description?: string;
+  commonData: Rcsp472CommonData;
+  testCases: Rcsp472TestCase[];
+}
+
 const databaseReader = new DatabaseReader();
 
 function isRecord(value: unknown): value is Record<string, unknown> {
