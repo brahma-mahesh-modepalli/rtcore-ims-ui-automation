@@ -724,6 +724,123 @@ export interface Rcsp472JsonData {
   testCases: Rcsp472TestCase[];
 }
 
+export interface Rcsp133HierarchyData {
+  region: string;
+  market: string;
+  store: string;
+}
+
+export interface Rcsp133MenuPathData {
+  section: string;
+  item: string;
+  urlSegment: string;
+}
+
+export interface Rcsp133ServiceBusData {
+  namespace: string;
+  topic: string;
+  subscriber: string;
+}
+
+export interface Rcsp133LabelsData {
+  pageTitle: string;
+  pageSubtitlePattern: string;
+  mealPeriodAll: string;
+  clearFilters: string;
+}
+
+export interface Rcsp133CommonData {
+  prerequisites?: string[];
+  userRole?: string;
+  hierarchy: Rcsp133HierarchyData;
+  menuPath: Rcsp133MenuPathData;
+  serviceBus: Rcsp133ServiceBusData;
+  labels: Rcsp133LabelsData;
+  summaryCards: string[];
+  viewTabs: string[];
+  columnHeaders: string[];
+  expectedSaleType: string;
+  expectedSaleStatus: string;
+  emptyBusinessDay: string;
+  unloadedSaleId: string;
+  edgeMealPeriod: string;
+}
+
+export type Rcsp133TestCaseData = Record<string, unknown>;
+
+export type Rcsp133TestCase = TestCaseJsonData<Rcsp133TestCaseData> & {
+  sourceTestCaseId?: string;
+  module?: string;
+  preCondition?: string;
+  expectedResult?: string;
+  rawTestData?: string;
+};
+
+export interface Rcsp133JsonData {
+  scenarioId: string;
+  epic: string;
+  feature: string;
+  sourceSheet?: string;
+  description?: string;
+  commonData: Rcsp133CommonData;
+  testCases: Rcsp133TestCase[];
+}
+
+export interface Rcsp287MenuPathData {
+  section: string;
+  item: string;
+  urlSegment: string;
+}
+
+export interface Rcsp287LabelsData {
+  pageTitle: string;
+  pageSubtitle: string;
+  newUomButton: string;
+  modalTitle: string;
+  typePlaceholder: string;
+  cancelButton: string;
+  createButton: string;
+}
+
+export interface Rcsp287UomValues {
+  name: string;
+  abbreviation: string;
+  type: string;
+}
+
+export interface Rcsp287CommonData {
+  prerequisites?: string[];
+  userRole?: string;
+  menuPath: Rcsp287MenuPathData;
+  labels: Rcsp287LabelsData;
+  columnHeaders: string[];
+  typeOptions: string[];
+  createUom: Rcsp287UomValues;
+  updatedUom: Rcsp287UomValues;
+  baselineUoms: string[];
+  duplicateReference: Rcsp287UomValues;
+}
+
+export type Rcsp287TestCaseData = Record<string, unknown>;
+
+export type Rcsp287TestCase = TestCaseJsonData<Rcsp287TestCaseData> & {
+  sourceTestCaseId?: string;
+  module?: string;
+  preCondition?: string;
+  expectedResult?: string;
+  rawTestData?: string;
+};
+
+export interface Rcsp287JsonData {
+  scenarioId: string;
+  epic: string;
+  feature: string;
+  sourceSheet?: string;
+  description?: string;
+  commonData: Rcsp287CommonData;
+  testCases: Rcsp287TestCase[];
+}
+
 const databaseReader = new DatabaseReader();
 
 function isRecord(value: unknown): value is Record<string, unknown> {

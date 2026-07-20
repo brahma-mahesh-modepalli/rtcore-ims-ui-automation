@@ -1,0 +1,515 @@
+{
+  "RCSP-287": {
+    "scenarioId": "RCSP-287",
+    "epic": "EPIC-RCSP-1",
+    "feature": "Inventory Setup – Units of Measure",
+    "sourceSheet": "Units of Measure TC",
+    "description": "Optimised set (9 TCs, ≤10) for Units of Measure list, New UOM modal, create with TEST, edit via pencil to TESTTEST, plus negative/edge/regression. Delete UOM, UOM usage in recipes/inventory items, and conversion factors assumed covered by other stories unless present in UI.",
+    "commonData": {
+      "prerequisites": [
+        "User has valid Admin access to Whataburger IMS Backoffice",
+        "Application URL https://qa-backoffice.wbhq.com/dashboard is accessible",
+        "User credentials: admin@whataburger-ims.com (valid password as per test env)"
+      ],
+      "userRole": "admin",
+      "menuPath": {
+        "section": "Inventory Setup",
+        "item": "Unit of Measure",
+        "urlSegment": "/inventory/uom"
+      },
+      "labels": {
+        "pageTitle": "Units of Measure",
+        "pageSubtitle": "Manage unit definitions for inventory tracking",
+        "newUomButton": "+ NEW UOM",
+        "modalTitle": "New Unit Of Measure",
+        "typePlaceholder": "Select type",
+        "cancelButton": "CANCEL",
+        "createButton": "CREATE UOM"
+      },
+      "columnHeaders": [
+        "NAME",
+        "ABBREVIATION",
+        "TYPE"
+      ],
+      "typeOptions": [
+        "Weight",
+        "Volume",
+        "Each",
+        "Case",
+        "Length",
+        "Count"
+      ],
+      "createUom": {
+        "name": "TEST",
+        "abbreviation": "TEST",
+        "type": "Count"
+      },
+      "updatedUom": {
+        "name": "TESTTEST",
+        "abbreviation": "TESTTEST",
+        "type": "Count"
+      },
+      "baselineUoms": [
+        "Kilogram",
+        "Each",
+        "Gram"
+      ],
+      "duplicateReference": {
+        "name": "Each",
+        "abbreviation": "EA",
+        "type": "Each"
+      }
+    },
+    "testCases": [
+      {
+        "testCaseId": "TC_RCSP-287_001",
+        "sourceTestCaseId": "TC-RCSP-287-001",
+        "module": "Inventory Setup > Unit of Measure",
+        "testName": "Verify whether the Units of Measure page under Inventory Setup loads successfully with correct page header, + NEW UOM button, and table columns (NAME, ABBREVIATION, TYPE)",
+        "description": "Positive – Page load, header, + NEW UOM, columns (TC-UOM-001).",
+        "preCondition": "1. User has valid Admin access to Whataburger IMS Backoffice. 2. Application URL https://qa-backoffice.wbhq.com/dashboard is accessible. 3. User credentials: admin@whataburger-ims.com (valid password as per test env).",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Launch URL https://qa-backoffice.wbhq.com/dashboard."
+          },
+          {
+            "step": 2,
+            "description": "Login with valid Admin credentials."
+          },
+          {
+            "step": 3,
+            "description": "From the left sidebar, expand the Inventory Setup section."
+          },
+          {
+            "step": 4,
+            "description": "Click the Unit of Measure menu item."
+          },
+          {
+            "step": 5,
+            "description": "Verify the page title and subtitle."
+          },
+          {
+            "step": 6,
+            "description": "Verify the + NEW UOM button is visible at the top right of the content area."
+          },
+          {
+            "step": 7,
+            "description": "Verify the Units of Measure table columns NAME, ABBREVIATION, and TYPE."
+          }
+        ],
+        "rawTestData": "Menu path: Sidebar → Inventory Setup → Unit of Measure | Page URL: /inventory/uom | Expected title: Units of Measure | Expected subtitle: Manage unit definitions for inventory tracking | Expected columns: NAME | ABBREVIATION | TYPE",
+        "expectedResult": "Units of Measure page loads with correct header, subtitle, + NEW UOM button, and NAME / ABBREVIATION / TYPE columns.",
+        "testData": {
+          "pageTitle": "Units of Measure",
+          "pageSubtitle": "Manage unit definitions for inventory tracking",
+          "newUomButton": "+ NEW UOM",
+          "columnHeaders": [
+            "NAME",
+            "ABBREVIATION",
+            "TYPE"
+          ]
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-287_002",
+        "sourceTestCaseId": "TC-RCSP-287-002",
+        "module": "Inventory Setup > Unit of Measure",
+        "testName": "Verify whether clicking + NEW UOM on the Units of Measure page under Inventory Setup opens the New Unit Of Measure modal with Name, Abbreviation, Type dropdown options, Cancel, and Create UOM controls",
+        "description": "Positive – New UOM modal fields & Type options; Cancel closes (TC-UOM-002).",
+        "preCondition": "1. User is logged into IMS Backoffice as Admin. 2. User has navigated to Inventory Setup → Unit of Measure. 3. Units of Measure list page is displayed.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "On the Units of Measure page, click the + NEW UOM button."
+          },
+          {
+            "step": 2,
+            "description": "Observe the modal popup title and close (X) control."
+          },
+          {
+            "step": 3,
+            "description": "Verify fields: Name, Abbreviation, and Type are present."
+          },
+          {
+            "step": 4,
+            "description": "Click the Type dropdown and verify available type options."
+          },
+          {
+            "step": 5,
+            "description": "Verify Cancel and Create UOM buttons are visible at the bottom of the modal."
+          },
+          {
+            "step": 6,
+            "description": "Click Cancel (or X) and verify the modal closes without creating a UOM."
+          }
+        ],
+        "rawTestData": "Action: + NEW UOM | Modal title: New Unit Of Measure | Fields: Name, Abbreviation, Type | Type options: Weight, Volume, Each, Case, Length, Count | Buttons: CANCEL, CREATE UOM | Type placeholder: Select type",
+        "expectedResult": "New Unit Of Measure modal opens with required fields and type options; Cancel/X dismisses without creating a UOM.",
+        "testData": {
+          "modalTitle": "New Unit Of Measure",
+          "typeOptions": [
+            "Weight",
+            "Volume",
+            "Each",
+            "Case",
+            "Length",
+            "Count"
+          ],
+          "typePlaceholder": "Select type"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-287_003",
+        "sourceTestCaseId": "TC-RCSP-287-003",
+        "module": "Inventory Setup > Unit of Measure",
+        "testName": "Verify whether a new Unit of Measure can be created successfully from the New Unit Of Measure modal on the Units of Measure page under Inventory Setup and appears at the end of the list",
+        "description": "Positive – Create UOM with TEST; appears at end of list (TC-UOM-003).",
+        "preCondition": "1. User is logged into IMS Backoffice as Admin. 2. User is on Inventory Setup → Unit of Measure. 3. UOM name \"TEST\" and abbreviation \"TEST\" do not already exist (or use unique values if they do). 4. Note the last row in the current UOM list before create.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Navigate to Sidebar → Inventory Setup → Unit of Measure."
+          },
+          {
+            "step": 2,
+            "description": "Note the last UOM currently displayed in the list."
+          },
+          {
+            "step": 3,
+            "description": "Click + NEW UOM."
+          },
+          {
+            "step": 4,
+            "description": "In the New Unit Of Measure modal, enter Name = TEST."
+          },
+          {
+            "step": 5,
+            "description": "Enter Abbreviation = TEST."
+          },
+          {
+            "step": 6,
+            "description": "Select a valid Type from the dropdown (e.g., Count or Each)."
+          },
+          {
+            "step": 7,
+            "description": "Click CREATE UOM."
+          },
+          {
+            "step": 8,
+            "description": "Observe return to the Units of Measure list and verify the new UOM at the end of the list."
+          }
+        ],
+        "rawTestData": "Name: TEST | Abbreviation: TEST | Type: Count | Action: CREATE UOM",
+        "expectedResult": "Modal closes; TEST / TEST UOM is visible at the end of the list with correct Type and Edit (pencil) icon.",
+        "testData": {
+          "name": "TEST",
+          "abbreviation": "TEST",
+          "type": "Count"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-287_004",
+        "sourceTestCaseId": "TC-RCSP-287-004",
+        "module": "Inventory Setup > Unit of Measure",
+        "testName": "Verify whether an existing Unit of Measure can be updated using the pencil (Edit) icon on the Units of Measure page under Inventory Setup (update TEST to TESTTEST)",
+        "description": "Positive – Edit via pencil; update TEST → TESTTEST (TC-UOM-004).",
+        "preCondition": "1. User is logged into IMS Backoffice as Admin. 2. UOM with Name/Abbreviation \"TEST\" exists on Inventory Setup → Unit of Measure (created via TC-UOM-003 or pre-seeded). 3. Updated values \"TESTTEST\" are not already used by another UOM (or are allowed per business rules).",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Navigate to Sidebar → Inventory Setup → Unit of Measure."
+          },
+          {
+            "step": 2,
+            "description": "Locate the UOM row with Name \"TEST\" in the list."
+          },
+          {
+            "step": 3,
+            "description": "Click the pencil (Edit) icon on that row."
+          },
+          {
+            "step": 4,
+            "description": "In the Edit modal/form, update Name to TESTTEST."
+          },
+          {
+            "step": 5,
+            "description": "Update Abbreviation to TESTTEST."
+          },
+          {
+            "step": 6,
+            "description": "Keep or change Type as required for the test."
+          },
+          {
+            "step": 7,
+            "description": "Save/Update the UOM."
+          }
+        ],
+        "rawTestData": "Existing Name: TEST | Existing Abbreviation: TEST | Updated Name: TESTTEST | Updated Abbreviation: TESTTEST | Action: Edit via pencil icon → Save/Update",
+        "expectedResult": "After save, list shows TESTTEST / TESTTEST; previous TEST values are no longer shown for that record.",
+        "testData": {
+          "existingName": "TEST",
+          "existingAbbreviation": "TEST",
+          "updatedName": "TESTTEST",
+          "updatedAbbreviation": "TESTTEST",
+          "type": "Count"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-287_005",
+        "sourceTestCaseId": "TC-RCSP-287-005",
+        "module": "Inventory Setup > Unit of Measure",
+        "testName": "Verify whether creating a Unit of Measure from the New Unit Of Measure modal on the Units of Measure page under Inventory Setup is blocked when mandatory fields are empty or Type is not selected (negative)",
+        "description": "Negative – Mandatory field / Type not selected validation (TC-UOM-005).",
+        "preCondition": "1. User is logged into IMS Backoffice as Admin. 2. User is on Inventory Setup → Unit of Measure. 3. Note current total number of UOM rows before attempting invalid creates.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Click + NEW UOM to open New Unit Of Measure modal."
+          },
+          {
+            "step": 2,
+            "description": "Leave Name, Abbreviation, and Type empty; click CREATE UOM."
+          },
+          {
+            "step": 3,
+            "description": "Enter Name only; leave Abbreviation empty and Type unselected; click CREATE UOM."
+          },
+          {
+            "step": 4,
+            "description": "Enter Name and Abbreviation; leave Type as \"Select type\"; click CREATE UOM."
+          },
+          {
+            "step": 5,
+            "description": "Enter Abbreviation and Type; leave Name empty; click CREATE UOM."
+          }
+        ],
+        "rawTestData": "Attempt 1: all blank | Attempt 2: Name=TEST_NEG, Abbreviation=blank, Type=not selected | Attempt 3: Name=TEST_NEG, Abbreviation=TN, Type=not selected | Attempt 4: Name=blank, Abbreviation=TN, Type=Count",
+        "expectedResult": "CREATE UOM does not succeed when mandatory fields are missing; validation is shown; no new UOM row is added.",
+        "testData": {
+          "attempts": [
+            {
+              "name": "",
+              "abbreviation": "",
+              "type": ""
+            },
+            {
+              "name": "TEST_NEG",
+              "abbreviation": "",
+              "type": ""
+            },
+            {
+              "name": "TEST_NEG",
+              "abbreviation": "TN",
+              "type": ""
+            },
+            {
+              "name": "",
+              "abbreviation": "TN",
+              "type": "Count"
+            }
+          ]
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-287_006",
+        "sourceTestCaseId": "TC-RCSP-287-006",
+        "module": "Inventory Setup > Unit of Measure",
+        "testName": "Verify whether duplicate Unit of Measure Name or Abbreviation is handled correctly on create/edit from the Units of Measure page under Inventory Setup (negative)",
+        "description": "Negative – Duplicate Name / Abbreviation (TC-UOM-006).",
+        "preCondition": "1. User is logged into IMS Backoffice as Admin. 2. At least one UOM already exists (e.g., Each/EA or TESTTEST from prior test). 3. User is on Inventory Setup → Unit of Measure.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Note an existing UOM Name and Abbreviation from the list (e.g., Each / EA)."
+          },
+          {
+            "step": 2,
+            "description": "Click + NEW UOM."
+          },
+          {
+            "step": 3,
+            "description": "Enter the same Name as an existing UOM; provide a unique Abbreviation; select Type; click CREATE UOM."
+          },
+          {
+            "step": 4,
+            "description": "Observe validation/error handling."
+          },
+          {
+            "step": 5,
+            "description": "Retry with a unique Name but duplicate Abbreviation of an existing UOM; select Type; click CREATE UOM."
+          }
+        ],
+        "rawTestData": "Duplicate Name: Name=Each, Abbreviation=EA2, Type=Each | Duplicate Abbreviation: Name=Each2, Abbreviation=EA, Type=Each",
+        "expectedResult": "System prevents duplicate Name and/or Abbreviation with clear validation; existing UOM rows remain intact.",
+        "testData": {
+          "duplicateName": {
+            "name": "Each",
+            "abbreviation": "EA2",
+            "type": "Each"
+          },
+          "duplicateAbbreviation": {
+            "name": "Each2",
+            "abbreviation": "EA",
+            "type": "Each"
+          }
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-287_007",
+        "sourceTestCaseId": "TC-RCSP-287-007",
+        "module": "Inventory Setup > Unit of Measure",
+        "testName": "Verify whether Cancel and close (X) on the New Unit Of Measure modal under Inventory Setup → Unit of Measure discard unsaved input and do not add a UOM to the list (edge)",
+        "description": "Edge – Cancel and X discard unsaved data (TC-UOM-007).",
+        "preCondition": "1. User is logged into IMS Backoffice as Admin. 2. User is on Inventory Setup → Unit of Measure. 3. Note current UOM list count/last row before opening the modal.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Click + NEW UOM."
+          },
+          {
+            "step": 2,
+            "description": "Enter Name = TEMP_CANCEL, Abbreviation = TC, select Type = Count."
+          },
+          {
+            "step": 3,
+            "description": "Click CANCEL."
+          },
+          {
+            "step": 4,
+            "description": "Verify modal closes and TEMP_CANCEL is not present in the list."
+          },
+          {
+            "step": 5,
+            "description": "Click + NEW UOM again; enter Name = TEMP_X, Abbreviation = TX, select Type = Weight."
+          },
+          {
+            "step": 6,
+            "description": "Click the X (close) icon on the modal."
+          },
+          {
+            "step": 7,
+            "description": "Verify TEMP_X is not present in the list."
+          }
+        ],
+        "rawTestData": "Cancel data: Name=TEMP_CANCEL, Abbreviation=TC, Type=Count | Close (X) data: Name=TEMP_X, Abbreviation=TX, Type=Weight",
+        "expectedResult": "Cancel and X close the modal without creating UOMs; unsaved values are discarded; list remains unchanged.",
+        "testData": {
+          "cancelData": {
+            "name": "TEMP_CANCEL",
+            "abbreviation": "TC",
+            "type": "Count"
+          },
+          "closeXData": {
+            "name": "TEMP_X",
+            "abbreviation": "TX",
+            "type": "Weight"
+          }
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-287_008",
+        "sourceTestCaseId": "TC-RCSP-287-008",
+        "module": "Inventory Setup > Unit of Measure",
+        "testName": "Verify whether Name and Abbreviation field edge inputs (leading/trailing spaces, max length, special characters, lowercase abbreviation) are handled correctly on create from Units of Measure under Inventory Setup (edge)",
+        "description": "Edge – Spaces, max length, special chars, lowercase abbr (TC-UOM-008).",
+        "preCondition": "1. User is logged into IMS Backoffice as Admin. 2. User is on Inventory Setup → Unit of Measure. 3. Test values used below do not conflict with existing UOMs (adjust if needed).",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Click + NEW UOM."
+          },
+          {
+            "step": 2,
+            "description": "Enter Name with leading/trailing spaces; observe trim/accept behavior."
+          },
+          {
+            "step": 3,
+            "description": "Attempt create with very long Name/Abbreviation; observe validation."
+          },
+          {
+            "step": 4,
+            "description": "Attempt create with special characters in Name/Abbreviation."
+          },
+          {
+            "step": 5,
+            "description": "Attempt create with lowercase abbreviation."
+          }
+        ],
+        "rawTestData": "Spaces: Name=\"  SPACEUOM  \", Abbreviation=SP, Type=Count | Long text: over-max Name/Abbreviation | Special chars: Name=Test@UOM, Abbreviation=T#1, Type=Each | Lowercase abbr: Name=PoundEdge, Abbreviation=lb, Type=Weight",
+        "expectedResult": "Spaces trimmed or rejected per design; over-max blocked/truncated; special chars accepted or validated without UI break; lowercase abbr saved as designed.",
+        "testData": {
+          "spaces": {
+            "name": "  SPACEUOM  ",
+            "abbreviation": "SP",
+            "type": "Count",
+            "expectedName": "SPACEUOM"
+          },
+          "longText": {
+            "name": "LONGLONGLONGLONGLONGLONGLONGLONGLONGLONGLONGLONGLONGLONGLONGLONG",
+            "abbreviation": "LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL",
+            "type": "Count"
+          },
+          "specialChars": {
+            "name": "Test@UOM",
+            "abbreviation": "T#1",
+            "type": "Each"
+          },
+          "lowercaseAbbr": {
+            "name": "PoundEdge",
+            "abbreviation": "lb",
+            "type": "Weight"
+          }
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-287_009",
+        "sourceTestCaseId": "TC-RCSP-287-009",
+        "module": "Inventory Setup > Unit of Measure",
+        "testName": "Verify whether existing Units of Measure remain unchanged on the list page under Inventory Setup → Unit of Measure after create/edit/cancel flows, and whether page refresh retains the latest TESTTEST record (regression/edge)",
+        "description": "Regression/Edge – Existing list intact + refresh retains TESTTEST (TC-UOM-009).",
+        "preCondition": "1. User is logged into IMS Backoffice as Admin. 2. Baseline list includes standard UOMs (e.g., Kilogram/KG, Each/EA, Gram/G) and the updated TESTTEST UOM from prior tests. 3. User is on Inventory Setup → Unit of Measure.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Capture baseline for several existing UOMs including standard rows and TESTTEST."
+          },
+          {
+            "step": 2,
+            "description": "Open + NEW UOM, enter partial data, click Cancel."
+          },
+          {
+            "step": 3,
+            "description": "Open Edit (pencil) on TESTTEST, change a field, then Cancel without saving (if Cancel exists on edit)."
+          },
+          {
+            "step": 4,
+            "description": "Refresh the browser and re-open Units of Measure if needed."
+          },
+          {
+            "step": 5,
+            "description": "Verify baseline UOMs and TESTTEST remain correct."
+          }
+        ],
+        "rawTestData": "Baseline samples: Kilogram/KG, Each/EA, Gram/G | Updated UOM: TESTTEST / TESTTEST | Actions: Cancel create/edit, browser refresh",
+        "expectedResult": "Existing standard UOMs unchanged after cancel flows; after refresh, TESTTEST remains visible with correct values; no unexpected duplicates or missing rows.",
+        "testData": {
+          "baselineUoms": [
+            "Kilogram",
+            "Each",
+            "Gram"
+          ],
+          "retainedUom": {
+            "name": "TESTTEST",
+            "abbreviation": "TESTTEST"
+          },
+          "cancelPartial": {
+            "name": "TEMP_REGRESS",
+            "abbreviation": "TR",
+            "type": "Count"
+          }
+        }
+      }
+    ]
+  }
+}

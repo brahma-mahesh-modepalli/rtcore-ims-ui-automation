@@ -1,0 +1,339 @@
+{
+  "RCSP-133": {
+    "scenarioId": "RCSP-133",
+    "epic": "EPIC-RCSP-5",
+    "feature": "Operations – Sales Transactions (Service Bus → IMS)",
+    "sourceSheet": "Sales Transactions TC",
+    "description": "Optimised set (max 5) for Sales transaction visibility after QA Service Bus consumption into IMS. Focuses on post-load UI availability on Operations → Sales → Sales Transactions. Refund processing, void lines, delete/remove with inventory reversal, and deep Service Bus consumer harness details are assumed covered by other stories.",
+    "commonData": {
+      "prerequisites": [
+        "User is logged into Whataburger IMS Backoffice with access to Operations → Sales",
+        "Sales transaction messages have been published to the QA Service Bus and processed by IMS (or processing is already complete for the test day)",
+        "Store/unit context is selected (e.g., WB Unit 1034)",
+        "Application URL is accessible (e.g., qa-backoffice.wbhq.com/sales)"
+      ],
+      "userRole": "admin",
+      "hierarchy": {
+        "region": "1700 San Antonio 4126314",
+        "market": "1708 E Central SA 4126393",
+        "store": "WB Unit 1034"
+      },
+      "menuPath": {
+        "section": "Operations",
+        "item": "Sales",
+        "urlSegment": "/sales"
+      },
+      "serviceBus": {
+        "namespace": "sb://qa-enterprise-events.servicebus.windows.net",
+        "topic": "edh_sales_transactions",
+        "subscriber": "ims"
+      },
+      "labels": {
+        "pageTitle": "Sales Transactions",
+        "pageSubtitlePattern": "review posted sales|refunds|voids|sales transactions",
+        "mealPeriodAll": "All meal periods",
+        "clearFilters": "Clear filters"
+      },
+      "summaryCards": [
+        "Transactions",
+        "Net Revenue",
+        "Refunds In View",
+        "Voided Lines"
+      ],
+      "viewTabs": [
+        "All",
+        "Sales",
+        "Refunds",
+        "Deleted"
+      ],
+      "columnHeaders": [
+        "SALE ID",
+        "TYPE",
+        "TIMESTAMP",
+        "MEAL PERIOD",
+        "LINES",
+        "TOTAL",
+        "STATUS"
+      ],
+      "expectedSaleType": "Sale",
+      "expectedSaleStatus": "Posted",
+      "emptyBusinessDay": "01/01/2020",
+      "unloadedSaleId": "SAL-NOTLOADED-99999",
+      "edgeMealPeriod": "Late Night"
+    },
+    "testCases": [
+      {
+        "testCaseId": "TC_RCSP-133_001",
+        "sourceTestCaseId": "TC-RCSP-133-001",
+        "module": "Operations > Sales > Sales Transactions",
+        "testName": "Verify whether the Sales Transactions page under the Operations menu loads successfully after sales data has been consumed from the QA Service Bus, with summary cards, filters, tabs, and grid displayed without UI errors",
+        "description": "Page load + UI stability after Service Bus sales data consumption (covers TC-001, TC-008 + AC5).",
+        "preCondition": "1. User is logged into Whataburger IMS Backoffice with access to Operations → Sales. 2. Sales transaction messages have been published to the QA Service Bus and processed by IMS (or processing is already complete for the test day). 3. Store/unit context is selected (e.g., WB Unit 1034). 4. Application URL is accessible (e.g., qa-backoffice.wbhq.com/sales).",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Launch IMS Backoffice and log in with valid credentials."
+          },
+          {
+            "step": 2,
+            "description": "Confirm store context in the header/sidebar (e.g., WB Unit 1034 / Store 1034)."
+          },
+          {
+            "step": 3,
+            "description": "From the left sidebar, locate the Operations section and click Sales."
+          },
+          {
+            "step": 4,
+            "description": "Observe the Sales Transactions page load (title, description, summary cards, tabs, filters, and transaction grid)."
+          },
+          {
+            "step": 5,
+            "description": "Check browser console / UI for errors, blank panels, broken layout, or overlapping elements."
+          },
+          {
+            "step": 6,
+            "description": "Confirm summary cards (Transactions, Net Revenue, Refunds In View, Voided Lines) render with values."
+          }
+        ],
+        "rawTestData": "Menu path: Sidebar → Operations → Sales | URL: /sales | Page: Sales Transactions | Unit: WB Unit 1034 | Service Bus: sb://qa-enterprise-events.servicebus.windows.net | Topic: edh_sales_transactions | Subscriber: ims",
+        "expectedResult": "Sales Transactions page loads successfully without UI errors; title, summary cards, view tabs, Business Day / Meal Period filters, and transaction grid are visible and correctly aligned (AC3, AC5).",
+        "testData": {
+          "pageTitle": "Sales Transactions",
+          "pageSubtitlePattern": "review posted sales|refunds|voids|sales transactions",
+          "summaryCards": [
+            "Transactions",
+            "Net Revenue",
+            "Refunds In View",
+            "Voided Lines"
+          ],
+          "viewTabs": [
+            "All",
+            "Sales",
+            "Refunds",
+            "Deleted"
+          ],
+          "columnHeaders": [
+            "SALE ID",
+            "TYPE",
+            "TIMESTAMP",
+            "MEAL PERIOD",
+            "LINES",
+            "TOTAL",
+            "STATUS"
+          ],
+          "store": "WB Unit 1034"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-133_002",
+        "sourceTestCaseId": "TC-RCSP-133-002",
+        "module": "Operations > Sales > Sales Transactions",
+        "testName": "Verify whether sales transactions for the current business date are displayed correctly on the Sales Transactions page under Operations → Sales after data load from the QA Service Bus into IMS",
+        "description": "Current business date + sales available after Service Bus → IMS DB load (covers TC-002, TC-003 + AC3/AC4).",
+        "preCondition": "1. User is logged into IMS Backoffice with Sales access. 2. Sales data for the current business date has been successfully consumed from QA Service Bus topic edh_sales_transactions (subscriber: ims) and stored in the IMS (RTC) database. 3. User is on Operations → Sales → Sales Transactions. 4. Known expected count/sample Sale IDs exist for the current business date in the test environment.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Navigate to Sidebar → Operations → Sales (Sales Transactions page)."
+          },
+          {
+            "step": 2,
+            "description": "Locate the Business Day filter in the filters section above the grid."
+          },
+          {
+            "step": 3,
+            "description": "Verify the Business Day value defaults to / shows the current business date."
+          },
+          {
+            "step": 4,
+            "description": "Ensure Meal Period is set to \"All meal periods\" (or clear filters if needed)."
+          },
+          {
+            "step": 5,
+            "description": "Ensure the All tab is selected."
+          },
+          {
+            "step": 6,
+            "description": "Observe that sales records for that business date appear in the transaction grid."
+          },
+          {
+            "step": 7,
+            "description": "Cross-check at least 2–3 Sale IDs / totals against known source or expected loaded data."
+          },
+          {
+            "step": 8,
+            "description": "Confirm summary card \"Transactions\" count aligns with the filtered view (as designed)."
+          }
+        ],
+        "rawTestData": "Business Day: Current business date | Meal Period: All meal periods | Tab: All | Expected sample fields: Sale ID (e.g., SAL-xxxxx), Type=Sale, Status=Posted | Source: QA Service Bus → IMS DB → UI",
+        "expectedResult": "Business Day shows current business date; sales records for that date are visible; summary metrics reflect the filtered view; page remains stable (AC1–AC5).",
+        "testData": {
+          "mealPeriod": "All meal periods",
+          "tab": "All",
+          "expectedSaleType": "Sale",
+          "expectedSaleStatus": "Posted",
+          "minimumSaleRows": 1,
+          "store": "WB Unit 1034"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-133_003",
+        "sourceTestCaseId": "TC-RCSP-133-003",
+        "module": "Operations > Sales > Sales Transactions",
+        "testName": "Verify whether each sales transaction row on the Sales Transactions page under Operations → Sales displays complete details (Sale ID, Type, Timestamp, Meal Period, Lines, Total, Status) and whether the Sales tab shows the loaded sales data",
+        "description": "Grid details + Sales tab coverage (covers TC-004, TC-005, TC-006).",
+        "preCondition": "1. User is logged into IMS Backoffice with Sales access. 2. Current business date has at least one posted Sale transaction loaded into IMS. 3. User is on Operations → Sales → Sales Transactions with Business Day = current business date.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Navigate to Sidebar → Operations → Sales."
+          },
+          {
+            "step": 2,
+            "description": "Set/confirm Business Day = current business date; Meal Period = All meal periods."
+          },
+          {
+            "step": 3,
+            "description": "On the All tab, open/inspect the first few transaction rows in the grid."
+          },
+          {
+            "step": 4,
+            "description": "For each sample row, verify columns: SALE ID, TYPE, TIMESTAMP, MEAL PERIOD, LINES, TOTAL, STATUS are populated (not blank)."
+          },
+          {
+            "step": 5,
+            "description": "Click the Sales tab and verify sales transactions remain visible."
+          },
+          {
+            "step": 6,
+            "description": "Optionally click Refunds and Deleted tabs to confirm they do not incorrectly list the same posted Sale rows as sales (per design)."
+          },
+          {
+            "step": 7,
+            "description": "Return to All or Sales tab and confirm data still displays."
+          }
+        ],
+        "rawTestData": "Tab sequence: All → Sales → (optional) Refunds / Deleted | Required columns: SALE ID, TYPE, TIMESTAMP, MEAL PERIOD, LINES, TOTAL, STATUS | Sample expectation: TYPE = Sale, STATUS = Posted | Business Day: Current business date",
+        "expectedResult": "Transaction grid rows show complete details; Sales tab shows loaded sales; posted sales show expected Type/Status; no missing critical column values.",
+        "testData": {
+          "tabSequence": [
+            "All",
+            "Sales",
+            "Refunds",
+            "Deleted"
+          ],
+          "columnHeaders": [
+            "SALE ID",
+            "TYPE",
+            "TIMESTAMP",
+            "MEAL PERIOD",
+            "LINES",
+            "TOTAL",
+            "STATUS"
+          ],
+          "sampleRowCount": 3,
+          "expectedSaleType": "Sale",
+          "expectedSaleStatus": "Posted",
+          "store": "WB Unit 1034"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-133_004",
+        "sourceTestCaseId": "TC-RCSP-133-004",
+        "module": "Operations > Sales > Sales Transactions",
+        "testName": "Verify whether filtering and empty-data scenarios on the Sales Transactions page under Operations → Sales behave correctly for non-current business dates, cleared filters, and meal periods with no matching sales (negative and edge)",
+        "description": "Negative/edge: empty date, clear filters, empty meal period / tabs.",
+        "preCondition": "1. User is logged into IMS Backoffice with Sales access. 2. Current business date has sales data available. 3. At least one past/future business date with no sales (or known empty date) is identifiable in the test environment. 4. User is on Operations → Sales → Sales Transactions.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Navigate to Sidebar → Operations → Sales."
+          },
+          {
+            "step": 2,
+            "description": "Confirm current business date shows sales records (baseline positive check)."
+          },
+          {
+            "step": 3,
+            "description": "Change Business Day to a date with no loaded sales transactions."
+          },
+          {
+            "step": 4,
+            "description": "Observe grid, summary cards, and any empty-state message."
+          },
+          {
+            "step": 5,
+            "description": "Click \"Clear filters\" and verify filters reset to the designed default (including current business date if applicable)."
+          },
+          {
+            "step": 6,
+            "description": "On current business date, change Meal Period to a period with no matching rows (if available) and observe results."
+          },
+          {
+            "step": 7,
+            "description": "Switch to Refunds / Deleted tabs when no refunds/deletes exist in view and observe empty handling."
+          },
+          {
+            "step": 8,
+            "description": "Set an invalid or out-of-range date only if the date picker allows free entry; otherwise use farthest empty date as edge."
+          }
+        ],
+        "rawTestData": "Positive baseline: Current business date with sales | Negative: Business date with zero sales | Edge: Meal period with no matches; Refunds/Deleted with 0 in view | Action: Clear filters | Unit: WB Unit 1034",
+        "expectedResult": "Empty business date shows empty state / zero transactions without crash; Clear filters restores defaults; empty meal period / Refunds / Deleted views do not show false sales rows; returning to current date shows loaded sales again.",
+        "testData": {
+          "emptyBusinessDay": "01/01/2020",
+          "edgeMealPeriod": "Late Night",
+          "emptyTabs": [
+            "Refunds",
+            "Deleted"
+          ],
+          "store": "WB Unit 1034"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-133_005",
+        "sourceTestCaseId": "TC-RCSP-133-005",
+        "module": "Operations > Sales > Sales Transactions",
+        "testName": "Verify whether sales transactions loaded from the QA Service Bus remain visible on the Sales Transactions page under Operations → Sales after browser refresh, and whether data does not appear when messages were not consumed or failed to load (regression and negative)",
+        "description": "Refresh persistence + not-loaded negative (covers TC-007 + AC1/AC2 integrity via UI).",
+        "preCondition": "1. User is logged into IMS Backoffice with Sales access. 2. Positive path: Sales messages for the current business date were successfully consumed from topic edh_sales_transactions (subscriber ims) and stored in IMS DB; records are visible on Sales Transactions. 3. Negative path (if environment allows): a controlled scenario where no message was published / consumer failed / data not loaded for a known Sale ID or date. 4. Network is stable enough to complete a full page refresh.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Navigate to Sidebar → Operations → Sales."
+          },
+          {
+            "step": 2,
+            "description": "Set Business Day to current business date; note Sale IDs, transaction count, and a sample Total from the grid/summary."
+          },
+          {
+            "step": 3,
+            "description": "Refresh the browser page (F5 / Reload)."
+          },
+          {
+            "step": 4,
+            "description": "After reload, re-open Operations → Sales if needed and confirm Business Day and grid data."
+          },
+          {
+            "step": 5,
+            "description": "Compare Sale IDs / Transactions count / sample totals with the pre-refresh baseline."
+          },
+          {
+            "step": 6,
+            "description": "Negative (as applicable): For a Sale ID or business date known NOT to be loaded into IMS, search/filter and confirm the record is absent."
+          },
+          {
+            "step": 7,
+            "description": "Confirm no duplicate rows appear for the same Sale ID after refresh (edge/data integrity)."
+          }
+        ],
+        "rawTestData": "Pre-refresh baseline: Sale IDs, Transactions summary count, sample Totals | Business Day: Current business date | Action: Full page refresh | Negative: Unloaded / failed-consume Sale ID or empty date | Source: Service Bus topic edh_sales_transactions → IMS DB → UI",
+        "expectedResult": "After refresh, Sales Transactions loads successfully; previously loaded sales remain with consistent identifiers/counts; unloaded records do not appear; no duplicate Sale IDs or corrupted summaries (AC2–AC5).",
+        "testData": {
+          "unloadedSaleId": "SAL-NOTLOADED-99999",
+          "store": "WB Unit 1034"
+        }
+      }
+    ]
+  }
+}
