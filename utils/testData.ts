@@ -414,6 +414,74 @@ export interface Rcsp220JsonData {
   testCases: Rcsp220TestCase[];
 }
 
+/** RCSP-44 – IMS-to-IMS Transfers (extends RCSP-220 common shape). */
+export interface Rcsp44HierarchyData extends Rcsp220HierarchyData {
+  nonImsStore?: string;
+}
+
+export interface Rcsp44CommonData extends Omit<Rcsp220CommonData, 'hierarchy'> {
+  hierarchy: Rcsp44HierarchyData;
+}
+
+export type Rcsp44TestCaseData = Record<string, unknown>;
+
+export type Rcsp44TestCase = TestCaseJsonData<Rcsp44TestCaseData> & {
+  module?: string;
+  preCondition?: string;
+  expectedResult?: string;
+  rawTestData?: string;
+};
+
+export interface Rcsp44JsonData {
+  scenarioId: string;
+  epic: string;
+  feature: string;
+  sourceSheet?: string;
+  description?: string;
+  commonData: Rcsp44CommonData;
+  testCases: Rcsp44TestCase[];
+}
+
+/** RCSP-45 – Optimized IMS → Non-IMS Transfers. */
+export interface Rcsp45HierarchyData {
+  region: string;
+  market: string;
+  sourceStore: string;
+  nonImsDestination: string;
+  imsDestination: string;
+  nonImsBaselineStore: string;
+}
+
+export interface Rcsp45CommonData {
+  prerequisites?: string[];
+  userRole?: string;
+  hierarchy: Rcsp45HierarchyData;
+  item: Rcsp220ItemData;
+  transfer: Rcsp220TransferCommonData;
+  statusTabs: string[];
+  columnHeaders: string[];
+  buttons: Rcsp220CommonData['buttons'];
+}
+
+export type Rcsp45TestCaseData = Record<string, unknown>;
+
+export type Rcsp45TestCase = TestCaseJsonData<Rcsp45TestCaseData> & {
+  module?: string;
+  preCondition?: string;
+  expectedResult?: string;
+  rawTestData?: string;
+};
+
+export interface Rcsp45JsonData {
+  scenarioId: string;
+  epic: string;
+  feature: string;
+  sourceSheet?: string;
+  description?: string;
+  commonData: Rcsp45CommonData;
+  testCases: Rcsp45TestCase[];
+}
+
 export interface Rcsp169HierarchyData {
   region: string;
   market: string;

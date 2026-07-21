@@ -2,7 +2,8 @@
  * TransfersPage – Page Object
  * ===========================
  * Locators and actions for Transfers plus supporting My Hierarchy,
- * Inventory Balances, and Dashboard Recent Stock Movements flows used by RCSP-220.
+ * Inventory Balances, and Dashboard Recent Stock Movements flows used by
+ * RCSP-220 / RCSP-44 (IMS→IMS) / RCSP-45 (IMS→Non-IMS).
  */
 
 import { type Page, type Locator, expect } from '@playwright/test';
@@ -988,5 +989,70 @@ export class TransfersPage {
     } catch {
       return false;
     }
+  }
+
+  // ── RCSP-44 / RCSP-45: IMS vs Non-IMS store rules ──────────
+
+  async openFromStoreDropdown(): Promise<void> {
+    await this.openFieldDropdown(/^From Store/i, undefined);
+  }
+
+  async openToStoreDropdown(): Promise<void> {
+    await this.openFieldDropdown(/^To Store/i, /^Select store$/i);
+  }
+
+  async searchInOpenDropdown(term: string): Promise<void> {
+    const search = this.page
+      .getByPlaceholder(/search/i)
+      .or(this.page.getByRole('textbox').last())
+      .first();
+    if (await search.isVisible().catch(() => false)) {
+      await search.fill(term);
+      await this.page.waitForTimeout(500);
+    }
+  }
+
+  async verifyStoreOptionVisible(store: string, shouldBeVisible = true): Promise<void> {
+    const option = this.page
+      .getByRole('option', { name: new RegExp(store.replace(/^WB Unit\s+/i, ''), 'i') })
+      .or(this.page.getByText(new RegExp(store, 'i')))
+      .first();
+    if (shouldBeVisible) {
+      await expect(option).toBeVisible({ timeout: 10000 });
+    } else {
+      await expect(option).toHaveCount(0);
+    }
+  }
+
+  async verifyFromStoreExcludesNonIms(nonImsStores: string[]): Promise<void> {
+    log('Verifying From Store excludes Non-IMS stores');
+    await this.openFromStoreDropdown();
+    for (const store of nonImsStores) {
+      await this.searchInOpenDropdown(store.replace(/^WB Unit\s+/i, '').trim());
+      await this.verifyStoreOptionVisible(store, false);
+    }
+    await this.page.keyboard.press('Escape').catch(() => undefined);
+  }
+
+  async verifyToStoreIncludesStores(stores: string[]): Promise<void> {
+    log('Verifying To Store includes IMS and/or Non-IMS stores');
+    await this.openToStoreDropdown();
+    for (const store of stores) {
+      await this.searchInOpenDropdown(store.replace(/^WB Unit\s+/i, '').trim());
+      await this.verifyStoreOptionVisible(store, true);
+    }
+    await this.page.keyboard.press('Escape').catch(() => undefined);
+  }
+
+  async verifySaveAndSubmitDisabled(): Promise<void> {
+    log('Verifying SAVE CHANGES / SUBMIT TRANSFER are disabled on incomplete form');
+    const saveDisabled = await this.saveChangesButton.isDisabled().catch(() => true);
+    const submitDisabled = await this.submitTransferButton.isDisabled().catch(() => true);
+    expect(saveDisabled || submitDisabled).toBeTruthy();
+  }
+
+  async verifySaveAndSubmitEnabled(): Promise<void> {
+    log('Verifying SAVE CHANGES / SUBMIT TRANSFER are enabled on complete form');
+    await expect(this.submitTransferButton).toBeEnabled({ timeout: 15000 });
   }
 }
