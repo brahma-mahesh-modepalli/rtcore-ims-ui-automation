@@ -436,4 +436,41 @@ export class UnitOfMeasurePage {
       await this.verifyPageLoaded();
     }
   }
+
+  // ── RCSP-310: Delete removed ──────────────────────────────
+
+  async verifyDeleteControlsAbsentOnAllRows(): Promise<void> {
+    log('Verifying trash/delete icons are absent on all UOM rows');
+    const rows = this.uomTable.getByRole('row').filter({
+      hasNot: this.page.getByRole('columnheader'),
+    });
+    const count = await rows.count();
+    expect(count).toBeGreaterThan(0);
+
+    for (let i = 0; i < count; i++) {
+      const row = rows.nth(i);
+      const deleteBtn = row
+        .getByRole('button', { name: /delete|remove|trash/i })
+        .or(row.locator('[aria-label*="Delete" i], [title*="Delete" i], [aria-label*="trash" i]'));
+      await expect(deleteBtn).toHaveCount(0);
+    }
+    log('✓ No delete/trash controls on UOM rows');
+  }
+
+  async verifyDeleteConfirmationCannotOpen(): Promise<void> {
+    log('Verifying delete confirmation modal cannot be opened from UOM UI');
+    const deleteDialog = this.page.getByRole('dialog').filter({
+      hasText: /delete|remove.*unit|confirm.*delete/i,
+    });
+    await expect(deleteDialog).toHaveCount(0);
+  }
+
+  async verifyEditRemainsAvailable(uomName: string): Promise<void> {
+    log(`Verifying pencil/edit remains available for UOM: ${uomName}`);
+    await this.verifyEditIconOnRow(uomName);
+    await this.openEditUom(uomName);
+    await expect(this.modal).toBeVisible({ timeout: 10000 });
+    await this.cancelModal().catch(async () => this.closeModalViaX());
+    await this.verifyModalClosed();
+  }
 }

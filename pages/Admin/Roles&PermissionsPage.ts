@@ -431,4 +431,101 @@ export class RolesAndPermissionsPage {
     // Fallback: look for role chips / list on users page
     return roleOption.isVisible().catch(() => false);
   }
+
+  // ── RCSP-310: Inventory permissions catalog ───────────────
+
+  async openPermissionsCatalogTab(): Promise<void> {
+    log('Selecting Permissions Catalog tab');
+    await this.permissionsCatalogTab.click().catch(() => undefined);
+    await this.page.waitForTimeout(400);
+  }
+
+  async filterPermissions(term: string): Promise<void> {
+    log(`Filtering permissions for: ${term}`);
+    const filterInput = this.page
+      .getByPlaceholder(/filter permissions|search permissions|search/i)
+      .or(this.page.getByRole('textbox', { name: /filter|search/i }))
+      .first();
+    await expect(filterInput).toBeVisible({ timeout: 15000 });
+    await filterInput.fill('');
+    await filterInput.fill(term);
+    await this.page.waitForTimeout(500);
+  }
+
+  async expandPermissionCategory(category: string): Promise<void> {
+    log(`Expanding permission category: ${category}`);
+    const categoryControl = this.page
+      .getByRole('button', { name: new RegExp(category, 'i') })
+      .or(this.page.getByText(new RegExp(`^${category}$`, 'i')))
+      .first();
+    if (await categoryControl.isVisible().catch(() => false)) {
+      await categoryControl.click();
+      await this.page.waitForTimeout(400);
+    }
+  }
+
+  async verifyInventoryPermissionVisible(options: {
+    displayName: string;
+    permissionKey: string;
+  }): Promise<void> {
+    log(
+      `Verifying Inventory permission: ${options.displayName} (${options.permissionKey})`,
+    );
+    await expect(
+      this.page.getByText(new RegExp(options.displayName, 'i')).first(),
+    ).toBeVisible({ timeout: 15000 });
+    await expect(
+      this.page.getByText(options.permissionKey, { exact: false }).first(),
+    ).toBeVisible({ timeout: 10000 });
+  }
+
+  async verifyInventoryPermissionsInCatalog(
+    permissions: Array<{ displayName: string; permissionKey: string }>,
+  ): Promise<void> {
+    await this.openPermissionsCatalogTab();
+    await this.expandPermissionCategory('Inventory');
+
+    for (const permission of permissions) {
+      await this.filterPermissions(permission.permissionKey);
+      await this.verifyInventoryPermissionVisible(permission);
+      await this.filterPermissions(permission.displayName);
+      await this.verifyInventoryPermissionVisible(permission);
+    }
+    log('✓ All Inventory page-level permissions verified in catalog');
+  }
+
+  async verifyAdministratorHasInventoryPermissions(
+    roleName: string,
+    permissions: Array<{ displayName: string; permissionKey: string }>,
+  ): Promise<void> {
+    log(`Verifying ${roleName} has Inventory permissions granted`);
+    await this.selectRolesTab();
+    await this.openManagePermissions(roleName);
+    await this.expandPermissionCategory('Inventory');
+
+    for (const permission of permissions) {
+      await this.filterPermissions(permission.permissionKey).catch(async () => {
+        await this.filterPermissions(permission.displayName);
+      });
+      await expect(
+        this.page
+          .getByText(new RegExp(permission.displayName, 'i'))
+          .or(this.page.getByText(permission.permissionKey, { exact: false }))
+          .first(),
+      ).toBeVisible({ timeout: 15000 });
+
+      // Granted/selected: checkbox checked or selected chip/state
+      const row = this.page
+        .locator('label, div, tr, li')
+        .filter({ hasText: new RegExp(permission.permissionKey, 'i') })
+        .first();
+      const checkbox = row.getByRole('checkbox');
+      if (await checkbox.isVisible().catch(() => false)) {
+        await expect(checkbox).toBeChecked();
+      }
+    }
+
+    await this.cancelOrReturnFromRoleDetail();
+    log(`✓ ${roleName} Inventory permissions verified`);
+  }
 }

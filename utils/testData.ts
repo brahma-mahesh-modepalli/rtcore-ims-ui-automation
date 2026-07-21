@@ -841,6 +841,76 @@ export interface Rcsp287JsonData {
   testCases: Rcsp287TestCase[];
 }
 
+export interface Rcsp310MenuPathData {
+  inventorySection: string;
+  inventorySetupSection: string;
+  foodCostSection: string;
+  inventoryBalances: string;
+  storeInventoryItems: string;
+  storeItemsUrl: string;
+  balancesUrl: string;
+  uomUrl: string;
+}
+
+export interface Rcsp310PermissionData {
+  displayName: string;
+  permissionKey: string;
+}
+
+export interface Rcsp310RestrictedUserData {
+  username: string;
+  password: string;
+  note?: string;
+}
+
+export interface Rcsp310CommonData {
+  prerequisites?: string[];
+  userRole?: string;
+  menuPath: Rcsp310MenuPathData;
+  inventoryPermissions: Rcsp310PermissionData[];
+  administratorRole: string;
+  nonLockedRole: string;
+  stores: {
+    storeA: string;
+    storeB: string;
+  };
+  search: {
+    validItemName: string;
+    validSku: string;
+    invalidQuery: string;
+  };
+  uomSample: {
+    name: string;
+    abbreviation: string;
+  };
+  restrictedUsers: {
+    neitherInventoryRead: Rcsp310RestrictedUserData;
+    balancesOnly: Rcsp310RestrictedUserData;
+    storeItemsReadOnly: Rcsp310RestrictedUserData;
+    storeItemsManage: Rcsp310RestrictedUserData;
+  };
+}
+
+export type Rcsp310TestCaseData = Record<string, unknown>;
+
+export type Rcsp310TestCase = TestCaseJsonData<Rcsp310TestCaseData> & {
+  sourceTestCaseId?: string;
+  module?: string;
+  preCondition?: string;
+  expectedResult?: string;
+  rawTestData?: string;
+};
+
+export interface Rcsp310JsonData {
+  scenarioId: string;
+  epic: string;
+  feature: string;
+  sourceSheet?: string;
+  description?: string;
+  commonData: Rcsp310CommonData;
+  testCases: Rcsp310TestCase[];
+}
+
 const databaseReader = new DatabaseReader();
 
 function isRecord(value: unknown): value is Record<string, unknown> {

@@ -1,0 +1,457 @@
+{
+  "RCSP-310": {
+    "scenarioId": "RCSP-310",
+    "epic": "EPIC-RCSP-1",
+    "feature": "INVENTORY sidebar relocation, permissions, Store Inventory Items, UOM delete removal",
+    "sourceSheet": "Inventory AC Test Cases",
+    "description": "Optimised set (9 TCs) covering INVENTORY sidebar section (AC1), Roles & Permissions inventory keys + admin grant (AC2), Store Inventory Items pencil gating / global store switcher / search (AC2/AC4), and Units of Measure delete removal (AC5).",
+    "commonData": {
+      "prerequisites": [
+        "User can open Whataburger IMS backoffice",
+        "Migration for inventory permissions has been applied in the environment (or QA already migrated)",
+        "At least two stores available in Topbar switcher for store-scope tests"
+      ],
+      "userRole": "admin",
+      "menuPath": {
+        "inventorySection": "INVENTORY",
+        "inventorySetupSection": "INVENTORY SETUP",
+        "foodCostSection": "FOOD COST",
+        "inventoryBalances": "Inventory Balances",
+        "storeInventoryItems": "Store Inventory Items",
+        "storeItemsUrl": "/inventory/store-items",
+        "balancesUrl": "/inventory/balances",
+        "uomUrl": "/inventory/uom"
+      },
+      "inventoryPermissions": [
+        {
+          "displayName": "View Inventory Balances",
+          "permissionKey": "inventory_balances:read"
+        },
+        {
+          "displayName": "View Store Inventory Items",
+          "permissionKey": "store_items:read"
+        },
+        {
+          "displayName": "Manage Store Inventory Items",
+          "permissionKey": "store_items:update"
+        }
+      ],
+      "administratorRole": "Administrator",
+      "nonLockedRole": "Operations Admin",
+      "stores": {
+        "storeA": "WB Unit 1034",
+        "storeB": "WB Unit 1025"
+      },
+      "search": {
+        "validItemName": "SPLENDA",
+        "validSku": "",
+        "invalidQuery": "ZZZ-NO-MATCH"
+      },
+      "uomSample": {
+        "name": "Kilogram",
+        "abbreviation": "KG"
+      },
+      "restrictedUsers": {
+        "neitherInventoryRead": {
+          "username": "",
+          "password": "",
+          "note": "Optional: set when a Role A user (no inventory_balances:read / store_items:read) is available"
+        },
+        "balancesOnly": {
+          "username": "",
+          "password": "",
+          "note": "Optional: Role B – only inventory_balances:read"
+        },
+        "storeItemsReadOnly": {
+          "username": "",
+          "password": "",
+          "note": "Optional: store_items:read only (no update)"
+        },
+        "storeItemsManage": {
+          "username": "",
+          "password": "",
+          "note": "Optional: store_items:read + store_items:update"
+        }
+      }
+    },
+    "testCases": [
+      {
+        "testCaseId": "TC_RCSP-310_001",
+        "sourceTestCaseId": "TC-INV-001",
+        "module": "Navigation / Sidebar",
+        "testName": "Verify whether the left navigation shows a new collapsible INVENTORY section between FOOD COST and INVENTORY SETUP, containing exactly Inventory Balances and Store Inventory Items, and that those two items are no longer listed under INVENTORY SETUP",
+        "description": "AC1 — INVENTORY sidebar section structure & relocation.",
+        "preCondition": "User is logged in with at least one of inventory_balances:read or store_items:read; user can open the Whataburger IMS backoffice.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Launch the application and log in."
+          },
+          {
+            "step": 2,
+            "description": "Locate the left sidebar."
+          },
+          {
+            "step": 3,
+            "description": "Identify the FOOD COST section and the INVENTORY SETUP section."
+          },
+          {
+            "step": 4,
+            "description": "Confirm a collapsible INVENTORY section exists between them."
+          },
+          {
+            "step": 5,
+            "description": "Expand INVENTORY and note the child menu items."
+          },
+          {
+            "step": 6,
+            "description": "Expand INVENTORY SETUP and search for Inventory Balances and Store Inventory Items."
+          },
+          {
+            "step": 7,
+            "description": "Click each INVENTORY child item and confirm the correct pages open."
+          }
+        ],
+        "rawTestData": "User with inventory read access; browsers: Chrome (primary)",
+        "expectedResult": "INVENTORY appears only between FOOD COST and INVENTORY SETUP; exactly two items: Inventory Balances and Store Inventory Items; neither under INVENTORY SETUP; navigation works.",
+        "testData": {
+          "inventoryChildren": [
+            "Inventory Balances",
+            "Store Inventory Items"
+          ]
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-310_002",
+        "sourceTestCaseId": "TC-INV-002",
+        "module": "Navigation / Sidebar – Permissions (Negative)",
+        "testName": "Verify whether the left navigation INVENTORY section is completely hidden when the logged-in user has neither inventory_balances:read nor store_items:read",
+        "description": "AC1 — Hidden without read permissions (negative).",
+        "preCondition": "A non-admin test role exists with no inventory_balances:read and no store_items:read; test user is assigned that role.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Log in as the restricted user."
+          },
+          {
+            "step": 2,
+            "description": "Inspect the left sidebar between FOOD COST and INVENTORY SETUP."
+          },
+          {
+            "step": 3,
+            "description": "Confirm INVENTORY is not visible."
+          },
+          {
+            "step": 4,
+            "description": "Attempt direct URL access to Inventory Balances and Store Inventory Items pages."
+          },
+          {
+            "step": 5,
+            "description": "Log out and log in as a user who has only one of the two read permissions; confirm INVENTORY becomes visible."
+          }
+        ],
+        "rawTestData": "Role A: neither permission; Role B: only inventory_balances:read; Role C: only store_items:read",
+        "expectedResult": "For Role A, INVENTORY is hidden and direct page access denied; for Role B or C, INVENTORY is visible.",
+        "testData": {
+          "storeItemsUrl": "/inventory/store-items",
+          "balancesUrl": "/inventory/balances"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-310_003",
+        "sourceTestCaseId": "TC-INV-003",
+        "module": "Roles & Permissions",
+        "testName": "Verify whether the Roles & Permissions catalog under the Inventory category lists the three page-level permissions: View Inventory Balances (inventory_balances:read), View Store Inventory Items (store_items:read), and Manage Store Inventory Items (store_items:update)",
+        "description": "AC2 — Permissions visible in Roles & Permissions.",
+        "preCondition": "User with access to Admin → Roles & Permissions; migration for these permissions has been applied.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Navigate to Admin → Roles & Permissions."
+          },
+          {
+            "step": 2,
+            "description": "Open permissions for a non-locked role (or use Permissions Catalog / filter)."
+          },
+          {
+            "step": 3,
+            "description": "Expand the Inventory category."
+          },
+          {
+            "step": 4,
+            "description": "Use Filter permissions... to search each permission name/key."
+          },
+          {
+            "step": 5,
+            "description": "Confirm display name and permission key for all three."
+          }
+        ],
+        "rawTestData": "Search: Inventory Balances, Store Inventory Items, inventory_balances:read, store_items:read, store_items:update",
+        "expectedResult": "All three permissions appear under Inventory with correct labels and keys.",
+        "testData": {
+          "category": "Inventory",
+          "permissions": [
+            {
+              "displayName": "View Inventory Balances",
+              "permissionKey": "inventory_balances:read"
+            },
+            {
+              "displayName": "View Store Inventory Items",
+              "permissionKey": "store_items:read"
+            },
+            {
+              "displayName": "Manage Store Inventory Items",
+              "permissionKey": "store_items:update"
+            }
+          ]
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-310_004",
+        "sourceTestCaseId": "TC-INV-004",
+        "module": "Roles & Permissions / Migration",
+        "testName": "Verify whether running prisma migrate deploy applies the inventory permissions migration and automatically grants all three new permissions to the Administrator role",
+        "description": "AC2 — prisma migrate deploy grants admin (verified via UI post-migration).",
+        "preCondition": "QA env already migrated (or migration deploy completed); ability to verify admin role permission assignments.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Confirm migration is applied in QA (or via prisma migrate deploy)."
+          },
+          {
+            "step": 2,
+            "description": "Log in as Administrator."
+          },
+          {
+            "step": 3,
+            "description": "Open Roles & Permissions → Administrator permissions modal."
+          },
+          {
+            "step": 4,
+            "description": "Expand Inventory and filter/search for the three new permissions."
+          },
+          {
+            "step": 5,
+            "description": "Confirm each is granted/selected for Administrator."
+          }
+        ],
+        "rawTestData": "Admin role; permissions: inventory_balances:read, store_items:read, store_items:update",
+        "expectedResult": "Administrator has all three permissions selected (consistent with locked-admin all-granted behavior).",
+        "testData": {
+          "roleName": "Administrator",
+          "permissions": [
+            {
+              "displayName": "View Inventory Balances",
+              "permissionKey": "inventory_balances:read"
+            },
+            {
+              "displayName": "View Store Inventory Items",
+              "permissionKey": "store_items:read"
+            },
+            {
+              "displayName": "Manage Store Inventory Items",
+              "permissionKey": "store_items:update"
+            }
+          ]
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-310_005",
+        "sourceTestCaseId": "TC-INV-005",
+        "module": "Store Inventory Items – Permission UI",
+        "testName": "Verify whether a role without store_items:update can view the Store Inventory Items page (if it has store_items:read) but cannot see the edit (pencil) action, while a role with store_items:update can see and use the pencil",
+        "description": "AC2 — Pencil gated by store_items:update.",
+        "preCondition": "Two roles prepared: (1) store_items:read only; (2) store_items:read + store_items:update; store has at least one linked inventory item.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Log in as read-only store-items user."
+          },
+          {
+            "step": 2,
+            "description": "Open INVENTORY → Store Inventory Items."
+          },
+          {
+            "step": 3,
+            "description": "Inspect each table row’s action column for the pencil icon."
+          },
+          {
+            "step": 4,
+            "description": "Log out; log in as manage user."
+          },
+          {
+            "step": 5,
+            "description": "Open the same page and confirm pencil is visible."
+          },
+          {
+            "step": 6,
+            "description": "Click pencil and confirm edit flow opens."
+          }
+        ],
+        "rawTestData": "Store: Whataburger #1 (or any valid store); items present in table",
+        "expectedResult": "Without store_items:update: page loads, pencil not shown; with update: pencil visible and opens edit.",
+        "testData": {
+          "adminHasUpdate": true
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-310_006",
+        "sourceTestCaseId": "TC-INV-006",
+        "module": "Store Inventory Items – Global Store Switcher",
+        "testName": "Verify whether the Store Inventory Items page has no “Filter by Store” dropdown and the table data is driven solely by the Topbar global store switcher, refreshing automatically when the store is changed",
+        "description": "AC4 — Global store switcher (no Filter by Store).",
+        "preCondition": "User has store_items:read; at least two stores with different store-item datasets are available in the switcher.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Navigate to INVENTORY → Store Inventory Items (/inventory/store-items)."
+          },
+          {
+            "step": 2,
+            "description": "Confirm page title/subtitle and that no in-page Filter by Store control exists."
+          },
+          {
+            "step": 3,
+            "description": "Note current Topbar store and current table rows."
+          },
+          {
+            "step": 4,
+            "description": "Change store via Topbar store switcher."
+          },
+          {
+            "step": 5,
+            "description": "Do not click any page filter/refresh control."
+          },
+          {
+            "step": 6,
+            "description": "Observe table content after switch."
+          },
+          {
+            "step": 7,
+            "description": "Switch back to the original store and confirm data returns."
+          }
+        ],
+        "rawTestData": "Store A and Store B with distinct item sets (or different stock/par values)",
+        "expectedResult": "Filter by Store is absent; table shows only Topbar-selected store’s data; switching store refreshes table automatically.",
+        "testData": {
+          "storeA": "WB Unit 1034",
+          "storeB": "WB Unit 1025"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-310_007",
+        "sourceTestCaseId": "TC-INV-007",
+        "module": "Store Inventory Items – Edge / Empty & Search",
+        "testName": "Verify whether Store Inventory Items correctly handles empty store data and search-by-name/SKU while remaining scoped to the Topbar-selected store",
+        "description": "AC4 — Search/empty edge within Topbar store scope.",
+        "preCondition": "User has store_items:read; one store with items; known item name and SKU.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Select a store with items; search with a valid name."
+          },
+          {
+            "step": 2,
+            "description": "Search with a valid SKU (if available)."
+          },
+          {
+            "step": 3,
+            "description": "Search with a non-matching string."
+          },
+          {
+            "step": 4,
+            "description": "Clear search and confirm full list restores for that store."
+          },
+          {
+            "step": 5,
+            "description": "Switch to a store with no linked items (if available) and confirm empty-state behavior."
+          }
+        ],
+        "rawTestData": "Valid item name (e.g. SPLENDA); valid SKU; invalid string e.g. ZZZ-NO-MATCH",
+        "expectedResult": "Search filters within current store; valid queries match; invalid shows empty; empty store shows empty state.",
+        "testData": {
+          "validItemName": "SPLENDA",
+          "invalidQuery": "ZZZ-NO-MATCH",
+          "storeWithItems": "WB Unit 1034"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-310_008",
+        "sourceTestCaseId": "TC-INV-008",
+        "module": "Units of Measure – Delete Removed",
+        "testName": "Verify whether the Units of Measure page (/inventory/uom) no longer shows a trash/delete icon on any row, does not allow opening a delete confirmation modal, and still allows edit via the pencil icon",
+        "description": "AC5 — Delete removed from Units of Measure.",
+        "preCondition": "User can access INVENTORY SETUP → Unit of Measure; table has multiple UOM rows.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Navigate to Units of Measure."
+          },
+          {
+            "step": 2,
+            "description": "Inspect the action column on every visible row."
+          },
+          {
+            "step": 3,
+            "description": "Confirm only the pencil (edit) icon is present—no trash/delete icon."
+          },
+          {
+            "step": 4,
+            "description": "Attempt any UI path that previously opened delete."
+          },
+          {
+            "step": 5,
+            "description": "Click pencil on a row and confirm edit still works."
+          },
+          {
+            "step": 6,
+            "description": "Cancel/close edit without saving if needed."
+          }
+        ],
+        "rawTestData": "Any existing UOM e.g. Kilogram (KG), Each (EA)",
+        "expectedResult": "No delete/trash control; delete confirmation cannot open; pencil opens edit successfully.",
+        "testData": {
+          "uomName": "Kilogram",
+          "fallbackUomName": "Each"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-310_009",
+        "sourceTestCaseId": "TC-INV-009",
+        "module": "Cross-cutting – Regression / Access Matrix",
+        "testName": "Verify whether navigation visibility, page access, and Store Inventory Items edit affordance remain consistent across a compact permission matrix (balances read, store-items read, store-items update) without breaking INVENTORY SETUP pages such as UOM",
+        "description": "Cross-cutting regression for AC1/AC2/AC5 with admin as primary actor; optional restricted users when credentials are configured.",
+        "preCondition": "Admin user available; optional matrix users when configured in test data.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "For admin (full access), check sidebar INVENTORY visibility."
+          },
+          {
+            "step": 2,
+            "description": "Open Inventory Balances and Store Inventory Items."
+          },
+          {
+            "step": 3,
+            "description": "On Store Inventory Items, check pencil visibility (update granted)."
+          },
+          {
+            "step": 4,
+            "description": "Open Units of Measure and confirm delete remains unavailable and edit works."
+          },
+          {
+            "step": 5,
+            "description": "Confirm INVENTORY SETUP still lists setup menus and does not re-list the two moved inventory pages."
+          }
+        ],
+        "rawTestData": "Permission matrix: balances-only; store-items read-only; store-items read+update; neither inventory read",
+        "expectedResult": "Behavior matches AC1/AC2/AC5; UOM delete stays removed; moved menus are not duplicated under INVENTORY SETUP.",
+        "testData": {
+          "uomName": "Kilogram",
+          "expectInventoryVisible": true,
+          "expectPencilVisible": true
+        }
+      }
+    ]
+  }
+}
