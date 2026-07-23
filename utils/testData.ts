@@ -84,6 +84,29 @@ export interface TestCaseJsonData<TTestData = unknown> {
   testData: TTestData;
 }
 
+export interface Rcsp206CountLocationsPageTestData {
+  navigationItems: string[];
+}
+
+export interface Rcsp206CreateLocationItem {
+  locationName: string;
+  description: string;
+}
+
+export interface Rcsp206CreateLocationTestData {
+  navigationItems: string[];
+  createCountLocationItems: Rcsp206CreateLocationItem[];
+}
+
+export interface Rcsp206AssignItemPopup {
+  locationName: string;
+  itemName: string;
+}
+export interface Rcsp206AssignItemPopupTestData {
+  navigationItems: string[];
+  assignItemPopupItems: Rcsp206AssignItemPopup[];
+}
+
 export interface ScenarioWithTestCases<
   TTestCase extends TestCaseJsonData = TestCaseJsonData,
 > {

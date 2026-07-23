@@ -20,7 +20,8 @@ export class StockCountPage {
   private dailyShiftCountTitle: Locator;
   private weeklyCountTitle: Locator;
   private monthlyCountTitle: Locator;
-  
+  private countLocationsTitle: Locator;
+  private countLocationsOption: Locator;
 
   constructor(private readonly page: Page) {
     // Stock Count menu and options locators - Using flexible selectors
@@ -28,11 +29,13 @@ export class StockCountPage {
     this.dailyShiftCountOption = page.getByRole('link', { name: 'Daily Shift Count' });
     this.weeklyCountOption = page.getByRole('link', { name: 'Weekly Count' });
     this.monthlyCountOption = page.getByRole('link', { name: 'Monthly Count' });
+    this.countLocationsOption = page.getByRole('link', { name: 'Count Locations' });
 
     // Page title locators for verification - More flexible matching
     this.dailyShiftCountTitle = page.getByRole('heading', { name: 'Daily Shift Count' });
     this.weeklyCountTitle = page.getByRole('heading', { name: 'Weekly Count' });
     this.monthlyCountTitle = page.getByRole('heading', { name: 'Monthly Count' });
+     this.countLocationsTitle = page.getByRole('heading', { name: 'Count Locations' });
   }
 
   // ── Private Helper Methods ────────────────────────────────
@@ -132,6 +135,27 @@ export class StockCountPage {
     log('✓ Monthly Count page loaded');
   }
 
+
+  /**
+   * Click on Count Locations option
+   */
+  async clickCountLocations(): Promise<void> {
+    log('Clicking on Count Locations');
+    
+    try {
+      await this.countLocationsOption.waitFor({ state: 'visible', timeout: 10000 }).catch(() => {
+        log('⚠ Element not immediately visible, proceeding anyway');
+      });
+      await this.countLocationsOption.click();
+    } catch (error) {
+      log('Error clicking Count Locations: ' + String(error));
+      throw error;
+    }
+    
+    await this.page.waitForLoadState('networkidle');
+    log('✓ Count Locations page loaded');
+  }
+
   // ── Public Validation Methods ─────────────────────────────
 
   /**
@@ -156,6 +180,14 @@ export class StockCountPage {
   async verifyMonthlyCountPageLoaded(): Promise<void> {
     await expect(this.monthlyCountTitle).toBeVisible();
     log('✓ Verified: Monthly Count page is displayed');
+  }
+
+  /**
+   * Verify Count Locations page is displayed
+   */
+  async verifyCountLocationsPageLoaded(): Promise<void> {
+    await expect(this.countLocationsTitle).toBeVisible();
+    log('✓ Verified: Count Locations page is displayed');
   }
 
   // ── Public Flow Methods ───────────────────────────────────
@@ -196,6 +228,20 @@ export class StockCountPage {
 
     await this.clickMonthlyCount();
     await this.verifyMonthlyCountPageLoaded();
+  }
+
+   /**
+   * Navigate to Count Location from menu
+   * Goes back to menu, expands it, and clicks on Count Locations option
+   */
+  async navigateToCountLocations(): Promise<void> {
+    const countLocationsVisible = await this.countLocationsOption.isVisible().catch(() => false);
+    if (!countLocationsVisible) {
+      await this.expandStockCountMenu();
+    }
+
+    await this.clickCountLocations();
+    await this.verifyCountLocationsPageLoaded();
   }
 
   /**

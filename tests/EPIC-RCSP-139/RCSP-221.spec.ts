@@ -14,6 +14,7 @@ import {
   type Rcsp220CommonData,
   type Rcsp220JsonData,
 } from '../../utils/testData';
+import { getTransferData } from '../../database/tranferQueries';
 
 const RCSP_221_FILE_NAME = 'RCSP-221';
 const RCSP_221_SCENARIO_ID = 'RCSP-221';
@@ -137,6 +138,7 @@ test.describe("RCSP-221 - My Hierarchy: Logged-in admin user can open the My Hie
 
   });
 });
+
 
 test.describe("RCSP-221 - My Hierarchy: Admin user can select Region, Market, and Store from the My Hierarchy page and view sto...", () => {
   let loginPage: RTCDashboardLoginPage;
