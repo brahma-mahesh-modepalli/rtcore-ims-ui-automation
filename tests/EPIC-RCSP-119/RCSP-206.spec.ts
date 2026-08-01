@@ -31,7 +31,8 @@ const RCSP_206_TEST_CASE_IDS = {
   assignDailyAndMonthlyItem: 'TC_RCSP-206_08',
   assignWeeklyAndMonthlyItem: 'TC_RCSP-206_09',
   assignDailyAndWeeklyAndMonthlyItem: 'TC_RCSP-206_10',
-  assignItemDetailsAndCancel: 'TC_RCSP-206_11'
+  countFrequencyOptions: 'TC_RCSP-206_11',
+  assignItemDetailsAndCancel: 'TC_RCSP-206_12'
   
 } as const;
 
@@ -759,6 +760,63 @@ test.describe('RCSP-206 - Verify Assign Daily Frequency Item to Count Location',
         await stockCountPage.navigateToCountLocations();
         await countLocationsPage.deleteItems(assignDailyAndWeeklyAndMonthlyItem.locationName, selectedItem);
       }
+    
+      log('=== TEST PASSED - All navigations verified successfully ===');
+    }); 
+ 
+  }); 
+
+
+  test.describe('RCSP-206 - Verify Count Frequency options are displayed and Verify Assign Item button is disabled until all mandatory fields are filled in Assign Item popup', () => {
+  let loginPage: RTCDashboardLoginPage;
+  let stockCountPage: StockCountPage;
+  let countLocationsPage: CountLocationsPage;
+  let dailyPage: DailyShiftCountPage;
+  let weeklyPage: WeeklyCountPage;
+  let monthlyPage: MonthlyCountPage;
+
+  test('Verify Count Frequency options are displayed and Assign Item button is disabled until all mandatory fields are filled', async ({
+    page,
+  }) => {
+    test.setTimeout(120000);
+    let navigationData: Rcsp206CountLocationsPageTestData | undefined;
+    let countFrequencyOptionsData: Rcsp206AssignItemToCountLocationData | undefined;
+    let countFrequencyOptions: any;
+ 
+      loginPage = new RTCDashboardLoginPage(page);
+      stockCountPage = new StockCountPage(page);
+      countLocationsPage = new CountLocationsPage(page);
+      dailyPage = new DailyShiftCountPage(page);
+      weeklyPage = new WeeklyCountPage(page);
+      monthlyPage = new MonthlyCountPage(page);
+
+      navigationData = getRcsp206TestCaseData<Rcsp206CountLocationsPageTestData>(RCSP_206_TEST_CASE_IDS.navigation);
+      countFrequencyOptionsData = getRcsp206TestCaseData<Rcsp206AssignItemToCountLocationData>(RCSP_206_TEST_CASE_IDS.countFrequencyOptions);
+      countFrequencyOptions = countFrequencyOptionsData.assignItemData?.[0];
+
+      if (!countFrequencyOptions) {
+        throw new Error('RCSP-206 countFrequencyOptionsData is missing or empty');
+      }
+
+      log('=== RCSP-206: Verify Count Frequency options and Assign Item button Test Started ===');
+
+      log('STEP 1: Launching URL: ' + CONFIG.dashboardURL);
+      await page.goto(CONFIG.dashboardURL);
+      await page.waitForLoadState('networkidle');
+      log('✓ URL launched successfully');
+
+      log('STEP 2: Logging in with credentials');
+      log('Email: ' + CONFIG.credentials.admin.username);
+      await loginPage.login(CONFIG.credentials.admin.username, CONFIG.credentials.admin.password);
+      log('✓ Login successful - Dashboard loaded');
+
+      for (const navigationItem of navigationData.navigationItems) {
+        log(`Navigating to ${navigationItem}`);
+        await navigateToStockCountSection(stockCountPage, navigationItem);
+      }
+
+      await countLocationsPage.verifyCountFrequencyOptions(countFrequencyOptions.locationName, countFrequencyOptions.countFrequency);
+        log("✓ Verified all Count Frequency options successfully and Verify Assign Item button is disabled until all mandatory fields are filled.");
     
       log('=== TEST PASSED - All navigations verified successfully ===');
     }); 

@@ -375,7 +375,7 @@ async addNewItems(locationName: string, items: { sku: string; itemName: string }
 }
 
 
-async enterItemsDetailsAndClickOnCancel(locationName: string, items: { sku: string; itemName: string }[], countFrequency: string[]): Promise<{ sku: string; itemName: string }> {
+async enterItemsDetailsAndClickOnCancel(locationName: string,  items: { sku: string; itemName: string }[], countFrequency: string[]): Promise<{ sku: string; itemName: string }> {
     await this.expandLocationRow(locationName);
     await this.verifyAssignItemButton();
     await this.clickAssignItemButton();
@@ -391,7 +391,7 @@ async enterItemsDetailsAndClickOnCancel(locationName: string, items: { sku: stri
 }
 
 
-
+locationName: string,
 async selectCountFrequency(selectedFrequencies: string[]): Promise<void> {
 
     const dailyButton = this.getFrequencyButton("Daily");
@@ -616,11 +616,26 @@ async deleteItems( locationName: string,items: { sku: string; itemName: string }
         log(`Clicked delete for SKU : ${items.sku}`);
         await expect(this.getAssignedItemRow(items.itemName, items.sku)).not.toBeVisible({ timeout: 10000 });
         log(`Verified item with SKU : ${items.sku} is deleted successfully.`);
-  
-   
-   
-
 }
+
+ /**
+ * Verify given Count Frequency options
+ */
+async verifyCountFrequencyOptions(locationName: string, frequencies: string[]): Promise<void> {
+     await this.expandLocationRow(locationName);
+    await this.verifyAssignItemButton();
+    await this.clickAssignItemButton();
+
+    for (const frequency of frequencies) {
+
+        await expect(this.getFrequencyButton(frequency)).toBeVisible();
+
+        log(`✓ Verified '${frequency}' frequency option is displayed.`);
+    }
+}
+
+
+
 
 
 
