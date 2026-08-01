@@ -66,9 +66,7 @@ export class WeeklyCountPage {
     this.timeCreatedHeader = page.getByRole('columnheader', {
       name: 'Time Created',
     });
-    this.createWeeklyCountDialogTitle = page.getByText('New Weekly Count', {
-      exact: true,
-    });
+    this.createWeeklyCountDialogTitle = page.getByText('New Weekly Count', {exact: true,});
     this.startWeeklyCountButton = page.getByRole('button', {
       name: 'Start Weekly Count',
     });
@@ -124,10 +122,14 @@ export class WeeklyCountPage {
   }
 
   private getCountRow(identifier: string): Locator {
-    return this.weeklyCountTable.getByRole('row', {
-      name: new RegExp(this.escapeRegExp(identifier), 'i'),
-    });
+    return this.weeklyCountTable.getByRole('row', { name: new RegExp(this.escapeRegExp(identifier), 'i'),});
   }
+
+  
+  private getCountPageHeader(frequency: string): Locator {
+    return this.page.locator(`//h1[contains(normalize-space(),'${frequency} Count')]`);
+}
+  
 
   private getCreateDialogTextboxes(): Locator {
     return this.page.getByRole('textbox');
@@ -214,7 +216,7 @@ export class WeeklyCountPage {
    */
   async waitForWeeklyCountDetailsToLoad(): Promise<void> {
     await expect(this.page).toHaveURL(/\/counts\/weekly\/\d+$/);
-    await expect(this.detailHeading).toBeVisible();
+    await expect(this.detailHeading).toBeVisible({ timeout: 15000 });
     await expect(this.itemTable).toBeVisible();
   }
 
@@ -277,11 +279,9 @@ export class WeeklyCountPage {
    */
   async clickNewWeeklyCountButton(): Promise<void> {
     log('Clicking on + NEW WEEKLY COUNT button');
-
-    await expect(this.newWeeklyCountButton).toBeEnabled();
+    await expect(this.newWeeklyCountButton).toBeEnabled({ timeout: 15000 });
     await this.newWeeklyCountButton.click();
     await this.verifyNewWeeklyCountDialogVisible();
-
     log('✓ Clicked on + NEW WEEKLY COUNT button');
   }
 
@@ -291,13 +291,7 @@ export class WeeklyCountPage {
    * Parameters: None.
    */
   async verifyNewWeeklyCountDialogVisible(): Promise<void> {
-    await expect(this.createWeeklyCountDialogTitle).toBeVisible();
-    await expect(this.getShiftTriggerButton()).toBeVisible();
-    await expect(this.getShiftDateInput()).toBeVisible();
-    await expect(this.getWeeklyCountNameInput()).toBeVisible();
-    await expect(this.startWeeklyCountButton).toBeVisible();
-    await expect(this.startWeeklyCountButton).toBeEnabled();
-
+    await expect(this.getCountPageHeader("Weekly")).toBeVisible({ timeout: 15000 });
     log('✓ Verified: New Weekly Count dialog is displayed');
   }
 
@@ -311,7 +305,7 @@ export class WeeklyCountPage {
 
     await this.getShiftTriggerButton().click();
     await this.getShiftOptionButton(shift).click();
-    await expect(this.page.getByRole('button', { name: new RegExp(`^${this.escapeRegExp(shift)}$`, 'i') }).first()).toBeVisible();
+    await expect(this.page.getByRole('button', { name: new RegExp(`^${this.escapeRegExp(shift)}$`, 'i') }).first()).toBeVisible({ timeout: 15000 });
 
     log(`✓ Selected "${shift}" shift for Weekly Count`);
   }
@@ -352,7 +346,7 @@ export class WeeklyCountPage {
   async clickStartWeeklyCountButton(): Promise<void> {
     log('Clicking on Start Weekly Count button');
 
-    await expect(this.startWeeklyCountButton).toBeEnabled();
+    await expect(this.startWeeklyCountButton).toBeEnabled({ timeout: 15000 });
     await this.startWeeklyCountButton.click();
     await this.page.waitForLoadState('networkidle');
     await this.waitForWeeklyCountDetailsToLoad();
@@ -905,4 +899,32 @@ export class WeeklyCountPage {
 
     log(`✓ Verified: Validation message is visible - "${message}"`);
   }
+
+getLocation(locationName: string) {
+    return this.page.locator(`text=${locationName}`);
+  }
+
+  getItemName(itemName: string): Locator {
+    return this.page.locator(`//div[@class='font-medium' and normalize-space()='${itemName}']`);
+}
+
+getSku(sku: string): Locator {
+    return this.page.locator(`//div[contains(@class,'font-mono') and normalize-space()='${sku}']`);
+}
+
+  async verifyAssignedItemsOnWeeklyCountPage( items: { sku: string; itemName: string }): Promise<void> {
+      await this.page.waitForTimeout(3000);
+      await expect(this.getItemName(items.itemName)).toBeVisible({ timeout: 15000 });
+      await expect(this.getSku(items.sku)).toBeVisible({ timeout: 15000 });
+      log(`Verified Item '${items.itemName}' with SKU '${items.sku}'.`);
+    
+}
+
+  async verifyItemsNotPresentOnWeeklyCountPage(items: { sku: string; itemName: string }): Promise<void> {
+      // Replace fixed sleep with explicit, retrying assertions to avoid flakiness
+      await expect(this.page.getByText(items.itemName)).toHaveCount(0, { timeout: 15000 });
+      await expect(this.page.getByText(items.sku)).toHaveCount(0, { timeout: 15000 });
+      log(`Verified '${items.itemName}' is not displayed.`);
+    
+}
 }

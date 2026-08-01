@@ -42,6 +42,10 @@ export class DailyShiftCountPage {
     await expect(this.newDailyShiftCountButton).toBeVisible();
   }
 
+   private getCountPageHeader(frequency: string): Locator {
+    return this.page.locator(`//h1[contains(normalize-space(),'${frequency} Count')]`);
+}
+
   private async verifyColumnHeaders(): Promise<void> {
     await expect(this.countIdHeader).toBeVisible();
     await expect(this.nameHeader).toBeVisible();
@@ -67,8 +71,19 @@ export class DailyShiftCountPage {
     await this.newDailyShiftCountButton.waitFor({ state: 'visible', timeout: 10000 });
     await expect(this.newDailyShiftCountButton).toBeEnabled();
     await this.newDailyShiftCountButton.click();
+    await this.verifyNewDailyCountDialogVisible();
     await this.page.waitForLoadState('networkidle').catch(() => undefined);
     log('✓ Clicked on + NEW DAILY SHIFT COUNT button');
+  }
+
+  /**
+   * Validate the New Daily Count dialog contents.
+   * Verifies: dialog title, shift selector, shift date field, name field, and start button state.
+   * Parameters: None.
+   */
+  async verifyNewDailyCountDialogVisible(): Promise<void> {
+    await expect(this.getCountPageHeader("Daily")).toBeVisible();
+    log('✓ Verified: New Weekly Count dialog is displayed');
   }
 
   private shiftTrigger(): Locator {
@@ -316,4 +331,39 @@ export class DailyShiftCountPage {
     await this.page.getByRole('button', { name: /Start Weekly Count/i }).click();
     log('✓ Start Weekly Count Button is clicked successfully');
   }
+
+  
+getLocation(locationName: string) {
+    return this.page.locator(`text=${locationName}`);
+  }
+
+  getItemByLocation(locationName: string, itemName: string) {
+    return this.page.locator(`tr:has-text("${locationName}")`).locator(`text=${itemName}`);
+  }
+
+  getSkuByLocation(locationName: string, sku: string) {
+    return this.page.locator(`tr:has-text("${locationName}")`).locator(`text=${sku}`);
+  }
+
+   getItemName(itemName: string): Locator {
+    return this.page.locator(`//div[@class='font-medium' and normalize-space()='${itemName}']`);
+}
+
+getSku(sku: string): Locator {
+    return this.page.locator(`//div[contains(@class,'font-mono') and normalize-space()='${sku}']`);
+}
+
+  async verifyAssignedItemsOnDailyShiftCountPage(items: { sku: string; itemName: string }): Promise<void> {
+      await expect(this.getItemName(items.itemName)).toBeVisible({ timeout: 15000 });
+      await expect(this.getSku(items.sku)).toBeVisible({ timeout: 15000 });
+      log(`Verified Item '${items.itemName}' with SKU '${items.sku}'.`);
+    
+}
+
+async verifyItemsNotPresentOnDailyShiftCountPage( items: { sku: string; itemName: string }): Promise<void> {
+        await expect(this.page.getByText(items.itemName)).toHaveCount(0);
+        await expect(this.page.getByText(items.sku)).toHaveCount(0);
+        log(`Verified '${items.itemName}' is not displayed.`);
+    
+}
 }

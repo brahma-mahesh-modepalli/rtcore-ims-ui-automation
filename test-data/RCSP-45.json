@@ -1,0 +1,363 @@
+{
+  "RCSP-45": {
+    "scenarioId": "RCSP-45",
+    "epic": "EPIC-RCSP-139",
+    "feature": "Transfers \u2014 IMS to Non-IMS Optimized",
+    "sourceSheet": "Optimized Transfer TCs",
+    "description": "Optimized Transfers suite covering IMS From-store rules, IMS\u2192Non-IMS Completed on submit, IMS\u2192IMS Pending contrast, draft/cancel, validations, and status matrix.",
+    "commonData": {
+      "prerequisites": [
+        "User is logged in to QA Backoffice Dashboard as admin",
+        "WB Unit 1034 is IMS; WB Unit 698 and WB Unit 1025 are Non-IMS; WB Unit 1008 is IMS",
+        "LARGE BUNS 11201 ON HAND >= 1 on WB Unit 1034"
+      ],
+      "userRole": "admin",
+      "hierarchy": {
+        "region": "1700 San Antonio 4126314",
+        "market": "1708 E Central SA 4126393",
+        "sourceStore": "WB Unit 1034",
+        "nonImsDestination": "WB Unit 698",
+        "imsDestination": "WB Unit 1008",
+        "nonImsBaselineStore": "WB Unit 1025"
+      },
+      "item": {
+        "nameOrSku": "LARGE BUNS",
+        "displayName": "LARGE BUNS",
+        "uom": "EA",
+        "quantity": "1",
+        "invalidItem": "INVALID ITEM 99999",
+        "decimalQuantity": "1.5",
+        "zeroQuantity": "0",
+        "sku": "11201"
+      },
+      "transfer": {
+        "reason": "Excess Inventory + Shelf-Life",
+        "notes": "Automation transfer notes for RCSP-45 IMS-to-Non-IMS",
+        "updatedNotes": "Updated draft notes for validation",
+        "rejectionReason": "Incorrect quantity",
+        "otherReason": "Other",
+        "otherNotes": "Ad-hoc transfer for testing",
+        "reasonCodes": [
+          "Shortage",
+          "Overstock",
+          "Demand",
+          "Quality",
+          "Emergency",
+          "Inventory Correction",
+          "Other"
+        ]
+      },
+      "statusTabs": [
+        "All",
+        "Draft",
+        "Pending",
+        "Completed",
+        "Declined",
+        "Cancelled"
+      ],
+      "columnHeaders": [
+        "TRANSFER ID",
+        "FROM",
+        "TO",
+        "ITEMS",
+        "DATE",
+        "STATUS",
+        "ACTIONS"
+      ],
+      "buttons": {
+        "newTransfer": "NEW TRANSFER",
+        "addItem": "ADD ITEM",
+        "saveChanges": "SAVE CHANGES",
+        "submitTransfer": "SUBMIT TRANSFER",
+        "cancel": "CANCEL",
+        "approve": "Approve",
+        "reject": "Reject"
+      }
+    },
+    "testCases": [
+      {
+        "testCaseId": "TC_RCSP-45_001",
+        "module": "Overview > My Hierarchy | Store Selector",
+        "testName": "Verify whether after login the admin can open Overview > My Hierarchy, confirm Region > Market > Store path for WB Unit 1034 and WB Unit 698, and set active store to WB Unit 1034 in the top-right Store Selector",
+        "description": "Verify whether hierarchy path Region 1700 > Market 1708 shows WB Unit 1034 and WB Unit 698, and active store context is confirmed as WB Unit 1034 in the top-right Store Selector.",
+        "preCondition": "1. User has access to QA Backoffice Dashboard. 2. Valid admin credentials available (Username: admin@ims.com). 3. Hierarchy exists: Region 1700 San Antonio 4126314 > Market 1708 E Central SA 4126393 with stores WB Unit 1034 (IMS) and WB Unit 698 (Non-IMS). 4. WB Unit 1008 is IMS-labelled; WB Unit 1025 is Non-IMS. 5. Item LARGE BUNS 11201 has ON HAND >= 1 on WB Unit 1034. 6. User has access to Overview > My Hierarchy, Inventory > Inventory Balances, and Operations > Transfers.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Launch the application: QA Backoffice Dashboard. 2. On the Login page, enter Username and Password, then click Sign In / Login. 3. Verify user lands on Home/Dashboard. 4. From left navigation under OVERVIEW, click My Hierarchy. 5. Expand/select Region: 1700 San Antonio 4126314. 6. Expand/select Market: 1708 E Central SA 4126393. 7. Under Stores, verify WB Unit 1034 and WB Unit 698 are listed. 8. Select WB Unit 1034 as active store (via My Hierarchy or top-right Store Selector). 9. On Home/Dashboard, confirm top-right Store Selector displays WB Unit 1034. 10. Optionally confirm sidebar footer shows Store 1034 - WB Unit 1034."
+          }
+        ],
+        "rawTestData": "Application: QA Backoffice Dashboard | Username: admin@ims.com | Password: <valid admin password as per QA config> | Region: 1700 San Antonio 4126314 | Market: 1708 E Central SA 4126393 | Stores: WB Unit 1034 (IMS), WB Unit 698 (Non-IMS) | Confirmation: Top-right Store Selector",
+        "expectedResult": "Verify whether hierarchy path Region 1700 > Market 1708 shows WB Unit 1034 and WB Unit 698, and active store context is confirmed as WB Unit 1034 in the top-right Store Selector.",
+        "testData": {
+          "region": "1700 San Antonio 4126314",
+          "market": "1708 E Central SA 4126393",
+          "selectStore": "WB Unit 1034",
+          "stores": [
+            "WB Unit 1034",
+            "WB Unit 698"
+          ]
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-45_002",
+        "module": "Inventory > Inventory Balances",
+        "testName": "Verify whether ON HAND and FIFO COST for item LARGE BUNS 11201 can be recorded as baselines on IMS store WB Unit 1034 and Non-IMS store WB Unit 1025, then active store switched back to WB Unit 1034",
+        "description": "Verify whether baselines for LARGE BUNS 11201 ON HAND and FIFO COST are recorded on WB Unit 1034 and WB Unit 1025, and user successfully returns to active store WB Unit 1034.",
+        "preCondition": "1. User is logged in as admin. 2. Active store can be switched via top-right Store Selector. 3. Item LARGE BUNS 11201 exists on WB Unit 1034 and is searchable on WB Unit 1025. 4. TC_TRF_OPT_001 completed (active store can be set to WB Unit 1034).",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Confirm top-right Store Selector shows WB Unit 1034. 2. From left navigation, go to Inventory > Inventory Balances. 3. Search for LARGE BUNS 11201. 4. Record ON HAND as Baseline_ON_HAND_1034 and FIFO COST as Baseline_FIFO_COST_1034. 5. Using top-right Store Selector, switch to WB Unit 1025 and confirm top-right shows WB Unit 1025. 6. Go to Inventory > Inventory Balances and search LARGE BUNS 11201. 7. Record ON HAND as Baseline_ON_HAND_1025 and FIFO COST as Baseline_FIFO_COST_1025. 8. Switch back to WB Unit 1034 and confirm top-right Store Selector shows WB Unit 1034."
+          }
+        ],
+        "rawTestData": "Menu Path: Inventory > Inventory Balances | Item: LARGE BUNS 11201 | Stores: WB Unit 1034 (IMS baseline), WB Unit 1025 (Non-IMS baseline) | Fields: ON HAND, FIFO COST",
+        "expectedResult": "Verify whether baselines for LARGE BUNS 11201 ON HAND and FIFO COST are recorded on WB Unit 1034 and WB Unit 1025, and user successfully returns to active store WB Unit 1034.",
+        "testData": {
+          "store1034": "WB Unit 1034",
+          "store1025": "WB Unit 1025",
+          "item": "LARGE BUNS"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-45_003",
+        "module": "Operations > Transfers > New Transfer \u2014 Store Dropdown Rules",
+        "testName": "Verify whether on New Transfer page From Store * lists only IMS-labelled stores (defaults to WB Unit 1034) while To Store * lists both IMS stores (with IMS badge, e.g. WB Unit 1008) and Non-IMS stores (no badge, e.g. WB Unit 1025 / WB Unit 698)",
+        "description": "Verify whether From Store * is IMS-only (Non-IMS excluded) and To Store * shows both IMS (with badge) and Non-IMS stores, matching the transfer store-label business rules.",
+        "preCondition": "1. User is logged in as admin. 2. Active store top-right is WB Unit 1034. 3. Known IMS stores: WB Unit 1034, WB Unit 1008. 4. Known Non-IMS stores: WB Unit 698, WB Unit 1025.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Confirm top-right Store Selector shows WB Unit 1034. 2. From left navigation under OPERATIONS, click Transfers. 3. Click + NEW TRANSFER and wait for New Transfer page. 4. Verify From Store * defaults to WB Unit 1034. 5. Open From Store * dropdown/search: verify WB Unit 1034 and WB Unit 1008 appear as IMS. 6. Search Non-IMS stores 698 and 1025 in From Store *; verify they do NOT appear as selectable options. 7. Open To Store * dropdown/search: verify WB Unit 1008 appears with green IMS badge. 8. Verify WB Unit 1025 and WB Unit 698 appear without IMS badge and are selectable. 9. Verify To Store list includes both IMS and Non-IMS stores. 10. Verify Store not found checkbox is visible beside To Store (if applicable)."
+          }
+        ],
+        "rawTestData": "Menu Path: Operations > Transfers > + NEW TRANSFER | From Store *: IMS only (default WB Unit 1034) | To Store *: IMS + Non-IMS | IMS example: WB Unit 1008 | Non-IMS examples: WB Unit 698, WB Unit 1025",
+        "expectedResult": "Verify whether From Store * is IMS-only (Non-IMS excluded) and To Store * shows both IMS (with badge) and Non-IMS stores, matching the transfer store-label business rules.",
+        "testData": {
+          "fromStore": "WB Unit 1034",
+          "imsToExample": "WB Unit 1008",
+          "nonImsExamples": [
+            "WB Unit 698",
+            "WB Unit 1025"
+          ]
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-45_004",
+        "module": "Operations > Transfers \u2014 IMS to Non-IMS Submit (Completed)",
+        "testName": "Verify whether submitting a fully completed New Transfer from IMS From Store WB Unit 1034 to Non-IMS To Store WB Unit 698 for LARGE BUNS 11201 Qty 1 sets status to Completed immediately and decrements ON HAND on WB Unit 1034 by 1",
+        "description": "Verify whether IMS\u2192Non-IMS transfer becomes Completed on submit (not Pending) and source store WB Unit 1034 ON HAND for LARGE BUNS 11201 decreases by the transferred quantity.",
+        "preCondition": "1. User is logged in as admin with active store WB Unit 1034. 2. Baseline_ON_HAND_1034 recorded (TC_TRF_OPT_002). 3. ON HAND for LARGE BUNS 11201 on WB Unit 1034 >= 1. 4. WB Unit 698 is Non-IMS and selectable in To Store.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Confirm top-right store is WB Unit 1034. 2. Go to Operations > Transfers and click + NEW TRANSFER. 3. Select From Store * as WB Unit 1034 (IMS). 4. Select To Store * as WB Unit 698 (Non-IMS). 5. Select Transfer Reason * (valid reason; if Other, fill Notes as required). 6. Optionally enter Notes. 7. Click + ADD ITEM, search and select LARGE BUNS 11201, enter Qty 1. 8. Verify SAVE CHANGES / SUBMIT TRANSFER become enabled. 9. Click SUBMIT TRANSFER and confirm any prompt. 10. On Transfers listing, open Completed tab (and check Pending tab). 11. Locate the new Transfer ID: verify FROM = WB Unit 1034, TO = WB Unit 698, STATUS = Completed (green). 12. Verify the transfer is NOT listed under Pending. 13. Go to Inventory > Inventory Balances on WB Unit 1034, search LARGE BUNS 11201. 14. Verify ON HAND = Baseline_ON_HAND_1034 - 1."
+          }
+        ],
+        "rawTestData": "From Store: WB Unit 1034 (IMS) | To Store: WB Unit 698 (Non-IMS) | Item: LARGE BUNS 11201 | Qty: 1 | Action: SUBMIT TRANSFER | Expected Status: Completed | Expected ON HAND: Baseline_ON_HAND_1034 - 1",
+        "expectedResult": "Verify whether IMS\u2192Non-IMS transfer becomes Completed on submit (not Pending) and source store WB Unit 1034 ON HAND for LARGE BUNS 11201 decreases by the transferred quantity.",
+        "testData": {
+          "fromStore": "WB Unit 1034",
+          "toStore": "WB Unit 698",
+          "item": "LARGE BUNS",
+          "quantity": "1",
+          "expectedStatus": "Completed",
+          "expectedOnHandChange": -1
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-45_005",
+        "module": "Operations > Transfers \u2014 IMS to IMS Submit (Pending)",
+        "testName": "Verify whether submitting a New Transfer from IMS From Store WB Unit 1034 to IMS To Store WB Unit 1008 results in Pending status (approval workflow), contrasting with Completed status for Non-IMS destinations",
+        "description": "Verify whether IMS\u2192IMS transfer goes to Pending after submit, confirming destination IMS label drives Pending vs Completed workflow.",
+        "preCondition": "1. User is logged in as admin on WB Unit 1034. 2. WB Unit 1008 is IMS-labelled in To Store. 3. LARGE BUNS 11201 ON HAND on WB Unit 1034 >= 1. 4. Tester knows IMS\u2192Non-IMS yields Completed (TC_TRF_OPT_004).",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Confirm active store is WB Unit 1034. 2. Go to Operations > Transfers > + NEW TRANSFER. 3. Select From Store * as WB Unit 1034 (IMS). 4. Select To Store * as WB Unit 1008 (IMS badge). 5. Select Transfer Reason * and add LARGE BUNS 11201 Qty 1 via + ADD ITEM. 6. Click SUBMIT TRANSFER. 7. On Transfers listing, open Pending tab. 8. Verify new transfer STATUS = Pending (yellow). 9. Verify it is NOT Completed immediately. 10. Document status matrix: IMS\u2192Non-IMS = Completed; IMS\u2192IMS = Pending."
+          }
+        ],
+        "rawTestData": "From: WB Unit 1034 (IMS) | To: WB Unit 1008 (IMS) | Item: LARGE BUNS 11201 | Qty: 1 | Expected Status: Pending | Contrast: IMS\u2192Non-IMS = Completed",
+        "expectedResult": "Verify whether IMS\u2192IMS transfer goes to Pending after submit, confirming destination IMS label drives Pending vs Completed workflow.",
+        "testData": {
+          "fromStore": "WB Unit 1034",
+          "toStore": "WB Unit 1008",
+          "item": "LARGE BUNS",
+          "quantity": "1",
+          "expectedStatus": "Pending"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-45_006",
+        "module": "Operations > Transfers \u2014 Draft then Submit IMS to Non-IMS",
+        "testName": "Verify whether SAVE CHANGES creates a Draft transfer from WB Unit 1034 to Non-IMS WB Unit 698, and SUBMIT TRANSFER from Draft Details changes status to Completed",
+        "description": "Verify whether Draft save works for IMS\u2192Non-IMS and submit from Draft results in Completed status.",
+        "preCondition": "1. User is logged in as admin on WB Unit 1034. 2. Sufficient stock for LARGE BUNS 11201. 3. Draft and Completed tabs available on Transfers page.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Open Operations > Transfers > + NEW TRANSFER. 2. Select From Store WB Unit 1034, To Store WB Unit 698, Transfer Reason, and add LARGE BUNS 11201 Qty 1. 3. Click SAVE CHANGES. 4. On Transfers > Draft tab, verify the transfer appears with Draft status. 5. Open Draft details and click SUBMIT TRANSFER. 6. On Completed tab, verify same Transfer ID shows Completed. 7. Verify it no longer appears as Draft."
+          }
+        ],
+        "rawTestData": "From: WB Unit 1034 | To: WB Unit 698 (Non-IMS) | Item: LARGE BUNS 11201 | Qty: 1 | Flow: SAVE CHANGES \u2192 Draft \u2192 SUBMIT TRANSFER \u2192 Completed",
+        "expectedResult": "Verify whether Draft save works for IMS\u2192Non-IMS and submit from Draft results in Completed status.",
+        "testData": {
+          "fromStore": "WB Unit 1034",
+          "toStore": "WB Unit 698",
+          "item": "LARGE BUNS",
+          "quantity": "1",
+          "expectedStatus": "Completed"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-45_007",
+        "module": "Operations > Transfers > New Transfer \u2014 Mandatory Validations",
+        "testName": "Verify whether SUBMIT TRANSFER is blocked on New Transfer when any mandatory input is missing: From Store *, To Store *, Transfer Reason *, or Line Items (no item added)",
+        "description": "Verify whether New Transfer enforces all mandatory header fields and at least one line item before submit, and creates no transfer when any mandatory input is missing.",
+        "preCondition": "1. User is logged in as admin on WB Unit 1034. 2. User can open New Transfer. 3. Valid stores and item exist for positive fill combinations.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Open Operations > Transfers > + NEW TRANSFER. 2. Case A \u2014 Leave From Store * blank (if clearable) with other fields filled where possible; attempt SUBMIT TRANSFER; verify blocked/disabled + From Store validation. 3. Case B \u2014 Set From Store WB Unit 1034, leave To Store * blank, fill Reason + item; attempt submit; verify To Store validation. 4. Case C \u2014 Set From/To stores, leave Transfer Reason * as Select reason, add item; attempt submit; verify Reason validation. 5. Case D \u2014 Set From WB Unit 1034, To WB Unit 698, Reason selected, leave Line Items empty (No items added yet); attempt submit; verify blocked until + ADD ITEM. 6. Verify no transfer is created in Completed/Pending for any failed case."
+          }
+        ],
+        "rawTestData": "Page: New Transfer | Mandatory: From Store *, To Store *, Transfer Reason *, >=1 Line Item | Destination for valid combos: WB Unit 698 | Item when used: LARGE BUNS 11201",
+        "expectedResult": "Verify whether New Transfer enforces all mandatory header fields and at least one line item before submit, and creates no transfer when any mandatory input is missing.",
+        "testData": {
+          "fromStore": "WB Unit 1034",
+          "toStore": "WB Unit 698",
+          "item": "LARGE BUNS",
+          "quantity": "1"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-45_008",
+        "module": "Operations > Transfers > New Transfer \u2014 Invalid Store/Qty Rules",
+        "testName": "Verify whether New Transfer blocks same From/To store, rejects Non-IMS as From Store, and rejects invalid transfer quantities (0, negative, blank, decimal, or Qty > ON HAND) for LARGE BUNS 11201",
+        "description": "Verify whether same-store transfer, Non-IMS From Store selection, and invalid/insufficient quantities are all blocked with clear validation and no successful Completed transfer.",
+        "preCondition": "1. User is logged in as admin on WB Unit 1034. 2. Baseline ON HAND for LARGE BUNS 11201 on WB Unit 1034 is known. 3. Non-IMS stores WB Unit 698/WB Unit 1025 exist.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Open New Transfer with active store WB Unit 1034. 2. Same-store: set From Store WB Unit 1034 and attempt To Store WB Unit 1034; verify hidden/disabled/validation and transfer not created. 3. Non-IMS From Store: search 698 and 1025 in From Store *; verify not selectable. 4. Insufficient stock: set From WB Unit 1034, To WB Unit 698, Reason, add LARGE BUNS 11201 with Qty = ON HAND + 1; attempt SUBMIT TRANSFER; verify insufficient stock message; no Completed transfer. 5. Invalid qty: for Qty values 0, -1, blank, and 1.5 (if allowed), verify validation and submit blocked. 6. Confirm only positive whole-number Qty <= ON HAND is accepted."
+          }
+        ],
+        "rawTestData": "From: WB Unit 1034 | Invalid To same-store: WB Unit 1034 | Non-IMS From search: 698, 1025 | Item: LARGE BUNS 11201 | Invalid Qty: 0, -1, blank, 1.5, ON HAND+1",
+        "expectedResult": "Verify whether same-store transfer, Non-IMS From Store selection, and invalid/insufficient quantities are all blocked with clear validation and no successful Completed transfer.",
+        "testData": {
+          "fromStore": "WB Unit 1034",
+          "sameStore": "WB Unit 1034",
+          "nonImsFrom": [
+            "WB Unit 698",
+            "WB Unit 1025"
+          ],
+          "toStore": "WB Unit 698",
+          "item": "LARGE BUNS",
+          "invalidQuantities": [
+            "0",
+            "-1",
+            "",
+            "1.5"
+          ]
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-45_009",
+        "module": "Operations > Transfers > New Transfer \u2014 UI Edge Behaviors",
+        "testName": "Verify whether SAVE CHANGES/SUBMIT TRANSFER stay disabled until form is complete, To Store partial search filters correctly with IMS badges, invalid To Store search returns no selectable store, and Store not found checkbox behaves per design",
+        "description": "Verify whether New Transfer UI correctly gates actions until complete, filters To Store search with proper IMS badges, rejects invalid store search, and handles Store not found per designed rules.",
+        "preCondition": "1. User is logged in as admin on WB Unit 1034. 2. User is on New Transfer page.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Open a fresh New Transfer form. 2. Verify SAVE CHANGES and SUBMIT TRANSFER are disabled/greyed when empty; remain disabled after filling only some fields; enable only after From + To + Reason + line item are complete. 3. In To Store * search, type partial 69 / 102 / 1008 and verify matching stores ({S698}, {S1025}, {S1008}) with correct IMS badge on 1008. 4. Search invalid To Store value 999999 / INVALID_STORE; verify no selectable valid store. 5. Check Store not found checkbox (if present); observe UI changes and required fields; document whether save/submit is allowed and resulting status. 6. Do not leave a partial invalid transfer in Completed status."
+          }
+        ],
+        "rawTestData": "Buttons: SAVE CHANGES, SUBMIT TRANSFER | To Store search: 69, 102, 1008, 999999 | Control: Store not found checkbox | From: WB Unit 1034",
+        "expectedResult": "Verify whether New Transfer UI correctly gates actions until complete, filters To Store search with proper IMS badges, rejects invalid store search, and handles Store not found per designed rules.",
+        "testData": {
+          "partialSearches": [
+            "69",
+            "102",
+            "1008"
+          ],
+          "invalidSearch": "999999",
+          "fromStore": "WB Unit 1034"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-45_010",
+        "module": "Operations > Transfers \u2014 Cancel Draft & Lock Completed",
+        "testName": "Verify whether a Draft IMS-to-Non-IMS transfer can be Cancelled (no stock deduction) and a Completed IMS-to-Non-IMS transfer is read-only with no Approve/Reject/Re-submit actions",
+        "description": "Verify whether Draft cancel prevents inventory movement and Completed IMS\u2192Non-IMS transfers remain locked from further status/inventory changes.",
+        "preCondition": "1. User is logged in as admin on WB Unit 1034. 2. Ability to create Draft to WB Unit 698. 3. At least one Completed transfer From WB Unit 1034 To WB Unit 698 exists (from TC_TRF_OPT_004 or OPT_006).",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Create New Transfer From WB Unit 1034 To WB Unit 698 with Reason + LARGE BUNS 11201 Qty 1; click SAVE CHANGES (Draft). 2. Note current ON HAND on WB Unit 1034 for LARGE BUNS 11201. 3. Open Draft > Cancel transfer; confirm prompt. 4. Verify status = Cancelled on Cancelled tab; verify ON HAND unchanged. 5. Open an existing Completed transfer From 1034 To 698 from Completed tab. 6. Verify details are read-only; Approve/Reject/SUBMIT TRANSFER/Save Changes not available to alter stock again. 7. Verify status remains Completed."
+          }
+        ],
+        "rawTestData": "Draft path: WB Unit 1034 \u2192 WB Unit 698 \u2192 Cancelled (no ON HAND change) | Completed path: read-only, no further workflow actions | Item: LARGE BUNS 11201",
+        "expectedResult": "Verify whether Draft cancel prevents inventory movement and Completed IMS\u2192Non-IMS transfers remain locked from further status/inventory changes.",
+        "testData": {
+          "fromStore": "WB Unit 1034",
+          "toStore": "WB Unit 698",
+          "item": "LARGE BUNS",
+          "quantity": "1"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-45_011",
+        "module": "Transfers End-to-End \u2014 Full IMS to Non-IMS Flow",
+        "testName": "Verify whether the full business flow works end-to-end: login, My Hierarchy confirmation, inventory baselines on WB Unit 1034 and WB Unit 1025, return to WB Unit 1034, create and SUBMIT transfer From WB Unit 1034 to Non-IMS WB Unit 698 for LARGE BUNS 11201, and confirm Completed status with source ON HAND reduced",
+        "description": "Verify whether the complete hierarchy \u2192 inventory baseline \u2192 New Transfer IMS\u2192Non-IMS \u2192 SUBMIT flow results in Completed status and source ON HAND reduction by transferred quantity.",
+        "preCondition": "1. User has access to QA Backoffice Dashboard. 2. Valid admin credentials available (Username: admin@ims.com). 3. Hierarchy exists: Region 1700 San Antonio 4126314 > Market 1708 E Central SA 4126393 with stores WB Unit 1034 (IMS) and WB Unit 698 (Non-IMS). 4. WB Unit 1008 is IMS-labelled; WB Unit 1025 is Non-IMS. 5. Item LARGE BUNS 11201 has ON HAND >= 1 on WB Unit 1034. 6. User has access to Overview > My Hierarchy, Inventory > Inventory Balances, and Operations > Transfers. 7. Prefer executing after understanding OPT_003\u2013OPT_005 rules.",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Launch QA Backoffice Dashboard and login with Username admin@ims.com. 2. Click Overview > My Hierarchy; open Region 1700 San Antonio 4126314 > Market 1708 E Central SA 4126393; confirm stores WB Unit 1034 and WB Unit 698. 3. Set/confirm active store WB Unit 1034 via top-right Store Selector. 4. Go to Inventory > Inventory Balances; search LARGE BUNS 11201; record ON HAND and FIFO COST (1034 baseline). 5. Switch to WB Unit 1025 (confirm top-right); Inventory > Inventory Balances; search LARGE BUNS 11201; record ON HAND and FIFO COST. 6. Switch back to WB Unit 1034 (confirm top-right). 7. Click Operations > Transfers > + NEW TRANSFER. 8. Select From Store * WB Unit 1034 (IMS-only list). 9. Select To Store * WB Unit 698 (from IMS+Non-IMS list). 10. Select Transfer Reason *; optionally enter Notes. 11. Click + ADD ITEM; add LARGE BUNS 11201 Qty 1. 12. Click SUBMIT TRANSFER. 13. On Transfers > Completed tab, verify transfer status is Completed (not Pending). 14. On Inventory > Inventory Balances for WB Unit 1034, verify ON HAND decreased by 1."
+          }
+        ],
+        "rawTestData": "Username: admin@ims.com | Region: 1700 San Antonio 4126314 | Market: 1708 E Central SA 4126393 | From: WB Unit 1034 (IMS) | To: WB Unit 698 (Non-IMS) | Baseline store also checked: WB Unit 1025 | Item: LARGE BUNS 11201 | Qty: 1 | Final Status: Completed",
+        "expectedResult": "Verify whether the complete hierarchy \u2192 inventory baseline \u2192 New Transfer IMS\u2192Non-IMS \u2192 SUBMIT flow results in Completed status and source ON HAND reduction by transferred quantity.",
+        "testData": {
+          "fromStore": "WB Unit 1034",
+          "toStore": "WB Unit 698",
+          "baselineStore": "WB Unit 1025",
+          "item": "LARGE BUNS",
+          "quantity": "1",
+          "expectedStatus": "Completed"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-45_012",
+        "module": "Operations > Transfers \u2014 Status Matrix (IMS vs Non-IMS To Store)",
+        "testName": "Verify whether side-by-side comparison confirms status rule: IMS From + Non-IMS To => Completed on submit; IMS From + IMS To => Pending on submit",
+        "description": "Verify whether To Store IMS label alone determines post-submit status: Completed for Non-IMS destination and Pending for IMS destination when From Store is IMS.",
+        "preCondition": "1. User is logged in as admin on WB Unit 1034. 2. Stock allows two Qty-1 transfers of LARGE BUNS 11201. 3. To Store options include WB Unit 698 (Non-IMS) and WB Unit 1008 (IMS).",
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Create and SUBMIT Transfer A: From WB Unit 1034 To WB Unit 698 (Non-IMS), item LARGE BUNS 11201 Qty 1 \u2192 expect Completed. 2. Create and SUBMIT Transfer B: From WB Unit 1034 To WB Unit 1008 (IMS), item LARGE BUNS 11201 Qty 1 \u2192 expect Pending. 3. On Transfers tabs, confirm Transfer A under Completed and Transfer B under Pending. 4. Record status matrix for team onboarding reference."
+          }
+        ],
+        "rawTestData": "Transfer A: WB Unit 1034 \u2192 WB Unit 698 = Completed | Transfer B: WB Unit 1034 \u2192 WB Unit 1008 = Pending | Item: LARGE BUNS 11201 | Qty each: 1",
+        "expectedResult": "Verify whether To Store IMS label alone determines post-submit status: Completed for Non-IMS destination and Pending for IMS destination when From Store is IMS.",
+        "testData": {
+          "transferA": {
+            "fromStore": "WB Unit 1034",
+            "toStore": "WB Unit 698",
+            "expectedStatus": "Completed"
+          },
+          "transferB": {
+            "fromStore": "WB Unit 1034",
+            "toStore": "WB Unit 1008",
+            "expectedStatus": "Pending"
+          },
+          "item": "LARGE BUNS",
+          "quantity": "1"
+        }
+      }
+    ]
+  }
+}

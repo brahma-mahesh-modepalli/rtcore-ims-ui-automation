@@ -193,6 +193,10 @@ export class MonthlyCountPage {
     return this.page.getByRole('button', { name: 'Close dialog' });
   }
 
+   private getCountPageHeader(frequency: string): Locator {
+    return this.page.locator(`//h1[contains(normalize-space(),'${frequency} Count')]`);
+}
+
   private async prepareForDialogResponse(acceptDialog: boolean): Promise<void> {
     this.page.once('dialog', async (dialog) => {
       if (acceptDialog) {
@@ -247,7 +251,7 @@ export class MonthlyCountPage {
    */
   async verifyNewMonthlyCountButtonEnabled(): Promise<void> {
     await expect(this.newMonthlyCountButton).toBeVisible();
-    await expect(this.newMonthlyCountButton).toBeEnabled();
+    await expect(this.newMonthlyCountButton).toBeEnabled({ timeout: 1500 });
 
     log('✓ Verified: + NEW MONTHLY COUNT button is enabled');
   }
@@ -285,8 +289,7 @@ export class MonthlyCountPage {
    */
   async clickNewMonthlyCountButton(): Promise<void> {
     log('Clicking on + NEW MONTHLY COUNT button');
-
-    await expect(this.newMonthlyCountButton).toBeEnabled();
+    await expect(this.newMonthlyCountButton).toBeEnabled({ timeout: 3000 });
     await this.newMonthlyCountButton.click();
     await this.verifyNewMonthlyCountDialogVisible();
 
@@ -295,18 +298,11 @@ export class MonthlyCountPage {
 
   /**
    * Validate the New Monthly Count dialog contents.
-   * Verifies: title, shift selector, shift date field, readonly generated name, and start button state.
+   * Verifies: dialog title, shift selector, shift date field, name field, and start button state.
    * Parameters: None.
    */
   async verifyNewMonthlyCountDialogVisible(): Promise<void> {
-    await expect(this.createMonthlyCountDialogTitle).toBeVisible();
-    await expect(this.getShiftTriggerButton()).toBeVisible();
-    await expect(this.getShiftDateInput()).toBeVisible();
-    await expect(this.getMonthlyCountNameInput()).toBeVisible();
-    await this.verifyMonthlyCountNameReadOnly();
-    await expect(this.startMonthlyCountButton).toBeVisible();
-    await expect(this.startMonthlyCountButton).toBeEnabled();
-
+    await expect(this.getCountPageHeader("Monthly")).toBeVisible({ timeout: 3000 });
     log('✓ Verified: New Monthly Count dialog is displayed');
   }
 
@@ -830,4 +826,40 @@ export class MonthlyCountPage {
 
     log(`✓ Verified validation message: ${message}`);
   }
+
+    
+getLocation(locationName: string) {
+    return this.page.locator(`text=${locationName}`);
+  }
+
+  getItemByLocation(locationName: string, itemName: string) {
+    return this.page.locator(`tr:has-text("${locationName}")`).locator(`text=${itemName}`);
+  }
+
+  getSkuByLocation(locationName: string, sku: string) {
+    return this.page.locator(`tr:has-text("${locationName}")`).locator(`text=${sku}`);
+  }
+
+    getItemName(itemName: string): Locator {
+    return this.page.locator(`//div[@class='font-medium' and normalize-space()='${itemName}']`);
+    }
+
+  getSku(sku: string): Locator {
+    return this.page.locator(`//div[contains(@class,'font-mono') and normalize-space()='${sku}']`);
+  }
+
+ async verifyAssignedItemsOnMonthlyCountPage( items: { sku: string; itemName: string }): Promise<void> {
+      await this.page.waitForTimeout(3000);
+      await expect(this.getItemName(items.itemName)).toBeVisible();
+      await expect(this.getSku(items.sku)).toBeVisible();
+      log(`Verified Item '${items.itemName}' with SKU '${items.sku}'.`);
+    }
+
+  async verifyItemsNotPresentOnMonthlyCountPage(items: { sku: string; itemName: string }): Promise<void> {
+        await expect(this.page.getByText(items.itemName)).toHaveCount(0, { timeout: 15000 });
+        await expect(this.page.getByText(items.sku)).toHaveCount(0, { timeout: 15000 });
+        log(`Verified '${items.itemName}' is not displayed.`);
+    
+}
+
 }

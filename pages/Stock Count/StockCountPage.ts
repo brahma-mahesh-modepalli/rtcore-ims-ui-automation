@@ -102,7 +102,7 @@ export class StockCountPage {
     log('Clicking on Weekly Count');
     
     try {
-      await this.weeklyCountOption.waitFor({ state: 'visible', timeout: 10000 }).catch(() => {
+      await this.weeklyCountOption.waitFor({ state: 'visible', timeout: 15000 }).catch(() => {
         log('⚠ Element not immediately visible, proceeding anyway');
       });
       await this.weeklyCountOption.click();
@@ -122,7 +122,7 @@ export class StockCountPage {
     log('Clicking on Monthly Count');
     
     try {
-      await this.monthlyCountOption.waitFor({ state: 'visible', timeout: 10000 }).catch(() => {
+      await this.monthlyCountOption.waitFor({ state: 'visible', timeout: 30000 }).catch(() => {
         log('⚠ Element not immediately visible, proceeding anyway');
       });
       await this.monthlyCountOption.click();
@@ -143,16 +143,27 @@ export class StockCountPage {
     log('Clicking on Count Locations');
     
     try {
-      await this.countLocationsOption.waitFor({ state: 'visible', timeout: 10000 }).catch(() => {
-        log('⚠ Element not immediately visible, proceeding anyway');
-      });
-      await this.countLocationsOption.click();
+      const visible = await this.countLocationsOption.isVisible().catch(() => false);
+      if (!visible) {
+        await this.expandStockCountMenu();
+      }
+      await expect(this.countLocationsOption).toBeVisible({ timeout: 15000 });
+      await expect(this.countLocationsOption).toBeEnabled({ timeout: 15000 });
+      await this.countLocationsOption.scrollIntoViewIfNeeded();
+      try {
+        await this.countLocationsOption.click();
+      } catch (firstError) {
+        log('First Count Locations click attempt failed, retrying with force: ' + String(firstError));
+        await this.page.waitForTimeout(500);
+        await this.countLocationsOption.click({ force: true });
+      }
     } catch (error) {
       log('Error clicking Count Locations: ' + String(error));
       throw error;
     }
     
     await this.page.waitForLoadState('networkidle');
+    await expect(this.countLocationsTitle).toBeVisible({ timeout: 15000 });
     log('✓ Count Locations page loaded');
   }
 
@@ -178,7 +189,7 @@ export class StockCountPage {
    * Verify Monthly Count page is displayed
    */
   async verifyMonthlyCountPageLoaded(): Promise<void> {
-    await expect(this.monthlyCountTitle).toBeVisible();
+    await expect(this.monthlyCountTitle).toBeVisible({ timeout: 1500 });
     log('✓ Verified: Monthly Count page is displayed');
   }
 
@@ -186,7 +197,7 @@ export class StockCountPage {
    * Verify Count Locations page is displayed
    */
   async verifyCountLocationsPageLoaded(): Promise<void> {
-    await expect(this.countLocationsTitle).toBeVisible();
+    await expect(this.countLocationsTitle).toBeVisible({ timeout: 1500 });
     log('✓ Verified: Count Locations page is displayed');
   }
 
@@ -265,5 +276,32 @@ export class StockCountPage {
       await expect(link).toHaveCount(0);
       log(`✓ Forbidden menu absent: ${name}`);
     }
+  }
+
+  /**
+   * Click to Daily Shift Count from menu
+   * Expands menu and clicks Daily Shift Count option
+   */
+  async clickToDailyShiftCount(): Promise<void> {
+    await this.clickDailyShiftCount();
+    await this.verifyDailyShiftCountPageLoaded();
+  }
+
+  /**
+   * Click to Weekly Count from menu
+   * Expands menu and clicks Weekly Count option
+   */
+  async clickToWeeklyShiftCount(): Promise<void> {
+    await this.clickWeeklyCount();
+    await this.verifyWeeklyCountPageLoaded();
+  }
+
+  /**
+   * Click to Monthly Count from menu
+   * Expands menu and clicks Monthly Count option
+   */
+  async clickToMonthlyShiftCount(): Promise<void> {
+   await this.clickMonthlyCount();
+    await this.verifyMonthlyCountPageLoaded();
   }
 }
