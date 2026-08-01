@@ -1,0 +1,1157 @@
+{
+  "RCSP-206": {
+    "scenarioId": "RCSP-206",
+    "epic": "EPIC-RCSP-119",
+    "feature": "Stock Count",
+
+    "commonData": {
+      "prerequisites": [
+        "User is logged into the backoffice dashboard",
+        "User has admin privileges"
+      ],
+      "userRole": "admin"
+    },
+
+    "testCases": [
+      {
+        "testCaseId": "TC_RCSP-206_01",
+        "testName": "Verify user can navigate to Count Locations page",
+        "description": "Verify STOCK COUNT menu expands and Count Locations page opens.",
+
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Launch application",
+            "expectedResult": "Dashboard is displayed"
+          },
+          {
+            "step": 2,
+            "description": "Login with valid credentials",
+            "expectedResult": "User logged in successfully"
+          },
+          {
+            "step": 3,
+            "description": "Verify STOCK COUNT menu",
+            "expectedResult": "STOCK COUNT menu is visible"
+          },
+          {
+            "step": 4,
+            "description": "Expand STOCK COUNT menu",
+            "expectedResult": "Submenus are displayed"
+          },
+          {
+            "step": 5,
+            "description": "Click Count Locations",
+            "expectedResult": "Count Locations page is displayed"
+          }
+        ],
+        "testData": {
+          "navigationItems": [
+            "Count Locations"
+          ]
+        }
+  },
+  {
+        "testCaseId": "TC_RCSP-206_02",
+        "testName": "Verify user can create a new Count Location",
+        "description": "Verify user can create a new Count Location using mandatory fields.",
+
+        "testSteps": [
+          {
+            "step": 1,
+            "description": "Launch application",
+            "expectedResult": "Dashboard is displayed"
+          },
+          {
+            "step": 2,
+            "description": "Login with valid credentials",
+            "expectedResult": "User logged in successfully"
+          },
+          {
+            "step": 3,
+            "description": "Verify STOCK COUNT menu",
+            "expectedResult": "STOCK COUNT menu is visible"
+          },
+          {
+            "step": 4,
+            "description": "Expand STOCK COUNT menu",
+            "expectedResult": "Submenus are displayed"
+          },
+          {
+            "step": 5,
+            "description": "Click Count Locations",
+            "expectedResult": "Count Locations page is displayed"
+          }
+        ],
+        "testData": {
+          "navigationItems": [
+            "Count Locations"
+          ],
+          "createCountLocationItems": [
+            {
+              "locationName": "Walk-In Cooler",
+              "description": "Cooler for storing perishable items"
+            }
+           
+          ]
+        }
+  },
+  {
+  "testCaseId": "TC_RCSP-206_03",
+  "testName": "Verify Assign Item popup elements and button state",
+  "description": "Verify user can open the Assign Item popup from an existing Count Location and validate all popup elements along with the Assign and Cancel button states.",
+
+  "testSteps": [
+    {
+      "step": 1,
+      "description": "Launch application",
+      "expectedResult": "Dashboard is displayed"
+    },
+    {
+      "step": 2,
+      "description": "Login with valid credentials",
+      "expectedResult": "User logged in successfully"
+    },
+    {
+      "step": 3,
+      "description": "Verify STOCK COUNT menu",
+      "expectedResult": "STOCK COUNT menu is visible"
+    },
+    {
+      "step": 4,
+      "description": "Expand STOCK COUNT menu",
+      "expectedResult": "Submenus are displayed"
+    },
+    {
+      "step": 5,
+      "description": "Click Count Locations",
+      "expectedResult": "Count Locations page is displayed"
+    },
+    {
+      "step": 6,
+      "description": "Click on the 'Walk-In Cooler' location row",
+      "expectedResult": "Location row is selected"
+    },
+    {
+      "step": 7,
+      "description": "Expand the 'Walk-In Cooler' location row",
+      "expectedResult": "Location details section is expanded"
+    },
+    {
+      "step": 8,
+      "description": "Verify '+ ASSIGN ITEM' button is visible",
+      "expectedResult": "'+ ASSIGN ITEM' button is displayed and enabled"
+    },
+    {
+      "step": 9,
+      "description": "Click '+ ASSIGN ITEM' button",
+      "expectedResult": "'Assign Item To Location' popup is displayed"
+    },
+    {
+      "step": 10,
+      "description": "Verify all popup elements",
+      "expectedResult": "Popup title, Item search textbox, Daily, Weekly, Monthly options, Assign button, Cancel button and Close button are displayed"
+    },
+    {
+      "step": 11,
+      "description": "Verify Assign and Cancel button states without entering mandatory fields",
+      "expectedResult": "Assign button is disabled and Cancel button is enabled"
+    }
+  ],
+
+  "testData": {
+    "navigationItems": [
+      "Count Locations"
+    ],
+    "assignItemPopupItems": [
+      {
+        "locationName": "Walk-In Cooler",
+         "itemName": "1000002"
+      }
+    ]
+  }
+},{
+  "testCaseId": "TC_RCSP-206_04",
+  "testName": "Verify user can assign an Daily Frequency Item to Count Location",
+  "description": "Verify user can assign an Daily Frequency item to an existing Count Location with Daily count frequency.",
+  "testSteps": [
+    {
+      "step": 1,
+      "description": "Launch application",
+      "expectedResult": "Dashboard is displayed"
+    },
+    {
+      "step": 2,
+      "description": "Login with valid credentials",
+      "expectedResult": "User logged in successfully"
+    },
+    {
+      "step": 3,
+      "description": "Navigate to STOCK COUNT → Count Locations",
+      "expectedResult": "Count Locations page is displayed"
+    },
+    {
+      "step": 4,
+      "description": "Expand 'Walk-In Cooler' location row",
+      "expectedResult": "Location row is expanded"
+    },
+    {
+      "step": 5,
+      "description": "Click '+ ASSIGN ITEM'",
+      "expectedResult": "Assign Item To Location popup is displayed"
+    },
+    {
+      "step": 6,
+      "description": "Search item using SKU",
+      "expectedResult": "Matching item is displayed in dropdown"
+    },
+    {
+      "step": 7,
+      "description": "Select the item",
+      "expectedResult": "Item is selected"
+    },
+    {
+      "step": 8,
+      "description": "Verify Daily frequency is selected by default",
+      "expectedResult": "Daily option remains selected"
+    },
+    {
+      "step": 9,
+      "description": "Verify Assign Item button is enabled",
+      "expectedResult": "Assign Item button is clickable"
+    },
+    {
+      "step": 10,
+      "description": "Click Assign Item button",
+      "expectedResult": "Item is assigned successfully"
+    },
+    {
+      "step": 11,
+      "description": "Verify assigned item in expanded location",
+      "expectedResult": "Assigned Item Name, SKU and Daily status are displayed"
+    }
+  ],
+"testData": {
+    "navigationItems": [
+      "Count Locations"
+    ],
+    "assignItemData": [
+  {
+    "locationName": "Fry Station",
+      "countFrequency": ["Daily"],
+    "items": [
+      {
+        "sku": "1000002",
+        "itemName": "M-JAL WHOLE"
+      },
+      {
+        "sku": "1000048",
+        "itemName": "PIE APPLE-M"
+      },
+      {
+        "sku": "1000049",
+        "itemName": "OIL SOYCAN-M"
+      },
+      {
+        "sku": "1000050",
+        "itemName": "LEMONPIE-M"
+      },
+      {
+        "sku": "1000061",
+        "itemName": "EGG SHELL-M"
+      },
+       {
+        "sku": "1000001",
+        "itemName": "M-JALA BAG"
+      },
+      {
+        "sku": "1000060",
+        "itemName": "EGG LIQUID-M"
+      },
+      {
+        "sku": "1000078",
+        "itemName": "SAUCE BLAZE/JAL RANCH-M"
+      },{
+        "sku": "1000063",
+        "itemName": "LARGE BUNS-M"
+      },
+       {
+        "sku": "1000072",
+        "itemName": "COFFEE DECAF-M"
+      },
+      {
+        "sku": "1000080",
+        "itemName": "PWRADE FRT PUNCH-M"
+      },
+      {
+        "sku": "1000081",
+        "itemName": "PC HONEY-M"
+      }
+    ]
+  }
+]
+  }
+},
+{
+  "testCaseId": "TC_RCSP-206_05",
+  "testName": "Verify user can assign an Weekly Frequency Item to Count Location",
+  "description": "Verify user can assign an Weekly Frequency item to an existing Count Location with Weekly count frequency.",
+  "testSteps": [
+    {
+      "step": 1,
+      "description": "Launch application",
+      "expectedResult": "Dashboard is displayed"
+    },
+    {
+      "step": 2,
+      "description": "Login with valid credentials",
+      "expectedResult": "User logged in successfully"
+    },
+    {
+      "step": 3,
+      "description": "Navigate to STOCK COUNT → Count Locations",
+      "expectedResult": "Count Locations page is displayed"
+    },
+    {
+      "step": 4,
+      "description": "Expand 'Walk-In Cooler' location row",
+      "expectedResult": "Location row is expanded"
+    },
+    {
+      "step": 5,
+      "description": "Click '+ ASSIGN ITEM'",
+      "expectedResult": "Assign Item To Location popup is displayed"
+    },
+    {
+      "step": 6,
+      "description": "Search item using SKU",
+      "expectedResult": "Matching item is displayed in dropdown"
+    },
+    {
+      "step": 7,
+      "description": "Select the item",
+      "expectedResult": "Item is selected"
+    },
+    {
+      "step": 8,
+      "description": "Verify Daily frequency is selected by default",
+      "expectedResult": "Daily option remains selected"
+    },
+    {
+      "step": 9,
+      "description": "Verify Assign Item button is enabled",
+      "expectedResult": "Assign Item button is clickable"
+    },
+    {
+      "step": 10,
+      "description": "Click Assign Item button",
+      "expectedResult": "Item is assigned successfully"
+    },
+    {
+      "step": 11,
+      "description": "Verify assigned item in expanded location",
+      "expectedResult": "Assigned Item Name, SKU and Daily status are displayed"
+    }
+  ],
+  "testData": {
+    "navigationItems": [
+      "Count Locations"
+    ],
+    "assignItemData": [
+  {
+    "locationName": "Fry Station",
+      "countFrequency": ["Weekly"],
+    "items": [
+      {
+        "sku": "1000002",
+        "itemName": "M-JAL WHOLE"
+      },
+      {
+        "sku": "1000048",
+        "itemName": "PIE APPLE-M"
+      },
+      {
+        "sku": "1000049",
+        "itemName": "OIL SOYCAN-M"
+      },
+      {
+        "sku": "1000050",
+        "itemName": "LEMONPIE-M"
+      },
+      {
+        "sku": "1000061",
+        "itemName": "EGG SHELL-M"
+      },
+       {
+        "sku": "1000001",
+        "itemName": "M-JALA BAG"
+      },
+      {
+        "sku": "1000060",
+        "itemName": "EGG LIQUID-M"
+      },
+      {
+        "sku": "1000078",
+        "itemName": "SAUCE BLAZE/JAL RANCH-M"
+      },{
+        "sku": "1000063",
+        "itemName": "LARGE BUNS-M"
+      },
+       {
+        "sku": "1000072",
+        "itemName": "COFFEE DECAF-M"
+      },
+      {
+        "sku": "1000080",
+        "itemName": "PWRADE FRT PUNCH-M"
+      },
+      {
+        "sku": "1000081",
+        "itemName": "PC HONEY-M"
+      }
+    ]
+  }
+]
+  }
+},{
+  "testCaseId": "TC_RCSP-206_06",
+  "testName": "Verify user can assign an Monthly Frequency Item to Count Location",
+  "description": "Verify user can assign an Monthly Frequency item to an existing Count Location with Monthly count frequency.",
+  "testSteps": [
+    {
+      "step": 1,
+      "description": "Launch application",
+      "expectedResult": "Dashboard is displayed"
+    },
+    {
+      "step": 2,
+      "description": "Login with valid credentials",
+      "expectedResult": "User logged in successfully"
+    },
+    {
+      "step": 3,
+      "description": "Navigate to STOCK COUNT → Count Locations",
+      "expectedResult": "Count Locations page is displayed"
+    },
+    {
+      "step": 4,
+      "description": "Expand 'Walk-In Cooler' location row",
+      "expectedResult": "Location row is expanded"
+    },
+    {
+      "step": 5,
+      "description": "Click '+ ASSIGN ITEM'",
+      "expectedResult": "Assign Item To Location popup is displayed"
+    },
+    {
+      "step": 6,
+      "description": "Search item using SKU",
+      "expectedResult": "Matching item is displayed in dropdown"
+    },
+    {
+      "step": 7,
+      "description": "Select the item",
+      "expectedResult": "Item is selected"
+    },
+    {
+      "step": 8,
+      "description": "Verify user can assign an Monthly Frequency item to an existing Count Location with Monthly count frequency.",
+      "expectedResult": "Monthly option remains selected"
+    },
+    {
+      "step": 9,
+      "description": "Verify Assign Item button is enabled",
+      "expectedResult": "Assign Item button is clickable"
+    },
+    {
+      "step": 10,
+      "description": "Click Assign Item button",
+      "expectedResult": "Item is assigned successfully"
+    },
+    {
+      "step": 11,
+      "description": "Verify assigned item in expanded location",
+      "expectedResult": "Assigned Item Name, SKU and Daily status are displayed"
+    }
+  ],
+  "testData": {
+    "navigationItems": [
+      "Count Locations"
+    ],
+    "assignItemData": [
+  {
+    "locationName": "Fry Station",
+      "countFrequency": ["Monthly"],
+    "items": [
+      {
+        "sku": "1000002",
+        "itemName": "M-JAL WHOLE"
+      },
+      {
+        "sku": "1000048",
+        "itemName": "PIE APPLE-M"
+      },
+      {
+        "sku": "1000049",
+        "itemName": "OIL SOYCAN-M"
+      },
+      {
+        "sku": "1000050",
+        "itemName": "LEMONPIE-M"
+      },
+      {
+        "sku": "1000061",
+        "itemName": "EGG SHELL-M"
+      },
+       {
+        "sku": "1000001",
+        "itemName": "M-JALA BAG"
+      },
+      {
+        "sku": "1000060",
+        "itemName": "EGG LIQUID-M"
+      },
+      {
+        "sku": "1000078",
+        "itemName": "SAUCE BLAZE/JAL RANCH-M"
+      },{
+        "sku": "1000063",
+        "itemName": "LARGE BUNS-M"
+      },
+       {
+        "sku": "1000072",
+        "itemName": "COFFEE DECAF-M"
+      },
+      {
+        "sku": "1000080",
+        "itemName": "PWRADE FRT PUNCH-M"
+      },
+      {
+        "sku": "1000081",
+        "itemName": "PC HONEY-M"
+      }
+    ]
+  }
+]
+  }
+},{
+  "testCaseId": "TC_RCSP-206_07",
+  "testName": "Verify user can assign an Daily and Weekly Frequency Item to Count Location",
+  "description": "Verify user can assign an Daily and Weekly Frequency item to an existing Count Location with Daily and Weekly count frequency.",
+  "testSteps": [
+    {
+      "step": 1,
+      "description": "Launch application",
+      "expectedResult": "Dashboard is displayed"
+    },
+    {
+      "step": 2,
+      "description": "Login with valid credentials",
+      "expectedResult": "User logged in successfully"
+    },
+    {
+      "step": 3,
+      "description": "Navigate to STOCK COUNT → Count Locations",
+      "expectedResult": "Count Locations page is displayed"
+    },
+    {
+      "step": 4,
+      "description": "Expand 'Walk-In Cooler' location row",
+      "expectedResult": "Location row is expanded"
+    },
+    {
+      "step": 5,
+      "description": "Click '+ ASSIGN ITEM'",
+      "expectedResult": "Assign Item To Location popup is displayed"
+    },
+    {
+      "step": 6,
+      "description": "Search item using SKU",
+      "expectedResult": "Matching item is displayed in dropdown"
+    },
+    {
+      "step": 7,
+      "description": "Select the item",
+      "expectedResult": "Item is selected"
+    },
+    {
+      "step": 8,
+      "description": "Verify user can assign an Daily and Weekly Frequency item to an existing Count Location with Daily and Weekly count frequency.",
+      "expectedResult": "Daily and Weekly option remains selected"
+    },
+    {
+      "step": 9,
+      "description": "Verify Assign Item button is enabled",
+      "expectedResult": "Assign Item button is clickable"
+    },
+    {
+      "step": 10,
+      "description": "Click Assign Item button",
+      "expectedResult": "Item is assigned successfully"
+    },
+    {
+      "step": 11,
+      "description": "Verify assigned item in expanded location",
+      "expectedResult": "Assigned Item Name, SKU and Daily status are displayed"
+    }
+  ],
+  "testData": {
+    "navigationItems": [
+      "Count Locations"
+    ],
+    "assignItemData": [
+  {
+    "locationName": "Fry Station",
+      "countFrequency": ["Daily", "Weekly"],
+    "items": [
+      {
+        "sku": "1000002",
+        "itemName": "M-JAL WHOLE"
+      },
+      {
+        "sku": "1000048",
+        "itemName": "PIE APPLE-M"
+      },
+      {
+        "sku": "1000049",
+        "itemName": "OIL SOYCAN-M"
+      },
+      {
+        "sku": "1000050",
+        "itemName": "LEMONPIE-M"
+      },
+      {
+        "sku": "1000061",
+        "itemName": "EGG SHELL-M"
+      },
+       {
+        "sku": "1000001",
+        "itemName": "M-JALA BAG"
+      },
+      {
+        "sku": "1000060",
+        "itemName": "EGG LIQUID-M"
+      },
+      {
+        "sku": "1000078",
+        "itemName": "SAUCE BLAZE/JAL RANCH-M"
+      },{
+        "sku": "1000063",
+        "itemName": "LARGE BUNS-M"
+      },
+       {
+        "sku": "1000072",
+        "itemName": "COFFEE DECAF-M"
+      },
+      {
+        "sku": "1000080",
+        "itemName": "PWRADE FRT PUNCH-M"
+      },
+      {
+        "sku": "1000081",
+        "itemName": "PC HONEY-M"
+      }
+    ]
+  }
+]
+  }
+},{
+  "testCaseId": "TC_RCSP-206_08",
+  "testName": "Verify user can assign an Daily and Monthly Frequency Item to Count Location",
+  "description": "Verify user can assign an Daily and Monthly Frequency item to an existing Count Location with Daily and Monthly count frequency.",
+  "testSteps": [
+    {
+      "step": 1,
+      "description": "Launch application",
+      "expectedResult": "Dashboard is displayed"
+    },
+    {
+      "step": 2,
+      "description": "Login with valid credentials",
+      "expectedResult": "User logged in successfully"
+    },
+    {
+      "step": 3,
+      "description": "Navigate to STOCK COUNT → Count Locations",
+      "expectedResult": "Count Locations page is displayed"
+    },
+    {
+      "step": 4,
+      "description": "Expand 'Walk-In Cooler' location row",
+      "expectedResult": "Location row is expanded"
+    },
+    {
+      "step": 5,
+      "description": "Click '+ ASSIGN ITEM'",
+      "expectedResult": "Assign Item To Location popup is displayed"
+    },
+    {
+      "step": 6,
+      "description": "Search item using SKU",
+      "expectedResult": "Matching item is displayed in dropdown"
+    },
+    {
+      "step": 7,
+      "description": "Select the item",
+      "expectedResult": "Item is selected"
+    },
+    {
+      "step": 8,
+      "description": "Verify user can assign an Daily and Monthly Frequency item to an existing Count Location with Daily and Monthly count frequency.",
+      "expectedResult": "Daily and Monthly option remains selected"
+    },
+    {
+      "step": 9,
+      "description": "Verify Assign Item button is enabled",
+      "expectedResult": "Assign Item button is clickable"
+    },
+    {
+      "step": 10,
+      "description": "Click Assign Item button",
+      "expectedResult": "Item is assigned successfully"
+    },
+    {
+      "step": 11,
+      "description": "Verify assigned item in expanded location",
+      "expectedResult": "Assigned Item Name, SKU and Daily status are displayed"
+    }, {
+      "step": 112,
+      "description": "Verify assigned item in expanded location",
+      "expectedResult": "Assigned Item Name, SKU and Monthly status are displayed"
+    }
+  ],
+  "testData": {
+    "navigationItems": [
+      "Count Locations"
+    ],
+    "assignItemData": [
+  {
+    "locationName": "Fry Station",
+      "countFrequency": ["Daily", "Monthly"],
+    "items": [
+      {
+        "sku": "1000002",
+        "itemName": "M-JAL WHOLE"
+      },
+      {
+        "sku": "1000048",
+        "itemName": "PIE APPLE-M"
+      },
+      {
+        "sku": "1000049",
+        "itemName": "OIL SOYCAN-M"
+      },
+      {
+        "sku": "1000050",
+        "itemName": "LEMONPIE-M"
+      },
+      {
+        "sku": "1000061",
+        "itemName": "EGG SHELL-M"
+      },
+       {
+        "sku": "1000001",
+        "itemName": "M-JALA BAG"
+      },
+      {
+        "sku": "1000060",
+        "itemName": "EGG LIQUID-M"
+      },
+      {
+        "sku": "1000078",
+        "itemName": "SAUCE BLAZE/JAL RANCH-M"
+      },{
+        "sku": "1000063",
+        "itemName": "LARGE BUNS-M"
+      },
+       {
+        "sku": "1000072",
+        "itemName": "COFFEE DECAF-M"
+      },
+      {
+        "sku": "1000080",
+        "itemName": "PWRADE FRT PUNCH-M"
+      },
+      {
+        "sku": "1000081",
+        "itemName": "PC HONEY-M"
+      }
+    ]
+  }
+]
+  }
+},{
+  "testCaseId": "TC_RCSP-206_09",
+  "testName": "Verify user can assign an Weekly and Monthly Frequency Item to Count Location",
+  "description": "Verify user can assign an Weekly and Monthly Frequency item to an existing Count Location with Weekly and Monthly count frequency.",
+  "testSteps": [
+    {
+      "step": 1,
+      "description": "Launch application",
+      "expectedResult": "Dashboard is displayed"
+    },
+    {
+      "step": 2,
+      "description": "Login with valid credentials",
+      "expectedResult": "User logged in successfully"
+    },
+    {
+      "step": 3,
+      "description": "Navigate to STOCK COUNT → Count Locations",
+      "expectedResult": "Count Locations page is displayed"
+    },
+    {
+      "step": 4,
+      "description": "Expand 'Walk-In Cooler' location row",
+      "expectedResult": "Location row is expanded"
+    },
+    {
+      "step": 5,
+      "description": "Click '+ ASSIGN ITEM'",
+      "expectedResult": "Assign Item To Location popup is displayed"
+    },
+    {
+      "step": 6,
+      "description": "Search item using SKU",
+      "expectedResult": "Matching item is displayed in dropdown"
+    },
+    {
+      "step": 7,
+      "description": "Select the item",
+      "expectedResult": "Item is selected"
+    },
+    {
+      "step": 8,
+      "description": "Verify user can assign an Daily and Monthly Frequency item to an existing Count Location with Daily and Monthly count frequency.",
+      "expectedResult": "Daily and Monthly option remains selected"
+    },
+    {
+      "step": 9,
+      "description": "Verify Assign Item button is enabled",
+      "expectedResult": "Assign Item button is clickable"
+    },
+    {
+      "step": 10,
+      "description": "Click Assign Item button",
+      "expectedResult": "Item is assigned successfully"
+    },
+    {
+      "step": 11,
+      "description": "Verify assigned item in expanded location",
+      "expectedResult": "Assigned Item Name, SKU and Weekly status are displayed"
+    }, {
+      "step": 112,
+      "description": "Verify assigned item in expanded location",
+      "expectedResult": "Assigned Item Name, SKU and Monthly status are displayed"
+    }
+  ],
+  "testData": {
+    "navigationItems": [
+      "Count Locations"
+    ],
+    "assignItemData": [
+  {
+    "locationName": "Fry Station",
+      "countFrequency": ["Weekly", "Monthly"],
+    "items": [
+      {
+        "sku": "1000002",
+        "itemName": "M-JAL WHOLE"
+      },
+      {
+        "sku": "1000048",
+        "itemName": "PIE APPLE-M"
+      },
+      {
+        "sku": "1000049",
+        "itemName": "OIL SOYCAN-M"
+      },
+      {
+        "sku": "1000050",
+        "itemName": "LEMONPIE-M"
+      },
+      {
+        "sku": "1000061",
+        "itemName": "EGG SHELL-M"
+      },
+       {
+        "sku": "1000001",
+        "itemName": "M-JALA BAG"
+      },
+      {
+        "sku": "1000060",
+        "itemName": "EGG LIQUID-M"
+      },
+      {
+        "sku": "1000078",
+        "itemName": "SAUCE BLAZE/JAL RANCH-M"
+      },{
+        "sku": "1000063",
+        "itemName": "LARGE BUNS-M"
+      },
+       {
+        "sku": "1000072",
+        "itemName": "COFFEE DECAF-M"
+      },
+      {
+        "sku": "1000080",
+        "itemName": "PWRADE FRT PUNCH-M"
+      },
+      {
+        "sku": "1000081",
+        "itemName": "PC HONEY-M"
+      }
+    ]
+  }
+]
+  }
+},{
+  "testCaseId": "TC_RCSP-206_10",
+  "testName": "Verify user can assign and Daily, Weekly and Monthly Frequency Item to Count Location",
+  "description": "Verify user can assign and Daily, Weekly and Monthly Frequency item to an existing Count Location with Daily, Weekly and Monthly count frequency.",
+  "testSteps": [
+    {
+      "step": 1,
+      "description": "Launch application",
+      "expectedResult": "Dashboard is displayed"
+    },
+    {
+      "step": 2,
+      "description": "Login with valid credentials",
+      "expectedResult": "User logged in successfully"
+    },
+    {
+      "step": 3,
+      "description": "Navigate to STOCK COUNT → Count Locations",
+      "expectedResult": "Count Locations page is displayed"
+    },
+    {
+      "step": 4,
+      "description": "Expand 'Walk-In Cooler' location row",
+      "expectedResult": "Location row is expanded"
+    },
+    {
+      "step": 5,
+      "description": "Click '+ ASSIGN ITEM'",
+      "expectedResult": "Assign Item To Location popup is displayed"
+    },
+    {
+      "step": 6,
+      "description": "Search item using SKU",
+      "expectedResult": "Matching item is displayed in dropdown"
+    },
+    {
+      "step": 7,
+      "description": "Select the item",
+      "expectedResult": "Item is selected"
+    },
+    {
+      "step": 8,
+      "description": "Verify user can assign an Daily and Monthly Frequency item to an existing Count Location with Daily and Monthly count frequency.",
+      "expectedResult": "Daily and Monthly option remains selected"
+    },
+    {
+      "step": 9,
+      "description": "Verify Assign Item button is enabled",
+      "expectedResult": "Assign Item button is clickable"
+    },
+    {
+      "step": 10,
+      "description": "Click Assign Item button",
+      "expectedResult": "Item is assigned successfully"
+    },
+    {
+      "step": 11,
+      "description": "Verify assigned item in expanded location",
+      "expectedResult": "Assigned Item Name, SKU and Daily status are displayed"
+    }, {
+      "step": 12,
+      "description": "Verify assigned item in expanded location",
+      "expectedResult": "Assigned Item Name, SKU and Weekly status are displayed"
+    },
+     {
+      "step": 13,
+      "description": "Verify assigned item in expanded location",
+      "expectedResult": "Assigned Item Name, SKU and Monthly status are displayed"
+    }
+  ],
+  "testData": {
+    "navigationItems": [
+      "Count Locations"
+    ],
+    "assignItemData": [
+  {
+    "locationName": "Fry Station",
+      "countFrequency": ["Daily" ,"Weekly", "Monthly"],
+    "items": [
+      {
+        "sku": "1000002",
+        "itemName": "M-JAL WHOLE"
+      },
+      {
+        "sku": "1000048",
+        "itemName": "PIE APPLE-M"
+      },
+      {
+        "sku": "1000049",
+        "itemName": "OIL SOYCAN-M"
+      },
+      {
+        "sku": "1000050",
+        "itemName": "LEMONPIE-M"
+      },
+      {
+        "sku": "1000061",
+        "itemName": "EGG SHELL-M"
+      },
+       {
+        "sku": "1000001",
+        "itemName": "M-JALA BAG"
+      },
+      {
+        "sku": "1000060",
+        "itemName": "EGG LIQUID-M"
+      },
+      {
+        "sku": "1000078",
+        "itemName": "SAUCE BLAZE/JAL RANCH-M"
+      },{
+        "sku": "1000063",
+        "itemName": "LARGE BUNS-M"
+      },
+       {
+        "sku": "1000072",
+        "itemName": "COFFEE DECAF-M"
+      },
+      {
+        "sku": "1000080",
+        "itemName": "PWRADE FRT PUNCH-M"
+      },
+      {
+        "sku": "1000081",
+        "itemName": "PC HONEY-M"
+      }
+    ]
+  }
+]
+  }
+},{
+  "testCaseId": "TC_RCSP-206_11",
+  "testName": "Verify Count Frequency options and Assign Item button is disabled until all mandatory fields are filled in Assign Item popup",
+  "description": "Verify Daily, Weekly and Monthly Count Frequency options are displayed and Assign Item button is disabled until all mandatory fields are filled in the Assign Item popup.",
+
+  "testSteps": [
+    {
+      "step": 1,
+      "description": "Launch application",
+      "expectedResult": "Dashboard is displayed"
+    },
+    {
+      "step": 2,
+      "description": "Login with valid credentials",
+      "expectedResult": "User logged in successfully"
+    },
+    {
+      "step": 3,
+      "description": "Navigate to STOCK COUNT → Count Locations",
+      "expectedResult": "Count Locations page is displayed"
+    },
+    {
+      "step": 4,
+      "description": "Expand 'Walk-In Cooler' location",
+      "expectedResult": "Location details are expanded"
+    },
+    {
+      "step": 5,
+      "description": "Click '+ ASSIGN ITEM'",
+      "expectedResult": "Assign Item to Location popup is displayed"
+    },
+    {
+      "step": 6,
+      "description": "Verify Daily, Weekly and Monthly Count Frequency options",
+      "expectedResult": "All Count Frequency options are visible"
+    }
+  ],
+
+  "testData": {
+    "navigationItems": [
+      "Count Locations"
+    ],
+    "assignItemData": [
+      {
+        "locationName": "Walk-In Cooler",
+          "countFrequency": ["Daily" ,"Weekly", "Monthly"]
+       
+      }
+    ]
+  }
+}
+,{
+  "testCaseId": "TC_RCSP-206_12",
+  "testName": "Verify user can cancel assigning an Item to a Count Location",
+  "description": "Verify user can cancel the Assign Item operation after entering mandatory details.",
+
+  "testSteps": [
+    {
+      "step": 1,
+      "description": "Launch application",
+      "expectedResult": "Dashboard is displayed"
+    },
+    {
+      "step": 2,
+      "description": "Login with valid credentials",
+      "expectedResult": "User logged in successfully"
+    },
+    {
+      "step": 3,
+      "description": "Navigate to STOCK COUNT → Count Locations",
+      "expectedResult": "Count Locations page is displayed"
+    },
+    {
+      "step": 4,
+      "description": "Expand 'Walk-In Cooler' location and click '+ ASSIGN ITEM'",
+      "expectedResult": "Assign Item to Location popup is displayed"
+    },
+    {
+      "step": 5,
+      "description": "Enter Item details",
+      "expectedResult": "Item details are entered successfully"
+    },
+    {
+      "step": 6,
+      "description": "Click Cancel button",
+      "expectedResult": "Assign Item popup is closed and no item is assigned to the location"
+    }
+  ],
+
+  "testData": {
+    "navigationItems": [
+      "Count Locations"
+    ],
+    "assignItemData": [
+      {
+        "locationName": "Walk-In Cooler",
+        "countFrequency": [
+          "Daily"
+        ],
+        "items": [
+          {
+            "sku": "1000002",
+            "itemName": "JALAPENO WHOLE"
+          },
+          {
+            "sku": "1000003",
+            "itemName": "CHEDDAR CHEESE"
+          },
+          {
+            "sku": "1000004",
+            "itemName": "BEEF PATTY"
+          }
+        ]
+      }
+    ]
+  }
+}
+]
+}
+}
