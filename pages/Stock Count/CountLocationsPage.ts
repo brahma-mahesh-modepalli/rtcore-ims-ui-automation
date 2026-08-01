@@ -375,26 +375,18 @@ async addNewItems(locationName: string, items: { sku: string; itemName: string }
 }
 
 
-async addNewItems(locationName: string, items: { sku: string; itemName: string }[], countFrequency: string[]): Promise<{ sku: string; itemName: string }> {
+async enterItemsDetailsAndClickOnCancel(locationName: string, items: { sku: string; itemName: string }[], countFrequency: string[]): Promise<{ sku: string; itemName: string }> {
     await this.expandLocationRow(locationName);
     await this.verifyAssignItemButton();
     await this.clickAssignItemButton();
     const selectedItem = await this.searchAndSelectAvailableItem(items);
     log(`Selected item with Item Name : ${selectedItem.itemName}`);
     await this.selectCountFrequency(countFrequency);
+    await this.clickOnCancelButton();
 
-    await expect(this.getAssignedSku(selectedItem.sku)).toBeVisible({ timeout: 15000 });
-    log(`Item with SKU '${selectedItem.sku}' assigned successfully.`);
-
-    await expect(this.getAssignedItemName(selectedItem.itemName)).toBeVisible({ timeout: 15000 });
-    log(`Item with Item Name '${selectedItem.itemName}' assigned successfully.`);
-
-    for (const frequency of countFrequency) {
-      await expect(this.getAssignedItemCountFrequency(selectedItem.itemName, frequency)).toBeVisible({ timeout: 15000 });
-      log(`Item with Count Frequency '${frequency}' assigned successfully.`);
-    }
-
-    return selectedItem;
+   await expect(this.getAssignedSku(selectedItem.sku)).toHaveCount(0);
+   await expect(this.getAssignedItemName(selectedItem.itemName)).toHaveCount(0);
+   return selectedItem;
 
 }
 
