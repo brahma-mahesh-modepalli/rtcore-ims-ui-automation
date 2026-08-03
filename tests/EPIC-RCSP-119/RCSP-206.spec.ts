@@ -32,7 +32,8 @@ const RCSP_206_TEST_CASE_IDS = {
   assignWeeklyAndMonthlyItem: 'TC_RCSP-206_09',
   assignDailyAndWeeklyAndMonthlyItem: 'TC_RCSP-206_10',
   countFrequencyOptions: 'TC_RCSP-206_11',
-  assignItemDetailsAndCancel: 'TC_RCSP-206_12'
+  assignItemDetailsAndCancel: 'TC_RCSP-206_12',
+  editItemToDailyFrequencyToMonthlyFrequency: 'TC_RCSP-206_13',
   
 } as const;
 
@@ -154,7 +155,7 @@ test.describe('RCSP-206 - Create a new Count Location', () => {
       await countLocationsPage.createCountLocation(createLocationData.locationName, createLocationData.description);
       log('✓ Created Count Location successfully');
 
-    log('=== TEST PASSED - All navigations verified successfully ===');
+    log('=== TEST PASSED - create a new Count Location using mandatory fields successfully ===');
   });
 });
 
@@ -203,7 +204,7 @@ test.describe('RCSP-206 - Verify Assign Item Popup', () => {
      await countLocationsPage.verifyAssignItemPopupFunctionality(assignItemData.locationName);
       log('✓ Verified Assign Item Popup functionality successfully');
 
-    log('=== TEST PASSED - All navigations verified successfully ===');
+    log('=== TEST PASSED - Assign Item popup elements and button state verified successfully ===');
   });
 });
 
@@ -215,7 +216,7 @@ test.describe('RCSP-206 - Verify Assign Daily Frequency Item to Count Location',
   let weeklyPage: WeeklyCountPage;
   let monthlyPage: MonthlyCountPage;
 
-  test('Verify user can assign a Daily Frequency Item to an existing Count Location with Daily count frequency.', async ({
+  test('Verify user can assign a Daily Frequency Item to an existing Count Location', async ({
     page,
   }) => {
     let navigationData: Rcsp206CountLocationsPageTestData | undefined;
@@ -280,7 +281,7 @@ test.describe('RCSP-206 - Verify Assign Daily Frequency Item to Count Location',
         await countLocationsPage.deleteItems(assignDailyItem.locationName, selectedItem);
       }
     
-      log('=== TEST PASSED - All navigations verified successfully ===');
+      log('=== TEST PASSED - Assign Daily Frequency Item to Count Location successfully ===');
     }); 
  
   });  
@@ -363,7 +364,7 @@ test.describe('RCSP-206 - Verify Assign Daily Frequency Item to Count Location',
         await countLocationsPage.deleteItems(assignWeeklyItem.locationName, selectedItem);
       }
     
-      log('=== TEST PASSED - All navigations verified successfully ===');
+      log('=== TEST PASSED - Assign Weekly Frequency Item to Count Location successfully ===');
     }); 
  
   });  
@@ -444,7 +445,7 @@ test.describe('RCSP-206 - Verify Assign Daily Frequency Item to Count Location',
         await countLocationsPage.deleteItems(assignMonthlyItem.locationName, selectedItem);
       }
     
-      log('=== TEST PASSED - All navigations verified successfully ===');
+      log('=== TEST PASSED - Assign Monthly Frequency Item to Count Location successfully ===');
     }); 
  
   }); 
@@ -523,7 +524,7 @@ test.describe('RCSP-206 - Verify Assign Daily Frequency Item to Count Location',
         await countLocationsPage.deleteItems(assignDailyAndWeeklyItem.locationName, selectedItem);
       }
     
-      log('=== TEST PASSED - All navigations verified successfully ===');
+      log('=== TEST PASSED - Assign Daily and Weekly Frequency Item to Count Location successfully ===');
     }); 
  
   }); 
@@ -602,7 +603,7 @@ test.describe('RCSP-206 - Verify Assign Daily Frequency Item to Count Location',
         await countLocationsPage.deleteItems(assignDailyAndMonthlyItem.locationName, selectedItem);
       }
     
-      log('=== TEST PASSED - All navigations verified successfully ===');
+      log('=== TEST PASSED - Assign Daily and Monthly Frequency Item to Count Location successfully ===');
     }); 
  
   }); 
@@ -682,7 +683,7 @@ test.describe('RCSP-206 - Verify Assign Daily Frequency Item to Count Location',
         await countLocationsPage.deleteItems(assignWeeklyAndMonthlyItem.locationName, selectedItem);
       }
     
-      log('=== TEST PASSED - All navigations verified successfully ===');
+      log('=== TEST PASSED - Assign Weekly and Monthly Frequency Item to Count Location successfully ===');
     }); 
  
   }); 
@@ -761,20 +762,121 @@ test.describe('RCSP-206 - Verify Assign Daily Frequency Item to Count Location',
         await countLocationsPage.deleteItems(assignDailyAndWeeklyAndMonthlyItem.locationName, selectedItem);
       }
     
-      log('=== TEST PASSED - All navigations verified successfully ===');
+      log('=== TEST PASSED - Assign Daily, Weekly and Monthly Frequency Item to Count Location successfully ===');
     }); 
  
   }); 
 
+   
+  test.describe('RCSP-206 - Verify user can edit item to daily frequency to monthly frequency to Count Location', () => {
+    let loginPage: RTCDashboardLoginPage;
+    let stockCountPage: StockCountPage;
+    let countLocationsPage: CountLocationsPage;
+    let dailyPage: DailyShiftCountPage;
+    let weeklyPage: WeeklyCountPage;
+    let monthlyPage: MonthlyCountPage;
+  
+    test('Verify user can edit item to daily frequency to monthly frequency to an existing Count Location.', async ({
+      page,
+    }) => {
+      let navigationData: Rcsp206CountLocationsPageTestData | undefined;
+      let assignDailyItemData: Rcsp206AssignItemToCountLocationData | undefined;
+      let editItemToDailyFrequencyToMonthlyFrequencyData: Rcsp206AssignItemToCountLocationData | undefined;
+      let assignDailyItem: any;
+      let editItemToDailyFrequencyToMonthlyFrequency: any;
+  
+        loginPage = new RTCDashboardLoginPage(page);
+        stockCountPage = new StockCountPage(page);
+        countLocationsPage = new CountLocationsPage(page);
+        dailyPage = new DailyShiftCountPage(page);
+        weeklyPage = new WeeklyCountPage(page);
+        monthlyPage = new MonthlyCountPage(page);
+  
+        navigationData = getRcsp206TestCaseData<Rcsp206CountLocationsPageTestData>(RCSP_206_TEST_CASE_IDS.navigation);
+        assignDailyItemData = getRcsp206TestCaseData<Rcsp206AssignItemToCountLocationData>(RCSP_206_TEST_CASE_IDS.assignDailyItem);
+        editItemToDailyFrequencyToMonthlyFrequencyData = getRcsp206TestCaseData<Rcsp206AssignItemToCountLocationData>(RCSP_206_TEST_CASE_IDS.editItemToDailyFrequencyToMonthlyFrequency);
+        assignDailyItem = assignDailyItemData.assignItemData?.[0];
+        editItemToDailyFrequencyToMonthlyFrequency = editItemToDailyFrequencyToMonthlyFrequencyData.assignItemData?.[0];
+  
+        if (!assignDailyItem) {
+          throw new Error('RCSP-206 assignDailyItemData is missing or empty');
+        }
+  
+        log('=== RCSP-206: Verify Assign Daily Item Popup Test Started ===');
+  
+        log('STEP 1: Launching URL: ' + CONFIG.dashboardURL);
+        await page.goto(CONFIG.dashboardURL);
+        await page.waitForLoadState('networkidle');
+        log('✓ URL launched successfully');
+  
+        log('STEP 2: Logging in with credentials');
+        log('Email: ' + CONFIG.credentials.admin.username);
+        await loginPage.login(CONFIG.credentials.admin.username, CONFIG.credentials.admin.password);
+        log('✓ Login successful - Dashboard loaded');
+  
+        for (const navigationItem of navigationData.navigationItems) {
+          log(`Navigating to ${navigationItem}`);
+          await navigateToStockCountSection(stockCountPage, navigationItem);
+        }
+  
+        const selectedItem = await countLocationsPage.addNewItems(assignDailyItem.locationName, assignDailyItem.items, assignDailyItem.countFrequency);
+        log('✓ Verified Assign Item Popup functionality successfully');
+  
+        // await stockCountPage.clickToDailyShiftCount();
+        // await dailyPage.clickNewDailyShiftCountButton();
+        // await dailyPage.verifyAssignedItemsOnDailyShiftCountPage(assignDailyItem.locationName, selectedItem);
+        // log('✓ Verified Assign Item is displayed On Daily Shift Count Page');
+  
+        // Navigate to Weekly Shift Count
+        await stockCountPage.clickToWeeklyShiftCount();
+        await weeklyPage.clickNewWeeklyCountButton();
+        await weeklyPage.verifyItemsNotPresentOnWeeklyCountPage(selectedItem);
+        log('✓ Verified Assign Item is not displayed On Weekly Shift Count Page');
+  
+         // Navigate to Monthly Shift Count
+        await stockCountPage.clickToMonthlyShiftCount();
+        await monthlyPage.clickNewMonthlyCountButton();
+        await monthlyPage.verifyItemsNotPresentOnMonthlyCountPage(selectedItem);
+        log('✓ Verified Assign Item is not displayed On Monthly Shift Count Page');
+
+        // Edit Item to Daily Frequency to Monthly Frequency and verify it is displayed on Weekly and Monthly Shift Count Pages
+        await stockCountPage.navigateToCountLocations();
+        const editedItems = await countLocationsPage.editItemToDailyFrequencyToMonthlyFrequency(assignDailyItem.locationName, selectedItem, ["Monthly"]);
+        log('✓ Verified Edit Item to Daily Frequency to Monthly Frequency functionality successfully');
+
+        // await stockCountPage.clickToDailyShiftCount();
+        // await dailyPage.clickNewDailyShiftCountButton();
+        // await dailyPage.verifyItemsNotPresentOnDailyShiftCountPage(editedItems);
+        // log('✓ Verified edited Item is not displayed On Daily Shift Count Page');
+  
+        // Navigate to Weekly Shift Count
+        await stockCountPage.clickToWeeklyShiftCount();
+        await weeklyPage.clickNewWeeklyCountButton();
+        await weeklyPage.verifyAssignedItemsOnWeeklyCountPage(editedItems);
+        log('✓ Verified edited Item is displayed On Weekly Shift Count Page');
+    
+        // Navigate to Monthly Shift Count
+        await stockCountPage.clickToMonthlyShiftCount();
+        await monthlyPage.clickNewMonthlyCountButton();
+        await monthlyPage.verifyItemsNotPresentOnMonthlyCountPage(editedItems);
+        log('✓ Verified edited Item is not displayed On Monthly Shift Count Page');
+
+        // Delete Item from Count Locations
+        if (countLocationsPage && assignDailyItem) {
+          await stockCountPage.navigateToCountLocations();
+          await countLocationsPage.deleteItems(assignDailyItem.locationName, editedItems);
+        }
+      
+        log('=== TEST PASSED - Edit Item to Daily Frequency to Monthly Frequency successfully ===');
+      }); 
+   
+    });  
 
   test.describe('RCSP-206 - Verify Count Frequency options are displayed and Verify Assign Item button is disabled until all mandatory fields are filled in Assign Item popup', () => {
   let loginPage: RTCDashboardLoginPage;
   let stockCountPage: StockCountPage;
   let countLocationsPage: CountLocationsPage;
-  let dailyPage: DailyShiftCountPage;
-  let weeklyPage: WeeklyCountPage;
-  let monthlyPage: MonthlyCountPage;
-
+ 
   test('Verify Count Frequency options are displayed and Assign Item button is disabled until all mandatory fields are filled', async ({
     page,
   }) => {
@@ -786,9 +888,6 @@ test.describe('RCSP-206 - Verify Assign Daily Frequency Item to Count Location',
       loginPage = new RTCDashboardLoginPage(page);
       stockCountPage = new StockCountPage(page);
       countLocationsPage = new CountLocationsPage(page);
-      dailyPage = new DailyShiftCountPage(page);
-      weeklyPage = new WeeklyCountPage(page);
-      monthlyPage = new MonthlyCountPage(page);
 
       navigationData = getRcsp206TestCaseData<Rcsp206CountLocationsPageTestData>(RCSP_206_TEST_CASE_IDS.navigation);
       countFrequencyOptionsData = getRcsp206TestCaseData<Rcsp206AssignItemToCountLocationData>(RCSP_206_TEST_CASE_IDS.countFrequencyOptions);
@@ -818,7 +917,7 @@ test.describe('RCSP-206 - Verify Assign Daily Frequency Item to Count Location',
       await countLocationsPage.verifyCountFrequencyOptions(countFrequencyOptions.locationName, countFrequencyOptions.countFrequency);
         log("✓ Verified all Count Frequency options successfully and Verify Assign Item button is disabled until all mandatory fields are filled.");
     
-      log('=== TEST PASSED - All navigations verified successfully ===');
+      log('=== TEST PASSED - Count Frequency options are displayed and Assign Item button is disabled until all mandatory fields successfully ===');
     }); 
  
   }); 
@@ -874,11 +973,11 @@ test.describe('RCSP-206 - Verify Assign Daily Frequency Item to Count Location',
       await countLocationsPage.enterItemsDetailsAndClickOnCancel(assignDailyAndWeeklyAndMonthlyItem.locationName, assignDailyAndWeeklyAndMonthlyItem.items, assignDailyAndWeeklyAndMonthlyItem.countFrequency);
       log('✓ Verified Assign Item Popup functionality successfully');
     
-      log('=== TEST PASSED - All navigations verified successfully ===');
+      log('=== TEST PASSED - Cancel Assign Item operation successfully ===');
     }); 
  
   }); 
-
+  
 
 
 

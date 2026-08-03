@@ -374,6 +374,26 @@ async addNewItems(locationName: string, items: { sku: string; itemName: string }
 
 }
 
+async editItemToDailyFrequencyToMonthlyFrequency(locationName: string, items: { sku: string; itemName: string }, countFrequency: string[]): Promise<{ sku: string; itemName: string }> {
+    await this.clickOnEditItemButton(locationName, items.sku);
+    await this.selectCountFrequency(countFrequency);
+    await this.clickOnAssignButton();
+
+    await expect(this.getAssignedSku(items.sku)).toBeVisible({ timeout: 15000 });
+    log(`Item with SKU '${items.sku}' assigned successfully.`);
+
+    await expect(this.getAssignedItemName(items.itemName)).toBeVisible({ timeout: 15000 });
+    log(`Item with Item Name '${items.itemName}' assigned successfully.`);
+
+    for (const frequency of countFrequency) {
+      await expect(this.getAssignedItemCountFrequency(items.itemName, frequency)).toBeVisible({ timeout: 15000 });
+      log(`Item with Count Frequency '${frequency}' assigned successfully.`);
+    }
+
+    return items;
+
+}
+
 
 async enterItemsDetailsAndClickOnCancel(locationName: string,  items: { sku: string; itemName: string }[], countFrequency: string[]): Promise<{ sku: string; itemName: string }> {
     await this.expandLocationRow(locationName);
@@ -391,7 +411,6 @@ async enterItemsDetailsAndClickOnCancel(locationName: string,  items: { sku: str
 }
 
 
-locationName: string,
 async selectCountFrequency(selectedFrequencies: string[]): Promise<void> {
 
     const dailyButton = this.getFrequencyButton("Daily");
@@ -524,6 +543,11 @@ getDeleteButton(sku: string): Locator {
     return this.page.locator(`//tr[.//td[normalize-space()='${sku}']]//button[@title="Remove from location"]`);
 }
 
+getEditButton(sku: string): Locator {
+    // Find the row that contains a td with the exact SKU text, then the remove button in that row
+    return this.page.locator(`//tr[.//td[normalize-space()='${sku}']]//button[@title="Edit item""]`);
+}
+
 deleteButton(){
 
     return this.page.locator('//button[@title="Remove from location"]');
@@ -570,6 +594,8 @@ async searchAndSelectAvailableItem(items: { sku: string; itemName: string }[]): 
 
   throw new Error("No available items found for assignment.");
 }
+
+
 
 async deleteItems( locationName: string,items: { sku: string; itemName: string }): Promise<void> {
     await this.expandLocationRow(locationName);
@@ -633,6 +659,53 @@ async verifyCountFrequencyOptions(locationName: string, frequencies: string[]): 
         log(`✓ Verified '${frequency}' frequency option is displayed.`);
     }
 }
+
+async clickOnEditItemButton( locationName: string,existingItemSku: string): Promise<void> {
+    await this.expandLocationRow(locationName);
+    await this.page.waitForTimeout(3000);
+    const editBtn = await this.getEditButton(existingItemSku).first();
+        const visible = await editBtn.isVisible({ timeout: 10000 }).catch(() => false);
+        if (!visible) {
+            log(`Edit button for SKU ${existingItemSku} not found.`);
+            return;
+        }
+        await editBtn.waitFor({ state: 'visible', timeout: 5000 });
+        await editBtn.scrollIntoViewIfNeeded();
+        await editBtn.waitFor({ state: 'visible', timeout: 5000 });
+
+        // Prepare to accept confirmation dialog that appears on delete
+        this.page.once('dialog', async dialog => {
+            try {
+                expect(dialog.type()).toBe('confirm');
+                await dialog.accept();
+                    log('✓ Edit confirmation dialog accepted.');
+            } catch (err) {
+                await dialog.dismiss();
+            }
+        });
+
+        // Try a normal click, then fall back to hover+click and force click if necessary
+        try {
+             
+            await editBtn.click();
+            const visible = await editBtn.isVisible({ timeout: 10000 }).catch(() => false);
+            if (visible) {
+            await editBtn.click();
+        }
+        } catch (err) {
+            log(`Edit button regular click failed: ${String(err)} — trying hover+click`);
+            try {
+                await editBtn.hover();
+                await editBtn.click();
+            } catch (err2) {
+                log(`Hover+click failed: ${String(err2)} — trying force click`);
+                await editBtn.click({ force: true });
+            }
+        }
+
+        log(`Clicked edit for SKU : ${existingItemSku}`);
+}
+
 
 
 
