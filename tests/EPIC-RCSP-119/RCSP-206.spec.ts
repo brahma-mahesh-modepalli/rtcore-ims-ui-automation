@@ -841,7 +841,7 @@ test.describe('RCSP-206 - Verify Assign Daily Frequency Item to Count Location',
 
         // Edit Item to Daily Frequency to Monthly Frequency and verify it is displayed on Weekly and Monthly Shift Count Pages
         await stockCountPage.navigateToCountLocations();
-        const editedItems = await countLocationsPage.editItemToDailyFrequencyToMonthlyFrequency(assignDailyItem.locationName, selectedItem, ["Monthly"]);
+        const editedItems = await countLocationsPage.editItemToDailyFrequencyToMonthlyFrequency(editItemToDailyFrequencyToMonthlyFrequency.locationName, editItemToDailyFrequencyToMonthlyFrequency.items, editItemToDailyFrequencyToMonthlyFrequency.countFrequency);
         log('✓ Verified Edit Item to Daily Frequency to Monthly Frequency functionality successfully');
 
         // await stockCountPage.clickToDailyShiftCount();
