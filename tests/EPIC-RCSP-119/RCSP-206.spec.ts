@@ -935,8 +935,8 @@ test.describe('RCSP-206 - Verify Assign Daily Frequency Item to Count Location',
   }) => {
     test.setTimeout(120000);
     let navigationData: Rcsp206CountLocationsPageTestData | undefined;
-    let assignDailyAndWeeklyAndMonthlyItemData: Rcsp206AssignItemToCountLocationData | undefined;
-    let assignDailyAndWeeklyAndMonthlyItem: any;
+    let assignItemDetailsAndCancelData: Rcsp206AssignItemToCountLocationData | undefined;
+    let assignItemsDetailsAndCancel: any;
  
       loginPage = new RTCDashboardLoginPage(page);
       stockCountPage = new StockCountPage(page);
@@ -946,14 +946,14 @@ test.describe('RCSP-206 - Verify Assign Daily Frequency Item to Count Location',
       monthlyPage = new MonthlyCountPage(page);
 
       navigationData = getRcsp206TestCaseData<Rcsp206CountLocationsPageTestData>(RCSP_206_TEST_CASE_IDS.navigation);
-      assignDailyAndWeeklyAndMonthlyItemData = getRcsp206TestCaseData<Rcsp206AssignItemToCountLocationData>(RCSP_206_TEST_CASE_IDS.assignDailyAndWeeklyAndMonthlyItem);
-      assignDailyAndWeeklyAndMonthlyItem = assignDailyAndWeeklyAndMonthlyItemData.assignItemData?.[0];
+      assignItemDetailsAndCancelData = getRcsp206TestCaseData<Rcsp206AssignItemToCountLocationData>(RCSP_206_TEST_CASE_IDS.assignItemDetailsAndCancel);
+      assignItemsDetailsAndCancel = assignItemDetailsAndCancelData.assignItemData?.[0];
 
-      if (!assignDailyAndWeeklyAndMonthlyItem) {
-        throw new Error('RCSP-206 assignWeeklyItemData is missing or empty');
+      if (!assignItemsDetailsAndCancel) {
+        throw new Error('RCSP-206 assignItemDetailsAndCancelData is missing or empty');
       }
 
-      log('=== RCSP-206: Verify Assign Weekly Item Popup Test Started ===');
+      log('=== RCSP-206: Verify Assign Item Details and Cancel Test Started ===');
 
       log('STEP 1: Launching URL: ' + CONFIG.dashboardURL);
       await page.goto(CONFIG.dashboardURL);
@@ -970,7 +970,7 @@ test.describe('RCSP-206 - Verify Assign Daily Frequency Item to Count Location',
         await navigateToStockCountSection(stockCountPage, navigationItem);
       }
 
-      await countLocationsPage.enterItemsDetailsAndClickOnCancel(assignDailyAndWeeklyAndMonthlyItem.locationName, assignDailyAndWeeklyAndMonthlyItem.items, assignDailyAndWeeklyAndMonthlyItem.countFrequency);
+      await countLocationsPage.enterItemsDetailsAndClickOnCancel(assignItemsDetailsAndCancel.locationName, assignItemsDetailsAndCancel.items, assignItemsDetailsAndCancel.countFrequency);
       log('✓ Verified Assign Item Popup functionality successfully');
     
       log('=== TEST PASSED - Cancel Assign Item operation successfully ===');
