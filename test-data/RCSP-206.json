@@ -1150,7 +1150,99 @@
       }
     ]
   }
-}
+},{
+  "testCaseId": "TC_RCSP-206_13",
+  "testName": "Verify user can edit item to daily frequency to monthly frequency to Count Location",
+  "description": "Verify user can edit item to daily frequency to monthly frequency to an existing Count Location.",
+  "testSteps": [
+    {
+      "step": 1,
+      "description": "Launch application",
+      "expectedResult": "Dashboard is displayed"
+    },
+    {
+      "step": 2,
+      "description": "Login with valid credentials",
+      "expectedResult": "User logged in successfully"
+    },
+    {
+      "step": 3,
+      "description": "Navigate to STOCK COUNT → Count Locations",
+      "expectedResult": "Count Locations page is displayed"
+    },
+    {
+      "step": 4,
+      "description": "Expand 'Walk-In Cooler' location row",
+      "expectedResult": "Location row is expanded"
+    },
+    {
+      "step": 5,
+      "description": "Click '+ ASSIGN ITEM'",
+      "expectedResult": "Assign Item To Location popup is displayed"
+    },
+    {
+      "step": 6,
+      "description": "Search item using SKU",
+      "expectedResult": "Matching item is displayed in dropdown"
+    },
+    {
+      "step": 7,
+      "description": "Select the item",
+      "expectedResult": "Item is selected"
+    },
+    {
+      "step": 8,
+      "description": "Verify user can assign an Daily and Monthly Frequency item to an existing Count Location with Daily and Monthly count frequency.",
+      "expectedResult": "Daily and Monthly option remains selected"
+    },
+    {
+      "step": 9,
+      "description": "Verify Assign Item button is enabled",
+      "expectedResult": "Assign Item button is clickable"
+    },
+    {
+      "step": 10,
+      "description": "Click Assign Item button",
+      "expectedResult": "Item is assigned successfully"
+    },
+    {
+      "step": 11,
+      "description": "Verify assigned item in expanded location",
+      "expectedResult": "Assigned Item Name, SKU and Daily status are displayed"
+    }, {
+      "step": 112,
+      "description": "Verify assigned item in expanded location",
+      "expectedResult": "Assigned Item Name, SKU and Monthly status are displayed"
+    }
+  ],
+  "testData": {
+    "navigationItems": [
+      "Count Locations"
+    ],
+    "assignItemData": [
+  {
+    "locationName": "Fry Station",
+      "countFrequency": ["Monthly"],
+    "items": [
+      {
+        "sku": "1000061",
+        "itemName": "EGG SHELL-M"
+      },
+      {
+        "sku": "1000067",
+        "itemName": "MTN BLAST SYRUP-M"
+      },
+       {
+        "sku": "1000068",
+        "itemName": "TEXAS TOAST-M"
+      }
+     
+    ]
+  }
+]
+  }
+  }
+
 ]
 }
 }
