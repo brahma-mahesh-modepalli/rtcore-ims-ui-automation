@@ -15,10 +15,13 @@
 
 import { test as base } from '@playwright/test';
 import { RTCDashboardLoginPage } from '../pages/Login/RTCDashboardLoginPage';
+import { TestDataRepository } from '../test-data/TestDataRepository';
 
 /** Declare the custom fixture types */
 type CustomFixtures = {
   rtcDashboardLoginPage: RTCDashboardLoginPage;
+  /** DB-backed test data access, e.g. `await testData.getStoreById(1034)` */
+  testData: TestDataRepository;
 };
 
 /**
@@ -30,6 +33,12 @@ export const test = base.extend<CustomFixtures>({
   rtcDashboardLoginPage: async ({ page }, use) => {
     const rtcDashboardLoginPage = new RTCDashboardLoginPage(page);
     await use(rtcDashboardLoginPage);
+  },
+
+  /** Instantiate TestDataRepository and hand it to the test */
+  testData: async ({}, use) => {
+    const testData = new TestDataRepository();
+    await use(testData);
   },
 });
 

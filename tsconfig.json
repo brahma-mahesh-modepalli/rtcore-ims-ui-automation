@@ -27,6 +27,9 @@
     "fixtures/**/*.ts",
     "utils/**/*.ts",
     "constants/**/*.ts",
+    "database/**/*.ts",
+    "test-data/**/*.ts",
+    "reporting/**/*.ts",
     "playwright.config.ts"
   ],
   "exclude": ["node_modules", "dist", "test-results", "playwright-report"]
