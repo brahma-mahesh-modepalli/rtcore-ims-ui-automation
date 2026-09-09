@@ -211,6 +211,16 @@ export class LogWastePage {
     log('✓ Waste log detail page opened');
   }
 
+  async verifyWasteLogDetailLoaded(): Promise<void> {
+    await expect(
+      this.page
+        .getByRole('heading', { name: /#|waste|am|mid-shift|pm/i })
+        .or(this.saveButton)
+        .or(this.lockButton)
+        .first(),
+    ).toBeVisible({ timeout: 20000 });
+  }
+
   private entryRow(index = 0): Locator {
     return this.page
       .locator('main')
@@ -402,6 +412,12 @@ export class LogWastePage {
     await this.saveButton.click();
     await this.page.waitForLoadState('networkidle').catch(() => undefined);
     await this.page.waitForTimeout(800);
+  }
+
+  async verifySavedLineEditable(): Promise<void> {
+    await expect(this.lockButton).toBeVisible({ timeout: 15000 });
+    await expect(this.lockButton).toBeEnabled({ timeout: 10000 });
+    log('✓ Saved waste line remains editable');
   }
 
   async verifyValidationVisible(
