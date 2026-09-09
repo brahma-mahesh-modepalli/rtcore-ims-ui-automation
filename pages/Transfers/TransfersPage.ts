@@ -312,7 +312,11 @@ export class TransfersPage {
 
     const option = this.page
       .getByRole('option', { name: new RegExp(storeCode, 'i') })
-      .or(this.page.getByText(new RegExp(`${store}|${storeCode}`, 'i')))
+      .or(
+        this.page
+          .locator('button, [role="option"], li')
+          .filter({ hasText: new RegExp(`^\s*(?:${store}|${storeCode})\s*$`, 'i') }),
+      )
       .first();
     await option.click({ force: true });
     await this.page.waitForTimeout(1500);

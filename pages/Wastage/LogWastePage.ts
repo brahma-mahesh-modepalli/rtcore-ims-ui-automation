@@ -243,8 +243,116 @@ export class LogWastePage {
 
     const expectedSearch = /recipe/i.test(normalized)
       ? this.page.getByPlaceholder(/search recipe/i)
-      : this.page.getByPlaceholder(/search item/i);
+      : this.page.getByPlaceholder(/search wasteable item|search item/i);
+    const nativePicker = this.itemPickerSelect(/recipe/i.test(normalized));
+    if (await nativePicker.isVisible().catch(() => false)) {
+      await nativePicker.click();
+      await this.page.waitForTimeout(500);
+      return;
+    }
+    const pickerTrigger = this.page
+      .getByRole('button', { name: /search wasteable item|search recipe/i })
+      .or(this.page.getByText(/^search wasteable item$|^search recipe$/i))
+      .first();
+    if (!(await expectedSearch.first().isVisible().catch(() => false))) {
+      await expect(pickerTrigger).toBeVisible({ timeout: 10000 });
+      await pickerTrigger.click();
+    }
     await expect(expectedSearch.first()).toBeVisible({ timeout: 10000 });
+  }
+
+  async searchItemPicker(value: string): Promise<void> {
+    const nativePicker = this.itemPickerSelect(false);
+    if (await nativePicker.isVisible().catch(() => false)) {
+      const option = nativePicker.locator('option').filter({ hasText: value }).first();
+      await expect(option).toHaveCount(1);
+      await nativePicker.selectOption(await option.getAttribute('value'));
+      return;
+    }
+    const search = this.page.getByPlaceholder(/search wasteable item|search item/i).first();
+    if (!(await search.isVisible().catch(() => false))) {
+      const trigger = this.page
+        .getByRole('button', { name: /search wasteable item/i })
+        .or(this.page.getByText(/^search wasteable item$/i))
+        .first();
+      await trigger.click();
+    }
+    await expect(search).toBeVisible({ timeout: 10000 });
+    await search.fill(value);
+    await this.page.waitForTimeout(800);
+  }
+
+  async selectItemBySku(sku: string): Promise<void> {
+    const nativePicker = this.itemPickerSelect(false);
+    if (await nativePicker.isVisible().catch(() => false)) {
+      const option = nativePicker.locator('option').filter({ hasText: sku }).first();
+      await expect(option).toHaveCount(1);
+      const optionValue = await option.getAttribute('value');
+      await nativePicker.selectOption(optionValue || { label: sku });
+      await expect(nativePicker.locator('option:checked')).toContainText(sku);
+      return;
+    }
+
+    const search = this.page.getByPlaceholder(/search wasteable item|search item/i).first();
+    if (!(await search.isVisible().catch(() => false))) {
+      await this.page
+        .getByRole('button', { name: /search wasteable item/i })
+        .or(this.page.getByText(/^search wasteable item$/i))
+        .first()
+        .click();
+    }
+    await expect(search).toBeVisible({ timeout: 10000 });
+    await search.fill(sku);
+    await this.page.waitForTimeout(800);
+    const option = this.page
+      .getByRole('option')
+      .filter({ hasText: new RegExp(sku.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i') })
+      .first();
+    await expect(option).toBeVisible({ timeout: 10000 });
+    await option.click();
+  }
+
+  async verifyItemPickerResultVisible(value: string): Promise<void> {
+    const nativePicker = this.itemPickerSelect(false);
+    if (await nativePicker.isVisible().catch(() => false)) {
+      await expect(nativePicker.locator('option:checked')).toContainText(value);
+      return;
+    }
+    const result = this.page
+      .getByRole('option')
+      .filter({ hasText: new RegExp(value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i') })
+      .first();
+    await expect(result).toBeVisible({ timeout: 10000 });
+  }
+
+  async verifyItemPickerResultAbsent(value: string): Promise<void> {
+    const nativePicker = this.itemPickerSelect(false);
+    if (await nativePicker.isVisible().catch(() => false)) {
+      await expect(nativePicker.locator('option').filter({ hasText: value })).toHaveCount(0);
+      return;
+    }
+    const result = this.page
+      .getByRole('option')
+      .filter({ hasText: new RegExp(value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i') });
+    await expect(result).toHaveCount(0);
+    await expect(this.page.getByText(/no matches found|no results/i).first()).toBeVisible({ timeout: 5000 });
+  }
+
+  async getItemPickerResultCount(): Promise<number> {
+    const nativePicker = this.itemPickerSelect(false);
+    if (await nativePicker.isVisible().catch(() => false)) {
+      return nativePicker.locator('option').evaluateAll((options) =>
+        options.filter((option) => !(option as HTMLOptionElement).disabled).length,
+      );
+    }
+    return this.page.getByRole('option').count();
+  }
+
+  private itemPickerSelect(isRecipe: boolean): Locator {
+    return this.page
+      .locator('select:not([aria-hidden="true"])')
+      .filter({ hasText: isRecipe ? /search recipe/i : /search wasteable item/i })
+      .first();
   }
 
   async selectSearchableValue(
@@ -255,7 +363,35 @@ export class LogWastePage {
     const isRecipe = /recipe/i.test(labelPattern.source);
     const target = isRecipe
       ? this.page.locator('main').getByPlaceholder(/search recipe/i).first()
-      : this.page.locator('main').getByPlaceholder(/search item/i).first();
+      : this.page
+          .locator('main')
+          .getByPlaceholder(/search wasteable item|search item/i)
+          .first();
+
+    const nativePicker = this.itemPickerSelect(isRecipe);
+    if (await nativePicker.isVisible().catch(() => false)) {
+      const optionPattern = [value, sku]
+        .filter((candidate): candidate is string => Boolean(candidate && candidate.trim()))
+        .map((candidate) => candidate.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
+        .join('|');
+      const option = nativePicker
+        .locator('option')
+        .filter({ hasText: new RegExp(optionPattern, 'i') })
+        .first();
+      await expect(option).toHaveCount(1);
+      await nativePicker.selectOption(await option.getAttribute('value'));
+      return;
+    }
+
+    if (!(await target.isVisible().catch(() => false))) {
+      const trigger = isRecipe
+        ? this.page.getByRole('button', { name: /search recipe/i }).first()
+        : this.page
+            .getByRole('button', { name: /search wasteable item/i })
+            .or(this.page.getByText(/^search wasteable item$/i))
+            .first();
+      await trigger.click();
+    }
 
     const trySelect = async (query: string): Promise<boolean> => {
       await target.click();
