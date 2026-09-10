@@ -5,14 +5,22 @@
  * methods on this class and never touch SQL, connection details, or
  * credentials directly.
  *
- *   Playwright Test -> TestDataRepository -> DBQueries -> DBConnection -> PostgreSQL
+ *   Playwright Test -> TestDataRepository -> domain query class -> DBConnection -> PostgreSQL
  *
  * This coexists with (and does not replace) the existing JSON test-data
  * mechanism in utils/testData.ts.
  */
 
 import { DBConnection } from '../database/DBConnection';
-import { DBQueries } from '../database/DBQueries';
+import {
+  InventoryQueries,
+  RecipeQueries,
+  StoreQueries,
+  TransferQueries,
+  UomQueries,
+  UserQueries,
+  WastageQueries,
+} from '../database/DBQueries';
 import { Reporting } from '../reporting/Reporting';
 
 export interface StoreData {
@@ -54,6 +62,7 @@ export interface StoreLookupData {
   name: string;
   region: string | null;
   active: boolean;
+  ims_enabled?: boolean;
 }
 
 export interface WasteableIngredientData {
@@ -62,6 +71,10 @@ export interface WasteableIngredientData {
   name: string;
   store_id: number;
   qty_on_hand: number;
+}
+
+export interface TransferableIngredientSkuData {
+  sku: string;
 }
 
 export interface WasteableIngredientSkuData {
@@ -87,12 +100,19 @@ export interface UomData {
   abbreviation: string;
 }
 
+export interface TransferReasonData {
+  reason_id: number;
+  code: string;
+  description: string;
+  active: boolean;
+}
+
 export class TestDataRepository {
   /** Fetch a single store by its id. Returns undefined if no row is found. */
   async getStoreById(storeId: number): Promise<StoreData | undefined> {
     try {
       const rows = await DBConnection.executeQuery<StoreData>(
-        DBQueries.getStoreById,
+        StoreQueries.getStoreById,
         [storeId],
       );
       return rows[0];
@@ -110,7 +130,7 @@ export class TestDataRepository {
   async getUserByRole(role: string): Promise<UserData | undefined> {
     try {
       const rows = await DBConnection.executeQuery<UserData>(
-        DBQueries.getUserByRole,
+        UserQueries.getUserByRole,
         [role],
       );
       return rows[0];
@@ -130,7 +150,7 @@ export class TestDataRepository {
   ): Promise<InventoryItemData[]> {
     try {
       return await DBConnection.executeQuery<InventoryItemData>(
-        DBQueries.getActiveInventoryItemsByStore,
+        InventoryQueries.getActiveInventoryItemsByStore,
         [storeId],
       );
     } catch (error) {
@@ -145,19 +165,51 @@ export class TestDataRepository {
   }
 
   async getStoreByName(name: string): Promise<StoreLookupData | undefined> {
-    return (await DBConnection.executeQuery<StoreLookupData>(DBQueries.getStoreByName, [name]))[0];
+    return (await DBConnection.executeQuery<StoreLookupData>(StoreQueries.getStoreByName, [name]))[0];
+  }
+
+  async getTransferableZeroStockIngredientByStoreId(
+    storeId: number,
+  ): Promise<WasteableIngredientData | undefined> {
+    return (
+      await DBConnection.executeQuery<WasteableIngredientData>(
+        TransferQueries.getTransferableZeroStockIngredientByStoreId,
+        [storeId],
+      )
+    )[0];
+  }
+
+  async getTransferableZeroStockIngredientSkuByStoreId(
+    storeId: number,
+  ): Promise<string | undefined> {
+    const rows = await DBConnection.executeQuery<TransferableIngredientSkuData>(
+      TransferQueries.getTransferableZeroStockIngredientSkuByStoreId,
+      [storeId],
+    );
+    return rows[0]?.sku;
+  }
+
+  async getTransferReasonByCode(
+    code: string,
+  ): Promise<TransferReasonData | undefined> {
+    return (
+      await DBConnection.executeQuery<TransferReasonData>(
+        TransferQueries.getTransferReasonByCode,
+        [code],
+      )
+    )[0];
   }
 
   async getPositiveWasteableIngredient(storeName: string): Promise<WasteableIngredientData | undefined> {
     return (await DBConnection.executeQuery<WasteableIngredientData>(
-      DBQueries.getPositiveWasteableIngredient,
+      InventoryQueries.getPositiveWasteableIngredient,
       [storeName],
     ))[0];
   }
 
   async getZeroStockWasteableIngredient(storeName: string): Promise<WasteableIngredientData | undefined> {
     return (await DBConnection.executeQuery<WasteableIngredientData>(
-      DBQueries.getZeroStockWasteableIngredient,
+      InventoryQueries.getZeroStockWasteableIngredient,
       [storeName],
     ))[0];
   }
@@ -166,7 +218,7 @@ export class TestDataRepository {
     storeId: number,
   ): Promise<string | undefined> {
     const rows = await DBConnection.executeQuery<WasteableIngredientSkuData>(
-      DBQueries.getZeroStockWasteableIngredientByStoreId,
+      InventoryQueries.getZeroStockWasteableIngredientByStoreId,
       [storeId],
     );
     return rows[0]?.sku;
@@ -174,31 +226,31 @@ export class TestDataRepository {
 
   async getEligibleWasteableIngredients(storeName: string): Promise<WasteableIngredientData[]> {
     return DBConnection.executeQuery<WasteableIngredientData>(
-      DBQueries.getEligibleWasteableIngredients,
+      InventoryQueries.getEligibleWasteableIngredients,
       [storeName],
     );
   }
 
   async getAlternateActiveStore(excludedStoreName: string): Promise<StoreLookupData | undefined> {
     return (await DBConnection.executeQuery<StoreLookupData>(
-      DBQueries.getAlternateActiveStore,
+      StoreQueries.getAlternateActiveStore,
       [excludedStoreName],
     ))[0];
   }
 
   async getActiveRecipe(): Promise<RecipeData | undefined> {
-    return (await DBConnection.executeQuery<RecipeData>(DBQueries.getActiveRecipe))[0];
+    return (await DBConnection.executeQuery<RecipeData>(RecipeQueries.getActiveRecipe))[0];
   }
 
   async getWasteReason(description: string): Promise<WasteReasonData | undefined> {
-    return (await DBConnection.executeQuery<WasteReasonData>(DBQueries.getWasteReason, [description]))[0];
+    return (await DBConnection.executeQuery<WasteReasonData>(WastageQueries.getWasteReason, [description]))[0];
   }
 
   async getFirstActiveWasteReason(): Promise<WasteReasonData | undefined> {
-    return (await DBConnection.executeQuery<WasteReasonData>(DBQueries.getFirstActiveWasteReason))[0];
+    return (await DBConnection.executeQuery<WasteReasonData>(WastageQueries.getFirstActiveWasteReason))[0];
   }
 
   async getUomByAbbreviation(abbreviation: string): Promise<UomData | undefined> {
-    return (await DBConnection.executeQuery<UomData>(DBQueries.getUomByAbbreviation, [abbreviation]))[0];
+    return (await DBConnection.executeQuery<UomData>(UomQueries.getUomByAbbreviation, [abbreviation]))[0];
   }
 }

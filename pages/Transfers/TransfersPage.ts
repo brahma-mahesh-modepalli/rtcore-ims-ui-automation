@@ -515,6 +515,26 @@ export class TransfersPage {
     await expect(row).toContainText(new RegExp(toStore, 'i'));
   }
 
+  async verifyTransferDetail(input: {
+    transferId?: string;
+    fromStore: string;
+    toStore: string;
+    reason?: string;
+    sku: string;
+    quantity?: string;
+    status?: string;
+  }): Promise<void> {
+    const scope = input.transferId
+      ? this.page.locator('main').filter({ hasText: new RegExp(input.transferId, 'i') }).first()
+      : this.page.locator('main').first();
+    await expect(scope).toContainText(new RegExp(input.fromStore, 'i'));
+    await expect(scope).toContainText(new RegExp(input.toStore, 'i'));
+    if (input.reason) await expect(scope).toContainText(new RegExp(input.reason, 'i'));
+    await expect(scope).toContainText(new RegExp(input.sku, 'i'));
+    if (input.quantity) await expect(scope).toContainText(new RegExp(input.quantity.replace('.', '\\.'), 'i'));
+    if (input.status) await expect(scope).toContainText(new RegExp(input.status, 'i'));
+  }
+
   async getLatestTransferId(preferredStatus?: string): Promise<string> {
     await this.page.waitForTimeout(1000);
     const rows = this.transfersTable.getByRole('row');
@@ -659,6 +679,14 @@ export class TransfersPage {
       return;
     }
     await this.selectDropdownByLabel(/^From Store/i, store, undefined, { useSearch: true });
+  }
+
+  async verifyFromStoreSelected(store: string): Promise<void> {
+    const field = this.page
+      .getByText(/^From Store/i)
+      .first()
+      .locator('xpath=following::button[1]');
+    await expect(field).toContainText(new RegExp(store, 'i'));
   }
 
   async selectToStore(store: string): Promise<void> {
@@ -808,6 +836,25 @@ export class TransfersPage {
     await expect(this.submitTransferButton).toBeEnabled();
   }
 
+  async verifySubmittedReadOnly(): Promise<void> {
+    const editableControls = this.page.locator('input:not([type="hidden"]), textarea, select, [contenteditable="true"]');
+    const count = await editableControls.count();
+    for (let index = 0; index < count; index++) {
+      const control = editableControls.nth(index);
+      if (!(await control.isVisible().catch(() => false))) continue;
+      const disabled = await control.isDisabled().catch(() => false);
+      const readonly = await control.getAttribute('readonly');
+      expect(disabled || readonly !== null).toBeTruthy();
+    }
+    await expect(this.submitTransferButton).toHaveCount(0);
+    await expect(this.saveChangesButton).toHaveCount(0);
+  }
+
+  async verifyTerminalTransferState(expectedStatus: string): Promise<void> {
+    await expect(this.page.getByText(new RegExp(expectedStatus, 'i')).first()).toBeVisible({ timeout: 15000 });
+    await expect(this.page.getByRole('button', { name: /approve|accept|reject/i })).toHaveCount(0);
+  }
+
   async verifyItemOnTransfer(itemNameOrSku: string, quantity?: string): Promise<void> {
     await expect(
       this.page.getByText(new RegExp(itemNameOrSku, 'i')).first(),
@@ -889,6 +936,11 @@ export class TransfersPage {
   async clickRejectForTransfer(transferId: string): Promise<void> {
     const row = this.transferRow(transferId);
     await row.getByRole('button', { name: /reject/i }).click();
+  }
+
+  async clickAcceptForTransfer(transferId: string): Promise<void> {
+    const row = this.transferRow(transferId);
+    await row.getByRole('button', { name: /approve|accept/i }).click();
   }
 
   async clickApproveForTransfer(transferId: string): Promise<void> {
