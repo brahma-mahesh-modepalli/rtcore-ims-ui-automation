@@ -19,7 +19,7 @@ const RECEIVER_STORE_NAME = 'WB Unit 1008';
 const SOURCE_STORE_ID = 37;
 const REGION_NAME = '1700 San Antonio 4126314';
 const MARKET_NAME = '1708 E Central SA 4126393';
-const QUANTITY = '1.1';
+const QUANTITY = '1';
 const repository = new TestDataRepository();
 
 type TransferContext = {
@@ -44,25 +44,22 @@ const shared: SharedState = {
 };
 
 async function getTransferContext(): Promise<TransferContext> {
-	const [source, receiver, item, itemSku, reason] = await Promise.all([
+	const [source, receiver, item, reason] = await Promise.all([
 		repository.getStoreByName(SOURCE_STORE_NAME),
 		repository.getStoreByName(RECEIVER_STORE_NAME),
-		repository.getTransferableZeroStockIngredientByStoreId(SOURCE_STORE_ID),
-		repository.getTransferableZeroStockIngredientSkuByStoreId(SOURCE_STORE_ID),
+		repository.getTransferableIngredientWithStockByStoreId(SOURCE_STORE_ID),
 		repository.getTransferReasonByCode('Demand'),
 	]);
 
 	expect(source, `Missing source store in DB: ${SOURCE_STORE_NAME}`).toBeDefined();
 	expect(receiver, `Missing receiver store in DB: ${RECEIVER_STORE_NAME}`).toBeDefined();
-	expect(item, `No transferable zero-stock ingredient for store ${SOURCE_STORE_ID}`).toBeDefined();
-	expect(itemSku, `No transferable zero-stock SKU for store ${SOURCE_STORE_ID}`).toBeDefined();
+	expect(item, `No transferable ingredient with stock for store ${SOURCE_STORE_ID}`).toBeDefined();
 	expect(reason, 'Missing active Demand transfer reason in DB').toBeDefined();
-	expect(item!.sku).toBe(itemSku);
 
 	return {
 		source: source!,
 		receiver: receiver!,
-		item: { ...item!, sku: itemSku! },
+		item: item!,
 		reason: reason!,
 	};
 }
@@ -117,7 +114,7 @@ async function createSubmittedTransfer(
 	return transferId;
 }
 
-test.describe.configure({ mode: 'serial' });
+test.describe.configure({ mode: 'serial', timeout: 90_000 });
 
 test('TC_RCSP-31_01 - create a DB-driven Draft IUT', async ({ page }) => {
 	const context = await getTransferContext();

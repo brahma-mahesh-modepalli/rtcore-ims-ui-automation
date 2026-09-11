@@ -4,9 +4,9 @@ on:
   workflow_dispatch:
     inputs:
       spec_path:
-        description: Playwright spec path to run
+        description: Optional spec path; leave blank to run all tests
         required: false
-        default: tests/EPIC-RCSP-139/RCSP-31.spec.ts
+        default: ''
       project:
         description: BrowserStack Playwright project
         required: false
@@ -18,7 +18,7 @@ on:
 jobs:
   browserstack:
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 180
     env:
       ENVIRONMENT: qa
       BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
@@ -68,9 +68,13 @@ jobs:
         run: |
           SPEC_PATH="${{ github.event.inputs.spec_path }}"
           PROJECT="${{ github.event.inputs.project }}"
-          if [[ -z "$SPEC_PATH" ]]; then SPEC_PATH="tests/EPIC-RCSP-139/RCSP-31.spec.ts"; fi
           if [[ -z "$PROJECT" ]]; then PROJECT="browserstack-chrome-windows"; fi
-          npx playwright test -c browserstack.config.ts "$SPEC_PATH" --project="$PROJECT"
+          if [[ -n "$SPEC_PATH" ]]; then
+            npx playwright test -c browserstack.config.ts "$SPEC_PATH" --project="$PROJECT"
+          else
+            echo "No spec_path supplied; running all tests under tests/."
+            npx playwright test -c browserstack.config.ts --project="$PROJECT"
+          fi
 
       - name: Upload Playwright report
         if: always()

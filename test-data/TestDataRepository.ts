@@ -189,6 +189,17 @@ export class TestDataRepository {
     return rows[0]?.sku;
   }
 
+  async getTransferableIngredientWithStockByStoreId(
+    storeId: number,
+  ): Promise<WasteableIngredientData | undefined> {
+    return (
+      await DBConnection.executeQuery<WasteableIngredientData>(
+        TransferQueries.getTransferableIngredientWithStockByStoreId,
+        [storeId],
+      )
+    )[0];
+  }
+
   async getTransferReasonByCode(
     code: string,
   ): Promise<TransferReasonData | undefined> {

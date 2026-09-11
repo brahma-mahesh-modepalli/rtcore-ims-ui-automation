@@ -546,6 +546,17 @@ export class TransfersPage {
       if (preferredStatus && !new RegExp(preferredStatus, 'i').test(text)) continue;
       return match[0];
     }
+
+    // Some responsive/grid renderings expose IDs as text without role="row".
+    const visibleIds = this.page.getByText(/^TRF-\w+$/i);
+    const visibleIdCount = await visibleIds.count();
+    for (let i = 0; i < visibleIdCount; i++) {
+      const candidate = visibleIds.nth(i);
+      if (!(await candidate.isVisible().catch(() => false))) continue;
+      const text = (await candidate.innerText()).trim();
+      if (/^TRF-\w+$/i.test(text)) return text;
+    }
+
     const firstDataRow = rows.nth(1);
     await expect(firstDataRow).toBeVisible({ timeout: 15000 });
     const text = await firstDataRow.innerText();
@@ -721,7 +732,9 @@ export class TransfersPage {
     log(`Adding item ${itemNameOrSku}${sku ? ` (SKU ${sku})` : ''} qty ${quantity}`);
     await this.openAddItem();
 
-    const search = this.page.getByPlaceholder(/filter by name|plu|category/i);
+    const search = this.page.getByPlaceholder(
+      /search by name or sku|filter by name|plu|category/i,
+    );
     await expect(search).toBeVisible({ timeout: 10000 });
     await search.fill(searchValue);
     await this.page.waitForTimeout(700);
@@ -753,20 +766,32 @@ export class TransfersPage {
     const itemRow = this.page.getByRole('row').filter({ hasText: rowMatcher }).first();
     await expect(itemRow).toBeVisible({ timeout: 10000 });
 
-    // Qty fields may be CS / TR / PK (or CS / PK / EA). Prefer an EA control when present.
+    // Qty fields may be CS / TR / PK (or CS / PK / EA). Prefer the EA control when present.
     const spinbuttons = itemRow.getByRole('spinbutton');
     const spinCount = await spinbuttons.count();
     for (let i = 0; i < spinCount; i++) {
       await spinbuttons.nth(i).fill('0');
     }
-    const eaSpin = itemRow
-      .locator('xpath=.//*[normalize-space()="EA"]/preceding::input[@type="number" or @role="spinbutton"][1]')
-      .or(itemRow.getByRole('spinbutton').last());
-    await eaSpin.first().fill(quantity);
-    // If EA isn't editable and only CS exists, 1 EA may auto-map; keep a single base unit when possible.
+
+    const eaUnit = itemRow.getByText(/^EA$/).first();
+    const eaSpin = eaUnit
+      .locator('xpath=..')
+      .getByRole('spinbutton')
+      .or(
+        itemRow
+          .locator('xpath=.//*[normalize-space()="EA"]/preceding::input[@type="number" or @role="spinbutton"][1]')
+          .or(itemRow.getByRole('spinbutton').last()),
+      )
+      .first();
+    await expect(eaSpin).toBeVisible({ timeout: 10000 });
+    await eaSpin.fill(quantity);
+    await eaSpin.press('Tab').catch(() => undefined);
+
+    // If EA is unavailable, retain the requested quantity in the first editable unit.
     const shown = (await itemRow.innerText()).replace(/\s+/g, ' ');
     if (!new RegExp(`\\b${quantity}\\b`).test(shown) && spinCount > 0) {
       await spinbuttons.first().fill(quantity);
+      await spinbuttons.first().press('Tab').catch(() => undefined);
     }
   }
 
