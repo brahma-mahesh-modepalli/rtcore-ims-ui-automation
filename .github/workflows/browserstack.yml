@@ -47,6 +47,22 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Validate BrowserStack and database configuration
+        shell: bash
+        run: |
+          missing=()
+          for variable in BROWSERSTACK_USERNAME BROWSERSTACK_ACCESS_KEY DB_HOST DB_PORT DB_NAME DB_USER DB_PASSWORD; do
+            if [[ -z "${!variable}" ]]; then
+              missing+=("$variable")
+            fi
+          done
+          if [[ ${#missing[@]} -gt 0 ]]; then
+            echo "Missing required GitHub Actions secrets/environment values: ${missing[*]}"
+            echo "Configure these under Settings > Secrets and variables > Actions."
+            exit 1
+          fi
+          echo "BrowserStack and database configuration is present."
+
       - name: Run BrowserStack Playwright tests
         shell: bash
         run: |
