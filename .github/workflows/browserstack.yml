@@ -1,0 +1,73 @@
+name: BrowserStack Playwright Tests
+
+on:
+  workflow_dispatch:
+    inputs:
+      spec_path:
+        description: Playwright spec path to run
+        required: false
+        default: tests/EPIC-RCSP-139/RCSP-31.spec.ts
+      project:
+        description: BrowserStack Playwright project
+        required: false
+        default: browserstack-chrome-windows
+  push:
+    branches:
+      - feature/inventory-tests
+
+jobs:
+  browserstack:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      ENVIRONMENT: qa
+      BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
+      BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
+      BROWSERSTACK_PROJECT_NAME: RTCore IMS UI Automation
+      BROWSERSTACK_BUILD_NAME: ${{ github.repository }} - ${{ github.ref_name }} - ${{ github.run_number }}
+      BROWSERSTACK_LOCAL: true
+      BROWSERSTACK_LOCAL_IDENTIFIER: rtcore-${{ github.run_id }}
+      DB_HOST: ${{ secrets.DB_HOST }}
+      DB_PORT: ${{ secrets.DB_PORT }}
+      DB_NAME: ${{ secrets.DB_NAME }}
+      DB_USER: ${{ secrets.DB_USER }}
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      DB_SSL: true
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run BrowserStack Playwright tests
+        shell: bash
+        run: |
+          SPEC_PATH="${{ github.event.inputs.spec_path }}"
+          PROJECT="${{ github.event.inputs.project }}"
+          if [[ -z "$SPEC_PATH" ]]; then SPEC_PATH="tests/EPIC-RCSP-139/RCSP-31.spec.ts"; fi
+          if [[ -z "$PROJECT" ]]; then PROJECT="browserstack-chrome-windows"; fi
+          npx playwright test -c browserstack.config.ts "$SPEC_PATH" --project="$PROJECT"
+
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report-browserstack
+          path: playwright-report-browserstack/
+          if-no-files-found: ignore
+
+      - name: Upload BrowserStack test artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-browserstack
+          path: test-results/browserstack/
+          if-no-files-found: ignore

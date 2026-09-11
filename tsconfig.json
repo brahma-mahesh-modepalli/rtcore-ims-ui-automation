@@ -29,6 +29,8 @@
     "database/**/*.ts",
     "test-data/**/*.ts",
     "reporting/**/*.ts",
+    "browserstack.config.ts",
+    "browserstack.global-setup.ts",
     "playwright.config.ts"
   ],
   "exclude": ["node_modules", "dist", "test-results", "playwright-report"]

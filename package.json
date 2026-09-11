@@ -14,12 +14,16 @@
     "test:login": "npx playwright test tests/login.spec.ts",
     "test:login:prod": "cross-env ENVIRONMENT=prod npx playwright test tests/login.spec.ts",
     "test:login:qa": "cross-env ENVIRONMENT=qa npx playwright test tests/login.spec.ts",
+    "test:browserstack": "cross-env BROWSERSTACK_LOCAL=true npx playwright test -c browserstack.config.ts",
+    "test:browserstack:rcsp31": "cross-env BROWSERSTACK_LOCAL=true npx playwright test -c browserstack.config.ts tests/EPIC-RCSP-139/RCSP-31.spec.ts",
+    "test:browserstack:rcsp707": "cross-env BROWSERSTACK_LOCAL=true npx playwright test -c browserstack.config.ts tests/EPIC-RCSP-9/RCSP-707.spec.ts",
     "report": "npx playwright show-report playwright-report"
   },
   "devDependencies": {
     "@playwright/test": "^1.50.0",
     "@types/node": "^20.11.0",
     "@types/pg": "^8.11.0",
+    "browserstack-local": "^1.5.6",
     "cross-env": "^10.1.0",
     "typescript": "^5.4.0"
   },

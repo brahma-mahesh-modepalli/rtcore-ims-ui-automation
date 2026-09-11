@@ -342,7 +342,7 @@ export class LogWastePage {
     const nativePicker = this.itemPickerSelect(false);
     if (await nativePicker.isVisible().catch(() => false)) {
       return nativePicker.locator('option').evaluateAll((options) =>
-        options.filter((option) => !(option as HTMLOptionElement).disabled).length,
+        options.filter((option) => !option.hasAttribute('disabled')).length,
       );
     }
     return this.page.getByRole('option').count();
