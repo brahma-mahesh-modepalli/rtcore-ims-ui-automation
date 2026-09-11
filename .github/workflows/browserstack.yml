@@ -58,7 +58,7 @@ jobs:
 
       - name: Upload Playwright report
         if: always()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: playwright-report-browserstack
           path: playwright-report-browserstack/
@@ -66,7 +66,7 @@ jobs:
 
       - name: Upload BrowserStack test artifacts
         if: always()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: test-results-browserstack
           path: test-results/browserstack/
