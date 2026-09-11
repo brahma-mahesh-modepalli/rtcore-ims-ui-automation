@@ -24,7 +24,7 @@ jobs:
       BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
       BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
       BROWSERSTACK_PROJECT_NAME: RTCore IMS UI Automation
-      BROWSERSTACK_BUILD_NAME: ${{ github.repository }} - ${{ github.ref_name }} - ${{ github.run_number }}
+      BROWSERSTACK_BUILD_NAME: ${{ github.repository }} - ${{ github.ref_name }} - by ${{ github.actor }} - run ${{ github.run_number }}
       BROWSERSTACK_LOCAL: true
       BROWSERSTACK_LOCAL_IDENTIFIER: rtcore-${{ github.run_id }}
       DB_HOST: ${{ secrets.DB_HOST }}
