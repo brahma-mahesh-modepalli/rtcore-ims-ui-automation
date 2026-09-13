@@ -158,6 +158,14 @@ npm run test:browserstack:rcsp707
 
 The GitHub Actions workflow is [.github/workflows/browserstack.yml](.github/workflows/browserstack.yml). It runs on pushes to `feature/inventory-tests` and can also be started manually.
 
+Because the Stage PostgreSQL host is private, the workflow runs on a self-hosted GitHub Actions runner with these labels:
+
+```text
+self-hosted, linux, x64, rtcore-network
+```
+
+Register that runner on a machine connected to the company network/VPN and install Node.js 24, npm, and Playwright dependencies. BrowserStack still provides the remote browser; the self-hosted runner only supplies network access to QA and PostgreSQL.
+
 Add these **repository secrets** in GitHub under **Settings -> Secrets and variables -> Actions**:
 
 ```text

@@ -17,7 +17,8 @@ on:
 
 jobs:
   browserstack:
-    runs-on: ubuntu-latest
+    # The Stage PostgreSQL host is private; this runner must be registered inside the company network.
+    runs-on: [self-hosted, linux, x64, rtcore-network]
     timeout-minutes: 180
     env:
       ENVIRONMENT: qa
