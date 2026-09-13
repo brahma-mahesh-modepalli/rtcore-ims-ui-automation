@@ -73,6 +73,7 @@ export default defineConfig({
     headless: true,
   },
   outputDir: 'test-results/browserstack',
+  testIgnore: ['tests/database/**'],
   projects: [
     {
       name: 'browserstack-chrome-windows',

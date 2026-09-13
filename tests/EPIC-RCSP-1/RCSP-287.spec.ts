@@ -64,7 +64,6 @@ async function loginAsAdmin(page: Page): Promise<{
   return { loginPage, uomPage };
 }
 
-test.describe.configure({ mode: 'serial' });
 
 test.describe("RCSP-287 - Inventory Setup > Unit of Measure: Units of Measure page loads successfully with correct page heade...", () => {
   let loginPage: RTCDashboardLoginPage;

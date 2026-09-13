@@ -702,9 +702,38 @@ export class TransfersPage {
 
   async selectToStore(store: string): Promise<void> {
     log(`Selecting To Store: ${store}`);
-    await this.selectDropdownByLabel(/^To Store/i, store, /^Select store$/i, {
-      useSearch: true,
-    });
+    const field = this.page
+      .getByText(/^To Store/i)
+      .first()
+      .locator('xpath=following::button[1]');
+    await expect(field).toBeVisible({ timeout: 10000 });
+
+    const currentText = (await field.innerText().catch(() => '')).trim();
+    if (new RegExp(store.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i').test(currentText)) {
+      return;
+    }
+
+    await field.click();
+    await this.page.waitForTimeout(300);
+
+    const search = this.page.getByPlaceholder(/^search/i).last();
+    if (await search.isVisible().catch(() => false)) {
+      await search.fill(store);
+      await this.page.waitForTimeout(500);
+    }
+
+    const escapedStore = store.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const exactStore = new RegExp(`^${escapedStore}(?:\\s+IMS)?$`, 'i');
+    const option = this.page
+      .getByRole('option', { name: exactStore })
+      .or(this.page.getByRole('button', { name: exactStore }))
+      .or(this.page.getByText(exactStore, { exact: true }))
+      .filter({ visible: true })
+      .first();
+    await expect(option).toBeVisible({ timeout: 10000 });
+    await option.click();
+    await this.page.waitForTimeout(300);
+    await expect(field).toContainText(new RegExp(escapedStore, 'i'), { timeout: 10000 });
   }
 
   async selectTransferReason(reason: string): Promise<void> {
@@ -934,7 +963,12 @@ export class TransfersPage {
   }
 
   async verifyValidationVisible(pattern = /required|mandatory|invalid|must|cannot|error/i): Promise<void> {
-    await expect(this.page.getByText(pattern).first()).toBeVisible({ timeout: 10000 });
+    const validationMessage = this.page
+      .locator('body *:not(option):not(select)')
+      .filter({ hasText: pattern })
+      .filter({ visible: true })
+      .first();
+    await expect(validationMessage).toBeVisible({ timeout: 10000 });
   }
 
   async getTransferReasonOptions(): Promise<string[]> {

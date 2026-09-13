@@ -112,7 +112,6 @@ async function loginAsAdmin(page: Page): Promise<{
 }
 
 
-test.describe.configure({ mode: 'serial' });
 
 
 const shared: SharedState = {

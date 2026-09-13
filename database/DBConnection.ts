@@ -46,7 +46,16 @@ function getPool(): Pool {
   const ssl =
     process.env.DB_SSL === 'false' ? false : { rejectUnauthorized: false };
 
-  pool = new Pool({ host, port, database, user, password, ssl });
+  pool = new Pool({
+    host,
+    port,
+    database,
+    user,
+    password,
+    ssl,
+    connectionTimeoutMillis: Number(process.env.DB_CONNECTION_TIMEOUT_MS) || 15000,
+    query_timeout: Number(process.env.DB_QUERY_TIMEOUT_MS) || 30000,
+  });
 
   pool.on('error', (err) => {
     // Unexpected error on an idle client - never log err which may include connection info.

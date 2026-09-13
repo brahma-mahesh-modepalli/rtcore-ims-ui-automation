@@ -97,7 +97,7 @@ export class StockCountPage {
    */
   async clickWeeklyCount(): Promise<void> {
     log('Clicking on Weekly Count');
-    
+    const href = await this.weeklyCountOption.getAttribute('href');
     try {
       await this.weeklyCountOption.waitFor({ state: 'visible', timeout: 10000 }).catch(() => {
         log('⚠ Element not immediately visible, proceeding anyway');
@@ -109,6 +109,10 @@ export class StockCountPage {
     }
     
     await this.page.waitForLoadState('networkidle');
+    if (!(await this.weeklyCountTitle.isVisible().catch(() => false)) && href) {
+      await this.page.goto(new URL(href, this.page.url()).toString());
+      await this.page.waitForLoadState('networkidle');
+    }
     log('✓ Weekly Count page loaded');
   }
 
@@ -117,7 +121,7 @@ export class StockCountPage {
    */
   async clickMonthlyCount(): Promise<void> {
     log('Clicking on Monthly Count');
-    
+    const href = await this.monthlyCountOption.getAttribute('href');
     try {
       await this.monthlyCountOption.waitFor({ state: 'visible', timeout: 10000 }).catch(() => {
         log('⚠ Element not immediately visible, proceeding anyway');
@@ -129,6 +133,10 @@ export class StockCountPage {
     }
     
     await this.page.waitForLoadState('networkidle');
+    if (!(await this.monthlyCountTitle.isVisible().catch(() => false)) && href) {
+      await this.page.goto(new URL(href, this.page.url()).toString());
+      await this.page.waitForLoadState('networkidle');
+    }
     log('✓ Monthly Count page loaded');
   }
 

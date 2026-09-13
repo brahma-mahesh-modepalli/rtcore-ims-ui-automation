@@ -100,7 +100,6 @@ async function createEditableLog(logWastePage: LogWastePage, common: Rcsp227Comm
   await logWastePage.createWasteLog(common.defaultShift);
 }
 
-test.describe.configure({ mode: 'serial' });
 
 test.describe("RCSP-227 - Verify whether a user can successfully create, save, lock, and apply a Raw Waste entry ...", () => {
   test("Verify whether a user can successfully create, save, lock, and apply a Raw Waste entry for an Item when all...", async ({ page }) => {

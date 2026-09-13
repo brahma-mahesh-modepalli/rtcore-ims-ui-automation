@@ -6,6 +6,7 @@
 import { test, expect, type Page } from '@playwright/test';
 import { CONFIG } from '../../config';
 import { log } from '../../utils/helpers';
+import { getCurrentLocalDate, getLatestMonday, getNextCountMonday } from '../../utils/testDates';
 import { RTCDashboardLoginPage } from '../../pages/Login/RTCDashboardLoginPage';
 import { StockCountPage } from '../../pages/Stock Count/StockCountPage';
 import { DailyShiftCountPage } from '../../pages/Stock Count/DailyShiftCountPage';
@@ -20,6 +21,14 @@ import {
 
 const RCSP_171_FILE_NAME = 'RCSP-171';
 const RCSP_171_SCENARIO_ID = 'RCSP-171';
+
+test.beforeEach(async ({}, testInfo) => {
+  testInfo.annotations.push({ type: 'count-date', description: `Latest Monday: ${getLatestMonday()}` });
+});
+
+test.afterEach(async ({}, testInfo) => {
+  log(`${testInfo.title} completed; current system date: ${getCurrentLocalDate()}`);
+});
 
 const TC = {
   unifiedMenu: 'TC_RCSP-171_01',
@@ -108,12 +117,11 @@ async function createSession(
   await dailyPage.verifyDailyShiftCountPageLoaded();
   await dailyPage.createDailyShiftCount({
     shift,
-    shiftDate: common.createCount.shiftDate,
+    shiftDate: getNextCountMonday(),
     name: sessionName(common.createCount.namePrefix ?? 'RCSP-171', shift),
   });
 }
 
-test.describe.configure({ mode: 'serial' });
 
 test.describe('RCSP-171 - Unified Daily Shift Count menu', () => {
   test('TC_RCSP-171_01 – Spot/Daily Count removed; Daily Shift Count + Weekly/Monthly remain', async ({
@@ -324,7 +332,7 @@ test.describe('RCSP-171 - Submitted record and empty list', () => {
     await ctx.stockCountPage.navigateToDailyShiftCount();
     await ctx.dailyPage.verifySubmittedListingMetadata({
       shift,
-      dateFragment: ctx.common.createCount.shiftDate,
+      dateFragment: getNextCountMonday(),
     });
   });
 

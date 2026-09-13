@@ -60,7 +60,6 @@ async function loginAsAdmin(page: Page): Promise<{
   return { loginPage, rolesPage };
 }
 
-test.describe.configure({ mode: 'serial' });
 
 test.describe("RCSP-472 - Admin > Roles & Permissions: Roles & Permissions page under Admin menu loads successfully and displ...", () => {
   let loginPage: RTCDashboardLoginPage;
@@ -193,12 +192,10 @@ test.describe("RCSP-472 - Admin > Roles & Permissions / User Role Assignment: Op
 
     await rolesPage.openRolesAndPermissions();
     await rolesPage.selectRolesTab();
-    await rolesPage.verifyRoleVisible(data.roleToSelect);
-    await expect(
-      rolesPage.roleRow(data.roleToSelect).getByText(
-        new RegExp(data.expectedStatusAfterChecks, 'i'),
-      ),
-    ).toBeVisible();
+    await rolesPage.verifyRoleStatus(
+      data.roleToSelect,
+      data.expectedStatusAfterChecks,
+    );
   });
 });
 

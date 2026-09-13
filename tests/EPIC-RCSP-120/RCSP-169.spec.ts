@@ -79,7 +79,6 @@ async function ensureStoreSelected(
   await transfersPage.switchStore(region, market, store);
 }
 
-test.describe.configure({ mode: 'serial' });
 
 test.describe('RCSP-169 - Ordering: Credit Requests submenu and page landing content', () => {
   test('Verify whether Ordering submenu shows Credit Requests (not Credit Memos) and opens Credit Requests page with correct title and description', async ({

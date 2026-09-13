@@ -25,7 +25,7 @@ jobs:
       BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
       BROWSERSTACK_PROJECT_NAME: RTCore IMS UI Automation
       BROWSERSTACK_BUILD_NAME: ${{ github.repository }} - ${{ github.ref_name }} - by ${{ github.actor }} - run ${{ github.run_number }}
-      BROWSERSTACK_LOCAL: true
+      BROWSERSTACK_LOCAL: false
       BROWSERSTACK_LOCAL_IDENTIFIER: rtcore-${{ github.run_id }}
       DB_HOST: ${{ secrets.DB_HOST }}
       DB_PORT: ${{ secrets.DB_PORT }}
@@ -63,6 +63,35 @@ jobs:
           fi
           echo "BrowserStack and database configuration is present."
 
+      - name: Verify PostgreSQL DB query
+        shell: bash
+        run: |
+          node - <<'NODE'
+          require('dotenv').config();
+          const { Pool } = require('pg');
+          const pool = new Pool({
+            host: process.env.DB_HOST,
+            port: Number(process.env.DB_PORT) || 5432,
+            database: process.env.DB_NAME,
+            user: process.env.DB_USER,
+            password: process.env.DB_PASSWORD,
+            ssl: process.env.DB_SSL === 'false' ? false : { rejectUnauthorized: false },
+            connectionTimeoutMillis: 15000,
+            query_timeout: 30000,
+          });
+          (async () => {
+            try {
+              const result = await pool.query('SELECT 1 AS database_connection_check');
+              console.log(`PostgreSQL connection verified: ${result.rows[0].database_connection_check}`);
+            } finally {
+              await pool.end();
+            }
+          })().catch((error) => {
+            console.error(`PostgreSQL verification failed: ${error.message}`);
+            process.exitCode = 1;
+          });
+          NODE
+
       - name: Run BrowserStack Playwright tests
         shell: bash
         run: |
@@ -72,7 +101,7 @@ jobs:
           if [[ -n "$SPEC_PATH" ]]; then
             npx playwright test -c browserstack.config.ts "$SPEC_PATH" --project="$PROJECT"
           else
-            echo "No spec_path supplied; running all tests under tests/."
+            echo "No spec_path supplied; running all UI tests under tests/ (database POC is verified above)."
             npx playwright test -c browserstack.config.ts --project="$PROJECT"
           fi
 

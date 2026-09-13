@@ -72,7 +72,6 @@ async function ensureStoreContext(salesPage: SalesPage): Promise<void> {
   }
 }
 
-test.describe.configure({ mode: 'serial' });
 
 test.describe("RCSP-133 - Operations > Sales > Sales Transactions: Sales Transactions page under the Operations menu loads su...", () => {
   let loginPage: RTCDashboardLoginPage;

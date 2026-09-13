@@ -103,7 +103,6 @@ async function createEditableLog(logWastePage: LogWastePage, shift: string) {
 	await logWastePage.verifyWasteLogDetailLoaded();
 }
 
-test.describe.configure({ mode: 'serial' });
 
 test('TC_RCSP-41_001 - Waste Logs page chrome', async ({ page }) => {
 	const common = getCommonData();

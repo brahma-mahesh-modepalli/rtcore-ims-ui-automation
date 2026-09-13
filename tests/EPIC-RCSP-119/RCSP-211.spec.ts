@@ -7,6 +7,7 @@
 import { test, expect, type Page } from '@playwright/test';
 import { CONFIG } from '../../config';
 import { log } from '../../utils/helpers';
+import { getCurrentLocalDate, getLatestMonday, getNextCountMonday, getNextMonthlyCountDate } from '../../utils/testDates';
 import { RTCDashboardLoginPage } from '../../pages/Login/RTCDashboardLoginPage';
 import { TransfersPage } from '../../pages/Transfers/TransfersPage';
 import { StockCountPage } from '../../pages/Stock Count/StockCountPage';
@@ -29,6 +30,14 @@ import {
 
 const RCSP_211_FILE_NAME = 'RCSP-211';
 const RCSP_211_SCENARIO_ID = 'RCSP-211';
+
+test.beforeEach(async ({}, testInfo) => {
+  testInfo.annotations.push({ type: 'count-date', description: `Latest Monday: ${getLatestMonday()}` });
+});
+
+test.afterEach(async ({}, testInfo) => {
+  log(`${testInfo.title} completed; current system date: ${getCurrentLocalDate()}`);
+});
 
 type CountType = 'Daily Shift Count' | 'Weekly Count' | 'Monthly Count';
 
@@ -147,7 +156,7 @@ async function createCountSession(
     await dailyPage.verifyDailyShiftCountPageLoaded();
     await dailyPage.createDailyShiftCount({
       shift: shift === 'Mid-Shift' ? 'Mid' : shift,
-      shiftDate: common.createCount.shiftDate,
+      shiftDate: getNextCountMonday(),
       name,
     });
     return;
@@ -157,7 +166,7 @@ async function createCountSession(
     await stockCountPage.navigateToWeeklyCount();
     await weeklyPage.verifyWeeklyCountPageLoaded();
     await weeklyPage.startWeeklyCount(shift, {
-      shiftDate: common.createCount.shiftDate,
+      shiftDate: getNextCountMonday(),
       name,
     });
     return;
@@ -166,7 +175,7 @@ async function createCountSession(
   await stockCountPage.navigateToMonthlyCount();
   await monthlyPage.verifyMonthlyCountPageLoaded();
   await monthlyPage.startMonthlyCount(shift, {
-    shiftDate: common.createCount.shiftDate,
+    shiftDate: getNextMonthlyCountDate(),
   });
 }
 
@@ -230,7 +239,6 @@ async function runVarianceScenario(
   await variancePage.saveAndLock();
 }
 
-test.describe.configure({ mode: 'serial' });
 
 test.describe('RCSP-211 - Variance indicator (Green / Red / Yellow)', () => {
   for (const caseId of ALL_CASE_IDS.slice(0, 9)) {

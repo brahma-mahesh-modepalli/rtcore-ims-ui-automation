@@ -6,6 +6,7 @@ import { StockCountPage } from '../../pages/Stock Count/StockCountPage';
 import { MonthlyCountPage } from '@pages/Stock Count/MonthlyCountPage';
 import { WeeklyCountPage } from '@pages/Stock Count/WeeklyCountPage';
 import { DailyShiftCountPage } from '@pages/Stock Count/DailyShiftCountPage';
+import { getNextMonthlyCountDate } from '../../utils/testDates';
 import {
   getScenarioTestCaseData,
   type MonthlyCountJsonData,
@@ -25,6 +26,42 @@ const RCSP_115_TEST_CASE_IDS = {
   monthlyCountValidation: 'TC_RCSP-115_04',
   sessionCreation: 'TC_RCSP-115_05',
 } as const;
+
+function formatDate(date: Date): string {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
+function getLatestMonday(date = new Date()): string {
+  const monday = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+  const daysSinceMonday = (monday.getDay() + 6) % 7;
+  monday.setDate(monday.getDate() - daysSinceMonday);
+  return formatDate(monday);
+}
+
+function getNextCountMonday(date = new Date()): string {
+  const monday = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+  const daysUntilMonday = (8 - monday.getDay()) % 7 || 7;
+  monday.setDate(monday.getDate() + daysUntilMonday);
+  return formatDate(monday);
+}
+
+function getCurrentDate(): string {
+  return formatDate(new Date());
+}
+
+test.beforeEach(async ({}, testInfo) => {
+  testInfo.annotations.push({
+    type: 'count-date',
+    description: `Latest Monday: ${getLatestMonday()}`,
+  });
+});
+
+test.afterEach(async ({}, testInfo) => {
+  log(`${testInfo.title} completed; current system date: ${getCurrentDate()}`);
+});
 
 function getRcsp115TestCaseData<T>(testCaseId: string): T {
   return getScenarioTestCaseData<T>(
@@ -213,6 +250,8 @@ test.describe('RCSP-115 - Weekly Count feature validation', () => {
 
     if (weeklyCountData.createCount.shiftDate) {
       await weeklyCountPage.fillShiftDate(weeklyCountData.createCount.shiftDate);
+    } else {
+      await weeklyCountPage.fillShiftDate(getNextCountMonday());
     }
 
     if (weeklyCountData.createCount.name) {
@@ -342,6 +381,8 @@ test.describe('RCSP-115 - Monthly Count feature validation', () => {
       await monthlyCountPage.fillShiftDate(
         monthlyCountData.createCount.shiftDate,
       );
+    } else {
+      await monthlyCountPage.fillShiftDate(getNextMonthlyCountDate());
     }
 
     await monthlyCountPage.verifyMonthlyCountNameReadOnly();

@@ -126,7 +126,6 @@ function requireReceivedPo(vendor: CreditRequestVendorData) {
   );
 }
 
-test.describe.configure({ mode: 'serial' });
 
 
 test.describe("RCSP-595 [TC_RCSP-595_001] (Flowers) - Verify whether the admin user can navigate from QA Backoffice Dashb...", () => {

@@ -6,6 +6,7 @@
 import { test, expect, type Page } from '@playwright/test';
 import { CONFIG } from '../../config';
 import { log } from '../../utils/helpers';
+import { getCurrentLocalDate, getLatestMonday, getNextCountMonday, getNextMonthlyCountDate } from '../../utils/testDates';
 import { RTCDashboardLoginPage } from '../../pages/Login/RTCDashboardLoginPage';
 import { StockCountPage } from '../../pages/Stock Count/StockCountPage';
 import { DailyShiftCountPage } from '../../pages/Stock Count/DailyShiftCountPage';
@@ -22,6 +23,14 @@ import {
 
 const RCSP_172_FILE_NAME = 'RCSP-172';
 const RCSP_172_SCENARIO_ID = 'RCSP-172';
+
+test.beforeEach(async ({}, testInfo) => {
+  testInfo.annotations.push({ type: 'count-date', description: `Latest Monday: ${getLatestMonday()}` });
+});
+
+test.afterEach(async ({}, testInfo) => {
+  log(`${testInfo.title} completed; current system date: ${getCurrentLocalDate()}`);
+});
 
 const TC = {
   openAddItem: 'TC_RCSP-172_01',
@@ -103,7 +112,7 @@ async function openCountWithAddItem(
     try {
       await dailyPage.createDailyShiftCount({
         shift,
-        shiftDate: common.createCount.shiftDate,
+        shiftDate: getNextMonthlyCountDate(),
         name: common.createCount.dailyName,
       });
     } catch {
@@ -117,7 +126,7 @@ async function openCountWithAddItem(
     await weeklyPage.verifyWeeklyCountPageLoaded();
     try {
       await weeklyPage.startWeeklyCount(shift, {
-        shiftDate: common.createCount.shiftDate,
+        shiftDate: getNextCountMonday(),
         name: common.createCount.weeklyName,
       });
     } catch {
@@ -131,7 +140,7 @@ async function openCountWithAddItem(
     await monthlyPage.verifyMonthlyCountPageLoaded();
     try {
       await monthlyPage.startMonthlyCount(shift, {
-        shiftDate: common.createCount.shiftDate,
+        shiftDate: getNextCountMonday(),
       });
     } catch {
       log('Create Monthly failed or dialog differed; opening existing count');
@@ -156,7 +165,6 @@ async function forEachCountType(
   }
 }
 
-test.describe.configure({ mode: 'serial' });
 
 test.describe('RCSP-172 - Navigate to Daily/Weekly/Monthly and open Add Item popup', () => {
   test('Verify whether the user can navigate to Daily Shift Count, Weekly Count, and Monthly Count and open Add Item popup', async ({

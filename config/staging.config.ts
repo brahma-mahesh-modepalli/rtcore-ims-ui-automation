@@ -10,7 +10,7 @@ export const stagingConfig = {
   credentials: {
     admin: {
       username: 'admin@whataburger-ims.com',
-      password: 'admin123',
+      password: 'Ims-go-live@0815',
       role: 'admin',
     },
     manager: {

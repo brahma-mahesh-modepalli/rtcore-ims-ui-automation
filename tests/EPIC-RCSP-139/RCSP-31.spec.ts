@@ -19,7 +19,8 @@ const RECEIVER_STORE_NAME = 'WB Unit 1008';
 const SOURCE_STORE_ID = 37;
 const REGION_NAME = '1700 San Antonio 4126314';
 const MARKET_NAME = '1708 E Central SA 4126393';
-const QUANTITY = '1';
+const EA_QUANTITY = '1';
+const INVALID_QUANTITY = '0';
 const repository = new TestDataRepository();
 
 type TransferContext = {
@@ -93,7 +94,7 @@ async function createDraft(
 	await transfersPage.verifyFromStoreSelected(context.source.name);
 	await transfersPage.selectToStore(context.receiver.name);
 	await transfersPage.selectTransferReason(context.reason.description);
-	await transfersPage.addItem(context.item.name, QUANTITY, context.item.sku);
+	await transfersPage.addItem(context.item.name, EA_QUANTITY, context.item.sku);
 	await transfersPage.saveChanges();
 	await transfersPage.openTransfers();
 	await transfersPage.selectStatusTab('Draft');
@@ -114,7 +115,7 @@ async function createSubmittedTransfer(
 	return transferId;
 }
 
-test.describe.configure({ mode: 'serial', timeout: 90_000 });
+test.describe.configure({ timeout: 90_000 });
 
 test('TC_RCSP-31_01 - create a DB-driven Draft IUT', async ({ page }) => {
 	const context = await getTransferContext();
@@ -132,7 +133,7 @@ test('TC_RCSP-31_02 - validate missing mandatory fields and invalid quantity', a
 	await openTransfersForStore(page, transfersPage, context.source);
 	await transfersPage.clickNewTransfer();
 	await transfersPage.verifyNewTransferFormVisible();
-	await transfersPage.addItem(context.item.name, '0', context.item.sku);
+	await transfersPage.addItem(context.item.name, INVALID_QUANTITY, context.item.sku);
 	await transfersPage.submitTransfer().catch(() => undefined);
 	await transfersPage.verifyValidationVisible();
 });
@@ -149,7 +150,7 @@ test('TC_RCSP-31_03 - verify Draft details and actions', async ({ page }) => {
 		toStore: context.receiver.name,
 		reason: context.reason.description,
 		sku: context.item.sku,
-		quantity: QUANTITY,
+		quantity: EA_QUANTITY,
 		status: 'Draft',
 	});
 	await transfersPage.verifyDraftDetailActionsVisible();
@@ -189,7 +190,7 @@ test('TC_RCSP-31_06 - receiving store sees submitted IUT as read-only', async ({
 		fromStore: context.source.name,
 		toStore: context.receiver.name,
 		sku: context.item.sku,
-		quantity: QUANTITY,
+		quantity: EA_QUANTITY,
 		status: 'Pending',
 	});
 	await transfersPage.verifySubmittedReadOnly();
@@ -234,7 +235,7 @@ test('TC_RCSP-31_08 - completed IUT is terminal and ready for downstream process
 		fromStore: context.source.name,
 		toStore: context.receiver.name,
 		sku: context.item.sku,
-		quantity: QUANTITY,
+		quantity: EA_QUANTITY,
 		status: 'Completed',
 	});
 	await transfersPage.verifyTerminalTransferState('Completed');

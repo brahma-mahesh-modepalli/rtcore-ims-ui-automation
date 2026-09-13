@@ -102,7 +102,6 @@ async function ensureSourceStore(transfersPage: TransfersPage): Promise<void> {
   );
 }
 
-test.describe.configure({ mode: 'serial' });
 
 const shared: SharedState = {
   pendingTransferId: '',
