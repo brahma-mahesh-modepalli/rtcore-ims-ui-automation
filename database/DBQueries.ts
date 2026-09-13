@@ -4,6 +4,7 @@ import { StoreQueries } from './queries/StoreQueries';
 import { TransferQueries } from './queries/TransferQueries';
 import { UomQueries } from './queries/UomQueries';
 import { UserQueries } from './queries/UserQueries';
+import { VendorItemQueries } from './queries/VendorItemQueries';
 import { WastageQueries } from './queries/WastageQueries';
 
 export { InventoryQueries } from './queries/InventoryQueries';
@@ -13,6 +14,7 @@ export { StoreQueries } from './queries/StoreQueries';
 export { TransferQueries } from './queries/TransferQueries';
 export { UomQueries } from './queries/UomQueries';
 export { UserQueries } from './queries/UserQueries';
+export { VendorItemQueries } from './queries/VendorItemQueries';
 export { WastageQueries } from './queries/WastageQueries';
 
 export const DBQueries = {
@@ -23,5 +25,6 @@ export const DBQueries = {
   ...RecipeQueries,
   ...WastageQueries,
   ...UomQueries,
+  ...VendorItemQueries,
 };
 

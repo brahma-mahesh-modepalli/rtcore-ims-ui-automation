@@ -129,7 +129,7 @@ function requireReceivedPo(vendor: CreditRequestVendorData) {
 
 
 test.describe("RCSP-595 [TC_RCSP-595_001] (Flowers) - Verify whether the admin user can navigate from QA Backoffice Dashb...", () => {
-  test("TC_RCSP-595_001: Verify whether the admin user can navigate from QA Backoffice Dashboard Home page to Or... (Flowers)", async ({ page }) => {
+  test("TC_RCSP-595_001: Verify whether the admin user can navigate from QA Backoffice Dashboard Home page to Or... (Flowers)", { tag: ['@smoke', '@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc001);
     expect(_case).toBeTruthy();
     const { common, creditPage } = await prepare(page);
@@ -143,7 +143,7 @@ test.describe("RCSP-595 [TC_RCSP-595_001] (Flowers) - Verify whether the admin u
 
 
 test.describe("RCSP-595 [TC_RCSP-595_002] (Flowers) - Verify whether clicking + New Credit Request / START CREDIT REQUEST...", () => {
-  test("TC_RCSP-595_002: Verify whether clicking + New Credit Request / START CREDIT REQUEST on the Credit Reque... (Flowers)", async ({ page }) => {
+  test("TC_RCSP-595_002: Verify whether clicking + New Credit Request / START CREDIT REQUEST on the Credit Reque... (Flowers)", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc002);
     expect(_case).toBeTruthy();
     const { common, creditPage } = await prepare(page);
@@ -157,7 +157,7 @@ test.describe("RCSP-595 [TC_RCSP-595_002] (Flowers) - Verify whether clicking + 
 
 
 test.describe("RCSP-595 [TC_RCSP-595_003] (Flowers) - Verify whether selecting a Flowers Purchase Order in Received statu...", () => {
-  test("TC_RCSP-595_003: Verify whether selecting a Flowers Purchase Order in Received status from the Purchase ... (Flowers)", async ({ page }) => {
+  test("TC_RCSP-595_003: Verify whether selecting a Flowers Purchase Order in Received status from the Purchase ... (Flowers)", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc003);
     expect(_case).toBeTruthy();
     const { common, creditPage } = await prepare(page);
@@ -170,7 +170,7 @@ test.describe("RCSP-595 [TC_RCSP-595_003] (Flowers) - Verify whether selecting a
 
 
 test.describe("RCSP-595 [TC_RCSP-595_004] (Flowers) - Verify whether selecting the Damaged checkbox for a received item o...", () => {
-  test("TC_RCSP-595_004: Verify whether selecting the Damaged checkbox for a received item on the Damaged Items ... (Flowers)", async ({ page }) => {
+  test("TC_RCSP-595_004: Verify whether selecting the Damaged checkbox for a received item on the Damaged Items ... (Flowers)", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc004);
     expect(_case).toBeTruthy();
     const { common, creditPage } = await prepare(page);
@@ -185,7 +185,7 @@ test.describe("RCSP-595 [TC_RCSP-595_004] (Flowers) - Verify whether selecting t
 
 
 test.describe("RCSP-595 [TC_RCSP-595_005] (Flowers) - Verify whether the UOM dropdown values displayed for a damaged item...", () => {
-  test("TC_RCSP-595_005: Verify whether the UOM dropdown values displayed for a damaged item on the Damaged Item... (Flowers)", async ({ page }) => {
+  test("TC_RCSP-595_005: Verify whether the UOM dropdown values displayed for a damaged item on the Damaged Item... (Flowers)", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc005);
     expect(_case).toBeTruthy();
     const { common, creditPage } = await prepare(page);
@@ -211,7 +211,7 @@ test.describe("RCSP-595 [TC_RCSP-595_005] (Flowers) - Verify whether the UOM dro
 
 
 test.describe("RCSP-595 [TC_RCSP-595_006] (Flowers) - Verify whether the UOM profile for a damaged item on the Flowers Cr...", () => {
-  test("TC_RCSP-595_006: Verify whether the UOM profile for a damaged item on the Flowers Credit Request matches... (Flowers)", async ({ page }) => {
+  test("TC_RCSP-595_006: Verify whether the UOM profile for a damaged item on the Flowers Credit Request matches... (Flowers)", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc006);
     expect(_case).toBeTruthy();
     const { common, creditPage } = await prepare(page);
@@ -228,7 +228,7 @@ test.describe("RCSP-595 [TC_RCSP-595_006] (Flowers) - Verify whether the UOM pro
 
 
 test.describe("RCSP-595 [TC_RCSP-595_007] (Flowers) - Verify whether the user can change/update the UOM dropdown value on...", () => {
-  test("TC_RCSP-595_007: Verify whether the user can change/update the UOM dropdown value on a Draft Flowers Cre... (Flowers)", async ({ page }) => {
+  test("TC_RCSP-595_007: Verify whether the user can change/update the UOM dropdown value on a Draft Flowers Cre... (Flowers)", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc007);
     expect(_case).toBeTruthy();
     const { common, creditPage } = await prepare(page);
@@ -262,7 +262,7 @@ test.describe("RCSP-595 [TC_RCSP-595_007] (Flowers) - Verify whether the user ca
 
 
 test.describe("RCSP-595 [TC_RCSP-595_008] (Flowers) - Verify whether the user can submit a Draft Flowers Credit Request f...", () => {
-  test("TC_RCSP-595_008: Verify whether the user can submit a Draft Flowers Credit Request from the Damaged Item... (Flowers)", async ({ page }) => {
+  test("TC_RCSP-595_008: Verify whether the user can submit a Draft Flowers Credit Request from the Damaged Item... (Flowers)", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc008);
     expect(_case).toBeTruthy();
     const { common, creditPage } = await prepare(page);
@@ -281,7 +281,7 @@ test.describe("RCSP-595 [TC_RCSP-595_008] (Flowers) - Verify whether the user ca
 
 
 test.describe("RCSP-595 [TC_RCSP-595_009] (Flowers) - Verify whether the UOM field on a Submitted Flowers Credit Request ...", () => {
-  test("TC_RCSP-595_009: Verify whether the UOM field on a Submitted Flowers Credit Request is read-only on the ... (Flowers)", async ({ page }) => {
+  test("TC_RCSP-595_009: Verify whether the UOM field on a Submitted Flowers Credit Request is read-only on the ... (Flowers)", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc009);
     expect(_case).toBeTruthy();
     const { common, creditPage } = await prepare(page);
@@ -299,7 +299,7 @@ test.describe("RCSP-595 [TC_RCSP-595_009] (Flowers) - Verify whether the UOM fie
 
 
 test.describe("RCSP-595 [TC_RCSP-595_010] (Flowers) - Verify whether the Start Credit Request button does not navigate to...", () => {
-  test("TC_RCSP-595_010: Verify whether the Start Credit Request button does not navigate to Damaged Items From ... (Flowers)", async ({ page }) => {
+  test("TC_RCSP-595_010: Verify whether the Start Credit Request button does not navigate to Damaged Items From ... (Flowers)", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc010);
     expect(_case).toBeTruthy();
     const { creditPage } = await prepare(page);
@@ -318,7 +318,7 @@ test.describe("RCSP-595 [TC_RCSP-595_010] (Flowers) - Verify whether the Start C
 
 
 test.describe("RCSP-595 [TC_RCSP-595_011] (Flowers) - Verify whether a Flowers Purchase Order that is NOT in Received sta...", () => {
-  test("TC_RCSP-595_011: Verify whether a Flowers Purchase Order that is NOT in Received status does not appear ... (Flowers)", async ({ page }) => {
+  test("TC_RCSP-595_011: Verify whether a Flowers Purchase Order that is NOT in Received status does not appear ... (Flowers)", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc011);
     expect(_case).toBeTruthy();
     const { common, creditPage } = await prepare(page);
@@ -335,7 +335,7 @@ test.describe("RCSP-595 [TC_RCSP-595_011] (Flowers) - Verify whether a Flowers P
 
 
 test.describe("RCSP-595 [TC_RCSP-595_012] (Flowers) - Verify whether the mandatory damaged-item fields (Incident Type, Qt...", () => {
-  test("TC_RCSP-595_012: Verify whether the mandatory damaged-item fields (Incident Type, Qty, UOM, Can you use ... (Flowers)", async ({ page }) => {
+  test("TC_RCSP-595_012: Verify whether the mandatory damaged-item fields (Incident Type, Qty, UOM, Can you use ... (Flowers)", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc012);
     expect(_case).toBeTruthy();
     const { common, creditPage } = await prepare(page);
@@ -350,7 +350,7 @@ test.describe("RCSP-595 [TC_RCSP-595_012] (Flowers) - Verify whether the mandato
 
 
 test.describe("RCSP-595 [TC_RCSP-595_013] (Flowers) - Verify whether saving/submitting a Flowers Credit Request is blocke...", () => {
-  test("TC_RCSP-595_013: Verify whether saving/submitting a Flowers Credit Request is blocked when Damaged check... (Flowers)", async ({ page }) => {
+  test("TC_RCSP-595_013: Verify whether saving/submitting a Flowers Credit Request is blocked when Damaged check... (Flowers)", { tag: ['@regression'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc013);
     expect(_case).toBeTruthy();
     const { common, creditPage } = await prepare(page);
@@ -375,7 +375,7 @@ test.describe("RCSP-595 [TC_RCSP-595_013] (Flowers) - Verify whether saving/subm
 
 
 test.describe("RCSP-595 [TC_RCSP-595_014] (Flowers) - Verify whether saving/submitting a Flowers Credit Request is blocke...", () => {
-  test("TC_RCSP-595_014: Verify whether saving/submitting a Flowers Credit Request is blocked when Qty * is left... (Flowers)", async ({ page }) => {
+  test("TC_RCSP-595_014: Verify whether saving/submitting a Flowers Credit Request is blocked when Qty * is left... (Flowers)", { tag: ['@regression'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc014);
     expect(_case).toBeTruthy();
     const { common, creditPage } = await prepare(page);
@@ -400,7 +400,7 @@ test.describe("RCSP-595 [TC_RCSP-595_014] (Flowers) - Verify whether saving/subm
 
 
 test.describe("RCSP-595 [TC_RCSP-595_015] (Flowers) - Verify whether saving/submitting a Flowers Credit Request is blocke...", () => {
-  test("TC_RCSP-595_015: Verify whether saving/submitting a Flowers Credit Request is blocked when UOM * is not ... (Flowers)", async ({ page }) => {
+  test("TC_RCSP-595_015: Verify whether saving/submitting a Flowers Credit Request is blocked when UOM * is not ... (Flowers)", { tag: ['@regression'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc015);
     expect(_case).toBeTruthy();
     const { common, creditPage } = await prepare(page);
@@ -425,7 +425,7 @@ test.describe("RCSP-595 [TC_RCSP-595_015] (Flowers) - Verify whether saving/subm
 
 
 test.describe("RCSP-595 [TC_RCSP-595_016] (Flowers) - Verify whether saving/submitting a Flowers Credit Request is blocke...", () => {
-  test("TC_RCSP-595_016: Verify whether saving/submitting a Flowers Credit Request is blocked when Can you use t... (Flowers)", async ({ page }) => {
+  test("TC_RCSP-595_016: Verify whether saving/submitting a Flowers Credit Request is blocked when Can you use t... (Flowers)", { tag: ['@regression'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc016);
     expect(_case).toBeTruthy();
     const { common, creditPage } = await prepare(page);
@@ -450,7 +450,7 @@ test.describe("RCSP-595 [TC_RCSP-595_016] (Flowers) - Verify whether saving/subm
 
 
 test.describe("RCSP-595 [TC_RCSP-595_017] (Flowers) - Verify whether saving/submitting a Flowers Credit Request is blocke...", () => {
-  test("TC_RCSP-595_017: Verify whether saving/submitting a Flowers Credit Request is blocked when Do you have e... (Flowers)", async ({ page }) => {
+  test("TC_RCSP-595_017: Verify whether saving/submitting a Flowers Credit Request is blocked when Do you have e... (Flowers)", { tag: ['@regression'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc017);
     expect(_case).toBeTruthy();
     const { common, creditPage } = await prepare(page);
@@ -475,7 +475,7 @@ test.describe("RCSP-595 [TC_RCSP-595_017] (Flowers) - Verify whether saving/subm
 
 
 test.describe("RCSP-595 [TC_RCSP-595_018] (Flowers) - Verify whether saving/submitting a Flowers Credit Request is blocke...", () => {
-  test("TC_RCSP-595_018: Verify whether saving/submitting a Flowers Credit Request is blocked when Images * are ... (Flowers)", async ({ page }) => {
+  test("TC_RCSP-595_018: Verify whether saving/submitting a Flowers Credit Request is blocked when Images * are ... (Flowers)", { tag: ['@regression'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc018);
     expect(_case).toBeTruthy();
     const { common, creditPage } = await prepare(page);
@@ -500,7 +500,7 @@ test.describe("RCSP-595 [TC_RCSP-595_018] (Flowers) - Verify whether saving/subm
 
 
 test.describe("RCSP-595 [TC_RCSP-595_019] (Flowers) - Verify whether the user cannot modify the UOM value on a Submitted ...", () => {
-  test("TC_RCSP-595_019: Verify whether the user cannot modify the UOM value on a Submitted Flowers Credit Reque... (Flowers)", async ({ page }) => {
+  test("TC_RCSP-595_019: Verify whether the user cannot modify the UOM value on a Submitted Flowers Credit Reque... (Flowers)", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc019);
     expect(_case).toBeTruthy();
     const { common, creditPage } = await prepare(page);
@@ -518,7 +518,7 @@ test.describe("RCSP-595 [TC_RCSP-595_019] (Flowers) - Verify whether the user ca
 
 
 test.describe("RCSP-595 [TC_RCSP-595_020] (Flowers) - Verify whether unchecking the Damaged checkbox on Damaged Items Fro...", () => {
-  test("TC_RCSP-595_020: Verify whether unchecking the Damaged checkbox on Damaged Items From Order page (Flower... (Flowers)", async ({ page }) => {
+  test("TC_RCSP-595_020: Verify whether unchecking the Damaged checkbox on Damaged Items From Order page (Flower... (Flowers)", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc020);
     expect(_case).toBeTruthy();
     const { common, creditPage } = await prepare(page);
@@ -535,7 +535,7 @@ test.describe("RCSP-595 [TC_RCSP-595_020] (Flowers) - Verify whether unchecking 
 
 
 test.describe("RCSP-595 [TC_RCSP-595_021] (Flowers) - Verify whether Qty entered on Flowers Damaged Items From Order page...", () => {
-  test("TC_RCSP-595_021: Verify whether Qty entered on Flowers Damaged Items From Order page cannot exceed the r... (Flowers)", async ({ page }) => {
+  test("TC_RCSP-595_021: Verify whether Qty entered on Flowers Damaged Items From Order page cannot exceed the r... (Flowers)", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc021);
     expect(_case).toBeTruthy();
     const { common, creditPage } = await prepare(page);
@@ -559,7 +559,7 @@ test.describe("RCSP-595 [TC_RCSP-595_021] (Flowers) - Verify whether Qty entered
 
 
 test.describe("RCSP-595 [TC_RCSP-595_022] (Flowers) - Verify whether changing UOM on a Draft Flowers Credit Request updat...", () => {
-  test("TC_RCSP-595_022: Verify whether changing UOM on a Draft Flowers Credit Request updates only the Draft re... (Flowers)", async ({ page }) => {
+  test("TC_RCSP-595_022: Verify whether changing UOM on a Draft Flowers Credit Request updates only the Draft re... (Flowers)", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc022);
     expect(_case).toBeTruthy();
     const { common, creditPage } = await prepare(page);
@@ -590,7 +590,7 @@ test.describe("RCSP-595 [TC_RCSP-595_022] (Flowers) - Verify whether changing UO
 
 
 test.describe("RCSP-595 [TC_RCSP-595_023] (Flowers) - Verify whether a Flowers Purchase Order with Received status but ze...", () => {
-  test("TC_RCSP-595_023: Verify whether a Flowers Purchase Order with Received status but zero received items (o... (Flowers)", async ({ page }) => {
+  test("TC_RCSP-595_023: Verify whether a Flowers Purchase Order with Received status but zero received items (o... (Flowers)", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc023);
     expect(_case).toBeTruthy();
     const { common, creditPage } = await prepare(page);
@@ -607,7 +607,7 @@ test.describe("RCSP-595 [TC_RCSP-595_023] (Flowers) - Verify whether a Flowers P
 
 
 test.describe("RCSP-595 [TC_RCSP-595_024] (Flowers) - Verify whether selecting Damaged for multiple received items on the...", () => {
-  test("TC_RCSP-595_024: Verify whether selecting Damaged for multiple received items on the same Flowers Credit... (Flowers)", async ({ page }) => {
+  test("TC_RCSP-595_024: Verify whether selecting Damaged for multiple received items on the same Flowers Credit... (Flowers)", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc024);
     expect(_case).toBeTruthy();
     const { common, creditPage } = await prepare(page);
@@ -628,7 +628,7 @@ test.describe("RCSP-595 [TC_RCSP-595_024] (Flowers) - Verify whether selecting D
 
 
 test.describe("RCSP-595 [TC_RCSP-595_025] (Flowers) - Verify whether UOM dropdown on Flowers Credit Request does not disp...", () => {
-  test("TC_RCSP-595_025: Verify whether UOM dropdown on Flowers Credit Request does not display UOM values that ... (Flowers)", async ({ page }) => {
+  test("TC_RCSP-595_025: Verify whether UOM dropdown on Flowers Credit Request does not display UOM values that ... (Flowers)", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc025);
     expect(_case).toBeTruthy();
     const { common, creditPage } = await prepare(page);
@@ -651,7 +651,7 @@ test.describe("RCSP-595 [TC_RCSP-595_025] (Flowers) - Verify whether UOM dropdow
 
 
 test.describe("RCSP-595 [TC_RCSP-595_026] (McLane) - Verify whether the admin user can navigate from QA Backoffice Dashb...", () => {
-  test("TC_RCSP-595_026: Verify whether the admin user can navigate from QA Backoffice Dashboard Home page to Or... (McLane)", async ({ page }) => {
+  test("TC_RCSP-595_026: Verify whether the admin user can navigate from QA Backoffice Dashboard Home page to Or... (McLane)", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc026);
     expect(_case).toBeTruthy();
     const { common, creditPage } = await prepare(page);
@@ -665,7 +665,7 @@ test.describe("RCSP-595 [TC_RCSP-595_026] (McLane) - Verify whether the admin us
 
 
 test.describe("RCSP-595 [TC_RCSP-595_027] (McLane) - Verify whether clicking + New Credit Request / START CREDIT REQUEST...", () => {
-  test("TC_RCSP-595_027: Verify whether clicking + New Credit Request / START CREDIT REQUEST on the Credit Reque... (McLane)", async ({ page }) => {
+  test("TC_RCSP-595_027: Verify whether clicking + New Credit Request / START CREDIT REQUEST on the Credit Reque... (McLane)", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc027);
     expect(_case).toBeTruthy();
     const { common, creditPage } = await prepare(page);
@@ -679,7 +679,7 @@ test.describe("RCSP-595 [TC_RCSP-595_027] (McLane) - Verify whether clicking + N
 
 
 test.describe("RCSP-595 [TC_RCSP-595_028] (McLane) - Verify whether selecting a McLane Purchase Order in Received status...", () => {
-  test("TC_RCSP-595_028: Verify whether selecting a McLane Purchase Order in Received status from the Purchase O... (McLane)", async ({ page }) => {
+  test("TC_RCSP-595_028: Verify whether selecting a McLane Purchase Order in Received status from the Purchase O... (McLane)", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc028);
     expect(_case).toBeTruthy();
     const { common, creditPage } = await prepare(page);
@@ -692,7 +692,7 @@ test.describe("RCSP-595 [TC_RCSP-595_028] (McLane) - Verify whether selecting a 
 
 
 test.describe("RCSP-595 [TC_RCSP-595_029] (McLane) - Verify whether selecting the Damaged checkbox for a received item o...", () => {
-  test("TC_RCSP-595_029: Verify whether selecting the Damaged checkbox for a received item on the Damaged Items ... (McLane)", async ({ page }) => {
+  test("TC_RCSP-595_029: Verify whether selecting the Damaged checkbox for a received item on the Damaged Items ... (McLane)", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc029);
     expect(_case).toBeTruthy();
     const { common, creditPage } = await prepare(page);
@@ -707,7 +707,7 @@ test.describe("RCSP-595 [TC_RCSP-595_029] (McLane) - Verify whether selecting th
 
 
 test.describe("RCSP-595 [TC_RCSP-595_030] (McLane) - Verify whether the UOM dropdown values displayed for a damaged item...", () => {
-  test("TC_RCSP-595_030: Verify whether the UOM dropdown values displayed for a damaged item on the Damaged Item... (McLane)", async ({ page }) => {
+  test("TC_RCSP-595_030: Verify whether the UOM dropdown values displayed for a damaged item on the Damaged Item... (McLane)", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc030);
     expect(_case).toBeTruthy();
     const { common, creditPage } = await prepare(page);
@@ -733,7 +733,7 @@ test.describe("RCSP-595 [TC_RCSP-595_030] (McLane) - Verify whether the UOM drop
 
 
 test.describe("RCSP-595 [TC_RCSP-595_031] (McLane) - Verify whether the UOM profile for a damaged item on the McLane Cre...", () => {
-  test("TC_RCSP-595_031: Verify whether the UOM profile for a damaged item on the McLane Credit Request matches ... (McLane)", async ({ page }) => {
+  test("TC_RCSP-595_031: Verify whether the UOM profile for a damaged item on the McLane Credit Request matches ... (McLane)", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc031);
     expect(_case).toBeTruthy();
     const { common, creditPage } = await prepare(page);
@@ -750,7 +750,7 @@ test.describe("RCSP-595 [TC_RCSP-595_031] (McLane) - Verify whether the UOM prof
 
 
 test.describe("RCSP-595 [TC_RCSP-595_032] (McLane) - Verify whether the user can change/update the UOM dropdown value on...", () => {
-  test("TC_RCSP-595_032: Verify whether the user can change/update the UOM dropdown value on a Draft McLane Cred... (McLane)", async ({ page }) => {
+  test("TC_RCSP-595_032: Verify whether the user can change/update the UOM dropdown value on a Draft McLane Cred... (McLane)", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc032);
     expect(_case).toBeTruthy();
     const { common, creditPage } = await prepare(page);
@@ -784,7 +784,7 @@ test.describe("RCSP-595 [TC_RCSP-595_032] (McLane) - Verify whether the user can
 
 
 test.describe("RCSP-595 [TC_RCSP-595_033] (McLane) - Verify whether the user can submit a Draft McLane Credit Request fr...", () => {
-  test("TC_RCSP-595_033: Verify whether the user can submit a Draft McLane Credit Request from the Damaged Items... (McLane)", async ({ page }) => {
+  test("TC_RCSP-595_033: Verify whether the user can submit a Draft McLane Credit Request from the Damaged Items... (McLane)", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc033);
     expect(_case).toBeTruthy();
     const { common, creditPage } = await prepare(page);
@@ -803,7 +803,7 @@ test.describe("RCSP-595 [TC_RCSP-595_033] (McLane) - Verify whether the user can
 
 
 test.describe("RCSP-595 [TC_RCSP-595_034] (McLane) - Verify whether the UOM field on a Submitted McLane Credit Request i...", () => {
-  test("TC_RCSP-595_034: Verify whether the UOM field on a Submitted McLane Credit Request is read-only on the D... (McLane)", async ({ page }) => {
+  test("TC_RCSP-595_034: Verify whether the UOM field on a Submitted McLane Credit Request is read-only on the D... (McLane)", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc034);
     expect(_case).toBeTruthy();
     const { common, creditPage } = await prepare(page);
@@ -821,7 +821,7 @@ test.describe("RCSP-595 [TC_RCSP-595_034] (McLane) - Verify whether the UOM fiel
 
 
 test.describe("RCSP-595 [TC_RCSP-595_035] (McLane) - Verify whether the Start Credit Request button does not navigate to...", () => {
-  test("TC_RCSP-595_035: Verify whether the Start Credit Request button does not navigate to Damaged Items From ... (McLane)", async ({ page }) => {
+  test("TC_RCSP-595_035: Verify whether the Start Credit Request button does not navigate to Damaged Items From ... (McLane)", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc035);
     expect(_case).toBeTruthy();
     const { creditPage } = await prepare(page);
@@ -840,7 +840,7 @@ test.describe("RCSP-595 [TC_RCSP-595_035] (McLane) - Verify whether the Start Cr
 
 
 test.describe("RCSP-595 [TC_RCSP-595_036] (McLane) - Verify whether a McLane Purchase Order that is NOT in Received stat...", () => {
-  test("TC_RCSP-595_036: Verify whether a McLane Purchase Order that is NOT in Received status does not appear a... (McLane)", async ({ page }) => {
+  test("TC_RCSP-595_036: Verify whether a McLane Purchase Order that is NOT in Received status does not appear a... (McLane)", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc036);
     expect(_case).toBeTruthy();
     const { common, creditPage } = await prepare(page);
@@ -857,7 +857,7 @@ test.describe("RCSP-595 [TC_RCSP-595_036] (McLane) - Verify whether a McLane Pur
 
 
 test.describe("RCSP-595 [TC_RCSP-595_037] (McLane) - Verify whether the mandatory damaged-item fields (Incident Type, Qt...", () => {
-  test("TC_RCSP-595_037: Verify whether the mandatory damaged-item fields (Incident Type, Qty, UOM, Can you use ... (McLane)", async ({ page }) => {
+  test("TC_RCSP-595_037: Verify whether the mandatory damaged-item fields (Incident Type, Qty, UOM, Can you use ... (McLane)", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc037);
     expect(_case).toBeTruthy();
     const { common, creditPage } = await prepare(page);
@@ -872,7 +872,7 @@ test.describe("RCSP-595 [TC_RCSP-595_037] (McLane) - Verify whether the mandator
 
 
 test.describe("RCSP-595 [TC_RCSP-595_038] (McLane) - Verify whether saving/submitting a McLane Credit Request is blocked...", () => {
-  test("TC_RCSP-595_038: Verify whether saving/submitting a McLane Credit Request is blocked when Damaged checkb... (McLane)", async ({ page }) => {
+  test("TC_RCSP-595_038: Verify whether saving/submitting a McLane Credit Request is blocked when Damaged checkb... (McLane)", { tag: ['@regression'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc038);
     expect(_case).toBeTruthy();
     const { common, creditPage } = await prepare(page);
@@ -897,7 +897,7 @@ test.describe("RCSP-595 [TC_RCSP-595_038] (McLane) - Verify whether saving/submi
 
 
 test.describe("RCSP-595 [TC_RCSP-595_039] (McLane) - Verify whether saving/submitting a McLane Credit Request is blocked...", () => {
-  test("TC_RCSP-595_039: Verify whether saving/submitting a McLane Credit Request is blocked when Qty * is left ... (McLane)", async ({ page }) => {
+  test("TC_RCSP-595_039: Verify whether saving/submitting a McLane Credit Request is blocked when Qty * is left ... (McLane)", { tag: ['@regression'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc039);
     expect(_case).toBeTruthy();
     const { common, creditPage } = await prepare(page);
@@ -922,7 +922,7 @@ test.describe("RCSP-595 [TC_RCSP-595_039] (McLane) - Verify whether saving/submi
 
 
 test.describe("RCSP-595 [TC_RCSP-595_040] (McLane) - Verify whether saving/submitting a McLane Credit Request is blocked...", () => {
-  test("TC_RCSP-595_040: Verify whether saving/submitting a McLane Credit Request is blocked when UOM * is not s... (McLane)", async ({ page }) => {
+  test("TC_RCSP-595_040: Verify whether saving/submitting a McLane Credit Request is blocked when UOM * is not s... (McLane)", { tag: ['@regression'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc040);
     expect(_case).toBeTruthy();
     const { common, creditPage } = await prepare(page);
@@ -947,7 +947,7 @@ test.describe("RCSP-595 [TC_RCSP-595_040] (McLane) - Verify whether saving/submi
 
 
 test.describe("RCSP-595 [TC_RCSP-595_041] (McLane) - Verify whether saving/submitting a McLane Credit Request is blocked...", () => {
-  test("TC_RCSP-595_041: Verify whether saving/submitting a McLane Credit Request is blocked when Can you use th... (McLane)", async ({ page }) => {
+  test("TC_RCSP-595_041: Verify whether saving/submitting a McLane Credit Request is blocked when Can you use th... (McLane)", { tag: ['@regression'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc041);
     expect(_case).toBeTruthy();
     const { common, creditPage } = await prepare(page);
@@ -972,7 +972,7 @@ test.describe("RCSP-595 [TC_RCSP-595_041] (McLane) - Verify whether saving/submi
 
 
 test.describe("RCSP-595 [TC_RCSP-595_042] (McLane) - Verify whether saving/submitting a McLane Credit Request is blocked...", () => {
-  test("TC_RCSP-595_042: Verify whether saving/submitting a McLane Credit Request is blocked when Do you have en... (McLane)", async ({ page }) => {
+  test("TC_RCSP-595_042: Verify whether saving/submitting a McLane Credit Request is blocked when Do you have en... (McLane)", { tag: ['@regression'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc042);
     expect(_case).toBeTruthy();
     const { common, creditPage } = await prepare(page);
@@ -997,7 +997,7 @@ test.describe("RCSP-595 [TC_RCSP-595_042] (McLane) - Verify whether saving/submi
 
 
 test.describe("RCSP-595 [TC_RCSP-595_043] (McLane) - Verify whether saving/submitting a McLane Credit Request is blocked...", () => {
-  test("TC_RCSP-595_043: Verify whether saving/submitting a McLane Credit Request is blocked when Images * are n... (McLane)", async ({ page }) => {
+  test("TC_RCSP-595_043: Verify whether saving/submitting a McLane Credit Request is blocked when Images * are n... (McLane)", { tag: ['@regression'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc043);
     expect(_case).toBeTruthy();
     const { common, creditPage } = await prepare(page);
@@ -1022,7 +1022,7 @@ test.describe("RCSP-595 [TC_RCSP-595_043] (McLane) - Verify whether saving/submi
 
 
 test.describe("RCSP-595 [TC_RCSP-595_044] (McLane) - Verify whether the user cannot modify the UOM value on a Submitted ...", () => {
-  test("TC_RCSP-595_044: Verify whether the user cannot modify the UOM value on a Submitted McLane Credit Reques... (McLane)", async ({ page }) => {
+  test("TC_RCSP-595_044: Verify whether the user cannot modify the UOM value on a Submitted McLane Credit Reques... (McLane)", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc044);
     expect(_case).toBeTruthy();
     const { common, creditPage } = await prepare(page);
@@ -1040,7 +1040,7 @@ test.describe("RCSP-595 [TC_RCSP-595_044] (McLane) - Verify whether the user can
 
 
 test.describe("RCSP-595 [TC_RCSP-595_045] (McLane) - Verify whether unchecking the Damaged checkbox on Damaged Items Fro...", () => {
-  test("TC_RCSP-595_045: Verify whether unchecking the Damaged checkbox on Damaged Items From Order page (McLane... (McLane)", async ({ page }) => {
+  test("TC_RCSP-595_045: Verify whether unchecking the Damaged checkbox on Damaged Items From Order page (McLane... (McLane)", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc045);
     expect(_case).toBeTruthy();
     const { common, creditPage } = await prepare(page);
@@ -1057,7 +1057,7 @@ test.describe("RCSP-595 [TC_RCSP-595_045] (McLane) - Verify whether unchecking t
 
 
 test.describe("RCSP-595 [TC_RCSP-595_046] (McLane) - Verify whether Qty entered on McLane Damaged Items From Order page ...", () => {
-  test("TC_RCSP-595_046: Verify whether Qty entered on McLane Damaged Items From Order page cannot exceed the re... (McLane)", async ({ page }) => {
+  test("TC_RCSP-595_046: Verify whether Qty entered on McLane Damaged Items From Order page cannot exceed the re... (McLane)", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc046);
     expect(_case).toBeTruthy();
     const { common, creditPage } = await prepare(page);
@@ -1081,7 +1081,7 @@ test.describe("RCSP-595 [TC_RCSP-595_046] (McLane) - Verify whether Qty entered 
 
 
 test.describe("RCSP-595 [TC_RCSP-595_047] (McLane) - Verify whether changing UOM on a Draft McLane Credit Request update...", () => {
-  test("TC_RCSP-595_047: Verify whether changing UOM on a Draft McLane Credit Request updates only the Draft rec... (McLane)", async ({ page }) => {
+  test("TC_RCSP-595_047: Verify whether changing UOM on a Draft McLane Credit Request updates only the Draft rec... (McLane)", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc047);
     expect(_case).toBeTruthy();
     const { common, creditPage } = await prepare(page);
@@ -1112,7 +1112,7 @@ test.describe("RCSP-595 [TC_RCSP-595_047] (McLane) - Verify whether changing UOM
 
 
 test.describe("RCSP-595 [TC_RCSP-595_048] (McLane) - Verify whether a McLane Purchase Order with Received status but zer...", () => {
-  test("TC_RCSP-595_048: Verify whether a McLane Purchase Order with Received status but zero received items (or... (McLane)", async ({ page }) => {
+  test("TC_RCSP-595_048: Verify whether a McLane Purchase Order with Received status but zero received items (or... (McLane)", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc048);
     expect(_case).toBeTruthy();
     const { common, creditPage } = await prepare(page);
@@ -1129,7 +1129,7 @@ test.describe("RCSP-595 [TC_RCSP-595_048] (McLane) - Verify whether a McLane Pur
 
 
 test.describe("RCSP-595 [TC_RCSP-595_049] (McLane) - Verify whether selecting Damaged for multiple received items on the...", () => {
-  test("TC_RCSP-595_049: Verify whether selecting Damaged for multiple received items on the same McLane Credit ... (McLane)", async ({ page }) => {
+  test("TC_RCSP-595_049: Verify whether selecting Damaged for multiple received items on the same McLane Credit ... (McLane)", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc049);
     expect(_case).toBeTruthy();
     const { common, creditPage } = await prepare(page);
@@ -1150,7 +1150,7 @@ test.describe("RCSP-595 [TC_RCSP-595_049] (McLane) - Verify whether selecting Da
 
 
 test.describe("RCSP-595 [TC_RCSP-595_050] (McLane) - Verify whether UOM dropdown on McLane Credit Request does not displ...", () => {
-  test("TC_RCSP-595_050: Verify whether UOM dropdown on McLane Credit Request does not display UOM values that b... (McLane)", async ({ page }) => {
+  test("TC_RCSP-595_050: Verify whether UOM dropdown on McLane Credit Request does not display UOM values that b... (McLane)", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc050);
     expect(_case).toBeTruthy();
     const { common, creditPage } = await prepare(page);
@@ -1173,7 +1173,7 @@ test.describe("RCSP-595 [TC_RCSP-595_050] (McLane) - Verify whether UOM dropdown
 
 
 test.describe("RCSP-595 [TC_RCSP-595_051] (Both) - Verify whether prerequisite Flowers and McLane Purchase Orders exis...", () => {
-  test("TC_RCSP-595_051: Verify whether prerequisite Flowers and McLane Purchase Orders exist in Received status... (Both)", async ({ page }) => {
+  test("TC_RCSP-595_051: Verify whether prerequisite Flowers and McLane Purchase Orders exist in Received status... (Both)", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc051);
     expect(_case).toBeTruthy();
     const { common, creditPage } = await prepare(page);

@@ -102,7 +102,7 @@ async function createEditableLog(logWastePage: LogWastePage, common: Rcsp227Comm
 
 
 test.describe("RCSP-227 - Verify whether a user can successfully create, save, lock, and apply a Raw Waste entry ...", () => {
-  test("Verify whether a user can successfully create, save, lock, and apply a Raw Waste entry for an Item when all...", async ({ page }) => {
+  test("Verify whether a user can successfully create, save, lock, and apply a Raw Waste entry for an Item when all...", { tag: ['@smoke', '@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc01);
     expect(_case).toBeTruthy();
 
@@ -116,7 +116,7 @@ test.describe("RCSP-227 - Verify whether a user can successfully create, save, l
 });
 
 test.describe("RCSP-227 - Verify whether a user can successfully create, save, lock, and apply a Completed Waste ...", () => {
-  test("Verify whether a user can successfully create, save, lock, and apply a Completed Waste entry for a Recipe w...", async ({ page }) => {
+  test("Verify whether a user can successfully create, save, lock, and apply a Completed Waste entry for a Recipe w...", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc02);
     expect(_case).toBeTruthy();
 
@@ -129,7 +129,7 @@ test.describe("RCSP-227 - Verify whether a user can successfully create, save, l
 });
 
 test.describe("RCSP-227 - Verify whether the system prevents saving a Waste Log when Waste Category is not selected", () => {
-  test("Verify whether the system prevents saving a Waste Log when Waste Category is not selected", async ({ page }) => {
+  test("Verify whether the system prevents saving a Waste Log when Waste Category is not selected", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc03);
     expect(_case).toBeTruthy();
 
@@ -148,7 +148,7 @@ test.describe("RCSP-227 - Verify whether the system prevents saving a Waste Log 
 });
 
 test.describe("RCSP-227 - Verify whether the system prevents saving a Waste Log when Item or Recipe is not selected", () => {
-  test("Verify whether the system prevents saving a Waste Log when Item or Recipe is not selected", async ({ page }) => {
+  test("Verify whether the system prevents saving a Waste Log when Item or Recipe is not selected", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc04);
     expect(_case).toBeTruthy();
 
@@ -167,7 +167,7 @@ test.describe("RCSP-227 - Verify whether the system prevents saving a Waste Log 
 });
 
 test.describe("RCSP-227 - Verify whether the system prevents saving a Waste Log when Quantity is left blank", () => {
-  test("Verify whether the system prevents saving a Waste Log when Quantity is left blank", async ({ page }) => {
+  test("Verify whether the system prevents saving a Waste Log when Quantity is left blank", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc05);
     expect(_case).toBeTruthy();
 
@@ -180,7 +180,7 @@ test.describe("RCSP-227 - Verify whether the system prevents saving a Waste Log 
 });
 
 test.describe("RCSP-227 - Verify whether the system prevents saving a Waste Log when Unit of Measure is not selected", () => {
-  test("Verify whether the system prevents saving a Waste Log when Unit of Measure is not selected", async ({ page }) => {
+  test("Verify whether the system prevents saving a Waste Log when Unit of Measure is not selected", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc06);
     expect(_case).toBeTruthy();
 
@@ -199,7 +199,7 @@ test.describe("RCSP-227 - Verify whether the system prevents saving a Waste Log 
 });
 
 test.describe("RCSP-227 - Verify whether the system prevents saving a Waste Log when Reason Code is not selected", () => {
-  test("Verify whether the system prevents saving a Waste Log when Reason Code is not selected", async ({ page }) => {
+  test("Verify whether the system prevents saving a Waste Log when Reason Code is not selected", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc07);
     expect(_case).toBeTruthy();
 
@@ -218,7 +218,7 @@ test.describe("RCSP-227 - Verify whether the system prevents saving a Waste Log 
 });
 
 test.describe("RCSP-227 - Verify whether the system prevents saving a Waste Log when Employee ID is not entered", () => {
-  test("Verify whether the system prevents saving a Waste Log when Employee ID is not entered", async ({ page }) => {
+  test("Verify whether the system prevents saving a Waste Log when Employee ID is not entered", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc08);
     expect(_case).toBeTruthy();
 
@@ -231,7 +231,7 @@ test.describe("RCSP-227 - Verify whether the system prevents saving a Waste Log 
 });
 
 test.describe("RCSP-227 - Verify whether the system prevents saving a Waste Log when Daypart is not selected", () => {
-  test("Verify whether the system prevents saving a Waste Log when Daypart is not selected", async ({ page }) => {
+  test("Verify whether the system prevents saving a Waste Log when Daypart is not selected", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc09);
     expect(_case).toBeTruthy();
 
@@ -241,7 +241,7 @@ test.describe("RCSP-227 - Verify whether the system prevents saving a Waste Log 
 });
 
 test.describe("RCSP-227 - Verify whether only Reason Codes mapped to Raw Waste category are displayed when Raw Wa...", () => {
-  test("Verify whether only Reason Codes mapped to Raw Waste category are displayed when Raw Waste is selected", async ({ page }) => {
+  test("Verify whether only Reason Codes mapped to Raw Waste category are displayed when Raw Waste is selected", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc10);
     expect(_case).toBeTruthy();
 
@@ -258,7 +258,7 @@ test.describe("RCSP-227 - Verify whether only Reason Codes mapped to Raw Waste c
 });
 
 test.describe("RCSP-227 - Verify whether only Reason Codes mapped to Completed Waste category are displayed when ...", () => {
-  test("Verify whether only Reason Codes mapped to Completed Waste category are displayed when Completed Waste is s...", async ({ page }) => {
+  test("Verify whether only Reason Codes mapped to Completed Waste category are displayed when Completed Waste is s...", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc11);
     expect(_case).toBeTruthy();
 
@@ -275,7 +275,7 @@ test.describe("RCSP-227 - Verify whether only Reason Codes mapped to Completed W
 });
 
 test.describe("RCSP-227 - Verify whether a newly configured Reason Code is available for selection in Waste Entry...", () => {
-  test("Verify whether a newly configured Reason Code is available for selection in Waste Entry after Admin configu...", async ({ page }) => {
+  test("Verify whether a newly configured Reason Code is available for selection in Waste Entry after Admin configu...", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc12);
     expect(_case).toBeTruthy();
 
@@ -292,7 +292,7 @@ test.describe("RCSP-227 - Verify whether a newly configured Reason Code is avail
 });
 
 test.describe("RCSP-227 - Verify whether Estimated Cost equals FIFO Cost when an Item waste entry is submitted wi...", () => {
-  test("Verify whether Estimated Cost equals FIFO Cost when an Item waste entry is submitted with quantity equal to 1", async ({ page }) => {
+  test("Verify whether Estimated Cost equals FIFO Cost when an Item waste entry is submitted with quantity equal to 1", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc13);
     expect(_case).toBeTruthy();
 
@@ -315,7 +315,7 @@ test.describe("RCSP-227 - Verify whether Estimated Cost equals FIFO Cost when an
 });
 
 test.describe("RCSP-227 - Verify whether Estimated Cost is calculated correctly when an Item waste entry is submi...", () => {
-  test("Verify whether Estimated Cost is calculated correctly when an Item waste entry is submitted with quantity g...", async ({ page }) => {
+  test("Verify whether Estimated Cost is calculated correctly when an Item waste entry is submitted with quantity g...", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc14);
     expect(_case).toBeTruthy();
 
@@ -338,7 +338,7 @@ test.describe("RCSP-227 - Verify whether Estimated Cost is calculated correctly 
 });
 
 test.describe("RCSP-227 - Verify whether Estimated Cost for a Recipe waste entry is calculated using the FIFO Cos...", () => {
-  test("Verify whether Estimated Cost for a Recipe waste entry is calculated using the FIFO Cost of all mapped Ingr...", async ({ page }) => {
+  test("Verify whether Estimated Cost for a Recipe waste entry is calculated using the FIFO Cost of all mapped Ingr...", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc15);
     expect(_case).toBeTruthy();
 
@@ -353,7 +353,7 @@ test.describe("RCSP-227 - Verify whether Estimated Cost for a Recipe waste entry
 });
 
 test.describe("RCSP-227 - Verify whether Estimated Cost for a Recipe waste entry is multiplied correctly when qua...", () => {
-  test("Verify whether Estimated Cost for a Recipe waste entry is multiplied correctly when quantity greater than 1...", async ({ page }) => {
+  test("Verify whether Estimated Cost for a Recipe waste entry is multiplied correctly when quantity greater than 1...", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc16);
     expect(_case).toBeTruthy();
 
@@ -368,7 +368,7 @@ test.describe("RCSP-227 - Verify whether Estimated Cost for a Recipe waste entry
 });
 
 test.describe("RCSP-227 - Verify whether Estimated Cost is calculated correctly when Item and Recipe are added to...", () => {
-  test("Verify whether Estimated Cost is calculated correctly when Item and Recipe are added together in the same W...", async ({ page }) => {
+  test("Verify whether Estimated Cost is calculated correctly when Item and Recipe are added together in the same W...", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc17);
     expect(_case).toBeTruthy();
 
@@ -391,7 +391,7 @@ test.describe("RCSP-227 - Verify whether Estimated Cost is calculated correctly 
 });
 
 test.describe("RCSP-227 - Verify whether Estimated Cost is calculated correctly when multiple Item entries are ad...", () => {
-  test("Verify whether Estimated Cost is calculated correctly when multiple Item entries are added within the same ...", async ({ page }) => {
+  test("Verify whether Estimated Cost is calculated correctly when multiple Item entries are added within the same ...", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc18);
     expect(_case).toBeTruthy();
 
@@ -414,7 +414,7 @@ test.describe("RCSP-227 - Verify whether Estimated Cost is calculated correctly 
 });
 
 test.describe("RCSP-227 - Verify whether Estimated Cost is calculated correctly when multiple Recipe entries are ...", () => {
-  test("Verify whether Estimated Cost is calculated correctly when multiple Recipe entries are added within the sam...", async ({ page }) => {
+  test("Verify whether Estimated Cost is calculated correctly when multiple Recipe entries are added within the sam...", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc19);
     expect(_case).toBeTruthy();
 
@@ -429,7 +429,7 @@ test.describe("RCSP-227 - Verify whether Estimated Cost is calculated correctly 
 });
 
 test.describe("RCSP-227 - Verify whether inventory on-hand quantity is reduced immediately after a Waste Log is a...", () => {
-  test("Verify whether inventory on-hand quantity is reduced immediately after a Waste Log is applied to stock for ...", async ({ page }) => {
+  test("Verify whether inventory on-hand quantity is reduced immediately after a Waste Log is applied to stock for ...", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc20);
     expect(_case).toBeTruthy();
 
@@ -450,7 +450,7 @@ test.describe("RCSP-227 - Verify whether inventory on-hand quantity is reduced i
 });
 
 test.describe("RCSP-227 - Verify whether inventory is reduced correctly after a Recipe waste entry is applied to ...", () => {
-  test("Verify whether inventory is reduced correctly after a Recipe waste entry is applied to stock", async ({ page }) => {
+  test("Verify whether inventory is reduced correctly after a Recipe waste entry is applied to stock", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc21);
     expect(_case).toBeTruthy();
 
@@ -471,7 +471,7 @@ test.describe("RCSP-227 - Verify whether inventory is reduced correctly after a 
 });
 
 test.describe("RCSP-227 - Verify whether a Waste Log cannot be applied to stock before it is locked", () => {
-  test("Verify whether a Waste Log cannot be applied to stock before it is locked", async ({ page }) => {
+  test("Verify whether a Waste Log cannot be applied to stock before it is locked", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc22);
     expect(_case).toBeTruthy();
 
@@ -484,7 +484,7 @@ test.describe("RCSP-227 - Verify whether a Waste Log cannot be applied to stock 
 });
 
 test.describe("RCSP-227 - Verify whether a Waste Log can be successfully applied only after it has been saved and...", () => {
-  test("Verify whether a Waste Log can be successfully applied only after it has been saved and locked", async ({ page }) => {
+  test("Verify whether a Waste Log can be successfully applied only after it has been saved and locked", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc23);
     expect(_case).toBeTruthy();
 
@@ -497,7 +497,7 @@ test.describe("RCSP-227 - Verify whether a Waste Log can be successfully applied
 });
 
 test.describe("RCSP-227 - Verify whether the system prevents entry of zero quantity in a Waste Log", () => {
-  test("Verify whether the system prevents entry of zero quantity in a Waste Log", async ({ page }) => {
+  test("Verify whether the system prevents entry of zero quantity in a Waste Log", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc24);
     expect(_case).toBeTruthy();
 
@@ -510,7 +510,7 @@ test.describe("RCSP-227 - Verify whether the system prevents entry of zero quant
 });
 
 test.describe("RCSP-227 - Verify whether the system prevents entry of negative quantity values in a Waste Log", () => {
-  test("Verify whether the system prevents entry of negative quantity values in a Waste Log", async ({ page }) => {
+  test("Verify whether the system prevents entry of negative quantity values in a Waste Log", { tag: ['@regression'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc25);
     expect(_case).toBeTruthy();
 
@@ -523,7 +523,7 @@ test.describe("RCSP-227 - Verify whether the system prevents entry of negative q
 });
 
 test.describe("RCSP-227 - Verify whether the system calculates Estimated Cost correctly when decimal quantities a...", () => {
-  test("Verify whether the system calculates Estimated Cost correctly when decimal quantities are entered", async ({ page }) => {
+  test("Verify whether the system calculates Estimated Cost correctly when decimal quantities are entered", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc26);
     expect(_case).toBeTruthy();
 
@@ -546,7 +546,7 @@ test.describe("RCSP-227 - Verify whether the system calculates Estimated Cost co
 });
 
 test.describe("RCSP-227 - Verify whether changing the Reason Code does not affect FIFO-based Estimated Cost calcu...", () => {
-  test("Verify whether changing the Reason Code does not affect FIFO-based Estimated Cost calculation", async ({ page }) => {
+  test("Verify whether changing the Reason Code does not affect FIFO-based Estimated Cost calculation", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc27);
     expect(_case).toBeTruthy();
 
@@ -569,7 +569,7 @@ test.describe("RCSP-227 - Verify whether changing the Reason Code does not affec
 });
 
 test.describe("RCSP-227 - Verify whether Waste History displays the same Estimated Cost that was calculated durin...", () => {
-  test("Verify whether Waste History displays the same Estimated Cost that was calculated during Waste Log submission", async ({ page }) => {
+  test("Verify whether Waste History displays the same Estimated Cost that was calculated during Waste Log submission", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc28);
     expect(_case).toBeTruthy();
 
@@ -592,7 +592,7 @@ test.describe("RCSP-227 - Verify whether Waste History displays the same Estimat
 });
 
 test.describe("RCSP-227 - Verify whether a submitted Waste Record cannot be edited after Apply To Stock is completed", () => {
-  test("Verify whether a submitted Waste Record cannot be edited after Apply To Stock is completed", async ({ page }) => {
+  test("Verify whether a submitted Waste Record cannot be edited after Apply To Stock is completed", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc29);
     expect(_case).toBeTruthy();
 
@@ -606,7 +606,7 @@ test.describe("RCSP-227 - Verify whether a submitted Waste Record cannot be edit
 });
 
 test.describe("RCSP-227 - Verify whether a submitted Waste Record cannot be deleted after Apply To Stock is compl...", () => {
-  test("Verify whether a submitted Waste Record cannot be deleted after Apply To Stock is completed", async ({ page }) => {
+  test("Verify whether a submitted Waste Record cannot be deleted after Apply To Stock is completed", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc30);
     expect(_case).toBeTruthy();
 
@@ -620,7 +620,7 @@ test.describe("RCSP-227 - Verify whether a submitted Waste Record cannot be dele
 });
 
 test.describe("RCSP-227 - Verify whether a Waste Log can be submitted successfully while a stock count is in prog...", () => {
-  test("Verify whether a Waste Log can be submitted successfully while a stock count is in progress", async ({ page }) => {
+  test("Verify whether a Waste Log can be submitted successfully while a stock count is in progress", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc31);
     expect(_case).toBeTruthy();
 
@@ -634,7 +634,7 @@ test.describe("RCSP-227 - Verify whether a Waste Log can be submitted successful
 });
 
 test.describe("RCSP-227 - Verify whether multiple Waste Logs can be created and submitted for the same Item on th...", () => {
-  test("Verify whether multiple Waste Logs can be created and submitted for the same Item on the same business day", async ({ page }) => {
+  test("Verify whether multiple Waste Logs can be created and submitted for the same Item on the same business day", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc32);
     expect(_case).toBeTruthy();
 
@@ -652,7 +652,7 @@ test.describe("RCSP-227 - Verify whether multiple Waste Logs can be created and 
 });
 
 test.describe("RCSP-227 - Verify whether the same Item can be added in multiple rows within a single Waste Log", () => {
-  test("Verify whether the same Item can be added in multiple rows within a single Waste Log", async ({ page }) => {
+  test("Verify whether the same Item can be added in multiple rows within a single Waste Log", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc33);
     expect(_case).toBeTruthy();
 
@@ -668,7 +668,7 @@ test.describe("RCSP-227 - Verify whether the same Item can be added in multiple 
 });
 
 test.describe("RCSP-227 - Verify whether the same Recipe can be added in multiple rows within a single Waste Log", () => {
-  test("Verify whether the same Recipe can be added in multiple rows within a single Waste Log", async ({ page }) => {
+  test("Verify whether the same Recipe can be added in multiple rows within a single Waste Log", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc34);
     expect(_case).toBeTruthy();
 
@@ -684,7 +684,7 @@ test.describe("RCSP-227 - Verify whether the same Recipe can be added in multipl
 });
 
 test.describe("RCSP-227 - Verify whether the total Estimated Cost displayed in the Waste Log equals the sum of al...", () => {
-  test("Verify whether the total Estimated Cost displayed in the Waste Log equals the sum of all Item and Recipe li...", async ({ page }) => {
+  test("Verify whether the total Estimated Cost displayed in the Waste Log equals the sum of all Item and Recipe li...", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc35);
     expect(_case).toBeTruthy();
 
@@ -707,7 +707,7 @@ test.describe("RCSP-227 - Verify whether the total Estimated Cost displayed in t
 });
 
 test.describe("RCSP-227 - Verify whether the system correctly calculates Estimated Cost when Items have FIFO Cost...", () => {
-  test("Verify whether the system correctly calculates Estimated Cost when Items have FIFO Costs containing decimal...", async ({ page }) => {
+  test("Verify whether the system correctly calculates Estimated Cost when Items have FIFO Costs containing decimal...", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc36);
     expect(_case).toBeTruthy();
 
@@ -730,7 +730,7 @@ test.describe("RCSP-227 - Verify whether the system correctly calculates Estimat
 });
 
 test.describe("RCSP-227 - Verify whether the system correctly rounds Estimated Cost values when quantity contains...", () => {
-  test("Verify whether the system correctly rounds Estimated Cost values when quantity contains decimal values", async ({ page }) => {
+  test("Verify whether the system correctly rounds Estimated Cost values when quantity contains decimal values", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc37);
     expect(_case).toBeTruthy();
 
@@ -753,7 +753,7 @@ test.describe("RCSP-227 - Verify whether the system correctly rounds Estimated C
 });
 
 test.describe("RCSP-227 - Verify whether Waste History retains accurate cost information after multiple Waste Log...", () => {
-  test("Verify whether Waste History retains accurate cost information after multiple Waste Logs are submitted for ...", async ({ page }) => {
+  test("Verify whether Waste History retains accurate cost information after multiple Waste Logs are submitted for ...", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc38);
     expect(_case).toBeTruthy();
 
@@ -769,7 +769,7 @@ test.describe("RCSP-227 - Verify whether Waste History retains accurate cost inf
 });
 
 test.describe("RCSP-227 - Verify whether a Waste Log remains visible in Waste History after user logout and subse...", () => {
-  test("Verify whether a Waste Log remains visible in Waste History after user logout and subsequent login", async ({ page }) => {
+  test("Verify whether a Waste Log remains visible in Waste History after user logout and subsequent login", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc39);
     expect(_case).toBeTruthy();
 
@@ -785,7 +785,7 @@ test.describe("RCSP-227 - Verify whether a Waste Log remains visible in Waste Hi
 });
 
 test.describe("RCSP-227 - Verify whether inventory reduction is accurately reflected when multiple line items are...", () => {
-  test("Verify whether inventory reduction is accurately reflected when multiple line items are submitted in a sing...", async ({ page }) => {
+  test("Verify whether inventory reduction is accurately reflected when multiple line items are submitted in a sing...", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc40);
     expect(_case).toBeTruthy();
 
@@ -806,7 +806,7 @@ test.describe("RCSP-227 - Verify whether inventory reduction is accurately refle
 });
 
 test.describe("RCSP-227 - Verify whether the system allows submission of Waste Logs using different valid Reason ...", () => {
-  test("Verify whether the system allows submission of Waste Logs using different valid Reason Codes configured for...", async ({ page }) => {
+  test("Verify whether the system allows submission of Waste Logs using different valid Reason Codes configured for...", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc41);
     expect(_case).toBeTruthy();
 
@@ -823,7 +823,7 @@ test.describe("RCSP-227 - Verify whether the system allows submission of Waste L
 });
 
 test.describe("RCSP-227 - Verify whether only authorized Admin users can configure Waste Reason Codes", () => {
-  test("Verify whether only authorized Admin users can configure Waste Reason Codes", async ({ page }) => {
+  test("Verify whether only authorized Admin users can configure Waste Reason Codes", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc42);
     expect(_case).toBeTruthy();
 
@@ -843,7 +843,7 @@ test.describe("RCSP-227 - Verify whether only authorized Admin users can configu
 });
 
 test.describe("RCSP-227 - Verify whether the system supports waste logging for all configured Waste Reason Codes ...", () => {
-  test("Verify whether the system supports waste logging for all configured Waste Reason Codes listed in the master...", async ({ page }) => {
+  test("Verify whether the system supports waste logging for all configured Waste Reason Codes listed in the master...", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc43);
     expect(_case).toBeTruthy();
 
@@ -860,7 +860,7 @@ test.describe("RCSP-227 - Verify whether the system supports waste logging for a
 });
 
 test.describe("RCSP-227 - Verify whether a submitted Waste Record maintains an audit trail including Item/Recipe,...", () => {
-  test("Verify whether a submitted Waste Record maintains an audit trail including Item/Recipe, quantity, UOM, Reas...", async ({ page }) => {
+  test("Verify whether a submitted Waste Record maintains an audit trail including Item/Recipe, quantity, UOM, Reas...", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc44);
     expect(_case).toBeTruthy();
 
@@ -875,7 +875,7 @@ test.describe("RCSP-227 - Verify whether a submitted Waste Record maintains an a
 });
 
 test.describe("RCSP-227 - Verify whether historical Estimated Cost remains unchanged when FIFO Cost values are mo...", () => {
-  test("Verify whether historical Estimated Cost remains unchanged when FIFO Cost values are modified after Waste L...", async ({ page }) => {
+  test("Verify whether historical Estimated Cost remains unchanged when FIFO Cost values are modified after Waste L...", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc45);
     expect(_case).toBeTruthy();
 
@@ -898,7 +898,7 @@ test.describe("RCSP-227 - Verify whether historical Estimated Cost remains uncha
 });
 
 test.describe("RCSP-227 - Verify whether the Waste Entry workflow is supported on a mobile device without UI dist...", () => {
-  test("Verify whether the Waste Entry workflow is supported on a mobile device without UI distortion", async ({ page }) => {
+  test("Verify whether the Waste Entry workflow is supported on a mobile device without UI distortion", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc46);
     expect(_case).toBeTruthy();
 
@@ -913,7 +913,7 @@ test.describe("RCSP-227 - Verify whether the Waste Entry workflow is supported o
 });
 
 test.describe("RCSP-227 - Verify whether mobile users can successfully create and submit Raw Waste entries for Items", () => {
-  test("Verify whether mobile users can successfully create and submit Raw Waste entries for Items", async ({ page }) => {
+  test("Verify whether mobile users can successfully create and submit Raw Waste entries for Items", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc47);
     expect(_case).toBeTruthy();
 
@@ -927,7 +927,7 @@ test.describe("RCSP-227 - Verify whether mobile users can successfully create an
 });
 
 test.describe("RCSP-227 - Verify whether mobile users can successfully create and submit Completed Waste entries ...", () => {
-  test("Verify whether mobile users can successfully create and submit Completed Waste entries for Recipes", async ({ page }) => {
+  test("Verify whether mobile users can successfully create and submit Completed Waste entries for Recipes", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc48);
     expect(_case).toBeTruthy();
 
@@ -940,7 +940,7 @@ test.describe("RCSP-227 - Verify whether mobile users can successfully create an
 });
 
 test.describe("RCSP-227 - Verify whether mobile Waste Entries enforce mandatory field validation before submission", () => {
-  test("Verify whether mobile Waste Entries enforce mandatory field validation before submission", async ({ page }) => {
+  test("Verify whether mobile Waste Entries enforce mandatory field validation before submission", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc49);
     expect(_case).toBeTruthy();
 
@@ -954,7 +954,7 @@ test.describe("RCSP-227 - Verify whether mobile Waste Entries enforce mandatory 
 });
 
 test.describe("RCSP-227 - Verify whether Waste Logs created on mobile are visible and consistent in desktop Waste...", () => {
-  test("Verify whether Waste Logs created on mobile are visible and consistent in desktop Waste History after submi...", async ({ page }) => {
+  test("Verify whether Waste Logs created on mobile are visible and consistent in desktop Waste History after submi...", { tag: ['@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc50);
     expect(_case).toBeTruthy();
 

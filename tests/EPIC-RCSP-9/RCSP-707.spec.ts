@@ -49,7 +49,7 @@ async function selectDbItem(logWastePage: LogWastePage, item: WasteableIngredien
 	await logWastePage.selectItemBySku(item.sku);
 }
 
-test('TC_RCSP-707_01 - positive-stock wasteable ingredient is searchable and selectable', async ({ page }) => {
+test('TC_RCSP-707_01 - positive-stock wasteable ingredient is searchable and selectable', { tag: ['@smoke', '@functional'] }, async ({ page }) => {
 	const item = await repository.getPositiveWasteableIngredient(STORE_NAME);
 	expect(item, 'No positive-stock wasteable ingredient returned by DB').toBeDefined();
 	const { logWastePage } = await loginAndOpenStore(page);
@@ -59,7 +59,7 @@ test('TC_RCSP-707_01 - positive-stock wasteable ingredient is searchable and sel
 	await selectDbItem(logWastePage, item!);
 });
 
-test('TC_RCSP-707_02 - zero-stock wasteable ingredient is excluded from item search', async ({ page }) => {
+test('TC_RCSP-707_02 - zero-stock wasteable ingredient is excluded from item search', { tag: ['@regression'] }, async ({ page }) => {
 	const zeroStockSku = await repository.getZeroStockWasteableIngredientSkuByStoreId(STORE_ID);
 	expect(zeroStockSku, `No zero-stock wasteable ingredient returned for store ${STORE_ID}`).toBeDefined();
 	const { logWastePage } = await loginAndOpenStore(page);
@@ -68,7 +68,7 @@ test('TC_RCSP-707_02 - zero-stock wasteable ingredient is excluded from item sea
 	await logWastePage.verifyItemPickerResultAbsent(zeroStockSku!);
 });
 
-test('TC_RCSP-707_03 - picker count matches the DB eligible dataset', async ({ page }) => {
+test('TC_RCSP-707_03 - picker count matches the DB eligible dataset', { tag: ['@functional'] }, async ({ page }) => {
 	const eligible = await repository.getEligibleWasteableIngredients(STORE_NAME);
 	expect(eligible.length, 'DB returned no eligible picker items').toBeGreaterThan(0);
 	const { logWastePage } = await loginAndOpenStore(page);
@@ -79,13 +79,13 @@ test('TC_RCSP-707_03 - picker count matches the DB eligible dataset', async ({ p
 	expect(visibleCount).toBeLessThanOrEqual(eligible.length);
 });
 
-test('TC_RCSP-707_04 - stock transition behavior requires an external receipt transaction', async ({ page }) => {
+test('TC_RCSP-707_04 - stock transition behavior requires an external receipt transaction', { tag: ['@functional'] }, async ({ page }) => {
 	const item = await repository.getPositiveWasteableIngredient(STORE_NAME);
 	expect(item, 'No positive-stock wasteable ingredient returned by DB').toBeDefined();
 	test.skip(true, 'Read-only automation must not zero or restock inventory; execute the stock transaction separately, then rerun the search assertions.');
 });
 
-test('TC_RCSP-707_05 - switching stores refreshes the DB-backed item context', async ({ page }) => {
+test('TC_RCSP-707_05 - switching stores refreshes the DB-backed item context', { tag: ['@functional'] }, async ({ page }) => {
 	const storeB = await repository.getAlternateActiveStore(STORE_NAME);
 	expect(storeB, 'No alternate active store returned by DB').toBeDefined();
 	const itemB = await repository.getPositiveWasteableIngredient(storeB!.name);
@@ -102,7 +102,7 @@ test('TC_RCSP-707_05 - switching stores refreshes the DB-backed item context', a
 	await logWastePage.verifyItemPickerResultVisible(itemB!.sku);
 });
 
-test('TC_RCSP-707_06 - picker has eligible results and excludes a DB zero-stock SKU', async ({ page }) => {
+test('TC_RCSP-707_06 - picker has eligible results and excludes a DB zero-stock SKU', { tag: ['@regression'] }, async ({ page }) => {
 	const eligible = await repository.getEligibleWasteableIngredients(STORE_NAME);
 	const zeroStock = await repository.getZeroStockWasteableIngredient(STORE_NAME);
 	expect(eligible.length).toBeGreaterThan(0);
@@ -115,7 +115,7 @@ test('TC_RCSP-707_06 - picker has eligible results and excludes a DB zero-stock 
 	await logWastePage.verifyItemPickerResultAbsent(zeroStock!.sku);
 });
 
-test('TC_RCSP-707_07 - Transfers picker still includes the zero-stock configured item', async ({ page }) => {
+test('TC_RCSP-707_07 - Transfers picker still includes the zero-stock configured item', { tag: ['@functional'] }, async ({ page }) => {
 	const zeroStock = await repository.getZeroStockWasteableIngredient(STORE_NAME);
 	expect(zeroStock).toBeDefined();
 	const { transfersPage } = await loginAndOpenStore(page);
@@ -126,7 +126,7 @@ test('TC_RCSP-707_07 - Transfers picker still includes the zero-stock configured
 	await transfersPage.verifyItemOnTransfer(zeroStock!.sku, '1');
 });
 
-test('TC_RCSP-707_08 - Store Inventory displays the zero-stock configured item', async ({ page }) => {
+test('TC_RCSP-707_08 - Store Inventory displays the zero-stock configured item', { tag: ['@functional'] }, async ({ page }) => {
 	const zeroStock = await repository.getZeroStockWasteableIngredient(STORE_NAME);
 	expect(zeroStock).toBeDefined();
 	const { transfersPage } = await loginAndOpenStore(page);
@@ -137,7 +137,7 @@ test('TC_RCSP-707_08 - Store Inventory displays the zero-stock configured item',
 	await transfersPage.verifyActiveStore(STORE_NAME);
 });
 
-test('TC_RCSP-707_09 - RECIPE selection remains independent of item stock filtering', async ({ page }) => {
+test('TC_RCSP-707_09 - RECIPE selection remains independent of item stock filtering', { tag: ['@functional'] }, async ({ page }) => {
 	const recipe = await repository.getActiveRecipe();
 	const reason = await repository.getFirstActiveWasteReason();
 	const uom = await repository.getUomByAbbreviation(recipe?.uom || 'EA');
@@ -156,7 +156,7 @@ test('TC_RCSP-707_09 - RECIPE selection remains independent of item stock filter
 	await logWastePage.verifySavedLineEditable();
 });
 
-test('TC_RCSP-707_10 - DB-selected eligible item completes save and lock workflow', async ({ page }) => {
+test('TC_RCSP-707_10 - DB-selected eligible item completes save and lock workflow', { tag: ['@functional'] }, async ({ page }) => {
 	const item = await repository.getPositiveWasteableIngredient(STORE_NAME);
 	const reason = await repository.getFirstActiveWasteReason();
 	const uom = await repository.getUomByAbbreviation('EA');

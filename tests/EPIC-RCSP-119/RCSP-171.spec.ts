@@ -124,7 +124,7 @@ async function createSession(
 
 
 test.describe('RCSP-171 - Unified Daily Shift Count menu', () => {
-  test('TC_RCSP-171_01 – Spot/Daily Count removed; Daily Shift Count + Weekly/Monthly remain', async ({
+  test('TC_RCSP-171_01 – Spot/Daily Count removed; Daily Shift Count + Weekly/Monthly remain', { tag: ['@smoke', '@functional'] }, async ({
     page,
   }) => {
     test.slow();
@@ -162,7 +162,7 @@ test.describe('RCSP-171 - Create Daily Shift Count by shift', () => {
 });
 
 test.describe('RCSP-171 - Shift label cleanup', () => {
-  test('TC_RCSP-171_05 – Only AM / Mid / PM; Opening / Mid-Shift / Closing removed', async ({
+  test('TC_RCSP-171_05 – Only AM / Mid / PM; Opening / Mid-Shift / Closing removed', { tag: ['@functional'] }, async ({
     page,
   }) => {
     test.slow();
@@ -224,7 +224,7 @@ test.describe('RCSP-171 - Shift time windows', () => {
     });
   }
 
-  test('TC_RCSP-171_09 – Outside window submission restricted or validated', async ({
+  test('TC_RCSP-171_09 – Outside window submission restricted or validated', { tag: ['@regression'] }, async ({
     page,
   }) => {
     test.slow();
@@ -264,7 +264,7 @@ test.describe('RCSP-171 - Shift time windows', () => {
 });
 
 test.describe('RCSP-171 - Pre-load and Add Item', () => {
-  test('TC_RCSP-171_10 – Count-list items pre-loaded on new Daily Shift Count', async ({
+  test('TC_RCSP-171_10 – Count-list items pre-loaded on new Daily Shift Count', { tag: ['@functional'] }, async ({
     page,
   }) => {
     test.slow();
@@ -280,7 +280,7 @@ test.describe('RCSP-171 - Pre-load and Add Item', () => {
     }
   });
 
-  test('TC_RCSP-171_11 – Add active inventory item via Add Item', async ({ page }) => {
+  test('TC_RCSP-171_11 – Add active inventory item via Add Item', { tag: ['@functional'] }, async ({ page }) => {
     test.slow();
     const data = getCaseData<{ searchTerm: string; preferredItem: string }>(
       TC.addActive,
@@ -298,7 +298,7 @@ test.describe('RCSP-171 - Pre-load and Add Item', () => {
     });
   });
 
-  test('TC_RCSP-171_12 – Inactive items excluded from Add Item', async ({ page }) => {
+  test('TC_RCSP-171_12 – Inactive items excluded from Add Item', { tag: ['@regression'] }, async ({ page }) => {
     test.slow();
     const data = getCaseData<{ inactiveSearchTerm: string }>(TC.excludeInactive);
     const ctx = await prepare(page);
@@ -320,7 +320,7 @@ test.describe('RCSP-171 - Pre-load and Add Item', () => {
 });
 
 test.describe('RCSP-171 - Submitted record and empty list', () => {
-  test('TC_RCSP-171_13 – Submitted record shows shift, date, employee ID', async ({
+  test('TC_RCSP-171_13 – Submitted record shows shift, date, employee ID', { tag: ['@functional'] }, async ({
     page,
   }) => {
     test.slow();
@@ -336,7 +336,7 @@ test.describe('RCSP-171 - Submitted record and empty list', () => {
     });
   });
 
-  test('TC_RCSP-171_14 – Empty count list: empty state + Add Item still available', async ({
+  test('TC_RCSP-171_14 – Empty count list: empty state + Add Item still available', { tag: ['@regression'] }, async ({
     page,
   }) => {
     test.slow();

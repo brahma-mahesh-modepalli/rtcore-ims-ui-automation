@@ -14,7 +14,8 @@ export function getLatestMonday(date = new Date()): string {
 
 export function getNextCountMonday(date = new Date()): string {
   const monday = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-  const daysUntilMonday = (8 - monday.getDay()) % 7 || 7;
+  // If today is already Monday, use today's date instead of skipping to next week's Monday.
+  const daysUntilMonday = (8 - monday.getDay()) % 7;
   monday.setDate(monday.getDate() + daysUntilMonday);
   return formatLocalDate(monday);
 }

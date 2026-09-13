@@ -104,7 +104,7 @@ async function createEditableLog(logWastePage: LogWastePage, shift: string) {
 }
 
 
-test('TC_RCSP-41_001 - Waste Logs page chrome', async ({ page }) => {
+test('TC_RCSP-41_001 - Waste Logs page chrome', { tag: ['@smoke', '@functional'] }, async ({ page }) => {
 	const common = getCommonData();
 	const testData = getCaseData<{ expectedPageTitle: string; expectedPageDescription: string; expectedPrimaryButton: string }>(TC.tc01);
 	const { logWastePage } = await prepare(page);
@@ -117,7 +117,7 @@ test('TC_RCSP-41_001 - Waste Logs page chrome', async ({ page }) => {
 	});
 });
 
-test('TC_RCSP-41_002 - Create modal shift options and cancel/create behavior', async ({ page }) => {
+test('TC_RCSP-41_002 - Create modal shift options and cancel/create behavior', { tag: ['@functional'] }, async ({ page }) => {
 	const common = getCommonData();
 	const testData = getCaseData<{ shift: string; shiftOptions: string[] }>(TC.tc02);
 	const { logWastePage } = await prepare(page);
@@ -131,7 +131,7 @@ test('TC_RCSP-41_002 - Create modal shift options and cancel/create behavior', a
 	await createEditableLog(logWastePage, testData.shift || common.defaultShift);
 });
 
-test('TC_RCSP-41_003 - Save an ITEM waste line', async ({ page }) => {
+test('TC_RCSP-41_003 - Save an ITEM waste line', { tag: ['@functional'] }, async ({ page }) => {
 	const common = getCommonData();
 	const { logWastePage } = await prepare(page);
 
@@ -141,7 +141,7 @@ test('TC_RCSP-41_003 - Save an ITEM waste line', async ({ page }) => {
 	await logWastePage.verifySavedLineEditable();
 });
 
-test('TC_RCSP-41_004 - Save a RECIPE waste line', async ({ page }) => {
+test('TC_RCSP-41_004 - Save a RECIPE waste line', { tag: ['@functional'] }, async ({ page }) => {
 	const common = getCommonData();
 	const { logWastePage } = await prepare(page);
 
@@ -151,7 +151,7 @@ test('TC_RCSP-41_004 - Save a RECIPE waste line', async ({ page }) => {
 	await logWastePage.verifySavedLineEditable();
 });
 
-test('TC_RCSP-41_005 - Block save when mandatory fields are missing', async ({ page }) => {
+test('TC_RCSP-41_005 - Block save when mandatory fields are missing', { tag: ['@regression'] }, async ({ page }) => {
 	const common = getCommonData();
 	const testData = getCaseData<{ validationPattern: string }>(TC.tc05);
 	const { logWastePage } = await prepare(page);
@@ -161,7 +161,7 @@ test('TC_RCSP-41_005 - Block save when mandatory fields are missing', async ({ p
 	await logWastePage.verifyValidationVisible(new RegExp(testData.validationPattern, 'i'));
 });
 
-test('TC_RCSP-41_006 - Lock a saved waste log', async ({ page }) => {
+test('TC_RCSP-41_006 - Lock a saved waste log', { tag: ['@functional'] }, async ({ page }) => {
 	const common = getCommonData();
 	const { logWastePage } = await prepare(page);
 
@@ -172,7 +172,7 @@ test('TC_RCSP-41_006 - Lock a saved waste log', async ({ page }) => {
 	await logWastePage.verifyLockedState();
 });
 
-test('TC_RCSP-41_007 - Apply a locked waste log and prevent duplicate apply', async ({ page }) => {
+test('TC_RCSP-41_007 - Apply a locked waste log and prevent duplicate apply', { tag: ['@regression'] }, async ({ page }) => {
 	const common = getCommonData();
 	const { logWastePage } = await prepare(page);
 
@@ -184,7 +184,7 @@ test('TC_RCSP-41_007 - Apply a locked waste log and prevent duplicate apply', as
 	await logWastePage.verifyDuplicateApplyBlocked();
 });
 
-test('TC_RCSP-41_008 - Save, lock, and apply ITEM and RECIPE rows', async ({ page }) => {
+test('TC_RCSP-41_008 - Save, lock, and apply ITEM and RECIPE rows', { tag: ['@functional'] }, async ({ page }) => {
 	const common = getCommonData();
 	const testData = getCaseData<{ row1: Record<string, string>; row2: Record<string, string> }>(TC.tc08);
 	const { logWastePage } = await prepare(page);
@@ -198,7 +198,7 @@ test('TC_RCSP-41_008 - Save, lock, and apply ITEM and RECIPE rows', async ({ pag
 	await logWastePage.applyToStock(true);
 });
 
-test('TC_RCSP-41_009 - Verify reasons and quantity/notes edge values', async ({ page }) => {
+test('TC_RCSP-41_009 - Verify reasons and quantity/notes edge values', { tag: ['@regression'] }, async ({ page }) => {
 	const common = getCommonData();
 	const testData = getCaseData<{
 		expectedReasons: string[];
@@ -226,7 +226,7 @@ test('TC_RCSP-41_009 - Verify reasons and quantity/notes edge values', async ({ 
 	await expect(logWastePage.lockButton.or(page.getByText(/required|invalid|must|error/i).first())).toBeVisible();
 });
 
-test('TC_RCSP-41_010 - Block unauthorized access when credentials are configured', async ({ page }) => {
+test('TC_RCSP-41_010 - Block unauthorized access when credentials are configured', { tag: ['@regression'] }, async ({ page }) => {
 	const common = getCommonData();
 	const unauthorized = common.unauthorizedUser;
 	test.skip(!unauthorized.username || !unauthorized.password, unauthorized.note);

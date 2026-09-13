@@ -77,7 +77,7 @@ test.describe("RCSP-133 - Operations > Sales > Sales Transactions: Sales Transac
   let loginPage: RTCDashboardLoginPage;
   let salesPage: SalesPage;
 
-  test("Verify whether the Sales Transactions page under the Operations menu loads successfully after sales data has been consumed from the QA Service Bus, with summary cards, filters, tabs, and grid displayed without UI errors", async ({ page }) => {
+  test("Verify whether the Sales Transactions page under the Operations menu loads successfully after sales data has been consumed from the QA Service Bus, with summary cards, filters, tabs, and grid displayed without UI errors", { tag: ['@regression'] }, async ({ page }) => {
     ({ loginPage, salesPage } = await loginAsAdmin(page));
 
     const data = getCaseData<{
@@ -99,7 +99,7 @@ test.describe("RCSP-133 - Operations > Sales > Sales Transactions: Sales transac
   let loginPage: RTCDashboardLoginPage;
   let salesPage: SalesPage;
 
-  test("Verify whether sales transactions for the current business date are displayed correctly on the Sales Transactions page under Operations → Sales after data load from the QA Service Bus into IMS", async ({ page }) => {
+  test("Verify whether sales transactions for the current business date are displayed correctly on the Sales Transactions page under Operations → Sales after data load from the QA Service Bus into IMS", { tag: ['@smoke', '@functional'] }, async ({ page }) => {
     ({ loginPage, salesPage } = await loginAsAdmin(page));
 
     const data = getCaseData<{
@@ -129,7 +129,7 @@ test.describe("RCSP-133 - Operations > Sales > Sales Transactions: Each sales tr
   let loginPage: RTCDashboardLoginPage;
   let salesPage: SalesPage;
 
-  test("Verify whether each sales transaction row on the Sales Transactions page under Operations → Sales displays complete details (Sale ID, Type, Timestamp, Meal Period, Lines, Total, Status) and whether the Sales tab shows the loaded sales data", async ({ page }) => {
+  test("Verify whether each sales transaction row on the Sales Transactions page under Operations → Sales displays complete details (Sale ID, Type, Timestamp, Meal Period, Lines, Total, Status) and whether the Sales tab shows the loaded sales data", { tag: ['@functional'] }, async ({ page }) => {
     ({ loginPage, salesPage } = await loginAsAdmin(page));
 
     const data = getCaseData<{
@@ -178,7 +178,7 @@ test.describe("RCSP-133 - Operations > Sales > Sales Transactions: Filtering and
   let loginPage: RTCDashboardLoginPage;
   let salesPage: SalesPage;
 
-  test("Verify whether filtering and empty-data scenarios on the Sales Transactions page under Operations → Sales behave correctly for non-current business dates, cleared filters, and meal periods with no matching sales (negative and edge)", async ({ page }) => {
+  test("Verify whether filtering and empty-data scenarios on the Sales Transactions page under Operations → Sales behave correctly for non-current business dates, cleared filters, and meal periods with no matching sales (negative and edge)", { tag: ['@regression'] }, async ({ page }) => {
     ({ loginPage, salesPage } = await loginAsAdmin(page));
 
     const common = getCommonData();
@@ -232,7 +232,7 @@ test.describe("RCSP-133 - Operations > Sales > Sales Transactions: Sales transac
   let loginPage: RTCDashboardLoginPage;
   let salesPage: SalesPage;
 
-  test("Verify whether sales transactions loaded from the QA Service Bus remain visible on the Sales Transactions page under Operations → Sales after browser refresh, and whether data does not appear when messages were not consumed or failed to load (regression and negative)", async ({ page }) => {
+  test("Verify whether sales transactions loaded from the QA Service Bus remain visible on the Sales Transactions page under Operations → Sales after browser refresh, and whether data does not appear when messages were not consumed or failed to load (regression and negative)", { tag: ['@regression'] }, async ({ page }) => {
     ({ loginPage, salesPage } = await loginAsAdmin(page));
 
     const data = getCaseData<{

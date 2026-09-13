@@ -11,6 +11,10 @@ on:
         description: BrowserStack Playwright project
         required: false
         default: browserstack-chrome-windows
+      tags:
+        description: 'Optional tag filter, e.g. @smoke, @regression, @functional (leave blank to run all)'
+        required: false
+        default: '@regression'
   push:
     branches:
       - feature/inventory-tests
@@ -98,13 +102,21 @@ jobs:
         run: |
           SPEC_PATH="${{ github.event.inputs.spec_path }}"
           PROJECT="${{ github.event.inputs.project }}"
+          TAGS="${{ github.event.inputs.tags }}"
           if [[ -z "$PROJECT" ]]; then PROJECT="browserstack-chrome-windows"; fi
+
+          ARGS=(-c browserstack.config.ts --project="$PROJECT")
           if [[ -n "$SPEC_PATH" ]]; then
-            npx playwright test -c browserstack.config.ts "$SPEC_PATH" --project="$PROJECT"
+            ARGS+=("$SPEC_PATH")
           else
             echo "No spec_path supplied; running all UI tests under tests/ (database POC is verified above)."
-            npx playwright test -c browserstack.config.ts --project="$PROJECT"
           fi
+          if [[ -n "$TAGS" ]]; then
+            echo "Filtering by tag: $TAGS"
+            ARGS+=(--grep "$TAGS")
+          fi
+
+          npx playwright test "${ARGS[@]}"
 
       - name: Upload Playwright report
         if: always()

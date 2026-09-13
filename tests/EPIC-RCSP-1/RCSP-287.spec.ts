@@ -69,7 +69,7 @@ test.describe("RCSP-287 - Inventory Setup > Unit of Measure: Units of Measure pa
   let loginPage: RTCDashboardLoginPage;
   let uomPage: UnitOfMeasurePage;
 
-  test("Verify whether the Units of Measure page under Inventory Setup loads successfully with correct page header, + NEW UOM button, and table columns (NAME, ABBREVIATION, TYPE)", async ({ page }) => {
+  test("Verify whether the Units of Measure page under Inventory Setup loads successfully with correct page header, + NEW UOM button, and table columns (NAME, ABBREVIATION, TYPE)", { tag: ['@smoke', '@functional'] }, async ({ page }) => {
     ({ loginPage, uomPage } = await loginAsAdmin(page));
 
     const data = getCaseData<{
@@ -88,7 +88,7 @@ test.describe("RCSP-287 - Inventory Setup > Unit of Measure: + NEW UOM opens New
   let loginPage: RTCDashboardLoginPage;
   let uomPage: UnitOfMeasurePage;
 
-  test("Verify whether clicking + NEW UOM on the Units of Measure page under Inventory Setup opens the New Unit Of Measure modal with Name, Abbreviation, Type dropdown options, Cancel, and Create UOM controls", async ({ page }) => {
+  test("Verify whether clicking + NEW UOM on the Units of Measure page under Inventory Setup opens the New Unit Of Measure modal with Name, Abbreviation, Type dropdown options, Cancel, and Create UOM controls", { tag: ['@functional'] }, async ({ page }) => {
     ({ loginPage, uomPage } = await loginAsAdmin(page));
 
     const data = getCaseData<{
@@ -109,7 +109,7 @@ test.describe("RCSP-287 - Inventory Setup > Unit of Measure: New Unit of Measure
   let loginPage: RTCDashboardLoginPage;
   let uomPage: UnitOfMeasurePage;
 
-  test("Verify whether a new Unit of Measure can be created successfully from the New Unit Of Measure modal on the Units of Measure page under Inventory Setup and appears at the end of the list", async ({ page }) => {
+  test("Verify whether a new Unit of Measure can be created successfully from the New Unit Of Measure modal on the Units of Measure page under Inventory Setup and appears at the end of the list", { tag: ['@functional'] }, async ({ page }) => {
     ({ loginPage, uomPage } = await loginAsAdmin(page));
 
     const data = getCaseData<{
@@ -152,7 +152,7 @@ test.describe("RCSP-287 - Inventory Setup > Unit of Measure: Existing Unit of Me
   let loginPage: RTCDashboardLoginPage;
   let uomPage: UnitOfMeasurePage;
 
-  test("Verify whether an existing Unit of Measure can be updated using the pencil (Edit) icon on the Units of Measure page under Inventory Setup (update TEST to TESTTEST)", async ({ page }) => {
+  test("Verify whether an existing Unit of Measure can be updated using the pencil (Edit) icon on the Units of Measure page under Inventory Setup (update TEST to TESTTEST)", { tag: ['@functional'] }, async ({ page }) => {
     ({ loginPage, uomPage } = await loginAsAdmin(page));
 
     const data = getCaseData<{
@@ -206,7 +206,7 @@ test.describe("RCSP-287 - Inventory Setup > Unit of Measure: Create is blocked w
   let loginPage: RTCDashboardLoginPage;
   let uomPage: UnitOfMeasurePage;
 
-  test("Verify whether creating a Unit of Measure from the New Unit Of Measure modal on the Units of Measure page under Inventory Setup is blocked when mandatory fields are empty or Type is not selected (negative)", async ({ page }) => {
+  test("Verify whether creating a Unit of Measure from the New Unit Of Measure modal on the Units of Measure page under Inventory Setup is blocked when mandatory fields are empty or Type is not selected (negative)", { tag: ['@regression'] }, async ({ page }) => {
     ({ loginPage, uomPage } = await loginAsAdmin(page));
 
     const data = getCaseData<{
@@ -238,7 +238,7 @@ test.describe("RCSP-287 - Inventory Setup > Unit of Measure: Duplicate Name or A
   let loginPage: RTCDashboardLoginPage;
   let uomPage: UnitOfMeasurePage;
 
-  test("Verify whether duplicate Unit of Measure Name or Abbreviation is handled correctly on create/edit from the Units of Measure page under Inventory Setup (negative)", async ({ page }) => {
+  test("Verify whether duplicate Unit of Measure Name or Abbreviation is handled correctly on create/edit from the Units of Measure page under Inventory Setup (negative)", { tag: ['@regression'] }, async ({ page }) => {
     ({ loginPage, uomPage } = await loginAsAdmin(page));
 
     const common = getCommonData();
@@ -294,7 +294,7 @@ test.describe("RCSP-287 - Inventory Setup > Unit of Measure: Cancel and close (X
   let loginPage: RTCDashboardLoginPage;
   let uomPage: UnitOfMeasurePage;
 
-  test("Verify whether Cancel and close (X) on the New Unit Of Measure modal under Inventory Setup → Unit of Measure discard unsaved input and do not add a UOM to the list (edge)", async ({ page }) => {
+  test("Verify whether Cancel and close (X) on the New Unit Of Measure modal under Inventory Setup → Unit of Measure discard unsaved input and do not add a UOM to the list (edge)", { tag: ['@regression'] }, async ({ page }) => {
     ({ loginPage, uomPage } = await loginAsAdmin(page));
 
     const data = getCaseData<{
@@ -324,7 +324,7 @@ test.describe("RCSP-287 - Inventory Setup > Unit of Measure: Name and Abbreviati
   let loginPage: RTCDashboardLoginPage;
   let uomPage: UnitOfMeasurePage;
 
-  test("Verify whether Name and Abbreviation field edge inputs (leading/trailing spaces, max length, special characters, lowercase abbreviation) are handled correctly on create from Units of Measure under Inventory Setup (edge)", async ({ page }) => {
+  test("Verify whether Name and Abbreviation field edge inputs (leading/trailing spaces, max length, special characters, lowercase abbreviation) are handled correctly on create from Units of Measure under Inventory Setup (edge)", { tag: ['@regression'] }, async ({ page }) => {
     ({ loginPage, uomPage } = await loginAsAdmin(page));
 
     const data = getCaseData<{
@@ -420,7 +420,7 @@ test.describe("RCSP-287 - Inventory Setup > Unit of Measure: Existing list remai
   let loginPage: RTCDashboardLoginPage;
   let uomPage: UnitOfMeasurePage;
 
-  test("Verify whether existing Units of Measure remain unchanged on the list page under Inventory Setup → Unit of Measure after create/edit/cancel flows, and whether page refresh retains the latest TESTTEST record (regression/edge)", async ({ page }) => {
+  test("Verify whether existing Units of Measure remain unchanged on the list page under Inventory Setup → Unit of Measure after create/edit/cancel flows, and whether page refresh retains the latest TESTTEST record (regression/edge)", { tag: ['@regression'] }, async ({ page }) => {
     ({ loginPage, uomPage } = await loginAsAdmin(page));
 
     const data = getCaseData<{

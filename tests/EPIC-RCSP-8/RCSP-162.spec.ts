@@ -248,7 +248,7 @@ test.describe('RCSP-162 @rcsp162 @ordering @scheduled @orderhistory', () => {
 		});
 	});
 
-	test('TC_RCSP-162_01 @rcsp162 Verify Unit Price field is removed from New Scheduled Order for store users', async () => {
+	test('TC_RCSP-162_01 @rcsp162 Verify Unit Price field is removed from New Scheduled Order for store users', { tag: ['@smoke', '@functional'] }, async () => {
 		const testData = getRcsp162TestData(RCSP_162_TEST_CASE_IDS.unitPriceRemovedNewScheduledOrder);
 		await navigateToScheduledOrders(dashboardPage, scheduledOrdersPage);
 		await scheduledOrdersPage.clickNewScheduledOrderButton();
@@ -258,7 +258,7 @@ test.describe('RCSP-162 @rcsp162 @ordering @scheduled @orderhistory', () => {
 		});
 	});
 
-	test('TC_RCSP-162_02 @rcsp162 Verify Unit Price field is hidden for all item categories', async () => {
+	test('TC_RCSP-162_02 @rcsp162 Verify Unit Price field is hidden for all item categories', { tag: ['@functional'] }, async () => {
 		const testData = getRcsp162TestData<Rcsp162VendorInventoryTestData>(
 			RCSP_162_TEST_CASE_IDS.unitPriceHiddenAllCategories,
 		);
@@ -282,7 +282,7 @@ test.describe('RCSP-162 @rcsp162 @ordering @scheduled @orderhistory', () => {
 		});
 	});
 
-	test('TC_RCSP-162_03 @rcsp162 Verify Unit Price cannot be accessed via keyboard or DOM inspection', async () => {
+	test('TC_RCSP-162_03 @rcsp162 Verify Unit Price cannot be accessed via keyboard or DOM inspection', { tag: ['@functional'] }, async () => {
 		const testData = getRcsp162TestData(RCSP_162_TEST_CASE_IDS.keyboardAndDomInspection);
 		await navigateToScheduledOrders(dashboardPage, scheduledOrdersPage);
 		await scheduledOrdersPage.clickNewScheduledOrderButton();
@@ -296,7 +296,7 @@ test.describe('RCSP-162 @rcsp162 @ordering @scheduled @orderhistory', () => {
 		});
 	});
 
-	test('TC_RCSP-162_04 @rcsp162 Verify Unit Price field visibility matches the active role on Order History screen', async ({ page }) => {
+	test('TC_RCSP-162_04 @rcsp162 Verify Unit Price field visibility matches the active role on Order History screen', { tag: ['@functional'] }, async ({ page }) => {
 		const testData = getRcsp162TestData(RCSP_162_TEST_CASE_IDS.orderHistoryVisibility);
 		await navigateToOrderHistory(dashboardPage, orderHistoryPage);
 		await orderHistoryPage.searchAndOpenOrder();
@@ -316,7 +316,7 @@ test.describe('RCSP-162 @rcsp162 @ordering @scheduled @orderhistory', () => {
 		});
 	});
 
-	test('TC_RCSP-162_05 @rcsp162 Verify Unit Price remains unavailable after adding items in Order History', async () => {
+	test('TC_RCSP-162_05 @rcsp162 Verify Unit Price remains unavailable after adding items in Order History', { tag: ['@functional'] }, async () => {
 		const testData = getRcsp162TestData<Rcsp162InventoryItemsTestData>(
 			RCSP_162_TEST_CASE_IDS.orderHistoryAfterAddItems,
 		);
@@ -336,7 +336,7 @@ test.describe('RCSP-162 @rcsp162 @ordering @scheduled @orderhistory', () => {
 		});
 	});
 
-	test('TC_RCSP-162_06 @rcsp162 Verify UOM field is read-only in New Scheduled Order', async ({ page }) => {
+	test('TC_RCSP-162_06 @rcsp162 Verify UOM field is read-only in New Scheduled Order', { tag: ['@functional'] }, async ({ page }) => {
 		const testData = getRcsp162TestData<Rcsp162VendorInventoryTestData>(
 			RCSP_162_TEST_CASE_IDS.uomReadOnlyScheduled,
 		);
@@ -363,7 +363,7 @@ test.describe('RCSP-162 @rcsp162 @ordering @scheduled @orderhistory', () => {
 		});
 	});
 
-	test('TC_RCSP-162_07 @rcsp162 Verify UOM field is read-only in Order History', async ({ page }) => {
+	test('TC_RCSP-162_07 @rcsp162 Verify UOM field is read-only in Order History', { tag: ['@functional'] }, async ({ page }) => {
 		const testData = getRcsp162TestData(RCSP_162_TEST_CASE_IDS.uomReadOnlyHistory);
 		await navigateToOrderHistory(dashboardPage, orderHistoryPage);
 		const openedOrder = await orderHistoryPage.searchAndOpenOrder();
@@ -385,7 +385,7 @@ test.describe('RCSP-162 @rcsp162 @ordering @scheduled @orderhistory', () => {
 		});
 	});
 
-	test('TC_RCSP-162_08 @rcsp162 Verify only one purchasing UOM per item in Scheduled Orders', async ({ page }) => {
+	test('TC_RCSP-162_08 @rcsp162 Verify only one purchasing UOM per item in Scheduled Orders', { tag: ['@functional'] }, async ({ page }) => {
 		const testData = getRcsp162TestData<Rcsp162VendorInventoryTestData>(
 			RCSP_162_TEST_CASE_IDS.purchasingUomScheduled,
 		);
@@ -428,7 +428,7 @@ test.describe('RCSP-162 @rcsp162 @ordering @scheduled @orderhistory', () => {
 		});
 	});
 
-	test('TC_RCSP-162_09 @rcsp162 Verify only one purchasing UOM is displayed in Order History', async ({ page }) => {
+	test('TC_RCSP-162_09 @rcsp162 Verify only one purchasing UOM is displayed in Order History', { tag: ['@functional'] }, async ({ page }) => {
 		const testData = getRcsp162TestData(RCSP_162_TEST_CASE_IDS.purchasingUomHistory);
 		await navigateToOrderHistory(dashboardPage, orderHistoryPage);
 		const openedOrder = await orderHistoryPage.searchAndOpenOrder();
@@ -445,7 +445,7 @@ test.describe('RCSP-162 @rcsp162 @ordering @scheduled @orderhistory', () => {
 		});
 	});
 
-	test('TC_RCSP-162_10 @rcsp162 Verify Unit Price visible after scheduled order is received and invoiced', async ({ page }) => {
+	test('TC_RCSP-162_10 @rcsp162 Verify Unit Price visible after scheduled order is received and invoiced', { tag: ['@functional'] }, async ({ page }) => {
 		const testData = getRcsp162TestData<Rcsp162VendorInventoryTestData>(
 			RCSP_162_TEST_CASE_IDS.unitPriceVisibleScheduledReceived,
 		);
@@ -486,7 +486,7 @@ test.describe('RCSP-162 @rcsp162 @ordering @scheduled @orderhistory', () => {
 		});
 	});
 
-	test('TC_RCSP-162_11 @rcsp162 Verify Unit Price visible after Order History request is received and invoiced', async ({ page }) => {
+	test('TC_RCSP-162_11 @rcsp162 Verify Unit Price visible after Order History request is received and invoiced', { tag: ['@functional'] }, async ({ page }) => {
 		const testData = getRcsp162TestData(RCSP_162_TEST_CASE_IDS.unitPriceVisibleOrderHistoryReceived);
 		await navigateToOrderHistory(dashboardPage, orderHistoryPage);
 		const openedOrder = await orderHistoryPage.searchAndOpenOrder();
@@ -500,7 +500,7 @@ test.describe('RCSP-162 @rcsp162 @ordering @scheduled @orderhistory', () => {
 		});
 	});
 
-	test('TC_RCSP-162_12 @rcsp162 Verify Unit Price read-only in Order History for Scheduled Orders', async ({ page }) => {
+	test('TC_RCSP-162_12 @rcsp162 Verify Unit Price read-only in Order History for Scheduled Orders', { tag: ['@functional'] }, async ({ page }) => {
 		const testData = getRcsp162TestData(RCSP_162_TEST_CASE_IDS.unitPriceReadOnlyScheduledHistory);
 		await navigateToOrderHistory(dashboardPage, orderHistoryPage);
 
@@ -514,7 +514,7 @@ test.describe('RCSP-162 @rcsp162 @ordering @scheduled @orderhistory', () => {
 		});
 	});
 
-	test('TC_RCSP-162_13 @rcsp162 Verify Unit Price read-only in Order History orders', async ({ page }) => {
+	test('TC_RCSP-162_13 @rcsp162 Verify Unit Price read-only in Order History orders', { tag: ['@functional'] }, async ({ page }) => {
 		const testData = getRcsp162TestData(RCSP_162_TEST_CASE_IDS.unitPriceReadOnlyOrderHistory);
 		await navigateToOrderHistory(dashboardPage, orderHistoryPage);
 		const openedOrder = await orderHistoryPage.searchAndOpenOrder();
@@ -527,7 +527,7 @@ test.describe('RCSP-162 @rcsp162 @ordering @scheduled @orderhistory', () => {
 		});
 	});
 
-	test('TC_RCSP-162_14 @rcsp162 Verify Unit Price hidden for orders not yet received', async () => {
+	test('TC_RCSP-162_14 @rcsp162 Verify Unit Price hidden for orders not yet received', { tag: ['@functional'] }, async () => {
 		const testData = getRcsp162TestData(RCSP_162_TEST_CASE_IDS.unitPriceHiddenBeforeReceive);
 		await navigateToScheduledOrders(dashboardPage, scheduledOrdersPage);
 		await scheduledOrdersPage.clickNewScheduledOrderButton();
@@ -537,7 +537,7 @@ test.describe('RCSP-162 @rcsp162 @ordering @scheduled @orderhistory', () => {
 		});
 	});
 
-	test('TC_RCSP-162_15 @rcsp162 Verify Unit Price hidden consistency after refresh, relogin, and relaunch', async ({
+	test('TC_RCSP-162_15 @rcsp162 Verify Unit Price hidden consistency after refresh, relogin, and relaunch', { tag: ['@functional'] }, async ({
 		page,
 		browser,
 	}) => {

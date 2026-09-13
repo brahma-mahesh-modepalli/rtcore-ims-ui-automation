@@ -127,7 +127,7 @@ test.describe("RCSP-237 - My Hierarchy: Logged-in admin user can open the My Hie
   let loginPage: RTCDashboardLoginPage;
   let transfersPage: TransfersPage;
 
-  test("Verify whether the logged-in admin user can open the My Hierarchy page from the main navigation menu", async ({ page }) => {
+  test("Verify whether the logged-in admin user can open the My Hierarchy page from the main navigation menu", { tag: ['@smoke', '@functional'] }, async ({ page }) => {
     ({ loginPage, transfersPage } = await loginAsAdmin(page));
 
     getCaseData(TC.hierarchyOpen);
@@ -141,7 +141,7 @@ test.describe("RCSP-237 - My Hierarchy: Admin user can select Region, Market, an
   let loginPage: RTCDashboardLoginPage;
   let transfersPage: TransfersPage;
 
-  test("Verify whether the admin user can select Region, Market, and Store from the My Hierarchy page and view stores under the selected hierarchy path", async ({ page }) => {
+  test("Verify whether the admin user can select Region, Market, and Store from the My Hierarchy page and view stores under the selected hierarchy path", { tag: ['@functional'] }, async ({ page }) => {
     ({ loginPage, transfersPage } = await loginAsAdmin(page));
 
     const data = getCaseData<{
@@ -167,7 +167,7 @@ test.describe("RCSP-237 - My Hierarchy: Currently selected store is displayed in
   let loginPage: RTCDashboardLoginPage;
   let transfersPage: TransfersPage;
 
-  test("Verify whether the currently selected store is displayed in the top-right corner of the Home page after selecting WB Unit 1034 from My Hierarchy", async ({ page }) => {
+  test("Verify whether the currently selected store is displayed in the top-right corner of the Home page after selecting WB Unit 1034 from My Hierarchy", { tag: ['@functional'] }, async ({ page }) => {
     ({ loginPage, transfersPage } = await loginAsAdmin(page));
 
     const common = getCommonData();
@@ -187,7 +187,7 @@ test.describe("RCSP-237 - My Hierarchy: Admin user can switch the active store f
   let loginPage: RTCDashboardLoginPage;
   let transfersPage: TransfersPage;
 
-  test("Verify whether the admin user can switch the active store from WB Unit 1034 to WB Unit 1025 using the My Hierarchy page and the Home page reflects the change", async ({ page }) => {
+  test("Verify whether the admin user can switch the active store from WB Unit 1034 to WB Unit 1025 using the My Hierarchy page and the Home page reflects the change", { tag: ['@functional'] }, async ({ page }) => {
     ({ loginPage, transfersPage } = await loginAsAdmin(page));
 
     const common = getCommonData();
@@ -216,7 +216,7 @@ test.describe("RCSP-237 - Inventory Balances: Admin user can navigate to Invento
   let loginPage: RTCDashboardLoginPage;
   let transfersPage: TransfersPage;
 
-  test("Verify whether the admin user can navigate to Inventory > Inventory Balances page from the main menu while WB Unit 1034 is selected", async ({ page }) => {
+  test("Verify whether the admin user can navigate to Inventory > Inventory Balances page from the main menu while WB Unit 1034 is selected", { tag: ['@functional'] }, async ({ page }) => {
     ({ loginPage, transfersPage } = await loginAsAdmin(page));
 
     const common = getCommonData();
@@ -235,7 +235,7 @@ test.describe("RCSP-237 - Inventory Balances: ON HAND quantity and FIFO COST val
   let loginPage: RTCDashboardLoginPage;
   let transfersPage: TransfersPage;
 
-  test("Verify whether the ON HAND quantity and FIFO COST values are displayed correctly for item LARGE BUNS 11201 on WB Unit 1034 Inventory Balances page", async ({ page }) => {
+  test("Verify whether the ON HAND quantity and FIFO COST values are displayed correctly for item LARGE BUNS 11201 on WB Unit 1034 Inventory Balances page", { tag: ['@functional'] }, async ({ page }) => {
     ({ loginPage, transfersPage } = await loginAsAdmin(page));
 
     const common = getCommonData();
@@ -258,7 +258,7 @@ test.describe("RCSP-237 - Inventory Balances: ON HAND quantity and FIFO COST val
   let loginPage: RTCDashboardLoginPage;
   let transfersPage: TransfersPage;
 
-  test("Verify whether the ON HAND quantity and FIFO COST values are displayed correctly for item LARGE BUNS 11201 on WB Unit 1025 Inventory Balances page", async ({ page }) => {
+  test("Verify whether the ON HAND quantity and FIFO COST values are displayed correctly for item LARGE BUNS 11201 on WB Unit 1025 Inventory Balances page", { tag: ['@functional'] }, async ({ page }) => {
     ({ loginPage, transfersPage } = await loginAsAdmin(page));
 
     const common = getCommonData();
@@ -281,7 +281,7 @@ test.describe("RCSP-237 - Inventory Balances: Inventory Balances page displays n
   let loginPage: RTCDashboardLoginPage;
   let transfersPage: TransfersPage;
 
-  test("Verify whether the Inventory Balances page displays no records or an appropriate message when searching for a non-existent item on WB Unit 1034", async ({ page }) => {
+  test("Verify whether the Inventory Balances page displays no records or an appropriate message when searching for a non-existent item on WB Unit 1034", { tag: ['@functional'] }, async ({ page }) => {
     ({ loginPage, transfersPage } = await loginAsAdmin(page));
 
     const common = getCommonData();
@@ -305,7 +305,7 @@ test.describe("RCSP-237 - Transfers: Admin user can navigate to the Transfers pa
   let loginPage: RTCDashboardLoginPage;
   let transfersPage: TransfersPage;
 
-  test("Verify whether the admin user can navigate to the Transfers page from the main menu while WB Unit 1034 is selected", async ({ page }) => {
+  test("Verify whether the admin user can navigate to the Transfers page from the main menu while WB Unit 1034 is selected", { tag: ['@functional'] }, async ({ page }) => {
     ({ loginPage, transfersPage } = await loginAsAdmin(page));
 
     const common = getCommonData();
@@ -324,7 +324,7 @@ test.describe("RCSP-237 - Transfers: Admin user can open the New Transfer form b
   let loginPage: RTCDashboardLoginPage;
   let transfersPage: TransfersPage;
 
-  test("Verify whether the admin user can open the New Transfer form by clicking the NEW TRANSFER button on the Transfers page", async ({ page }) => {
+  test("Verify whether the admin user can open the New Transfer form by clicking the NEW TRANSFER button on the Transfers page", { tag: ['@functional'] }, async ({ page }) => {
     ({ loginPage, transfersPage } = await loginAsAdmin(page));
 
     const common = getCommonData();
@@ -344,7 +344,7 @@ test.describe("RCSP-237 - Transfers: Admin user can create a new Transfer in Dra
   let loginPage: RTCDashboardLoginPage;
   let transfersPage: TransfersPage;
 
-  test("Verify whether the admin user can create a new Transfer in Draft status by filling transfer header details and adding item LARGE BUNS 11201 with quantity 1 on WB Unit 1034", async ({ page }) => {
+  test("Verify whether the admin user can create a new Transfer in Draft status by filling transfer header details and adding item LARGE BUNS 11201 with quantity 1 on WB Unit 1034", { tag: ['@functional'] }, async ({ page }) => {
     ({ loginPage, transfersPage } = await loginAsAdmin(page));
 
     const common = getCommonData();
@@ -381,7 +381,7 @@ test.describe("RCSP-237 - Transfers: Recently created Transfer appears in the Al
   let loginPage: RTCDashboardLoginPage;
   let transfersPage: TransfersPage;
 
-  test("Verify whether the recently created Transfer appears in the All section of the Transfers page with Draft status on WB Unit 1034", async ({ page }) => {
+  test("Verify whether the recently created Transfer appears in the All section of the Transfers page with Draft status on WB Unit 1034", { tag: ['@functional'] }, async ({ page }) => {
     ({ loginPage, transfersPage } = await loginAsAdmin(page));
 
     const common = getCommonData();
@@ -412,7 +412,7 @@ test.describe("RCSP-237 - Transfers: Recently created Draft transfer is visible 
   let loginPage: RTCDashboardLoginPage;
   let transfersPage: TransfersPage;
 
-  test("Verify whether the recently created Draft transfer is visible in the Draft section of the Transfers page on WB Unit 1034", async ({ page }) => {
+  test("Verify whether the recently created Draft transfer is visible in the Draft section of the Transfers page on WB Unit 1034", { tag: ['@functional'] }, async ({ page }) => {
     ({ loginPage, transfersPage } = await loginAsAdmin(page));
 
     const common = getCommonData();
@@ -437,7 +437,7 @@ test.describe("RCSP-237 - Transfers: Clicking a Draft transfer record opens the 
   let loginPage: RTCDashboardLoginPage;
   let transfersPage: TransfersPage;
 
-  test("Verify whether clicking a Draft transfer record opens the Draft Details page with CANCEL, SAVE CHANGES, and SUBMIT TRANSFER action buttons on WB Unit 1034", async ({ page }) => {
+  test("Verify whether clicking a Draft transfer record opens the Draft Details page with CANCEL, SAVE CHANGES, and SUBMIT TRANSFER action buttons on WB Unit 1034", { tag: ['@functional'] }, async ({ page }) => {
     ({ loginPage, transfersPage } = await loginAsAdmin(page));
 
     const common = getCommonData();
@@ -459,7 +459,7 @@ test.describe("RCSP-237 - Transfers: Admin user can submit a Draft transfer and 
   let loginPage: RTCDashboardLoginPage;
   let transfersPage: TransfersPage;
 
-  test("Verify whether the admin user can submit a Draft transfer and the transfer status changes to Pending on WB Unit 1034", async ({ page }) => {
+  test("Verify whether the admin user can submit a Draft transfer and the transfer status changes to Pending on WB Unit 1034", { tag: ['@functional'] }, async ({ page }) => {
     ({ loginPage, transfersPage } = await loginAsAdmin(page));
 
     const common = getCommonData();
@@ -488,7 +488,7 @@ test.describe("RCSP-237 - Transfers: Pending transfer sent from WB Unit 1034 is 
   let loginPage: RTCDashboardLoginPage;
   let transfersPage: TransfersPage;
 
-  test("Verify whether a Pending transfer sent from WB Unit 1034 is visible on the Transfers page when viewed from WB Unit 1025 with Reject and Approve action buttons", async ({ page }) => {
+  test("Verify whether a Pending transfer sent from WB Unit 1034 is visible on the Transfers page when viewed from WB Unit 1025 with Reject and Approve action buttons", { tag: ['@regression'] }, async ({ page }) => {
     ({ loginPage, transfersPage } = await loginAsAdmin(page));
 
     const common = getCommonData();
@@ -522,7 +522,7 @@ test.describe("RCSP-237 - Transfers: Reject Transfer modal prevents rejection wh
   let loginPage: RTCDashboardLoginPage;
   let transfersPage: TransfersPage;
 
-  test("Verify whether the Reject Transfer modal prevents rejection when the mandatory Reason field is left blank on WB Unit 1025", async ({ page }) => {
+  test("Verify whether the Reject Transfer modal prevents rejection when the mandatory Reason field is left blank on WB Unit 1025", { tag: ['@regression'] }, async ({ page }) => {
     ({ loginPage, transfersPage } = await loginAsAdmin(page));
 
     const common = getCommonData();
@@ -553,7 +553,7 @@ test.describe("RCSP-237 - Transfers: Destination store user can reject a Pending
   let loginPage: RTCDashboardLoginPage;
   let transfersPage: TransfersPage;
 
-  test("Verify whether the destination store user can reject a Pending transfer with a reason and the transfer status changes to Declined on WB Unit 1025", async ({ page }) => {
+  test("Verify whether the destination store user can reject a Pending transfer with a reason and the transfer status changes to Declined on WB Unit 1025", { tag: ['@regression'] }, async ({ page }) => {
     ({ loginPage, transfersPage } = await loginAsAdmin(page));
 
     const common = getCommonData();
@@ -589,7 +589,7 @@ test.describe("RCSP-237 - Transfers: Declined transfer status is reflected on th
   let loginPage: RTCDashboardLoginPage;
   let transfersPage: TransfersPage;
 
-  test("Verify whether a Declined transfer status is reflected on the Transfers page when viewed from the source store WB Unit 1034", async ({ page }) => {
+  test("Verify whether a Declined transfer status is reflected on the Transfers page when viewed from the source store WB Unit 1034", { tag: ['@functional'] }, async ({ page }) => {
     ({ loginPage, transfersPage } = await loginAsAdmin(page));
 
     const common = getCommonData();
@@ -613,7 +613,7 @@ test.describe("RCSP-237 - Transfers: Admin user can create and directly submit a
   let loginPage: RTCDashboardLoginPage;
   let transfersPage: TransfersPage;
 
-  test("Verify whether the admin user can create and directly submit a new Transfer from WB Unit 1034 to WB Unit 1025 without saving as Draft", async ({ page }) => {
+  test("Verify whether the admin user can create and directly submit a new Transfer from WB Unit 1034 to WB Unit 1025 without saving as Draft", { tag: ['@functional'] }, async ({ page }) => {
     ({ loginPage, transfersPage } = await loginAsAdmin(page));
 
     const common = getCommonData();
@@ -657,7 +657,7 @@ test.describe("RCSP-237 - Transfers: Destination store user can approve a Pendin
   let loginPage: RTCDashboardLoginPage;
   let transfersPage: TransfersPage;
 
-  test("Verify whether the destination store user can approve a Pending transfer and the transfer status changes to Completed on WB Unit 1025", async ({ page }) => {
+  test("Verify whether the destination store user can approve a Pending transfer and the transfer status changes to Completed on WB Unit 1025", { tag: ['@functional'] }, async ({ page }) => {
     ({ loginPage, transfersPage } = await loginAsAdmin(page));
 
     const common = getCommonData();
@@ -692,7 +692,7 @@ test.describe("RCSP-237 - Inventory Balances: ON HAND quantity for LARGE BUNS 11
   let loginPage: RTCDashboardLoginPage;
   let transfersPage: TransfersPage;
 
-  test("Verify whether the ON HAND quantity for LARGE BUNS 11201 is incremented by 1 on WB Unit 1025 Inventory Balances page after transfer approval", async ({ page }) => {
+  test("Verify whether the ON HAND quantity for LARGE BUNS 11201 is incremented by 1 on WB Unit 1025 Inventory Balances page after transfer approval", { tag: ['@functional'] }, async ({ page }) => {
     ({ loginPage, transfersPage } = await loginAsAdmin(page));
 
     const common = getCommonData();
@@ -719,7 +719,7 @@ test.describe("RCSP-237 - Dashboard: Recent Stock Movements section on the Dashb
   let loginPage: RTCDashboardLoginPage;
   let transfersPage: TransfersPage;
 
-  test("Verify whether the Recent Stock Movements section on the Dashboard displays a Transfer In record for LARGE BUNS with quantity +1 on WB Unit 1025 after transfer approval", async ({ page }) => {
+  test("Verify whether the Recent Stock Movements section on the Dashboard displays a Transfer In record for LARGE BUNS with quantity +1 on WB Unit 1025 after transfer approval", { tag: ['@functional'] }, async ({ page }) => {
     ({ loginPage, transfersPage } = await loginAsAdmin(page));
 
     const common = getCommonData();
@@ -749,7 +749,7 @@ test.describe("RCSP-237 - Inventory Balances: ON HAND quantity for LARGE BUNS 11
   let loginPage: RTCDashboardLoginPage;
   let transfersPage: TransfersPage;
 
-  test("Verify whether the ON HAND quantity for LARGE BUNS 11201 is decremented by 1 on WB Unit 1034 Inventory Balances page after transfer approval", async ({ page }) => {
+  test("Verify whether the ON HAND quantity for LARGE BUNS 11201 is decremented by 1 on WB Unit 1034 Inventory Balances page after transfer approval", { tag: ['@functional'] }, async ({ page }) => {
     ({ loginPage, transfersPage } = await loginAsAdmin(page));
 
     const common = getCommonData();
@@ -776,7 +776,7 @@ test.describe("RCSP-237 - Dashboard: Recent Stock Movements section on the Dashb
   let loginPage: RTCDashboardLoginPage;
   let transfersPage: TransfersPage;
 
-  test("Verify whether the Recent Stock Movements section on the Dashboard displays a Transfer Out record for LARGE BUNS with quantity -1 on WB Unit 1034 after transfer approval", async ({ page }) => {
+  test("Verify whether the Recent Stock Movements section on the Dashboard displays a Transfer Out record for LARGE BUNS with quantity -1 on WB Unit 1034 after transfer approval", { tag: ['@functional'] }, async ({ page }) => {
     ({ loginPage, transfersPage } = await loginAsAdmin(page));
 
     const common = getCommonData();
@@ -806,7 +806,7 @@ test.describe("RCSP-237 - Transfers: New Transfer form displays validation when 
   let loginPage: RTCDashboardLoginPage;
   let transfersPage: TransfersPage;
 
-  test("Verify whether the New Transfer form displays validation when mandatory From Store field is not selected on WB Unit 1034", async ({ page }) => {
+  test("Verify whether the New Transfer form displays validation when mandatory From Store field is not selected on WB Unit 1034", { tag: ['@functional'] }, async ({ page }) => {
     ({ loginPage, transfersPage } = await loginAsAdmin(page));
 
     const common = getCommonData();
@@ -832,7 +832,7 @@ test.describe("RCSP-237 - Transfers: New Transfer form displays validation when 
   let loginPage: RTCDashboardLoginPage;
   let transfersPage: TransfersPage;
 
-  test("Verify whether the New Transfer form displays validation when mandatory To Store field is not selected on WB Unit 1034", async ({ page }) => {
+  test("Verify whether the New Transfer form displays validation when mandatory To Store field is not selected on WB Unit 1034", { tag: ['@functional'] }, async ({ page }) => {
     ({ loginPage, transfersPage } = await loginAsAdmin(page));
 
     const common = getCommonData();
@@ -858,7 +858,7 @@ test.describe("RCSP-237 - Transfers: New Transfer form displays validation when 
   let loginPage: RTCDashboardLoginPage;
   let transfersPage: TransfersPage;
 
-  test("Verify whether the New Transfer form displays validation when mandatory Transfer Reason field is not selected on WB Unit 1034", async ({ page }) => {
+  test("Verify whether the New Transfer form displays validation when mandatory Transfer Reason field is not selected on WB Unit 1034", { tag: ['@functional'] }, async ({ page }) => {
     ({ loginPage, transfersPage } = await loginAsAdmin(page));
 
     const common = getCommonData();
@@ -886,7 +886,7 @@ test.describe("RCSP-237 - Transfers: New Transfer form prevents submission when 
   let loginPage: RTCDashboardLoginPage;
   let transfersPage: TransfersPage;
 
-  test("Verify whether the New Transfer form prevents submission when no item is added to the transfer on WB Unit 1034", async ({ page }) => {
+  test("Verify whether the New Transfer form prevents submission when no item is added to the transfer on WB Unit 1034", { tag: ['@functional'] }, async ({ page }) => {
     ({ loginPage, transfersPage } = await loginAsAdmin(page));
 
     const common = getCommonData();
@@ -915,7 +915,7 @@ test.describe("RCSP-237 - Transfers: New Transfer form prevents submission when 
   let loginPage: RTCDashboardLoginPage;
   let transfersPage: TransfersPage;
 
-  test("Verify whether the New Transfer form prevents submission when item quantity is entered as 0 on WB Unit 1034", async ({ page }) => {
+  test("Verify whether the New Transfer form prevents submission when item quantity is entered as 0 on WB Unit 1034", { tag: ['@functional'] }, async ({ page }) => {
     ({ loginPage, transfersPage } = await loginAsAdmin(page));
 
     const common = getCommonData();
@@ -944,7 +944,7 @@ test.describe("RCSP-237 - Transfers: New Transfer form prevents creating a trans
   let loginPage: RTCDashboardLoginPage;
   let transfersPage: TransfersPage;
 
-  test("Verify whether the New Transfer form prevents creating a transfer when From Store and To Store are the same on WB Unit 1034", async ({ page }) => {
+  test("Verify whether the New Transfer form prevents creating a transfer when From Store and To Store are the same on WB Unit 1034", { tag: ['@functional'] }, async ({ page }) => {
     ({ loginPage, transfersPage } = await loginAsAdmin(page));
 
     const common = getCommonData();
@@ -973,7 +973,7 @@ test.describe("RCSP-237 - Transfers: New Transfer form blocks submission and dis
   let loginPage: RTCDashboardLoginPage;
   let transfersPage: TransfersPage;
 
-  test("Verify whether the New Transfer form blocks submission and displays an insufficient stock message when Qty to Order exceeds ON HAND quantity on WB Unit 1034 Inventory Balances page", async ({ page }) => {
+  test("Verify whether the New Transfer form blocks submission and displays an insufficient stock message when Qty to Order exceeds ON HAND quantity on WB Unit 1034 Inventory Balances page", { tag: ['@functional'] }, async ({ page }) => {
     ({ loginPage, transfersPage } = await loginAsAdmin(page));
 
     const common = getCommonData();
@@ -1018,7 +1018,7 @@ test.describe("RCSP-237 - Transfers: Admin user can cancel a Draft transfer from
   let loginPage: RTCDashboardLoginPage;
   let transfersPage: TransfersPage;
 
-  test("Verify whether the admin user can cancel a Draft transfer from the Draft Details page on WB Unit 1034", async ({ page }) => {
+  test("Verify whether the admin user can cancel a Draft transfer from the Draft Details page on WB Unit 1034", { tag: ['@functional'] }, async ({ page }) => {
     ({ loginPage, transfersPage } = await loginAsAdmin(page));
 
     const common = getCommonData();
@@ -1054,7 +1054,7 @@ test.describe("RCSP-237 - Transfers: Clicking NO on the Reject Transfer confirma
   let loginPage: RTCDashboardLoginPage;
   let transfersPage: TransfersPage;
 
-  test("Verify whether clicking NO on the Reject Transfer confirmation modal keeps the transfer in Pending status on WB Unit 1025", async ({ page }) => {
+  test("Verify whether clicking NO on the Reject Transfer confirmation modal keeps the transfer in Pending status on WB Unit 1025", { tag: ['@regression'] }, async ({ page }) => {
     ({ loginPage, transfersPage } = await loginAsAdmin(page));
 
     const common = getCommonData();
@@ -1101,7 +1101,7 @@ test.describe("RCSP-237 - Transfers: Clicking NO on the Approve Transfer confirm
   let loginPage: RTCDashboardLoginPage;
   let transfersPage: TransfersPage;
 
-  test("Verify whether clicking NO on the Approve Transfer confirmation modal keeps the transfer in Pending status on WB Unit 1025", async ({ page }) => {
+  test("Verify whether clicking NO on the Approve Transfer confirmation modal keeps the transfer in Pending status on WB Unit 1025", { tag: ['@functional'] }, async ({ page }) => {
     ({ loginPage, transfersPage } = await loginAsAdmin(page));
 
     const common = getCommonData();
@@ -1147,7 +1147,7 @@ test.describe("RCSP-237 - Transfers: Completed transfer cannot be rejected or ap
   let loginPage: RTCDashboardLoginPage;
   let transfersPage: TransfersPage;
 
-  test("Verify whether a Completed transfer cannot be rejected or approved again on WB Unit 1025", async ({ page }) => {
+  test("Verify whether a Completed transfer cannot be rejected or approved again on WB Unit 1025", { tag: ['@regression'] }, async ({ page }) => {
     ({ loginPage, transfersPage } = await loginAsAdmin(page));
 
     const common = getCommonData();
@@ -1170,7 +1170,7 @@ test.describe("RCSP-237 - Transfers: Declined transfer cannot be approved on WB 
   let loginPage: RTCDashboardLoginPage;
   let transfersPage: TransfersPage;
 
-  test("Verify whether a Declined transfer cannot be approved on WB Unit 1025", async ({ page }) => {
+  test("Verify whether a Declined transfer cannot be approved on WB Unit 1025", { tag: ['@functional'] }, async ({ page }) => {
     ({ loginPage, transfersPage } = await loginAsAdmin(page));
 
     const common = getCommonData();
@@ -1193,7 +1193,7 @@ test.describe("RCSP-237 - Transfers: Admin user can save changes to a Draft tran
   let loginPage: RTCDashboardLoginPage;
   let transfersPage: TransfersPage;
 
-  test("Verify whether the admin user can save changes to a Draft transfer and the updated details are retained on WB Unit 1034", async ({ page }) => {
+  test("Verify whether the admin user can save changes to a Draft transfer and the updated details are retained on WB Unit 1034", { tag: ['@functional'] }, async ({ page }) => {
     ({ loginPage, transfersPage } = await loginAsAdmin(page));
 
     const common = getCommonData();
@@ -1233,7 +1233,7 @@ test.describe("RCSP-237 - Transfers: Transfers page on WB Unit 1034 displays the
   let loginPage: RTCDashboardLoginPage;
   let transfersPage: TransfersPage;
 
-  test("Verify whether the Transfers page on WB Unit 1034 displays the NEW TRANSFER button, status section tabs, and correct column headers in the transfers grid", async ({ page }) => {
+  test("Verify whether the Transfers page on WB Unit 1034 displays the NEW TRANSFER button, status section tabs, and correct column headers in the transfers grid", { tag: ['@functional'] }, async ({ page }) => {
     ({ loginPage, transfersPage } = await loginAsAdmin(page));
 
     const common = getCommonData();
@@ -1259,7 +1259,7 @@ test.describe("RCSP-237 - Transfers: New Transfer form rejects decimal/fractiona
   let loginPage: RTCDashboardLoginPage;
   let transfersPage: TransfersPage;
 
-  test("Verify whether the New Transfer form rejects decimal/fractional Qty to Order and accepts only whole number quantities on WB Unit 1034", async ({ page }) => {
+  test("Verify whether the New Transfer form rejects decimal/fractional Qty to Order and accepts only whole number quantities on WB Unit 1034", { tag: ['@regression'] }, async ({ page }) => {
     ({ loginPage, transfersPage } = await loginAsAdmin(page));
 
     const common = getCommonData();
@@ -1292,7 +1292,7 @@ test.describe("RCSP-237 - Transfers: Transfer can be initiated only by the sendi
   let loginPage: RTCDashboardLoginPage;
   let transfersPage: TransfersPage;
 
-  test("Verify whether a transfer can be initiated only by the sending unit and users logged into the receiving unit cannot create a transfer on behalf of another store on WB Unit 1025", async ({ page }) => {
+  test("Verify whether a transfer can be initiated only by the sending unit and users logged into the receiving unit cannot create a transfer on behalf of another store on WB Unit 1025", { tag: ['@functional'] }, async ({ page }) => {
     ({ loginPage, transfersPage } = await loginAsAdmin(page));
 
     const common = getCommonData();
@@ -1340,7 +1340,7 @@ test.describe("RCSP-237 - Transfers: Transfer Reason dropdown on the New Transfe
   let loginPage: RTCDashboardLoginPage;
   let transfersPage: TransfersPage;
 
-  test("Verify whether the Transfer Reason dropdown on the New Transfer form displays all valid reason codes with correct labels on WB Unit 1034", async ({ page }) => {
+  test("Verify whether the Transfer Reason dropdown on the New Transfer form displays all valid reason codes with correct labels on WB Unit 1034", { tag: ['@functional'] }, async ({ page }) => {
     ({ loginPage, transfersPage } = await loginAsAdmin(page));
 
     const common = getCommonData();
@@ -1362,7 +1362,7 @@ test.describe("RCSP-237 - Transfers: Selecting Transfer Reason \"Other\" require
   let loginPage: RTCDashboardLoginPage;
   let transfersPage: TransfersPage;
 
-  test("Verify whether selecting Transfer Reason \"Other\" requires a mandatory comment in the Notes field before submission on WB Unit 1034", async ({ page }) => {
+  test("Verify whether selecting Transfer Reason \"Other\" requires a mandatory comment in the Notes field before submission on WB Unit 1034", { tag: ['@functional'] }, async ({ page }) => {
     ({ loginPage, transfersPage } = await loginAsAdmin(page));
 
     const common = getCommonData();
@@ -1407,7 +1407,7 @@ test.describe("RCSP-237 - Transfers: Admin user can create, submit, and approve 
   let loginPage: RTCDashboardLoginPage;
   let transfersPage: TransfersPage;
 
-  test("Verify whether the admin user can create, submit, and approve a transfer end-to-end from WB Unit 1034 to WB Unit 1025 with Pending and Completed status transitions", async ({ page }) => {
+  test("Verify whether the admin user can create, submit, and approve a transfer end-to-end from WB Unit 1034 to WB Unit 1025 with Pending and Completed status transitions", { tag: ['@functional'] }, async ({ page }) => {
     ({ loginPage, transfersPage } = await loginAsAdmin(page));
 
     const common = getCommonData();
@@ -1461,7 +1461,7 @@ test.describe("RCSP-237 - Transfers: System creates a financial record when a tr
   let loginPage: RTCDashboardLoginPage;
   let transfersPage: TransfersPage;
 
-  test("Verify whether the system creates a financial record when a transfer is completed from WB Unit 1034 to WB Unit 1025", async ({ page }) => {
+  test("Verify whether the system creates a financial record when a transfer is completed from WB Unit 1034 to WB Unit 1025", { tag: ['@functional'] }, async ({ page }) => {
     ({ loginPage, transfersPage } = await loginAsAdmin(page));
 
     const common = getCommonData();
@@ -1485,7 +1485,7 @@ test.describe("RCSP-237 - Transfers: Transfer details and summary are exportable
   let loginPage: RTCDashboardLoginPage;
   let transfersPage: TransfersPage;
 
-  test("Verify whether the transfer details and summary are exportable and printable as a transfer receipt from the individual Completed transfer record page", async ({ page }) => {
+  test("Verify whether the transfer details and summary are exportable and printable as a transfer receipt from the individual Completed transfer record page", { tag: ['@functional'] }, async ({ page }) => {
     ({ loginPage, transfersPage } = await loginAsAdmin(page));
 
     const common = getCommonData();
@@ -1509,7 +1509,7 @@ test.describe("RCSP-237 - Transfers: Transfer receipt is exportable and printabl
   let loginPage: RTCDashboardLoginPage;
   let transfersPage: TransfersPage;
 
-  test("Verify whether the transfer receipt is exportable and printable from the Dashboard page for a recently completed transfer on WB Unit 1025", async ({ page }) => {
+  test("Verify whether the transfer receipt is exportable and printable from the Dashboard page for a recently completed transfer on WB Unit 1025", { tag: ['@functional'] }, async ({ page }) => {
     ({ loginPage, transfersPage } = await loginAsAdmin(page));
 
     const common = getCommonData();

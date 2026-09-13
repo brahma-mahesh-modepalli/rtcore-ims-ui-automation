@@ -113,7 +113,7 @@ const shared: SharedState = {
 };
 
 test.describe("RCSP-44 - Prerequisites: IMS-to-IMS data setup available before Approve/Reject suite", () => {
-  test("Verify whether prerequisite IMS stores WB Unit 1034 and WB Unit 1025, hierarchy path, item LARGE BUNS 11201, and Transfers access are available", async ({ page }) => {
+  test("Verify whether prerequisite IMS stores WB Unit 1034 and WB Unit 1025, hierarchy path, item LARGE BUNS 11201, and Transfers access are available", { tag: ['@regression'] }, async ({ page }) => {
     const { transfersPage } = await loginAsAdmin(page);
     const common = getCommonData();
     const data = getCaseData<{ stores: string[]; item: string }>(TC.prerequisites);
@@ -135,7 +135,7 @@ test.describe("RCSP-44 - Prerequisites: IMS-to-IMS data setup available before A
 });
 
 test.describe("RCSP-44 - Login & My Hierarchy: Admin can set active store to WB Unit 1034", () => {
-  test("Verify whether the admin user can launch QA Backoffice Dashboard, open My Hierarchy, and set active store to WB Unit 1034", async ({ page }) => {
+  test("Verify whether the admin user can launch QA Backoffice Dashboard, open My Hierarchy, and set active store to WB Unit 1034", { tag: ['@smoke', '@functional'] }, async ({ page }) => {
     const { transfersPage } = await loginAsAdmin(page);
     const data = getCaseData<{
       region: string;
@@ -153,7 +153,7 @@ test.describe("RCSP-44 - Login & My Hierarchy: Admin can set active store to WB 
 });
 
 test.describe("RCSP-44 - Transfers Listing UI: NEW TRANSFER, status tabs, and column headers", () => {
-  test("Verify whether the Transfers page on WB Unit 1034 displays NEW TRANSFER, status sections, and expected column headers", async ({ page }) => {
+  test("Verify whether the Transfers page on WB Unit 1034 displays NEW TRANSFER, status sections, and expected column headers", { tag: ['@functional'] }, async ({ page }) => {
     const { transfersPage } = await loginAsAdmin(page);
     const data = getCaseData<{ statusTabs: string[]; columnHeaders: string[] }>(
       TC.transfersListingUi,
@@ -169,7 +169,7 @@ test.describe("RCSP-44 - Transfers Listing UI: NEW TRANSFER, status tabs, and co
 });
 
 test.describe("RCSP-44 - Inventory Baselines: ON HAND / FIFO COST on 1034 and 1025", () => {
-  test("Verify whether ON HAND and FIFO COST for LARGE BUNS 11201 can be recorded as baselines on WB Unit 1034 and WB Unit 1025", async ({ page }) => {
+  test("Verify whether ON HAND and FIFO COST for LARGE BUNS 11201 can be recorded as baselines on WB Unit 1034 and WB Unit 1025", { tag: ['@functional'] }, async ({ page }) => {
     const { transfersPage } = await loginAsAdmin(page);
     const common = getCommonData();
     const data = getCaseData<{ store1034: string; store1025: string; item: string }>(
@@ -204,7 +204,7 @@ test.describe("RCSP-44 - Inventory Baselines: ON HAND / FIFO COST on 1034 and 10
 });
 
 test.describe("RCSP-44 - New Transfer Store Dropdown Rules (IMS context)", () => {
-  test("Verify whether From Store lists only IMS stores and To Store allows IMS destination WB Unit 1025", async ({ page }) => {
+  test("Verify whether From Store lists only IMS stores and To Store allows IMS destination WB Unit 1025", { tag: ['@functional'] }, async ({ page }) => {
     const { transfersPage } = await loginAsAdmin(page);
     const data = getCaseData<{
       fromStore: string;
@@ -223,7 +223,7 @@ test.describe("RCSP-44 - New Transfer Store Dropdown Rules (IMS context)", () =>
 });
 
 test.describe("RCSP-44 - Transfer Reason Codes on New Transfer", () => {
-  test("Verify whether the Transfer Reason dropdown displays all valid reason codes", async ({ page }) => {
+  test("Verify whether the Transfer Reason dropdown displays all valid reason codes", { tag: ['@functional'] }, async ({ page }) => {
     const { transfersPage } = await loginAsAdmin(page);
     const data = getCaseData<{ reasonCodes: string[] }>(TC.reasonCodes);
 
@@ -235,7 +235,7 @@ test.describe("RCSP-44 - Transfer Reason Codes on New Transfer", () => {
 });
 
 test.describe("RCSP-44 - IMS to IMS Submit lands in Pending", () => {
-  test("Verify whether submitting IMS→IMS transfer From 1034 To 1025 for LARGE BUNS Qty 1 creates Pending status", async ({ page }) => {
+  test("Verify whether submitting IMS→IMS transfer From 1034 To 1025 for LARGE BUNS Qty 1 creates Pending status", { tag: ['@functional'] }, async ({ page }) => {
     const { transfersPage } = await loginAsAdmin(page);
     const common = getCommonData();
     const data = getCaseData<{
@@ -270,7 +270,7 @@ test.describe("RCSP-44 - IMS to IMS Submit lands in Pending", () => {
 });
 
 test.describe("RCSP-44 - Destination Reject → Declined on both stores", () => {
-  test("Verify whether destination WB Unit 1025 can Reject Pending transfer to Declined and source also shows Declined", async ({ page }) => {
+  test("Verify whether destination WB Unit 1025 can Reject Pending transfer to Declined and source also shows Declined", { tag: ['@regression'] }, async ({ page }) => {
     const { transfersPage } = await loginAsAdmin(page);
     const common = getCommonData();
     const data = getCaseData<{
@@ -308,7 +308,7 @@ test.describe("RCSP-44 - Destination Reject → Declined on both stores", () => 
 });
 
 test.describe("RCSP-44 - Destination Approve → Completed", () => {
-  test("Verify whether a fresh Pending IMS→IMS transfer can be Approved on WB Unit 1025 to Completed", async ({ page }) => {
+  test("Verify whether a fresh Pending IMS→IMS transfer can be Approved on WB Unit 1025 to Completed", { tag: ['@functional'] }, async ({ page }) => {
     const { transfersPage } = await loginAsAdmin(page);
     const common = getCommonData();
     const data = getCaseData<{
@@ -363,7 +363,7 @@ test.describe("RCSP-44 - Destination Approve → Completed", () => {
 });
 
 test.describe("RCSP-44 - Destination ON HAND +1 after Approve", () => {
-  test("Verify whether ON HAND for LARGE BUNS on WB Unit 1025 increments by 1 after Completed transfer", async ({ page }) => {
+  test("Verify whether ON HAND for LARGE BUNS on WB Unit 1025 increments by 1 after Completed transfer", { tag: ['@functional'] }, async ({ page }) => {
     const { transfersPage } = await loginAsAdmin(page);
     const common = getCommonData();
     const data = getCaseData<{
@@ -385,7 +385,7 @@ test.describe("RCSP-44 - Destination ON HAND +1 after Approve", () => {
 });
 
 test.describe("RCSP-44 - Dashboard Transfer In on destination", () => {
-  test("Verify whether Dashboard Recent Stock Movements shows Transfer In +1 on WB Unit 1025", async ({ page }) => {
+  test("Verify whether Dashboard Recent Stock Movements shows Transfer In +1 on WB Unit 1025", { tag: ['@functional'] }, async ({ page }) => {
     const { transfersPage } = await loginAsAdmin(page);
     const common = getCommonData();
     const data = getCaseData<{
@@ -410,7 +410,7 @@ test.describe("RCSP-44 - Dashboard Transfer In on destination", () => {
 });
 
 test.describe("RCSP-44 - Source ON HAND -1 after Approve", () => {
-  test("Verify whether ON HAND for LARGE BUNS on WB Unit 1034 decrements by 1 after Completed transfer", async ({ page }) => {
+  test("Verify whether ON HAND for LARGE BUNS on WB Unit 1034 decrements by 1 after Completed transfer", { tag: ['@functional'] }, async ({ page }) => {
     const { transfersPage } = await loginAsAdmin(page);
     const common = getCommonData();
     const data = getCaseData<{
@@ -432,7 +432,7 @@ test.describe("RCSP-44 - Source ON HAND -1 after Approve", () => {
 });
 
 test.describe("RCSP-44 - Dashboard Transfer Out on source", () => {
-  test("Verify whether Dashboard Recent Stock Movements shows Transfer Out -1 on WB Unit 1034", async ({ page }) => {
+  test("Verify whether Dashboard Recent Stock Movements shows Transfer Out -1 on WB Unit 1034", { tag: ['@functional'] }, async ({ page }) => {
     const { transfersPage } = await loginAsAdmin(page);
     const common = getCommonData();
     const data = getCaseData<{
@@ -457,7 +457,7 @@ test.describe("RCSP-44 - Dashboard Transfer Out on source", () => {
 });
 
 test.describe("RCSP-44 - Financial record on Completed transfer", () => {
-  test("Verify whether completing an IMS→IMS transfer creates a financial record on transfer details", async ({ page }) => {
+  test("Verify whether completing an IMS→IMS transfer creates a financial record on transfer details", { tag: ['@functional'] }, async ({ page }) => {
     const { transfersPage } = await loginAsAdmin(page);
     const common = getCommonData();
     expect(shared.completedTransferId).toBeTruthy();
@@ -476,7 +476,7 @@ test.describe("RCSP-44 - Financial record on Completed transfer", () => {
 });
 
 test.describe("RCSP-44 - Export / Print transfer receipt", () => {
-  test("Verify whether Completed IMS→IMS transfer receipt is exportable/printable from transfer record and Dashboard", async ({ page }) => {
+  test("Verify whether Completed IMS→IMS transfer receipt is exportable/printable from transfer record and Dashboard", { tag: ['@functional'] }, async ({ page }) => {
     const { transfersPage } = await loginAsAdmin(page);
     const common = getCommonData();
     const data = getCaseData<{
@@ -510,7 +510,7 @@ test.describe("RCSP-44 - Export / Print transfer receipt", () => {
 });
 
 test.describe("RCSP-44 - Insufficient stock blocks submit", () => {
-  test("Verify whether Qty exceeding ON HAND blocks IMS→IMS SUBMIT TRANSFER", async ({ page }) => {
+  test("Verify whether Qty exceeding ON HAND blocks IMS→IMS SUBMIT TRANSFER", { tag: ['@functional'] }, async ({ page }) => {
     const { transfersPage } = await loginAsAdmin(page);
     const common = getCommonData();
     const data = getCaseData<{
@@ -541,7 +541,7 @@ test.describe("RCSP-44 - Insufficient stock blocks submit", () => {
 });
 
 test.describe("RCSP-44 - Decimal quantity not allowed", () => {
-  test("Verify whether decimal Qty to Order is rejected on New Transfer", async ({ page }) => {
+  test("Verify whether decimal Qty to Order is rejected on New Transfer", { tag: ['@regression'] }, async ({ page }) => {
     const { transfersPage } = await loginAsAdmin(page);
     const common = getCommonData();
     const data = getCaseData<{
@@ -563,7 +563,7 @@ test.describe("RCSP-44 - Decimal quantity not allowed", () => {
 });
 
 test.describe("RCSP-44 - Transfer initiation by sending unit only", () => {
-  test("Verify whether transfer cannot be initiated on behalf of another unit from destination store", async ({ page }) => {
+  test("Verify whether transfer cannot be initiated on behalf of another unit from destination store", { tag: ['@functional'] }, async ({ page }) => {
     const { transfersPage } = await loginAsAdmin(page);
     const common = getCommonData();
     const data = getCaseData<{
@@ -601,7 +601,7 @@ test.describe("RCSP-44 - Transfer initiation by sending unit only", () => {
 });
 
 test.describe("RCSP-44 - Reject modal Reason mandatory", () => {
-  test("Verify whether blank Reason on Reject modal keeps transfer Pending", async ({ page }) => {
+  test("Verify whether blank Reason on Reject modal keeps transfer Pending", { tag: ['@regression'] }, async ({ page }) => {
     const { transfersPage } = await loginAsAdmin(page);
     const common = getCommonData();
     const data = getCaseData<{ expectedStatus: string }>(TC.rejectBlankReason);
@@ -641,7 +641,7 @@ test.describe("RCSP-44 - Reject modal Reason mandatory", () => {
 });
 
 test.describe("RCSP-44 - Mandatory field consolidation on New Transfer", () => {
-  test("Verify whether SUBMIT is blocked when To Store, Reason, items, or Qty are missing/invalid", async ({ page }) => {
+  test("Verify whether SUBMIT is blocked when To Store, Reason, items, or Qty are missing/invalid", { tag: ['@regression'] }, async ({ page }) => {
     const { transfersPage } = await loginAsAdmin(page);
     const common = getCommonData();
     const data = getCaseData<{
@@ -680,7 +680,7 @@ test.describe("RCSP-44 - Mandatory field consolidation on New Transfer", () => {
 });
 
 test.describe("RCSP-44 - Other reason requires Notes", () => {
-  test("Verify whether Transfer Reason Other requires Notes before submit", async ({ page }) => {
+  test("Verify whether Transfer Reason Other requires Notes before submit", { tag: ['@functional'] }, async ({ page }) => {
     const { transfersPage } = await loginAsAdmin(page);
     const common = getCommonData();
     const data = getCaseData<{ reason: string; filledNotes: string }>(
@@ -719,7 +719,7 @@ test.describe("RCSP-44 - Other reason requires Notes", () => {
 });
 
 test.describe("RCSP-44 - Reject modal NO keeps Pending", () => {
-  test("Verify whether clicking NO on Reject modal leaves transfer Pending", async ({ page }) => {
+  test("Verify whether clicking NO on Reject modal leaves transfer Pending", { tag: ['@regression'] }, async ({ page }) => {
     const { transfersPage } = await loginAsAdmin(page);
     const common = getCommonData();
     const data = getCaseData<{ expectedStatus: string }>(TC.rejectModalNo);
@@ -756,7 +756,7 @@ test.describe("RCSP-44 - Reject modal NO keeps Pending", () => {
 });
 
 test.describe("RCSP-44 - Approve modal NO keeps Pending", () => {
-  test("Verify whether clicking NO on Approve modal leaves transfer Pending with no inventory movement", async ({ page }) => {
+  test("Verify whether clicking NO on Approve modal leaves transfer Pending with no inventory movement", { tag: ['@functional'] }, async ({ page }) => {
     const { transfersPage } = await loginAsAdmin(page);
     const common = getCommonData();
     const data = getCaseData<{ expectedStatus: string }>(TC.approveModalNo);
@@ -792,7 +792,7 @@ test.describe("RCSP-44 - Approve modal NO keeps Pending", () => {
 });
 
 test.describe("RCSP-44 - Completed transfer locked from further actions", () => {
-  test("Verify whether Completed IMS→IMS transfer cannot be Approved or Rejected again", async ({ page }) => {
+  test("Verify whether Completed IMS→IMS transfer cannot be Approved or Rejected again", { tag: ['@regression'] }, async ({ page }) => {
     const { transfersPage } = await loginAsAdmin(page);
     const common = getCommonData();
     expect(shared.completedTransferId).toBeTruthy();
@@ -810,7 +810,7 @@ test.describe("RCSP-44 - Completed transfer locked from further actions", () => 
 });
 
 test.describe("RCSP-44 - Declined transfer locked from Approve", () => {
-  test("Verify whether Declined IMS→IMS transfer cannot be Approved later", async ({ page }) => {
+  test("Verify whether Declined IMS→IMS transfer cannot be Approved later", { tag: ['@functional'] }, async ({ page }) => {
     const { transfersPage } = await loginAsAdmin(page);
     const common = getCommonData();
     expect(shared.declinedTransferId).toBeTruthy();
@@ -828,7 +828,7 @@ test.describe("RCSP-44 - Declined transfer locked from Approve", () => {
 });
 
 test.describe("RCSP-44 - Exact ON HAND quantity allowed (boundary)", () => {
-  test("Verify whether Qty exactly equal to ON HAND submits to Pending without insufficient-stock error", async ({ page }) => {
+  test("Verify whether Qty exactly equal to ON HAND submits to Pending without insufficient-stock error", { tag: ['@regression'] }, async ({ page }) => {
     const { transfersPage } = await loginAsAdmin(page);
     const common = getCommonData();
     const data = getCaseData<{
@@ -871,7 +871,7 @@ test.describe("RCSP-44 - Exact ON HAND quantity allowed (boundary)", () => {
 });
 
 test.describe("RCSP-44 - Same Transfer ID visibility across stores", () => {
-  test("Verify whether Transfer ID and status stay consistent on WB Unit 1034 and WB Unit 1025", async ({ page }) => {
+  test("Verify whether Transfer ID and status stay consistent on WB Unit 1034 and WB Unit 1025", { tag: ['@functional'] }, async ({ page }) => {
     const { transfersPage } = await loginAsAdmin(page);
     const common = getCommonData();
     const data = getCaseData<{
@@ -915,7 +915,7 @@ test.describe("RCSP-44 - Same Transfer ID visibility across stores", () => {
 });
 
 test.describe("RCSP-44 - End-to-End IMS to IMS Reject Flow", () => {
-  test("Verify whether full reject flow ends in Declined on both stores with no inventory movement", async ({ page }) => {
+  test("Verify whether full reject flow ends in Declined on both stores with no inventory movement", { tag: ['@regression'] }, async ({ page }) => {
     const { transfersPage } = await loginAsAdmin(page);
     const common = getCommonData();
     const data = getCaseData<{
@@ -983,7 +983,7 @@ test.describe("RCSP-44 - End-to-End IMS to IMS Reject Flow", () => {
 });
 
 test.describe("RCSP-44 - End-to-End IMS to IMS Approve Flow With Inventory & Dashboard", () => {
-  test("Verify whether full approve flow updates status, inventory, dashboard, financial record, and export", async ({ page }) => {
+  test("Verify whether full approve flow updates status, inventory, dashboard, financial record, and export", { tag: ['@functional'] }, async ({ page }) => {
     const { transfersPage } = await loginAsAdmin(page);
     const common = getCommonData();
     const data = getCaseData<{

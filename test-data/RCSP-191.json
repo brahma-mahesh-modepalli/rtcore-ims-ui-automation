@@ -1,0 +1,90 @@
+{
+  "RCSP-191": {
+    "scenarioId": "RCSP-191",
+    "epic": "EPIC-RCSP-1",
+    "feature": "Inventory Setup – Item Master",
+    "sourceSheet": "RCSP-191",
+    "description": "Verify Item Master (Inventory Setup → Inventory Item) page load, controls, filters, search behavior, hierarchy scoping, and exclusion of inactive items from operational transaction forms for WB Unit 1034.",
+    "commonData": {
+      "prerequisites": [
+        "User has valid Back Office credentials and Inventory Setup access",
+        "WB Unit 1034 is selected from My Hierarchy"
+      ],
+      "hierarchy": {
+        "region": "1700 San Antonio 4126314",
+        "market": "1708 E Central SA 4126393",
+        "store": "WB Unit 1034"
+      },
+      "storeId": 1034
+    },
+    "testCases": [
+      {
+        "testCaseId": "TC_RCSP-191_001",
+        "testName": "Verify whether the Item Master page is displayed successfully for WB Unit 1034",
+        "testData": {}
+      },
+      {
+        "testCaseId": "TC_RCSP-191_002",
+        "testName": "Verify whether the Item Master page displays all required search, filter and grid controls",
+        "testData": {
+          "expectedTypes": ["All Types", "Ingredient", "Non-Food", "Packing", "Recipe"],
+          "expectedStatuses": ["Active only", "All", "Inactive only"]
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-191_003",
+        "testName": "Verify whether Type and Status filters display only records matching the selected filter criteria",
+        "testData": {
+          "types": ["Ingredient", "Non-Food", "Packing", "Recipe"],
+          "statuses": ["Active only", "Inactive only", "All"]
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-191_004",
+        "testName": "Verify whether the Search box returns matching inventory items using item name, PLU and Item Number",
+        "testData": {
+          "partialName": "PI",
+          "completeName": "M-JAL WHOLE",
+          "plu": "1000002",
+          "itemNumber": ""
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-191_005",
+        "testName": "Verify whether invalid search input and special characters are handled correctly without breaking the application",
+        "testData": {
+          "invalidValue": "XYZINVALID123",
+          "specialChars": "@@@###",
+          "spacedValue": "  M-JAL WHOLE  ",
+          "expectedValue": "M-JAL WHOLE"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-191_006",
+        "testName": "Verify whether exact search results are displayed before partial matches in alphabetical order",
+        "testData": { "searchKeyword": "MEAT" }
+      },
+      {
+        "testCaseId": "TC_RCSP-191_007",
+        "testName": "Verify whether only inventory items assigned to WB Unit 1034 are displayed for the selected hierarchy unit",
+        "testData": {}
+      },
+      {
+        "testCaseId": "TC_RCSP-191_008",
+        "testName": "Verify whether inactive inventory items are excluded from operational transaction forms",
+        "testData": {
+          "inactiveItemName": ""
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-191_009",
+        "testName": "Verify whether multiple filters work together correctly on the Item Master page",
+        "testData": {
+          "search": "MEAT",
+          "type": "Ingredient",
+          "status": "Active only"
+        }
+      }
+    ]
+  }
+}

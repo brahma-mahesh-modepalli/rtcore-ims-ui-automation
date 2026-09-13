@@ -65,7 +65,7 @@ test.describe("RCSP-472 - Admin > Roles & Permissions: Roles & Permissions page 
   let loginPage: RTCDashboardLoginPage;
   let rolesPage: RolesAndPermissionsPage;
 
-  test("Verify whether the Roles & Permissions page under Admin menu loads successfully and displays the Roles tab UI without layout or alignment issues", async ({ page }) => {
+  test("Verify whether the Roles & Permissions page under Admin menu loads successfully and displays the Roles tab UI without layout or alignment issues", { tag: ['@smoke', '@functional'] }, async ({ page }) => {
     ({ loginPage, rolesPage } = await loginAsAdmin(page));
 
     const data = getCaseData<{
@@ -87,7 +87,7 @@ test.describe("RCSP-472 - Admin > Roles & Permissions: Operations Admin role is 
   let loginPage: RTCDashboardLoginPage;
   let rolesPage: RolesAndPermissionsPage;
 
-  test("Verify whether the Operations Admin role is displayed correctly on the Roles tab under Roles & Permissions with accurate name, description, permission count, user count, Active status, and action icons", async ({ page }) => {
+  test("Verify whether the Operations Admin role is displayed correctly on the Roles tab under Roles & Permissions with accurate name, description, permission count, user count, Active status, and action icons", { tag: ['@functional'] }, async ({ page }) => {
     ({ loginPage, rolesPage } = await loginAsAdmin(page));
 
     const data = getCaseData<{
@@ -109,7 +109,7 @@ test.describe("RCSP-472 - Admin > Roles & Permissions: Searching for Operations 
   let loginPage: RTCDashboardLoginPage;
   let rolesPage: RolesAndPermissionsPage;
 
-  test("Verify whether searching for Operations Admin on the Roles tab under Roles & Permissions returns the correct role and whether invalid/empty/partial search inputs behave correctly (positive, negative, and edge)", async ({ page }) => {
+  test("Verify whether searching for Operations Admin on the Roles tab under Roles & Permissions returns the correct role and whether invalid/empty/partial search inputs behave correctly (positive, negative, and edge)", { tag: ['@regression'] }, async ({ page }) => {
     ({ loginPage, rolesPage } = await loginAsAdmin(page));
 
     const common = getCommonData();
@@ -168,7 +168,7 @@ test.describe("RCSP-472 - Admin > Roles & Permissions / User Role Assignment: Op
   let loginPage: RTCDashboardLoginPage;
   let rolesPage: RolesAndPermissionsPage;
 
-  test("Verify whether the Operations Admin role is available for selection in the user role assignment dropdown/screen (if applicable) and is not selectable when the role is Inactive or the user lacks assignment permission (negative/edge)", async ({ page }) => {
+  test("Verify whether the Operations Admin role is available for selection in the user role assignment dropdown/screen (if applicable) and is not selectable when the role is Inactive or the user lacks assignment permission (negative/edge)", { tag: ['@regression'] }, async ({ page }) => {
     ({ loginPage, rolesPage } = await loginAsAdmin(page));
 
     const data = getCaseData<{
@@ -203,7 +203,7 @@ test.describe("RCSP-472 - Admin > Roles & Permissions: Existing roles remain unc
   let loginPage: RTCDashboardLoginPage;
   let rolesPage: RolesAndPermissionsPage;
 
-  test("Verify whether existing roles remain unchanged on the Roles tab under Roles & Permissions after viewing Operations Admin details, and whether restricted actions for locked/system roles still behave correctly (regression and edge)", async ({ page }) => {
+  test("Verify whether existing roles remain unchanged on the Roles tab under Roles & Permissions after viewing Operations Admin details, and whether restricted actions for locked/system roles still behave correctly (regression and edge)", { tag: ['@regression'] }, async ({ page }) => {
     ({ loginPage, rolesPage } = await loginAsAdmin(page));
 
     const data = getCaseData<{

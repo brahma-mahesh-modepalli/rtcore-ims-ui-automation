@@ -81,7 +81,7 @@ async function ensureStoreSelected(
 
 
 test.describe('RCSP-169 - Ordering: Credit Requests submenu and page landing content', () => {
-  test('Verify whether Ordering submenu shows Credit Requests (not Credit Memos) and opens Credit Requests page with correct title and description', async ({
+  test('Verify whether Ordering submenu shows Credit Requests (not Credit Memos) and opens Credit Requests page with correct title and description', { tag: ['@smoke', '@functional'] }, async ({
     page,
   }) => {
     const common = getCommonData();
@@ -113,7 +113,7 @@ test.describe('RCSP-169 - Ordering: Credit Requests submenu and page landing con
 });
 
 test.describe('RCSP-169 - Ordering: Credit Requests listing CTA, summary cards, and tabs', () => {
-  test('Verify whether Credit Requests listing shows + NEW CREDIT REQUEST, Draft Claim Value / Submitted cards, and All/Draft/Submitted tabs without Credit Memo CTA wording', async ({
+  test('Verify whether Credit Requests listing shows + NEW CREDIT REQUEST, Draft Claim Value / Submitted cards, and All/Draft/Submitted tabs without Credit Memo CTA wording', { tag: ['@functional'] }, async ({
     page,
   }) => {
     const common = getCommonData();
@@ -137,7 +137,7 @@ test.describe('RCSP-169 - Ordering: Credit Requests listing CTA, summary cards, 
 });
 
 test.describe('RCSP-169 - Ordering: Credit Requests grid terminology vs technical ID format', () => {
-  test('Verify whether user-facing labels use Credit Request(s) while MEMO # / CM- IDs are treated as accepted technical format or preferred renamed headers', async ({
+  test('Verify whether user-facing labels use Credit Request(s) while MEMO # / CM- IDs are treated as accepted technical format or preferred renamed headers', { tag: ['@functional'] }, async ({
     page,
   }) => {
     const common = getCommonData();
@@ -164,7 +164,7 @@ test.describe('RCSP-169 - Ordering: Credit Requests grid terminology vs technica
 });
 
 test.describe('RCSP-169 - Ordering: Unauthorized users cannot access Credit Requests', () => {
-  test('Verify whether unauthorized users cannot see/open Credit Requests or Credit Memos, while authorized users can open Credit Requests only', async ({
+  test('Verify whether unauthorized users cannot see/open Credit Requests or Credit Memos, while authorized users can open Credit Requests only', { tag: ['@regression'] }, async ({
     page,
   }) => {
     const common = getCommonData();
@@ -201,7 +201,7 @@ test.describe('RCSP-169 - Ordering: Unauthorized users cannot access Credit Requ
 });
 
 test.describe('RCSP-169 - Ordering: Credit Requests rename persists after refresh and re-navigation', () => {
-  test('Verify whether Credit Requests / + NEW CREDIT REQUEST labels remain after Ordering collapse/expand, refresh, and leave/return even if URL keeps credit-memos', async ({
+  test('Verify whether Credit Requests / + NEW CREDIT REQUEST labels remain after Ordering collapse/expand, refresh, and leave/return even if URL keeps credit-memos', { tag: ['@functional'] }, async ({
     page,
   }) => {
     const common = getCommonData();

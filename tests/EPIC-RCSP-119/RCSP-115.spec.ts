@@ -43,7 +43,8 @@ function getLatestMonday(date = new Date()): string {
 
 function getNextCountMonday(date = new Date()): string {
   const monday = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-  const daysUntilMonday = (8 - monday.getDay()) % 7 || 7;
+  // If today is already Monday, use today's date instead of skipping to next week's Monday.
+  const daysUntilMonday = (8 - monday.getDay()) % 7;
   monday.setDate(monday.getDate() + daysUntilMonday);
   return formatDate(monday);
 }
@@ -96,7 +97,7 @@ test.describe('RCSP-115 - Stock Count Navigation', () => {
   let loginPage: RTCDashboardLoginPage;
   let stockCountPage: StockCountPage;
 
-  test('Verify user can navigate to Daily Shift Count, Weekly Count, and Monthly Count pages from STOCK COUNT menu', async ({
+  test('Verify user can navigate to Daily Shift Count, Weekly Count, and Monthly Count pages from STOCK COUNT menu', { tag: ['@smoke', '@functional'] }, async ({
     page,
   }) => {
     const navigationData = getRcsp115TestCaseData<Rcsp115NavigationTestData>(
@@ -138,7 +139,7 @@ test.describe('RCSP-115 - “+ NEW DAILY SHIFT COUNT”, “+ NEW WEEKLY COUNT�
   let weeklyCountPage: WeeklyCountPage;
   let monthlyCountPage: MonthlyCountPage;
 
-  test('Verify whether the “+ NEW DAILY SHIFT COUNT”, “+ NEW WEEKLY COUNT”, and “+ NEW MONTHLY COUNT” buttons are visible and enabled on their respective listing pages', async ({
+  test('Verify whether the “+ NEW DAILY SHIFT COUNT”, “+ NEW WEEKLY COUNT”, and “+ NEW MONTHLY COUNT” buttons are visible and enabled on their respective listing pages', { tag: ['@functional'] }, async ({
     page,
   }) => {
     const buttonVisibilityData =
@@ -204,7 +205,7 @@ test.describe('RCSP-115 - Weekly Count feature validation', () => {
   let dailyShiftCountPage: DailyShiftCountPage;
   let weeklyCountPage: WeeklyCountPage;
 
-  test('Verify Weekly Count listing, detail, filter, export, and add item features using JSON-driven test data', async ({
+  test('Verify Weekly Count listing, detail, filter, export, and add item features using JSON-driven test data', { tag: ['@functional'] }, async ({
     page,
   }) => {
     test.slow();
@@ -336,7 +337,7 @@ test.describe('RCSP-115 - Monthly Count feature validation', () => {
   let dailyShiftCountPage: DailyShiftCountPage;
   let monthlyCountPage: MonthlyCountPage;
 
-  test('Verify Monthly Count listing, detail, filter, add item, and delete confirmation features using JSON-driven test data', async ({
+  test('Verify Monthly Count listing, detail, filter, add item, and delete confirmation features using JSON-driven test data', { tag: ['@functional'] }, async ({
     page,
   }) => {
     test.slow();
@@ -440,7 +441,7 @@ test.describe('RCSP-115 - “+ NEW DAILY SHIFT COUNT”, “+ NEW WEEKLY COUNT�
   let weeklyCountPage: WeeklyCountPage;
   let monthlyCountPage: MonthlyCountPage;
 
-  test('Verify whether the user is able to create Daily Shift Count, Weekly Count, and Monthly Count sessions successfully using valid AM, Mid-Shift, and PM shift values', async ({
+  test('Verify whether the user is able to create Daily Shift Count, Weekly Count, and Monthly Count sessions successfully using valid AM, Mid-Shift, and PM shift values', { tag: ['@functional'] }, async ({
     page,
   }) => {
     test.slow();

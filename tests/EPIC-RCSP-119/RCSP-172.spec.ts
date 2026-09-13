@@ -167,7 +167,7 @@ async function forEachCountType(
 
 
 test.describe('RCSP-172 - Navigate to Daily/Weekly/Monthly and open Add Item popup', () => {
-  test('Verify whether the user can navigate to Daily Shift Count, Weekly Count, and Monthly Count and open Add Item popup', async ({
+  test('Verify whether the user can navigate to Daily Shift Count, Weekly Count, and Monthly Count and open Add Item popup', { tag: ['@smoke', '@functional'] }, async ({
     page,
   }) => {
     test.slow();
@@ -184,7 +184,7 @@ test.describe('RCSP-172 - Navigate to Daily/Weekly/Monthly and open Add Item pop
 });
 
 test.describe('RCSP-172 - Partial item name type-ahead returns matching active items', () => {
-  test('Verify whether searchable type-ahead returns matching items for partial name search across count pages', async ({
+  test('Verify whether searchable type-ahead returns matching items for partial name search across count pages', { tag: ['@functional'] }, async ({
     page,
   }) => {
     test.slow();
@@ -202,7 +202,7 @@ test.describe('RCSP-172 - Partial item name type-ahead returns matching active i
 });
 
 test.describe('RCSP-172 - PLU type-ahead returns matching active items', () => {
-  test('Verify whether searchable type-ahead returns matching items for PLU search across count pages', async ({
+  test('Verify whether searchable type-ahead returns matching items for PLU search across count pages', { tag: ['@functional'] }, async ({
     page,
   }) => {
     test.slow();
@@ -220,7 +220,7 @@ test.describe('RCSP-172 - PLU type-ahead returns matching active items', () => {
 });
 
 test.describe('RCSP-172 - Inactive items are excluded from type-ahead', () => {
-  test('Verify whether inactive inventory items are excluded from Add Item search results across count pages', async ({
+  test('Verify whether inactive inventory items are excluded from Add Item search results across count pages', { tag: ['@regression'] }, async ({
     page,
   }) => {
     test.slow();
@@ -244,7 +244,7 @@ test.describe('RCSP-172 - Inactive items are excluded from type-ahead', () => {
 });
 
 test.describe('RCSP-172 - Item name, PLU, and UOM auto-populate after selection', () => {
-  test('Verify whether item name, PLU, and UOM auto-populate after selecting an item across count pages', async ({
+  test('Verify whether item name, PLU, and UOM auto-populate after selecting an item across count pages', { tag: ['@functional'] }, async ({
     page,
   }) => {
     test.slow();
@@ -265,7 +265,7 @@ test.describe('RCSP-172 - Item name, PLU, and UOM auto-populate after selection'
 });
 
 test.describe('RCSP-172 - UOM remains read-only after item selection', () => {
-  test('Verify whether UOM remains read-only after selecting an item across count pages', async ({
+  test('Verify whether UOM remains read-only after selecting an item across count pages', { tag: ['@functional'] }, async ({
     page,
   }) => {
     test.slow();
@@ -286,7 +286,7 @@ test.describe('RCSP-172 - UOM remains read-only after item selection', () => {
 });
 
 test.describe('RCSP-172 - Invalid item search shows no matches', () => {
-  test('Verify whether invalid item search shows no matching results across count pages', async ({
+  test('Verify whether invalid item search shows no matching results across count pages', { tag: ['@regression'] }, async ({
     page,
   }) => {
     test.slow();
@@ -304,7 +304,7 @@ test.describe('RCSP-172 - Invalid item search shows no matches', () => {
 });
 
 test.describe('RCSP-172 - Special characters in item search are handled safely', () => {
-  test('Verify whether special character search does not crash and returns no unrelated items across count pages', async ({
+  test('Verify whether special character search does not crash and returns no unrelated items across count pages', { tag: ['@regression'] }, async ({
     page,
   }) => {
     test.slow();
@@ -322,7 +322,7 @@ test.describe('RCSP-172 - Special characters in item search are handled safely',
 });
 
 test.describe('RCSP-172 - Leading/trailing spaces are trimmed in item search', () => {
-  test('Verify whether leading and trailing spaces still return matching items across count pages', async ({
+  test('Verify whether leading and trailing spaces still return matching items across count pages', { tag: ['@functional'] }, async ({
     page,
   }) => {
     test.slow();
@@ -342,7 +342,7 @@ test.describe('RCSP-172 - Leading/trailing spaces are trimmed in item search', (
 });
 
 test.describe('RCSP-172 - Case-insensitive item search', () => {
-  test('Verify whether uppercase and lowercase searches return the same matching items across count pages', async ({
+  test('Verify whether uppercase and lowercase searches return the same matching items across count pages', { tag: ['@functional'] }, async ({
     page,
   }) => {
     test.slow();

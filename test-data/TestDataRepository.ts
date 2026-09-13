@@ -19,6 +19,7 @@ import {
   TransferQueries,
   UomQueries,
   UserQueries,
+  VendorItemQueries,
   WastageQueries,
 } from '../database/DBQueries';
 import { Reporting } from '../reporting/Reporting';
@@ -105,6 +106,18 @@ export interface TransferReasonData {
   code: string;
   description: string;
   active: boolean;
+}
+
+export interface VendorItemData {
+  item_id: number;
+  sku: string;
+  vendor_item_id: number;
+  vendor_id: number;
+  vendor_sku: string | null;
+  vendor_item_name: string;
+  unit_cost: string;
+  available_from: string | null;
+  expires_at: string | null;
 }
 
 export class TestDataRepository {
@@ -263,5 +276,39 @@ export class TestDataRepository {
 
   async getUomByAbbreviation(abbreviation: string): Promise<UomData | undefined> {
     return (await DBConnection.executeQuery<UomData>(UomQueries.getUomByAbbreviation, [abbreviation]))[0];
+  }
+
+  /** All vendor-item records (unfiltered) for a given vendor. Used for RCSP-283. */
+  async getVendorItemsByVendorId(vendorId: number): Promise<VendorItemData[]> {
+    try {
+      return await DBConnection.executeQuery<VendorItemData>(
+        VendorItemQueries.getVendorItemsByVendorId,
+        [vendorId],
+      );
+    } catch (error) {
+      Reporting.error(
+        `Database query failed. Query name: getVendorItemsByVendorId. Environment: ${
+          process.env.ENVIRONMENT || 'stage'
+        }. Error: ${error instanceof Error ? error.message : String(error)}`,
+      );
+      throw error;
+    }
+  }
+
+  /** Latest applicable vendor-item record per item_id for a given vendor. Used for RCSP-283. */
+  async getLatestVendorItemsByVendorId(vendorId: number): Promise<VendorItemData[]> {
+    try {
+      return await DBConnection.executeQuery<VendorItemData>(
+        VendorItemQueries.getLatestVendorItemsByVendorId,
+        [vendorId],
+      );
+    } catch (error) {
+      Reporting.error(
+        `Database query failed. Query name: getLatestVendorItemsByVendorId. Environment: ${
+          process.env.ENVIRONMENT || 'stage'
+        }. Error: ${error instanceof Error ? error.message : String(error)}`,
+      );
+      throw error;
+    }
   }
 }

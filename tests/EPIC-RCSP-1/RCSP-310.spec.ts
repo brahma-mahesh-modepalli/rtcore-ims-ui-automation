@@ -95,7 +95,7 @@ function hasRestrictedCredentials(user?: {
 
 
 test.describe("RCSP-310 - Navigation / Sidebar: Left navigation shows collapsible INVENTORY between FOOD COST and INVENTORY...", () => {
-  test("Verify whether the left navigation shows a new collapsible INVENTORY section between FOOD COST and INVENTORY SETUP, containing exactly Inventory Balances and Store Inventory Items, and that those two items are no longer listed under INVENTORY SETUP", async ({ page }) => {
+  test("Verify whether the left navigation shows a new collapsible INVENTORY section between FOOD COST and INVENTORY SETUP, containing exactly Inventory Balances and Store Inventory Items, and that those two items are no longer listed under INVENTORY SETUP", { tag: ['@smoke', '@functional'] }, async ({ page }) => {
     const { inventoryPage } = await loginAsAdmin(page);
     getCaseData(TC.inventorySidebar);
 
@@ -109,7 +109,7 @@ test.describe("RCSP-310 - Navigation / Sidebar: Left navigation shows collapsibl
 });
 
 test.describe("RCSP-310 - Navigation / Sidebar – Permissions: INVENTORY section is hidden without inventory read permissio...", () => {
-  test("Verify whether the left navigation INVENTORY section is completely hidden when the logged-in user has neither inventory_balances:read nor store_items:read", async ({ page }) => {
+  test("Verify whether the left navigation INVENTORY section is completely hidden when the logged-in user has neither inventory_balances:read nor store_items:read", { tag: ['@functional'] }, async ({ page }) => {
     const common = getCommonData();
     const data = getCaseData<{
       storeItemsUrl: string;
@@ -157,7 +157,7 @@ test.describe("RCSP-310 - Navigation / Sidebar – Permissions: INVENTORY sectio
 });
 
 test.describe("RCSP-310 - Roles & Permissions: Inventory category lists three page-level permissions with correct keys", () => {
-  test("Verify whether the Roles & Permissions catalog under the Inventory category lists the three page-level permissions: View Inventory Balances (inventory_balances:read), View Store Inventory Items (store_items:read), and Manage Store Inventory Items (store_items:update)", async ({ page }) => {
+  test("Verify whether the Roles & Permissions catalog under the Inventory category lists the three page-level permissions: View Inventory Balances (inventory_balances:read), View Store Inventory Items (store_items:read), and Manage Store Inventory Items (store_items:update)", { tag: ['@functional'] }, async ({ page }) => {
     const { rolesPage } = await loginAsAdmin(page);
     const data = getCaseData<{
       category: string;
@@ -170,7 +170,7 @@ test.describe("RCSP-310 - Roles & Permissions: Inventory category lists three pa
 });
 
 test.describe("RCSP-310 - Roles & Permissions / Migration: Administrator is granted all three inventory permissions", () => {
-  test("Verify whether running prisma migrate deploy applies the inventory permissions migration and automatically grants all three new permissions to the Administrator role", async ({ page }) => {
+  test("Verify whether running prisma migrate deploy applies the inventory permissions migration and automatically grants all three new permissions to the Administrator role", { tag: ['@functional'] }, async ({ page }) => {
     const { rolesPage } = await loginAsAdmin(page);
     const data = getCaseData<{
       roleName: string;
@@ -186,7 +186,7 @@ test.describe("RCSP-310 - Roles & Permissions / Migration: Administrator is gran
 });
 
 test.describe("RCSP-310 - Store Inventory Items – Permission UI: Pencil gated by store_items:update", () => {
-  test("Verify whether a role without store_items:update can view the Store Inventory Items page (if it has store_items:read) but cannot see the edit (pencil) action, while a role with store_items:update can see and use the pencil", async ({ page }) => {
+  test("Verify whether a role without store_items:update can view the Store Inventory Items page (if it has store_items:read) but cannot see the edit (pencil) action, while a role with store_items:update can see and use the pencil", { tag: ['@functional'] }, async ({ page }) => {
     const common = getCommonData();
     getCaseData(TC.pencilGating);
 
@@ -230,7 +230,7 @@ test.describe("RCSP-310 - Store Inventory Items – Permission UI: Pencil gated 
 });
 
 test.describe("RCSP-310 - Store Inventory Items – Global Store Switcher: No Filter by Store; Topbar drives table data", () => {
-  test("Verify whether the Store Inventory Items page has no “Filter by Store” dropdown and the table data is driven solely by the Topbar global store switcher, refreshing automatically when the store is changed", async ({ page }) => {
+  test("Verify whether the Store Inventory Items page has no “Filter by Store” dropdown and the table data is driven solely by the Topbar global store switcher, refreshing automatically when the store is changed", { tag: ['@functional'] }, async ({ page }) => {
     const { inventoryPage } = await loginAsAdmin(page);
     const data = getCaseData<{ storeA: string; storeB: string }>(
       TC.globalStoreSwitcher,
@@ -262,7 +262,7 @@ test.describe("RCSP-310 - Store Inventory Items – Global Store Switcher: No Fi
 });
 
 test.describe("RCSP-310 - Store Inventory Items – Edge / Empty & Search: Search and empty state scoped to Topbar store", () => {
-  test("Verify whether Store Inventory Items correctly handles empty store data and search-by-name/SKU while remaining scoped to the Topbar-selected store", async ({ page }) => {
+  test("Verify whether Store Inventory Items correctly handles empty store data and search-by-name/SKU while remaining scoped to the Topbar-selected store", { tag: ['@regression'] }, async ({ page }) => {
     const { inventoryPage } = await loginAsAdmin(page);
     const data = getCaseData<{
       validItemName: string;
@@ -299,7 +299,7 @@ test.describe("RCSP-310 - Store Inventory Items – Edge / Empty & Search: Searc
 });
 
 test.describe("RCSP-310 - Units of Measure – Delete Removed: No trash icon; edit via pencil remains", () => {
-  test("Verify whether the Units of Measure page (/inventory/uom) no longer shows a trash/delete icon on any row, does not allow opening a delete confirmation modal, and still allows edit via the pencil icon", async ({ page }) => {
+  test("Verify whether the Units of Measure page (/inventory/uom) no longer shows a trash/delete icon on any row, does not allow opening a delete confirmation modal, and still allows edit via the pencil icon", { tag: ['@functional'] }, async ({ page }) => {
     const { uomPage } = await loginAsAdmin(page);
     const data = getCaseData<{
       uomName: string;
@@ -320,7 +320,7 @@ test.describe("RCSP-310 - Units of Measure – Delete Removed: No trash icon; ed
 });
 
 test.describe("RCSP-310 - Cross-cutting – Regression / Access Matrix: Navigation, pencil, and UOM delete remain consistent", () => {
-  test("Verify whether navigation visibility, page access, and Store Inventory Items edit affordance remain consistent across a compact permission matrix (balances read, store-items read, store-items update) without breaking INVENTORY SETUP pages such as UOM", async ({ page }) => {
+  test("Verify whether navigation visibility, page access, and Store Inventory Items edit affordance remain consistent across a compact permission matrix (balances read, store-items read, store-items update) without breaking INVENTORY SETUP pages such as UOM", { tag: ['@regression'] }, async ({ page }) => {
     const { inventoryPage, uomPage } = await loginAsAdmin(page);
     const data = getCaseData<{
       uomName: string;

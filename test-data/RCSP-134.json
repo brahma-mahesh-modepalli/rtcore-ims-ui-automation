@@ -1,0 +1,70 @@
+{
+  "RCSP-134": {
+    "scenarioId": "RCSP-134",
+    "epic": "EPIC-RCSP-1",
+    "feature": "Inventory - Vendor Items (DB vs UI validation)",
+    "sourceSheet": "RCSP-134",
+    "description": "Verify Vendor Item Name and Unit Cost displayed in the Vendor Items UI match PostgreSQL database values for Vendor ID 2 and Vendor ID 3 (latest record per item).",
+    "commonData": {
+      "prerequisites": [
+        "User has valid Back Office access",
+        "User can access Vendor Items page",
+        "PostgreSQL database is accessible",
+        "Playwright automation environment is configured",
+        "Switch to WB Unit 1034 via My Hierarchy before navigating to Vendor Items"
+      ],
+      "hierarchy": {
+        "region": "1700 San Antonio 4126314",
+        "market": "1708 E Central SA 4126393",
+        "store": "WB Unit 1034"
+      }
+    },
+    "testCases": [
+      {
+        "testCaseId": "TC_RCSP-134_01",
+        "testName": "Verify whether vendor item name and unit cost displayed in Vendor Items UI match the database values for Vendor ID 2",
+        "testData": { "vendorId": 2 }
+      },
+      {
+        "testCaseId": "TC_RCSP-134_02",
+        "testName": "Verify whether all vendor item records returned from the database are displayed in Vendor Items UI for Vendor ID 2",
+        "testData": { "vendorId": 2 }
+      },
+      {
+        "testCaseId": "TC_RCSP-134_03",
+        "testName": "Verify whether the latest vendor item name and unit cost for each item match the database values for Vendor ID 3",
+        "testData": { "vendorId": 3 }
+      },
+      {
+        "testCaseId": "TC_RCSP-134_04",
+        "testName": "Verify whether the latest vendor item record is selected when multiple vendor item records exist for the same item for Vendor ID 3",
+        "testData": { "vendorId": 3 }
+      },
+      {
+        "testCaseId": "TC_RCSP-134_05",
+        "testName": "Verify whether vendor item records with null available_from or expires_at are excluded from the Vendor ID 3 validation",
+        "testData": { "vendorId": 3 }
+      },
+      {
+        "testCaseId": "TC_RCSP-134_06",
+        "testName": "Verify whether Vendor Item Name is correctly displayed for all Vendor ID 2 records based on database values",
+        "testData": { "vendorId": 2 }
+      },
+      {
+        "testCaseId": "TC_RCSP-134_07",
+        "testName": "Verify whether Unit Cost is correctly displayed for all Vendor ID 2 records based on database values",
+        "testData": { "vendorId": 2 }
+      },
+      {
+        "testCaseId": "TC_RCSP-134_08",
+        "testName": "Verify whether Vendor Item Name is correctly displayed for the latest Vendor ID 3 records",
+        "testData": { "vendorId": 3 }
+      },
+      {
+        "testCaseId": "TC_RCSP-134_09",
+        "testName": "Verify whether Unit Cost is correctly displayed for the latest Vendor ID 3 records",
+        "testData": { "vendorId": 3 }
+      }
+    ]
+  }
+}

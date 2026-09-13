@@ -310,7 +310,7 @@ test.describe('RCSP-166 @rcsp166 @ordering @notes', () => {
 		});
 	});
 
-	test('TC_RCSP-166_01 @rcsp166 Verify that the Notes text field is available on the Create New Scheduled Order page', async ({
+	test('TC_RCSP-166_01 @rcsp166 Verify that the Notes text field is available on the Create New Scheduled Order page', { tag: ['@smoke', '@functional'] }, async ({
 		page,
 	}) => {
 		const testData = getRcsp166TestData(RCSP_166_TEST_CASE_IDS.notesFieldScheduledOrder);
@@ -325,7 +325,7 @@ test.describe('RCSP-166 @rcsp166 @ordering @notes', () => {
 		});
 	});
 
-	test('TC_RCSP-166_02 @rcsp166 Verify that the Notes text field is available on the Hot Shot Order page', async ({
+	test('TC_RCSP-166_02 @rcsp166 Verify that the Notes text field is available on the Hot Shot Order page', { tag: ['@functional'] }, async ({
 		page,
 	}) => {
 		const testData = getRcsp166TestData(RCSP_166_TEST_CASE_IDS.notesFieldHotShotOrder);
@@ -339,7 +339,7 @@ test.describe('RCSP-166 @rcsp166 @ordering @notes', () => {
 		});
 	});
 
-	test('TC_RCSP-166_03 @rcsp166 Verify Notes entered on Create New Scheduled Order are saved successfully after clicking Save as Draft', async () => {
+	test('TC_RCSP-166_03 @rcsp166 Verify Notes entered on Create New Scheduled Order are saved successfully after clicking Save as Draft', { tag: ['@functional'] }, async () => {
 		const testData = getRcsp166TestData<Rcsp166NotesTestData>(RCSP_166_TEST_CASE_IDS.saveDraftNotes);
 		await navigateToScheduledOrders(dashboardPage, scheduledOrderPage);
 
@@ -369,7 +369,7 @@ test.describe('RCSP-166 @rcsp166 @ordering @notes', () => {
 		});
 	});
 
-	test('TC_RCSP-166_04 @rcsp166 Verify that user can update Notes for a Draft Scheduled Order from the Scheduled Orders result grid', async () => {
+	test('TC_RCSP-166_04 @rcsp166 Verify that user can update Notes for a Draft Scheduled Order from the Scheduled Orders result grid', { tag: ['@functional'] }, async () => {
 		const testData = getRcsp166TestData<Rcsp166DraftUpdateTestData>(RCSP_166_TEST_CASE_IDS.updateDraftNotes);
 		await navigateToScheduledOrders(dashboardPage, scheduledOrderPage);
 
@@ -411,7 +411,7 @@ test.describe('RCSP-166 @rcsp166 @ordering @notes', () => {
 		await expect(scheduledOrderPage.notesInput).not.toHaveValue(testData.initialNotes);
 	});
 
-	test('TC_RCSP-166_05 @rcsp166 Verify that user is restricted from editing Notes after Scheduled Order is created using Create and Submit', async () => {
+	test('TC_RCSP-166_05 @rcsp166 Verify that user is restricted from editing Notes after Scheduled Order is created using Create and Submit', { tag: ['@regression'] }, async () => {
 		const testData = getRcsp166TestData<Rcsp166NotesTestData>(RCSP_166_TEST_CASE_IDS.submittedOrderRestriction);
 		await navigateToScheduledOrders(dashboardPage, scheduledOrderPage);
 
@@ -442,7 +442,7 @@ test.describe('RCSP-166 @rcsp166 @ordering @notes', () => {
 		await scheduledOrderPage.assertNotesReadOnlyOrEditRestricted(openSubmittedResult, testData.notes);
 	});
 
-	test('TC_RCSP-166_06 @rcsp166 Verify that Notes entered on Hot Shot Order page are saved successfully after clicking Create and Submit', async () => {
+	test('TC_RCSP-166_06 @rcsp166 Verify that Notes entered on Hot Shot Order page are saved successfully after clicking Create and Submit', { tag: ['@functional'] }, async () => {
 		const testData = getRcsp166TestData<Rcsp166NotesTestData>(RCSP_166_TEST_CASE_IDS.hotShotNotesSubmit);
 		await navigateToHotShotOrder(dashboardPage, hotShotOrderPage);
 
@@ -465,7 +465,7 @@ test.describe('RCSP-166 @rcsp166 @ordering @notes', () => {
 		await orderHistoryPage.assertNotesValue(testData.notes);
 	});
 
-	test('TC_RCSP-166_07 @rcsp166 Verify that Notes entered while saving Scheduled Order as Draft are visible correctly in Order History', async () => {
+	test('TC_RCSP-166_07 @rcsp166 Verify that Notes entered while saving Scheduled Order as Draft are visible correctly in Order History', { tag: ['@functional'] }, async () => {
 		const testData = getRcsp166TestData<Rcsp166NotesTestData>(RCSP_166_TEST_CASE_IDS.draftNotesVisibleInHistory);
 		await navigateToScheduledOrders(dashboardPage, scheduledOrderPage);
 
@@ -486,7 +486,7 @@ test.describe('RCSP-166 @rcsp166 @ordering @notes', () => {
 		await orderHistoryPage.assertNotesValue(testData.notes);
 	});
 
-	test('TC_RCSP-166_08 @rcsp166 Verify that Notes entered for Submitted Scheduled Order are visible correctly in Order History after submission', async () => {
+	test('TC_RCSP-166_08 @rcsp166 Verify that Notes entered for Submitted Scheduled Order are visible correctly in Order History after submission', { tag: ['@functional'] }, async () => {
 		const testData = getRcsp166TestData<Rcsp166NotesTestData>(RCSP_166_TEST_CASE_IDS.submittedNotesVisibleInHistory);
 		await navigateToScheduledOrders(dashboardPage, scheduledOrderPage);
 
@@ -515,7 +515,7 @@ test.describe('RCSP-166 @rcsp166 @ordering @notes', () => {
 		await orderHistoryPage.assertNotesValue(testData.notes);
 	});
 
-	test('TC_RCSP-166_09 @rcsp166 Verify that Notes entered while creating Hot Shot Order are visible correctly in Order History', async () => {
+	test('TC_RCSP-166_09 @rcsp166 Verify that Notes entered while creating Hot Shot Order are visible correctly in Order History', { tag: ['@functional'] }, async () => {
 		const testData = getRcsp166TestData<Rcsp166NotesTestData>(RCSP_166_TEST_CASE_IDS.hotShotNotesVisibleInHistory);
 		await navigateToHotShotOrder(dashboardPage, hotShotOrderPage);
 
@@ -538,7 +538,7 @@ test.describe('RCSP-166 @rcsp166 @ordering @notes', () => {
 		await orderHistoryPage.assertNotesValue(testData.notes);
 	});
 
-	test('TC_RCSP-166_10 @rcsp166 Verify that Notes field on Scheduled Order creation page accepts special characters, multiline text, and numeric values', async () => {
+	test('TC_RCSP-166_10 @rcsp166 Verify that Notes field on Scheduled Order creation page accepts special characters, multiline text, and numeric values', { tag: ['@regression'] }, async () => {
 		const testData = getRcsp166TestData<Rcsp166NotesTestData>(RCSP_166_TEST_CASE_IDS.multilineSpecialCharacterNotes);
 		await navigateToScheduledOrders(dashboardPage, scheduledOrderPage);
 
@@ -562,7 +562,7 @@ test.describe('RCSP-166 @rcsp166 @ordering @notes', () => {
 		await scheduledOrderPage.assertNotesValue(testData.notes);
 	});
 
-	test('TC_RCSP-166_11 @rcsp166 Verify system validates maximum allowed character limit for Notes field on Scheduled Order creation page', async () => {
+	test('TC_RCSP-166_11 @rcsp166 Verify system validates maximum allowed character limit for Notes field on Scheduled Order creation page', { tag: ['@functional'] }, async () => {
 		const testData = getRcsp166TestData<Rcsp166NotesValidationTestData>(RCSP_166_TEST_CASE_IDS.notesCharacterLimitValidation);
 		await navigateToScheduledOrders(dashboardPage, scheduledOrderPage);
 

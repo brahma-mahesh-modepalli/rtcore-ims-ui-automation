@@ -117,7 +117,7 @@ async function createSubmittedTransfer(
 
 test.describe.configure({ timeout: 90_000 });
 
-test('TC_RCSP-31_01 - create a DB-driven Draft IUT', async ({ page }) => {
+test('TC_RCSP-31_01 - create a DB-driven Draft IUT', { tag: ['@smoke', '@functional'] }, async ({ page }) => {
 	const context = await getTransferContext();
 	const { transfersPage, transferId } = await createDraft(page, context);
 	shared.draftId = transferId;
@@ -127,7 +127,7 @@ test('TC_RCSP-31_01 - create a DB-driven Draft IUT', async ({ page }) => {
 	await transfersPage.verifyTransferStatus(transferId, 'Draft');
 });
 
-test('TC_RCSP-31_02 - validate missing mandatory fields and invalid quantity', async ({ page }) => {
+test('TC_RCSP-31_02 - validate missing mandatory fields and invalid quantity', { tag: ['@regression'] }, async ({ page }) => {
 	const context = await getTransferContext();
 	const transfersPage = await loginAsAdmin(page);
 	await openTransfersForStore(page, transfersPage, context.source);
@@ -138,7 +138,7 @@ test('TC_RCSP-31_02 - validate missing mandatory fields and invalid quantity', a
 	await transfersPage.verifyValidationVisible();
 });
 
-test('TC_RCSP-31_03 - verify Draft details and actions', async ({ page }) => {
+test('TC_RCSP-31_03 - verify Draft details and actions', { tag: ['@functional'] }, async ({ page }) => {
 	const context = await getTransferContext();
 	const transfersPage = await loginAsAdmin(page);
 	await openTransfersForStore(page, transfersPage, context.source);
@@ -156,7 +156,7 @@ test('TC_RCSP-31_03 - verify Draft details and actions', async ({ page }) => {
 	await transfersPage.verifyDraftDetailActionsVisible();
 });
 
-test('TC_RCSP-31_04 - submit the Draft IUT and verify Pending status', async ({ page }) => {
+test('TC_RCSP-31_04 - submit the Draft IUT and verify Pending status', { tag: ['@functional'] }, async ({ page }) => {
 	const context = await getTransferContext();
 	const transfersPage = await loginAsAdmin(page);
 	await openTransfersForStore(page, transfersPage, context.source);
@@ -169,7 +169,7 @@ test('TC_RCSP-31_04 - submit the Draft IUT and verify Pending status', async ({ 
 	shared.submittedId = shared.draftId;
 });
 
-test('TC_RCSP-31_05 - block submission when required data is invalid', async ({ page }) => {
+test('TC_RCSP-31_05 - block submission when required data is invalid', { tag: ['@regression'] }, async ({ page }) => {
 	const context = await getTransferContext();
 	const transfersPage = await loginAsAdmin(page);
 	await openTransfersForStore(page, transfersPage, context.source);
@@ -179,7 +179,7 @@ test('TC_RCSP-31_05 - block submission when required data is invalid', async ({ 
 	await transfersPage.verifyValidationVisible();
 });
 
-test('TC_RCSP-31_06 - receiving store sees submitted IUT as read-only', async ({ page }) => {
+test('TC_RCSP-31_06 - receiving store sees submitted IUT as read-only', { tag: ['@functional'] }, async ({ page }) => {
 	const context = await getTransferContext();
 	const transfersPage = await loginAsAdmin(page);
 	await openTransfersForStore(page, transfersPage, context.receiver);
@@ -196,7 +196,7 @@ test('TC_RCSP-31_06 - receiving store sees submitted IUT as read-only', async ({
 	await transfersPage.verifySubmittedReadOnly();
 });
 
-test('TC_RCSP-31_07 - receiving store can accept and reject submitted IUTs', async ({ page }) => {
+test('TC_RCSP-31_07 - receiving store can accept and reject submitted IUTs', { tag: ['@regression'] }, async ({ page }) => {
 	const context = await getTransferContext();
 	const transfersPage = await loginAsAdmin(page);
 	await openTransfersForStore(page, transfersPage, context.receiver);
@@ -224,7 +224,7 @@ test('TC_RCSP-31_07 - receiving store can accept and reject submitted IUTs', asy
 	await transfersPage.verifyNoApproveRejectActions(rejectedId);
 });
 
-test('TC_RCSP-31_08 - completed IUT is terminal and ready for downstream processing', async ({ page }) => {
+test('TC_RCSP-31_08 - completed IUT is terminal and ready for downstream processing', { tag: ['@functional'] }, async ({ page }) => {
 	const context = await getTransferContext();
 	const transfersPage = await loginAsAdmin(page);
 	await openTransfersForStore(page, transfersPage, context.receiver);
@@ -241,7 +241,7 @@ test('TC_RCSP-31_08 - completed IUT is terminal and ready for downstream process
 	await transfersPage.verifyTerminalTransferState('Completed');
 });
 
-test('TC_RCSP-31_09 - DB-driven lifecycle reaches completion without exposing financial details', async ({ page }) => {
+test('TC_RCSP-31_09 - DB-driven lifecycle reaches completion without exposing financial details', { tag: ['@functional'] }, async ({ page }) => {
 	const context = await getTransferContext();
 	const transferId = await createSubmittedTransfer(page, context);
 	const transfersPage = await loginAsAdmin(page);
