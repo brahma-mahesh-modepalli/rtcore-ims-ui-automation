@@ -310,7 +310,7 @@ test.describe('RCSP-166 @rcsp166 @ordering @notes', () => {
 		});
 	});
 
-	test('TC_RCSP-166_01 @rcsp166 Verify that the Notes text field is available on the Create New Scheduled Order page', { tag: ['@smoke', '@functional'] }, async ({
+	test('TC_RCSP-166_01 @rcsp166 Verify that the Notes text field is available on the Create New Scheduled Order page', { tag: ['@smoke', '@sanity', '@functional'] }, async ({
 		page,
 	}) => {
 		const testData = getRcsp166TestData(RCSP_166_TEST_CASE_IDS.notesFieldScheduledOrder);

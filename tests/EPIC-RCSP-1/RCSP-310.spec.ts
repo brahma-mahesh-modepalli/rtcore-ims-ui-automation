@@ -95,7 +95,7 @@ function hasRestrictedCredentials(user?: {
 
 
 test.describe("RCSP-310 - Navigation / Sidebar: Left navigation shows collapsible INVENTORY between FOOD COST and INVENTORY...", () => {
-  test("Verify whether the left navigation shows a new collapsible INVENTORY section between FOOD COST and INVENTORY SETUP, containing exactly Inventory Balances and Store Inventory Items, and that those two items are no longer listed under INVENTORY SETUP", { tag: ['@smoke', '@functional'] }, async ({ page }) => {
+  test("Verify whether the left navigation shows a new collapsible INVENTORY section between FOOD COST and INVENTORY SETUP, containing exactly Inventory Balances and Store Inventory Items, and that those two items are no longer listed under INVENTORY SETUP", { tag: ['@smoke', '@sanity', '@functional'] }, async ({ page }) => {
     const { inventoryPage } = await loginAsAdmin(page);
     getCaseData(TC.inventorySidebar);
 

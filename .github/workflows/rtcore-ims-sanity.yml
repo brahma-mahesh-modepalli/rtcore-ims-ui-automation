@@ -1,0 +1,123 @@
+name: RTCore IMS Sanity Tests
+
+on:
+  workflow_dispatch:
+    inputs:
+      spec_path:
+        description: Optional spec path; leave blank to run all tests
+        required: false
+        default: ''
+      project:
+        description: BrowserStack Playwright project
+        required: false
+        default: browserstack-chrome-windows
+
+jobs:
+  browserstack:
+    # The Stage PostgreSQL host is private; this runner must be registered inside the company network.
+    runs-on: [self-hosted, linux, x64, rtcore-network]
+    timeout-minutes: 180
+    env:
+      ENVIRONMENT: qa
+      BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
+      BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
+      BROWSERSTACK_PROJECT_NAME: RTCore IMS UI Automation
+      BROWSERSTACK_BUILD_NAME: ${{ github.repository }} - Sanity - ${{ github.ref_name }} - by ${{ github.actor }} - run ${{ github.run_number }}
+      BROWSERSTACK_LOCAL: false
+      BROWSERSTACK_LOCAL_IDENTIFIER: rtcore-sanity-${{ github.run_id }}
+      DB_HOST: ${{ secrets.DB_HOST }}
+      DB_PORT: ${{ secrets.DB_PORT }}
+      DB_NAME: ${{ secrets.DB_NAME }}
+      DB_USER: ${{ secrets.DB_USER }}
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      DB_SSL: true
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Validate BrowserStack and database configuration
+        shell: bash
+        run: |
+          missing=()
+          for variable in BROWSERSTACK_USERNAME BROWSERSTACK_ACCESS_KEY DB_HOST DB_PORT DB_NAME DB_USER DB_PASSWORD; do
+            if [[ -z "${!variable}" ]]; then
+              missing+=("$variable")
+            fi
+          done
+          if [[ ${#missing[@]} -gt 0 ]]; then
+            echo "Missing required GitHub Actions secrets/environment values: ${missing[*]}"
+            echo "Configure these under Settings > Secrets and variables > Actions."
+            exit 1
+          fi
+          echo "BrowserStack and database configuration is present."
+
+      - name: Verify PostgreSQL DB query
+        shell: bash
+        run: |
+          node - <<'NODE'
+          require('dotenv').config();
+          const { Pool } = require('pg');
+          const pool = new Pool({
+            host: process.env.DB_HOST,
+            port: Number(process.env.DB_PORT) || 5432,
+            database: process.env.DB_NAME,
+            user: process.env.DB_USER,
+            password: process.env.DB_PASSWORD,
+            ssl: process.env.DB_SSL === 'false' ? false : { rejectUnauthorized: false },
+            connectionTimeoutMillis: 15000,
+            query_timeout: 30000,
+          });
+          (async () => {
+            try {
+              const result = await pool.query('SELECT 1 AS database_connection_check');
+              console.log(`PostgreSQL connection verified: ${result.rows[0].database_connection_check}`);
+            } finally {
+              await pool.end();
+            }
+          })().catch((error) => {
+            console.error(`PostgreSQL verification failed: ${error.message}`);
+            process.exitCode = 1;
+          });
+          NODE
+
+      - name: Run BrowserStack Playwright tests (Sanity)
+        shell: bash
+        run: |
+          SPEC_PATH="${{ github.event.inputs.spec_path }}"
+          PROJECT="${{ github.event.inputs.project }}"
+          if [[ -z "$PROJECT" ]]; then PROJECT="browserstack-chrome-windows"; fi
+
+          ARGS=(-c browserstack.config.ts --project="$PROJECT" --grep "@sanity")
+          if [[ -n "$SPEC_PATH" ]]; then
+            ARGS+=("$SPEC_PATH")
+          else
+            echo "No spec_path supplied; running all @sanity tests under tests/."
+          fi
+
+          npx playwright test "${ARGS[@]}"
+
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: playwright-report-browserstack-sanity
+          path: playwright-report-browserstack/
+          if-no-files-found: ignore
+
+      - name: Upload BrowserStack test artifacts
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: test-results-browserstack-sanity
+          path: test-results/browserstack/
+          if-no-files-found: ignore

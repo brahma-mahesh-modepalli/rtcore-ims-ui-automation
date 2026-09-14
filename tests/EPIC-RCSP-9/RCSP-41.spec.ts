@@ -104,7 +104,7 @@ async function createEditableLog(logWastePage: LogWastePage, shift: string) {
 }
 
 
-test('TC_RCSP-41_001 - Waste Logs page chrome', { tag: ['@smoke', '@functional'] }, async ({ page }) => {
+test('TC_RCSP-41_001 - Waste Logs page chrome', { tag: ['@smoke', '@sanity', '@functional'] }, async ({ page }) => {
 	const common = getCommonData();
 	const testData = getCaseData<{ expectedPageTitle: string; expectedPageDescription: string; expectedPrimaryButton: string }>(TC.tc01);
 	const { logWastePage } = await prepare(page);

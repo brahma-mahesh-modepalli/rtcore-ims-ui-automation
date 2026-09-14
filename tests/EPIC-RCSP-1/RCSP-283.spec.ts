@@ -83,7 +83,7 @@ test.describe('RCSP-283 - Vendor Items DB vs UI Price validation', () => {
     await vendorItemsPage.navigateToVendorItems();
   });
 
-  test('TC_RCSP-283_01 – Price for searched SKU matches DB unit_cost for Vendor ID 2', { tag: ['@smoke', '@functional'] }, async ({
+  test('TC_RCSP-283_01 – Price for searched SKU matches DB unit_cost for Vendor ID 2', { tag: ['@smoke', '@sanity', '@functional'] }, async ({
     testData,
   }) => {
     const { vendorId } = getCaseData<{ vendorId: number }>(TC.matchAllVendor2);

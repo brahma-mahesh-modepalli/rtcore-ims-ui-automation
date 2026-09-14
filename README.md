@@ -156,7 +156,7 @@ npm run test:browserstack:rcsp31
 npm run test:browserstack:rcsp707
 ```
 
-The GitHub Actions workflow is [.github/workflows/browserstack.yml](.github/workflows/browserstack.yml). It runs on pushes to `feature/inventory-tests` and can also be started manually.
+The GitHub Actions workflows are [.github/workflows/rtcore-ims-smoke.yml](.github/workflows/rtcore-ims-smoke.yml), [rtcore-ims-sanity.yml](.github/workflows/rtcore-ims-sanity.yml), [rtcore-ims-regression.yml](.github/workflows/rtcore-ims-regression.yml), and [rtcore-ims-functional.yml](.github/workflows/rtcore-ims-functional.yml). Each is triggered manually and runs the tests matching its tag (`@smoke`, `@sanity`, `@regression`, `@functional`).
 
 Because the Stage PostgreSQL host is private, the workflow runs on a self-hosted GitHub Actions runner with these labels:
 

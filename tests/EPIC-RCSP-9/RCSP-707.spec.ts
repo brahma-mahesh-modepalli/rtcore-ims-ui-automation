@@ -49,7 +49,7 @@ async function selectDbItem(logWastePage: LogWastePage, item: WasteableIngredien
 	await logWastePage.selectItemBySku(item.sku);
 }
 
-test('TC_RCSP-707_01 - positive-stock wasteable ingredient is searchable and selectable', { tag: ['@smoke', '@functional'] }, async ({ page }) => {
+test('TC_RCSP-707_01 - positive-stock wasteable ingredient is searchable and selectable', { tag: ['@smoke', '@sanity', '@functional'] }, async ({ page }) => {
 	const item = await repository.getPositiveWasteableIngredient(STORE_NAME);
 	expect(item, 'No positive-stock wasteable ingredient returned by DB').toBeDefined();
 	const { logWastePage } = await loginAndOpenStore(page);

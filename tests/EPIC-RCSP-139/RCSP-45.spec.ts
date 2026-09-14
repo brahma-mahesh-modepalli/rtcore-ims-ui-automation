@@ -90,7 +90,7 @@ const shared: SharedState = {
 };
 
 test.describe("RCSP-45 - My Hierarchy: Admin sets active store to WB Unit 1034", () => {
-  test("Verify whether after login the admin can open My Hierarchy, confirm Region > Market > Store path for WB Unit 1034 and WB Unit 698, and set active store to WB Unit 1034", { tag: ['@smoke', '@functional'] }, async ({ page }) => {
+  test("Verify whether after login the admin can open My Hierarchy, confirm Region > Market > Store path for WB Unit 1034 and WB Unit 698, and set active store to WB Unit 1034", { tag: ['@smoke', '@sanity', '@functional'] }, async ({ page }) => {
     const { transfersPage } = await loginAsAdmin(page);
     const data = getCaseData<{
       region: string;

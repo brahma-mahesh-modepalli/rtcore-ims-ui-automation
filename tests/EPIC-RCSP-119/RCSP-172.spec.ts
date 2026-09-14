@@ -167,7 +167,7 @@ async function forEachCountType(
 
 
 test.describe('RCSP-172 - Navigate to Daily/Weekly/Monthly and open Add Item popup', () => {
-  test('Verify whether the user can navigate to Daily Shift Count, Weekly Count, and Monthly Count and open Add Item popup', { tag: ['@smoke', '@functional'] }, async ({
+  test('Verify whether the user can navigate to Daily Shift Count, Weekly Count, and Monthly Count and open Add Item popup', { tag: ['@smoke', '@sanity', '@functional'] }, async ({
     page,
   }) => {
     test.slow();

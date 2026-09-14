@@ -69,7 +69,7 @@ test.describe("RCSP-287 - Inventory Setup > Unit of Measure: Units of Measure pa
   let loginPage: RTCDashboardLoginPage;
   let uomPage: UnitOfMeasurePage;
 
-  test("Verify whether the Units of Measure page under Inventory Setup loads successfully with correct page header, + NEW UOM button, and table columns (NAME, ABBREVIATION, TYPE)", { tag: ['@smoke', '@functional'] }, async ({ page }) => {
+  test("Verify whether the Units of Measure page under Inventory Setup loads successfully with correct page header, + NEW UOM button, and table columns (NAME, ABBREVIATION, TYPE)", { tag: ['@smoke', '@sanity', '@functional'] }, async ({ page }) => {
     ({ loginPage, uomPage } = await loginAsAdmin(page));
 
     const data = getCaseData<{

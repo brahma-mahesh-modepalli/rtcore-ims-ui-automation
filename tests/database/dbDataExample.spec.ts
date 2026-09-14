@@ -12,7 +12,7 @@
 
 import { test, expect } from '../../fixtures/baseTest';
 
-test('Get test data from PostgreSQL', { tag: ['@smoke', '@functional'] }, async ({ testData }) => {
+test('Get test data from PostgreSQL', { tag: ['@smoke', '@sanity', '@functional'] }, async ({ testData }) => {
   const store = await testData.getStoreById(1034);
 
   expect(store).toBeDefined();

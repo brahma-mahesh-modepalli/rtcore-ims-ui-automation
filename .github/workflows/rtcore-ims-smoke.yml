@@ -1,4 +1,4 @@
-name: BrowserStack Playwright Tests
+name: RTCore IMS Smoke Tests
 
 on:
   workflow_dispatch:
@@ -11,13 +11,6 @@ on:
         description: BrowserStack Playwright project
         required: false
         default: browserstack-chrome-windows
-      tags:
-        description: 'Optional tag filter, e.g. @smoke, @regression, @functional (leave blank to run all)'
-        required: false
-        default: '@regression'
-  push:
-    branches:
-      - feature/inventory-tests
 
 jobs:
   browserstack:
@@ -29,9 +22,9 @@ jobs:
       BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
       BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
       BROWSERSTACK_PROJECT_NAME: RTCore IMS UI Automation
-      BROWSERSTACK_BUILD_NAME: ${{ github.repository }} - ${{ github.ref_name }} - by ${{ github.actor }} - run ${{ github.run_number }}
+      BROWSERSTACK_BUILD_NAME: ${{ github.repository }} - Smoke - ${{ github.ref_name }} - by ${{ github.actor }} - run ${{ github.run_number }}
       BROWSERSTACK_LOCAL: false
-      BROWSERSTACK_LOCAL_IDENTIFIER: rtcore-${{ github.run_id }}
+      BROWSERSTACK_LOCAL_IDENTIFIER: rtcore-smoke-${{ github.run_id }}
       DB_HOST: ${{ secrets.DB_HOST }}
       DB_PORT: ${{ secrets.DB_PORT }}
       DB_NAME: ${{ secrets.DB_NAME }}
@@ -97,23 +90,18 @@ jobs:
           });
           NODE
 
-      - name: Run BrowserStack Playwright tests
+      - name: Run BrowserStack Playwright tests (Smoke)
         shell: bash
         run: |
           SPEC_PATH="${{ github.event.inputs.spec_path }}"
           PROJECT="${{ github.event.inputs.project }}"
-          TAGS="${{ github.event.inputs.tags }}"
           if [[ -z "$PROJECT" ]]; then PROJECT="browserstack-chrome-windows"; fi
 
-          ARGS=(-c browserstack.config.ts --project="$PROJECT")
+          ARGS=(-c browserstack.config.ts --project="$PROJECT" --grep "@smoke")
           if [[ -n "$SPEC_PATH" ]]; then
             ARGS+=("$SPEC_PATH")
           else
-            echo "No spec_path supplied; running all UI tests under tests/ (database POC is verified above)."
-          fi
-          if [[ -n "$TAGS" ]]; then
-            echo "Filtering by tag: $TAGS"
-            ARGS+=(--grep "$TAGS")
+            echo "No spec_path supplied; running all @smoke tests under tests/."
           fi
 
           npx playwright test "${ARGS[@]}"
@@ -122,7 +110,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v6
         with:
-          name: playwright-report-browserstack
+          name: playwright-report-browserstack-smoke
           path: playwright-report-browserstack/
           if-no-files-found: ignore
 
@@ -130,6 +118,6 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v6
         with:
-          name: test-results-browserstack
+          name: test-results-browserstack-smoke
           path: test-results/browserstack/
           if-no-files-found: ignore

@@ -129,7 +129,7 @@ function requireReceivedPo(vendor: CreditRequestVendorData) {
 
 
 test.describe("RCSP-595 [TC_RCSP-595_001] (Flowers) - Verify whether the admin user can navigate from QA Backoffice Dashb...", () => {
-  test("TC_RCSP-595_001: Verify whether the admin user can navigate from QA Backoffice Dashboard Home page to Or... (Flowers)", { tag: ['@smoke', '@functional'] }, async ({ page }) => {
+  test("TC_RCSP-595_001: Verify whether the admin user can navigate from QA Backoffice Dashboard Home page to Or... (Flowers)", { tag: ['@smoke', '@sanity', '@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc001);
     expect(_case).toBeTruthy();
     const { common, creditPage } = await prepare(page);

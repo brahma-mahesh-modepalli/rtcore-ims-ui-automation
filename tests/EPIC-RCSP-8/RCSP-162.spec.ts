@@ -248,7 +248,7 @@ test.describe('RCSP-162 @rcsp162 @ordering @scheduled @orderhistory', () => {
 		});
 	});
 
-	test('TC_RCSP-162_01 @rcsp162 Verify Unit Price field is removed from New Scheduled Order for store users', { tag: ['@smoke', '@functional'] }, async () => {
+	test('TC_RCSP-162_01 @rcsp162 Verify Unit Price field is removed from New Scheduled Order for store users', { tag: ['@smoke', '@sanity', '@functional'] }, async () => {
 		const testData = getRcsp162TestData(RCSP_162_TEST_CASE_IDS.unitPriceRemovedNewScheduledOrder);
 		await navigateToScheduledOrders(dashboardPage, scheduledOrdersPage);
 		await scheduledOrdersPage.clickNewScheduledOrderButton();

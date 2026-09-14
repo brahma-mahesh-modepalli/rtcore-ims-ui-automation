@@ -127,7 +127,7 @@ test.describe("RCSP-237 - My Hierarchy: Logged-in admin user can open the My Hie
   let loginPage: RTCDashboardLoginPage;
   let transfersPage: TransfersPage;
 
-  test("Verify whether the logged-in admin user can open the My Hierarchy page from the main navigation menu", { tag: ['@smoke', '@functional'] }, async ({ page }) => {
+  test("Verify whether the logged-in admin user can open the My Hierarchy page from the main navigation menu", { tag: ['@smoke', '@sanity', '@functional'] }, async ({ page }) => {
     ({ loginPage, transfersPage } = await loginAsAdmin(page));
 
     getCaseData(TC.hierarchyOpen);

@@ -65,7 +65,7 @@ test.describe("RCSP-472 - Admin > Roles & Permissions: Roles & Permissions page 
   let loginPage: RTCDashboardLoginPage;
   let rolesPage: RolesAndPermissionsPage;
 
-  test("Verify whether the Roles & Permissions page under Admin menu loads successfully and displays the Roles tab UI without layout or alignment issues", { tag: ['@smoke', '@functional'] }, async ({ page }) => {
+  test("Verify whether the Roles & Permissions page under Admin menu loads successfully and displays the Roles tab UI without layout or alignment issues", { tag: ['@smoke', '@sanity', '@functional'] }, async ({ page }) => {
     ({ loginPage, rolesPage } = await loginAsAdmin(page));
 
     const data = getCaseData<{

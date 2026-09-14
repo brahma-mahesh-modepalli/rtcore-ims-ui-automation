@@ -135,7 +135,7 @@ test.describe("RCSP-44 - Prerequisites: IMS-to-IMS data setup available before A
 });
 
 test.describe("RCSP-44 - Login & My Hierarchy: Admin can set active store to WB Unit 1034", () => {
-  test("Verify whether the admin user can launch QA Backoffice Dashboard, open My Hierarchy, and set active store to WB Unit 1034", { tag: ['@smoke', '@functional'] }, async ({ page }) => {
+  test("Verify whether the admin user can launch QA Backoffice Dashboard, open My Hierarchy, and set active store to WB Unit 1034", { tag: ['@smoke', '@sanity', '@functional'] }, async ({ page }) => {
     const { transfersPage } = await loginAsAdmin(page);
     const data = getCaseData<{
       region: string;

@@ -102,7 +102,7 @@ async function createEditableLog(logWastePage: LogWastePage, common: Rcsp227Comm
 
 
 test.describe("RCSP-227 - Verify whether a user can successfully create, save, lock, and apply a Raw Waste entry ...", () => {
-  test("Verify whether a user can successfully create, save, lock, and apply a Raw Waste entry for an Item when all...", { tag: ['@smoke', '@functional'] }, async ({ page }) => {
+  test("Verify whether a user can successfully create, save, lock, and apply a Raw Waste entry for an Item when all...", { tag: ['@smoke', '@sanity', '@functional'] }, async ({ page }) => {
     const _case = getCaseData<Record<string, unknown>>(TC.tc01);
     expect(_case).toBeTruthy();
 

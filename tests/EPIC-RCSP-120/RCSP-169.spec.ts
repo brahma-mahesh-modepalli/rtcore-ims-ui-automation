@@ -81,7 +81,7 @@ async function ensureStoreSelected(
 
 
 test.describe('RCSP-169 - Ordering: Credit Requests submenu and page landing content', () => {
-  test('Verify whether Ordering submenu shows Credit Requests (not Credit Memos) and opens Credit Requests page with correct title and description', { tag: ['@smoke', '@functional'] }, async ({
+  test('Verify whether Ordering submenu shows Credit Requests (not Credit Memos) and opens Credit Requests page with correct title and description', { tag: ['@smoke', '@sanity', '@functional'] }, async ({
     page,
   }) => {
     const common = getCommonData();

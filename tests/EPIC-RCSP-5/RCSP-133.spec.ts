@@ -99,7 +99,7 @@ test.describe("RCSP-133 - Operations > Sales > Sales Transactions: Sales transac
   let loginPage: RTCDashboardLoginPage;
   let salesPage: SalesPage;
 
-  test("Verify whether sales transactions for the current business date are displayed correctly on the Sales Transactions page under Operations → Sales after data load from the QA Service Bus into IMS", { tag: ['@smoke', '@functional'] }, async ({ page }) => {
+  test("Verify whether sales transactions for the current business date are displayed correctly on the Sales Transactions page under Operations → Sales after data load from the QA Service Bus into IMS", { tag: ['@smoke', '@sanity', '@functional'] }, async ({ page }) => {
     ({ loginPage, salesPage } = await loginAsAdmin(page));
 
     const data = getCaseData<{

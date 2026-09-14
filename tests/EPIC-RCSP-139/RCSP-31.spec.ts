@@ -117,7 +117,7 @@ async function createSubmittedTransfer(
 
 test.describe.configure({ timeout: 90_000 });
 
-test('TC_RCSP-31_01 - create a DB-driven Draft IUT', { tag: ['@smoke', '@functional'] }, async ({ page }) => {
+test('TC_RCSP-31_01 - create a DB-driven Draft IUT', { tag: ['@smoke', '@sanity', '@functional'] }, async ({ page }) => {
 	const context = await getTransferContext();
 	const { transfersPage, transferId } = await createDraft(page, context);
 	shared.draftId = transferId;

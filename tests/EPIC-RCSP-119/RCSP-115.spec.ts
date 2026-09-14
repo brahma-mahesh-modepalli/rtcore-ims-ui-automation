@@ -97,7 +97,7 @@ test.describe('RCSP-115 - Stock Count Navigation', () => {
   let loginPage: RTCDashboardLoginPage;
   let stockCountPage: StockCountPage;
 
-  test('Verify user can navigate to Daily Shift Count, Weekly Count, and Monthly Count pages from STOCK COUNT menu', { tag: ['@smoke', '@functional'] }, async ({
+  test('Verify user can navigate to Daily Shift Count, Weekly Count, and Monthly Count pages from STOCK COUNT menu', { tag: ['@smoke', '@sanity', '@functional'] }, async ({
     page,
   }) => {
     const navigationData = getRcsp115TestCaseData<Rcsp115NavigationTestData>(

@@ -71,7 +71,7 @@ test.describe('RCSP-191 - Inventory Setup: Item Master', () => {
     await itemMasterPage.navigateToItemMaster();
   });
 
-  test('TC_RCSP-191_001 – Item Master page is displayed successfully for WB Unit 1034', { tag: ['@smoke', '@functional'] }, async () => {
+  test('TC_RCSP-191_001 – Item Master page is displayed successfully for WB Unit 1034', { tag: ['@smoke', '@sanity', '@functional'] }, async () => {
     getCaseData(TC.pageLoads);
     await expect(itemMasterPage.pageTitle).toBeVisible({ timeout: 15000 });
     expect(await itemMasterPage.getRowCount()).toBeGreaterThanOrEqual(0);

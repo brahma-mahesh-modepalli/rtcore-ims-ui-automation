@@ -124,7 +124,7 @@ async function createSession(
 
 
 test.describe('RCSP-171 - Unified Daily Shift Count menu', () => {
-  test('TC_RCSP-171_01 – Spot/Daily Count removed; Daily Shift Count + Weekly/Monthly remain', { tag: ['@smoke', '@functional'] }, async ({
+  test('TC_RCSP-171_01 – Spot/Daily Count removed; Daily Shift Count + Weekly/Monthly remain', { tag: ['@smoke', '@sanity', '@functional'] }, async ({
     page,
   }) => {
     test.slow();
