@@ -1,0 +1,20 @@
+{
+  "RCSP-160": {
+    "scenarioId": "RCSP-160",
+    "epic": "EPIC-RCSP-8",
+    "feature": "Scheduled and Hot Shot order creation paths",
+    "commonData": {
+      "hierarchy": {
+        "region": "1700 San Antonio 4126314",
+        "market": "1708 E Central SA 4126393",
+        "store": "WB Unit 1034"
+      }
+    },
+    "testCases": [
+      { "testCaseId": "TC_RCSP-160_001", "testName": "New Scheduled Order button is visible and enabled", "testData": {} },
+      { "testCaseId": "TC_RCSP-160_002", "testName": "New Scheduled Order opens its creation page", "testData": {} },
+      { "testCaseId": "TC_RCSP-160_003", "testName": "Hot Shot Order is displayed and accessible", "testData": {} },
+      { "testCaseId": "TC_RCSP-160_004", "testName": "Hot Shot Order is the only ad-hoc creation path", "testData": {} }
+    ]
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "RCSP-39": {
+    "scenarioId": "RCSP-39",
+    "epic": "EPIC-RCSP-8",
+    "feature": "Scheduled Order form fields and line items",
+    "commonData": {
+      "hierarchy": {
+        "region": "1700 San Antonio 4126314",
+        "market": "1708 E Central SA 4126393",
+        "store": "WB Unit 1034"
+      },
+      "vendor": "Flowers Baking Company",
+      "item": "SM BUN",
+      "quantity": "1"
+    },
+    "testCases": [
+      {
+        "testCaseId": "TC_RCSP-39_01",
+        "testName": "Notes placeholder and item search accept text",
+        "testData": {
+          "notes": "Test order for automation",
+          "search": "SM BUN"
+        }
+      },
+      {
+        "testCaseId": "TC_RCSP-39_02",
+        "testName": "Qty to Order and line item columns",
+        "testData": {}
+      },
+      {
+        "testCaseId": "TC_RCSP-39_03",
+        "testName": "Remove a selected line item",
+        "testData": {}
+      }
+    ]
+  }
+}

@@ -675,6 +675,47 @@ export class ScheduledOrderPage {
 		log('✓ Verified: New Scheduled Order form controls are displayed');
 	}
 
+	async verifyNotesAndItemSearch(notes: string, searchText: string): Promise<void> {
+		await expect(this.notesInput).toBeVisible();
+		await expect(this.notesInput).toHaveAttribute('placeholder', 'Optional notes...');
+		await this.notesInput.fill(notes);
+		await expect(this.notesInput).toHaveValue(notes);
+
+		const searchInput = this.page.getByPlaceholder('Search items by name or description');
+		await expect(searchInput).toBeVisible();
+		await searchInput.fill(searchText);
+		await expect(searchInput).toHaveValue(searchText);
+	}
+
+	async verifyLineItemColumns(): Promise<void> {
+		for (const header of ['Item', 'PLU#', 'On Hand', 'On Order', 'Qty to Order', 'UOM']) {
+			await expect(this.page.getByRole('columnheader', { name: header, exact: true })).toBeVisible();
+		}
+	}
+
+	async verifyItemQuantity(itemName: string, quantity: string): Promise<void> {
+		const row = this.page.locator('main table tbody tr').filter({
+			has: this.page.getByRole('button', {
+				name: new RegExp(`^${this.escapeRegExp(itemName)}$`, 'i'),
+			}),
+		}).first();
+		await expect(row).toBeVisible();
+		await expect(row.locator('input[type="number"][placeholder="0"]')).toHaveValue(quantity);
+	}
+
+	async removeLineItem(itemName: string): Promise<void> {
+		const row = this.page.locator('main table tbody tr').filter({
+			has: this.page.getByRole('button', {
+				name: new RegExp(`^${this.escapeRegExp(itemName)}$`, 'i'),
+			}),
+		}).first();
+		await expect(row).toBeVisible();
+		const removeButton = row.getByRole('button', { name: /remove line/i });
+		await expect(removeButton).toBeEnabled();
+		await removeButton.click();
+		await expect(row).toBeHidden();
+	}
+
 	async verifyOrderDateLabel(): Promise<void> {
 		await expect(this.page.getByText(/^Order Date \*$/).first()).toBeVisible();
 		await expect(this.page.getByText(/^Required Date \*$/)).toHaveCount(0);

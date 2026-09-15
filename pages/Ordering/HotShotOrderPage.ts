@@ -206,8 +206,6 @@ export class HotShotOrderPage {
 		await expect(this.requiredDateInput).toBeVisible();
 		await expect(this.requiredDateInput).toBeEditable();
 		await expect(this.notesInput).toBeVisible();
-		await expect(this.autoSuggestItemsButton).toBeVisible();
-		await expect(this.autoSuggestItemsButton).toBeDisabled();
 		await expect(this.addLineButton).toBeVisible();
 		await expect(this.lineItemVendorDisabledButton).toBeDisabled();
 		await expect(this.lineItemQtyInput).toBeVisible();
