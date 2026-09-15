@@ -1,0 +1,30 @@
+{
+  "RCSP-531": {
+    "scenarioId": "RCSP-531",
+    "epic": "EPIC-RCSP-8",
+    "feature": "Default sort order for Scheduled Orders lists",
+    "commonData": {
+      "hierarchy": {
+        "region": "1700 San Antonio 4126314",
+        "market": "1708 E Central SA 4126393",
+        "store": "WB Unit 1034"
+      },
+      "vendor": "Flowers Baking Company",
+      "item": "SM BUN",
+      "quantity": "1"
+    },
+    "testCases": [
+      { "testCaseId": "TC_RCSP-531_001", "testName": "Newly submitted order appears at top", "testData": {} },
+      { "testCaseId": "TC_RCSP-531_002", "testName": "New order remains visible in a large Submitted list", "testData": {} },
+      { "testCaseId": "TC_RCSP-531_003", "testName": "Submitted orders are grouped by Order Date", "testData": {} },
+      { "testCaseId": "TC_RCSP-531_004", "testName": "Order Date groups are ascending", "testData": {} },
+      { "testCaseId": "TC_RCSP-531_005", "testName": "Current Order Date group is first when present", "testData": {} },
+      { "testCaseId": "TC_RCSP-531_006", "testName": "Vendor column sorts ascending", "testData": {} },
+      { "testCaseId": "TC_RCSP-531_007", "testName": "Vendor column sorts descending", "testData": {} },
+      { "testCaseId": "TC_RCSP-531_008", "testName": "Order Date sorts in both directions", "testData": {} },
+      { "testCaseId": "TC_RCSP-531_009", "testName": "Sorting applies within Order Date groups", "testData": {} },
+      { "testCaseId": "TC_RCSP-531_010", "testName": "Order Date groups remain intact after sorting", "testData": {} },
+      { "testCaseId": "TC_RCSP-531_011", "testName": "Positive quantities precede zero quantities in auto-drafts", "testData": {} }
+    ]
+  }
+}

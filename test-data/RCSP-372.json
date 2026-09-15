@@ -1,0 +1,25 @@
+{
+  "RCSP-372": {
+    "scenarioId": "RCSP-372",
+    "epic": "EPIC-RCSP-8",
+    "feature": "Configured future Draft Orders",
+    "commonData": {
+      "hierarchy": {
+        "region": "1700 San Antonio 4126314",
+        "market": "1708 E Central SA 4126393",
+        "store": "WB Unit 1034"
+      },
+      "configuredDraftDays": 7,
+      "holidayDate": "",
+      "maintenanceDate": "",
+      "alternateDraftDays": null
+    },
+    "testCases": [
+      { "testCaseId": "TC_RCSP-372-001", "testName": "Configured Draft Order count is displayed", "testData": {} },
+      { "testCaseId": "TC_RCSP-372-002", "testName": "Rolling future Draft Order schedule is maintained", "testData": {} },
+      { "testCaseId": "TC_RCSP-372-003", "testName": "Configured holidays are excluded", "testData": {} },
+      { "testCaseId": "TC_RCSP-372-004", "testName": "Maintenance dates are excluded", "testData": {} },
+      { "testCaseId": "TC_RCSP-372-005", "testName": "Draft Order count follows configuration", "testData": {} }
+    ]
+  }
+}

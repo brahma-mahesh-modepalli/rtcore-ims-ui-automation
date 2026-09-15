@@ -1,0 +1,20 @@
+{
+  "RCSP-278": {
+    "scenarioId": "RCSP-278",
+    "epic": "EPIC-RCSP-8",
+    "feature": "Scheduled Order Order Date validation",
+    "commonData": {
+      "hierarchy": {
+        "region": "1700 San Antonio 4126314",
+        "market": "1708 E Central SA 4126393",
+        "store": "WB Unit 1034"
+      }
+    },
+    "testCases": [
+      { "testCaseId": "TC_RCSP-278_001", "testName": "Required Date is renamed to Order Date", "testData": {} },
+      { "testCaseId": "TC_RCSP-278_002", "testName": "Past Order Dates are blocked", "testData": { "daysOffset": -1 } },
+      { "testCaseId": "TC_RCSP-278_003", "testName": "Current date is selectable", "testData": { "daysOffset": 0 } },
+      { "testCaseId": "TC_RCSP-278_004", "testName": "Future date is selectable", "testData": { "daysOffset": 1 } }
+    ]
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "RCSP-580": {
+    "scenarioId": "RCSP-580",
+    "epic": "EPIC-RCSP-8",
+    "feature": "Scheduled Order submission confirmation",
+    "commonData": {
+      "hierarchy": {
+        "region": "1700 San Antonio 4126314",
+        "market": "1708 E Central SA 4126393",
+        "store": "WB Unit 1034"
+      },
+      "vendor": "Flowers Baking Company",
+      "item": "SM BUN",
+      "quantity": "1"
+    },
+    "testCases": [
+      { "testCaseId": "TC_RCSP-580_001", "testName": "Confirm and submit a valid Scheduled Order", "testData": {} },
+      { "testCaseId": "TC_RCSP-580_002", "testName": "Select No and retain Scheduled Order data", "testData": {} },
+      { "testCaseId": "TC_RCSP-580_003", "testName": "Verify submission confirmation content", "testData": {} },
+      { "testCaseId": "TC_RCSP-580_004", "testName": "Block submission when mandatory details are incomplete", "testData": {} },
+      { "testCaseId": "TC_RCSP-580_005", "testName": "Prevent duplicate submission from repeated actions", "testData": {} }
+    ]
+  }
+}

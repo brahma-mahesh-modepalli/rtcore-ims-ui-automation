@@ -1,0 +1,24 @@
+{
+  "RCSP-165": {
+    "scenarioId": "RCSP-165",
+    "epic": "EPIC-RCSP-8",
+    "feature": "Scheduled Order dates and vendor items",
+    "commonData": {
+      "hierarchy": {
+        "region": "1700 San Antonio 4126314",
+        "market": "1708 E Central SA 4126393",
+        "store": "WB Unit 1034"
+      },
+      "vendor": "Flowers Baking Company",
+      "vendorId": 2,
+      "noHistoryItem": "BUN FROZEN 5\"",
+      "manualQuantity": "1"
+    },
+    "testCases": [
+      { "testCaseId": "TC_RCSP-165_01", "testName": "Landing orders display dates and cutoff", "testData": {} },
+      { "testCaseId": "TC_RCSP-165_02", "testName": "Past dates blocked and valid dates selectable", "testData": {} },
+      { "testCaseId": "TC_RCSP-165_03", "testName": "Item dropdown matches active DB vendor items", "testData": {} },
+      { "testCaseId": "TC_RCSP-165_04", "testName": "No-history item starts at zero and accepts manual quantity", "testData": {} }
+    ]
+  }
+}

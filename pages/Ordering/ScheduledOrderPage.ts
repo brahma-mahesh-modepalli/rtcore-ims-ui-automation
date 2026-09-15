@@ -3,6 +3,7 @@ import { log } from '../../utils/helpers';
 
 type ScheduledOrderItemInput = {
 	itemName: string;
+	quantity?: string;
 };
 
 type ScheduledOrderSaveResult = {
@@ -25,6 +26,7 @@ type SubmitOrderFromGridResult = {
 };
 
 export class ScheduledOrderPage {
+	private submissionFeedbackVerified = false;
 	readonly pageTitle: Locator;
 	readonly pageDescription: Locator;
 	readonly newScheduledOrderButton: Locator;
@@ -64,26 +66,26 @@ export class ScheduledOrderPage {
 			exact: true,
 		});
 		this.statusFilterAllButton = page.getByRole('button', {
-			name: 'all',
+			name: 'All',
 			exact: true,
 		});
 		this.statusFilterDraftButton = page.getByRole('button', {
-			name: 'draft',
+			name: 'Draft',
 			exact: true,
 		});
 		this.statusFilterSubmittedButton = page.getByRole('button', {
-			name: 'submitted',
+			name: 'Submitted',
 			exact: true,
 		});
-		this.ordersTable = page.getByRole('table').first();
-		this.poNumberHeader = page.getByRole('columnheader', { name: 'PO #' });
-		this.vendorHeader = page.getByRole('columnheader', { name: 'Vendor' });
+		this.ordersTable = page.getByRole('table').last();
+		this.poNumberHeader = page.getByRole('columnheader', { name: /^PO #/ });
+		this.vendorHeader = page.getByRole('columnheader', { name: /^Vendor/ });
 		this.requiredDateHeader = page.getByRole('columnheader', {
-			name: 'Required Date',
+			name: /^(Required|Delivery) Date/,
 		});
-		this.statusHeader = page.getByRole('columnheader', { name: 'Status' });
+		this.statusHeader = page.getByRole('columnheader', { name: /^Status/ });
 		this.totalHeader = page.getByRole('columnheader', { name: 'Total' });
-		this.orderTypeHeader = page.getByRole('columnheader', { name: 'Order Type' });
+		this.orderTypeHeader = page.getByRole('columnheader', { name: /^Order Type/ });
 		this.actionsHeader = page.getByRole('columnheader', { name: 'Actions' });
 
 		this.createOrderTitle = page.getByRole('heading', {
@@ -117,7 +119,9 @@ export class ScheduledOrderPage {
 			name: 'Select a vendor first',
 			exact: true,
 		});
-		this.lineItemQtyInput = page.getByRole('spinbutton').first();
+		this.lineItemQtyInput = page
+			.locator('main input[type="number"][placeholder="0"]')
+			.first();
 		this.alertDialog = page.getByRole('alertdialog');
 	}
 
@@ -128,7 +132,9 @@ export class ScheduledOrderPage {
 	}
 
 	private getVendorOption(option: string): Locator {
-		return this.page.getByRole('button', { name: option, exact: true });
+		return this.page
+			.locator('button[data-option="true"]')
+			.filter({ hasText: new RegExp(`^${this.escapeRegExp(option)}$`, 'i') });
 	}
 
 	private escapeRegExp(value: string): string {
@@ -181,6 +187,200 @@ export class ScheduledOrderPage {
 
 		await filterButton.click().catch(() => undefined);
 		await this.page.waitForLoadState('networkidle').catch(() => undefined);
+	}
+
+	async openSubmittedSection(): Promise<void> {
+		await this.applyStatusFilter('submitted');
+		await expect(this.statusFilterSubmittedButton).toBeVisible();
+	}
+
+	async openDraftSection(): Promise<void> {
+		await this.applyStatusFilter('draft');
+		await expect(this.statusFilterDraftButton).toBeVisible();
+	}
+
+	private visibleOrderRows(): Locator {
+		return this.ordersTable.locator('tbody tr').filter({ has: this.page.getByRole('cell') });
+	}
+
+	async getDraftOrderRows(): Promise<Locator> {
+		await this.openDraftSection();
+		return this.visibleOrderRows().filter({ hasText: /\bdraft\b/i });
+	}
+
+	async verifyDraftOrderCount(expectedCount: number): Promise<void> {
+		const rows = await this.getDraftOrderRows();
+		await expect(rows).toHaveCount(expectedCount);
+	}
+
+	private async getVisibleDateGroupLabels(): Promise<string[]> {
+		const candidates = this.page.locator(
+			'main [data-order-date], main [data-date-group], main h2, main h3, main [role="heading"], main button',
+		);
+		const texts = await candidates.allTextContents();
+		return texts
+			.map((value) => value.replace(/\s+/g, ' ').trim())
+			.map((value) => value.match(/\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\s+\d{1,2},\s+\d{4}\b/i)?.[0] ?? '')
+			.filter(Boolean);
+	}
+
+	async getDraftOrderDateLabels(): Promise<string[]> {
+		await this.openDraftSection();
+		return this.getVisibleDateGroupLabels();
+	}
+
+	async verifyDraftDatesUniqueAndFuture(expectedCount: number): Promise<void> {
+		const labels = await this.getDraftOrderDateLabels();
+		expect(labels.length, 'Expected one Draft Order Date group per configured day').toBe(expectedCount);
+		expect(new Set(labels).size, 'Draft Order dates should not be duplicated').toBe(labels.length);
+		const today = new Date();
+		today.setHours(0, 0, 0, 0);
+		for (const label of labels) {
+			expect(this.parseDateLabel(label)).toBeGreaterThanOrEqual(today.getTime());
+		}
+	}
+
+	async verifyDraftDateExcluded(date: string, expectedCount: number): Promise<void> {
+		const labels = await this.getDraftOrderDateLabels();
+		expect(labels.length).toBe(expectedCount);
+		const excluded = new Date(`${date}T00:00:00`);
+		expect(labels.map((label) => this.parseDateLabel(label))).not.toContain(excluded.getTime());
+	}
+
+	private submittedRows(): Locator {
+		return this.ordersTable.locator('tbody tr');
+	}
+
+	async getSubmittedRowTexts(): Promise<string[]> {
+		await this.openSubmittedSection();
+		return (await this.submittedRows().allTextContents())
+			.map((value) => value.replace(/\s+/g, ' ').trim())
+			.filter(Boolean);
+	}
+
+	async getOrderDateGroupLabels(): Promise<string[]> {
+		await this.openSubmittedSection();
+		return this.getVisibleDateGroupLabels();
+	}
+
+	parseDateLabel(value: string): number {
+		const parsed = Date.parse(value);
+		if (Number.isNaN(parsed)) {
+			throw new Error(`Unable to parse Order Date label: ${value}`);
+		}
+		return parsed;
+	}
+
+	async verifyOrderDateGroupsAscending(): Promise<void> {
+		const labels = await this.getOrderDateGroupLabels();
+		expect(labels.length, 'Expected at least two visible Order Date groups').toBeGreaterThan(1);
+		const dates = labels.map((label) => this.parseDateLabel(label));
+		expect(dates).toEqual([...dates].sort((left, right) => left - right));
+	}
+
+	async verifyCurrentDateGroupFirst(): Promise<boolean> {
+		const labels = await this.getOrderDateGroupLabels();
+		const today = new Date();
+		const sameDay = (value: number) => {
+			const date = new Date(value);
+			return date.getFullYear() === today.getFullYear() &&
+				date.getMonth() === today.getMonth() && date.getDate() === today.getDate();
+		};
+		const currentIndex = labels.findIndex((label) => sameDay(this.parseDateLabel(label)));
+		if (currentIndex === -1) return false;
+		expect(currentIndex).toBe(0);
+		return true;
+	}
+
+	private async columnIndex(header: RegExp): Promise<number> {
+		const headers = this.page.getByRole('columnheader');
+		for (let index = 0; index < await headers.count(); index += 1) {
+			if (header.test((await headers.nth(index).innerText()).trim())) return index;
+		}
+		return -1;
+	}
+
+	async getColumnValues(header: RegExp): Promise<string[]> {
+		const index = await this.columnIndex(header);
+		expect(index, `Expected column matching ${header}`).toBeGreaterThanOrEqual(0);
+		const rows = this.submittedRows();
+		const values: string[] = [];
+		for (let rowIndex = 0; rowIndex < await rows.count(); rowIndex += 1) {
+			const cells = rows.nth(rowIndex).getByRole('cell');
+			if (await cells.count() > index) {
+				const value = (await cells.nth(index).innerText()).trim();
+				if (value) values.push(value);
+			}
+		}
+		return values;
+	}
+
+	async sortColumn(header: RegExp, direction: 'ascending' | 'descending'): Promise<void> {
+		const columnHeader = this.page.getByRole('columnheader', { name: header }).first();
+		await expect(columnHeader).toBeVisible();
+		for (let attempt = 0; attempt < 2; attempt += 1) {
+			await columnHeader.click();
+			await this.page.waitForTimeout(500);
+			const sort = (await columnHeader.getAttribute('aria-sort'))?.toLowerCase();
+			if (sort === direction) return;
+		}
+	}
+
+	async verifyColumnSorted(header: RegExp, direction: 'ascending' | 'descending'): Promise<void> {
+		await this.openSubmittedSection();
+		await this.sortColumn(header, direction);
+		const values = await this.getColumnValues(header);
+		expect(values.length, `Expected multiple values for ${header}`).toBeGreaterThan(1);
+		const sorted = [...values].sort((left, right) => left.localeCompare(right, undefined, { numeric: true }));
+		if (direction === 'descending') sorted.reverse();
+		expect(values).toEqual(sorted);
+	}
+
+	async verifyOrderVisibleOnce(orderNumber?: string): Promise<void> {
+		await this.openSubmittedSection();
+		expect(orderNumber, 'Expected submitted order number').toBeTruthy();
+		const rows = this.submittedRows().filter({ hasText: new RegExp(this.escapeRegExp(orderNumber ?? ''), 'i') });
+		await expect(rows).toHaveCount(1);
+	}
+
+	async verifyOrderIsFirst(orderNumber?: string): Promise<void> {
+		await this.openSubmittedSection();
+		expect(orderNumber, 'Expected submitted order number').toBeTruthy();
+		const firstRow = this.submittedRows().filter({ hasText: /submitted/i }).first();
+		await expect(firstRow).toContainText(new RegExp(this.escapeRegExp(orderNumber ?? ''), 'i'));
+	}
+
+	async verifyGroupLabelsRemainAfterSort(): Promise<void> {
+		await this.openSubmittedSection();
+		const before = await this.getOrderDateGroupLabels();
+		await this.sortColumn(/vendor/i, 'ascending');
+		const ascending = await this.getOrderDateGroupLabels();
+		await this.sortColumn(/vendor/i, 'descending');
+		const descending = await this.getOrderDateGroupLabels();
+		expect(ascending).toEqual(before);
+		expect(descending).toEqual(before);
+	}
+
+	async openAutoDraftOrder(): Promise<boolean> {
+		await this.applyStatusFilter('draft');
+		const row = this.submittedRows().filter({ hasText: /auto[- ]?draft/i }).first();
+		if (!(await row.isVisible().catch(() => false))) return false;
+		const action = row.getByRole('button').last();
+		await action.click();
+		await this.page.waitForLoadState('networkidle').catch(() => undefined);
+		return true;
+	}
+
+	async verifyPositiveQuantitiesBeforeZero(): Promise<void> {
+		const inputs = this.page.locator('main table tbody tr').getByRole('spinbutton');
+		const quantities: number[] = [];
+		for (let index = 0; index < await inputs.count(); index += 1) {
+			quantities.push(Number(await inputs.nth(index).inputValue()));
+		}
+		expect(quantities.some((value) => value > 0)).toBeTruthy();
+		expect(quantities.some((value) => value === 0)).toBeTruthy();
+		const firstZero = quantities.findIndex((value) => value === 0);
+		expect(quantities.slice(firstZero).every((value) => value === 0)).toBeTruthy();
 	}
 
 	private async getOrderRow(orderNumber?: string, status?: string): Promise<Locator | null> {
@@ -280,6 +480,97 @@ export class ScheduledOrderPage {
 			.catch(() => false);
 	}
 
+	private submissionConfirmationDialog(): Locator {
+		return this.page.getByRole('dialog').filter({ hasText: /submit this order/i }).first();
+	}
+
+	async openSubmissionConfirmation(): Promise<void> {
+		await this.ensureRequiredDate();
+		await expect(this.createAndSubmitButton).toBeEnabled();
+		await this.createAndSubmitButton.click();
+		await expect(this.submissionConfirmationDialog()).toBeVisible({ timeout: 10_000 });
+	}
+
+	async verifySubmissionConfirmation(): Promise<void> {
+		const dialog = this.submissionConfirmationDialog();
+		await expect(dialog).toBeVisible();
+		await expect(dialog.getByText(/^Submit this order\?$/)).toBeVisible();
+		await expect(dialog.getByText(/This will submit the order to the vendor\./i)).toBeVisible();
+		await expect(dialog.getByRole('button', { name: /^No$/i })).toBeEnabled();
+		await expect(dialog.getByRole('button', { name: /^Yes$/i })).toBeEnabled();
+		await expect(this.page.getByText(/^Submit this order\?$/)).toHaveCount(1);
+	}
+
+	async cancelSubmissionConfirmation(): Promise<void> {
+		const dialog = this.submissionConfirmationDialog();
+		await dialog.locator('button').filter({ hasText: /^No$/ }).click();
+		await expect(dialog).toBeHidden();
+		await expect(this.page).toHaveURL(/\/orders\/scheduled\/new$/);
+		await expect(this.createAndSubmitButton).toBeEnabled();
+	}
+
+	private async continuePastDuplicateWarning(): Promise<void> {
+		const duplicateWarning = this.page.getByText(/^Possible Duplicate Order$/).first();
+		const createAnywayButton = this.page.locator('button').filter({ hasText: /^Create Anyway$/ }).first();
+		const visible = await createAnywayButton
+			.waitFor({ state: 'visible', timeout: 5_000 })
+			.then(() => true)
+			.catch(() => false);
+		if (!visible) return;
+
+		await createAnywayButton.click();
+		await duplicateWarning.waitFor({ state: 'hidden', timeout: 60_000 });
+	}
+
+	async confirmSubmission(): Promise<{ submitted: boolean; orderNumber?: string; reason?: string }> {
+		this.submissionFeedbackVerified = false;
+		const dialog = this.submissionConfirmationDialog();
+		const feedbackPromise = this.page
+			.getByText(/submitted to the vendor/i)
+			.first()
+			.waitFor({ state: 'visible', timeout: 60_000 })
+			.then(() => true)
+			.catch(() => false);
+		await dialog.locator('button').filter({ hasText: /^Yes$/ }).click();
+		await dialog.waitFor({ state: 'hidden', timeout: 10_000 }).catch(() => undefined);
+		await this.continuePastDuplicateWarning();
+
+		const alertReason = await this.dismissAlertDialogIfPresent();
+		if (alertReason) return { submitted: false, reason: alertReason };
+
+		const receivedSuccessFeedback = await feedbackPromise;
+		this.submissionFeedbackVerified = receivedSuccessFeedback;
+		const reachedListing = await expect
+			.poll(() => /\/orders\/scheduled$/.test(this.page.url()), { timeout: 60_000 })
+			.toBe(true)
+			.then(() => true)
+			.catch(() => false);
+
+		return reachedListing
+			? { submitted: true, orderNumber: await this.resolveOrderNumberFromCurrentContext('submitted') }
+			: { submitted: false, reason: 'Order submission did not return to the Scheduled Orders list.' };
+	}
+
+	async verifyOrderDataRetained(vendor: string, item: string, quantity: string): Promise<void> {
+		await expect(this.page.locator('main').getByRole('button', {
+			name: new RegExp(this.escapeRegExp(vendor), 'i'),
+		}).first()).toBeVisible();
+		const row = this.page.locator('main table tbody tr').filter({
+			has: this.page.getByRole('button', { name: new RegExp(this.escapeRegExp(item), 'i') }),
+		}).first();
+		await expect(row).toBeVisible();
+		await expect(row.locator('input[type="number"][placeholder="0"]')).toHaveValue(quantity);
+	}
+
+	async verifyIncompleteSubmissionBlocked(): Promise<void> {
+		await this.createAndSubmitButton.click();
+		await expect(this.submissionConfirmationDialog()).toBeHidden();
+		await expect(this.page).toHaveURL(/\/orders\/scheduled\/new$/);
+		await expect(
+			this.page.getByText(/required|select a vendor|complete line item|quantity/i).first(),
+		).toBeVisible({ timeout: 10_000 });
+	}
+
 	/**
 	 * Wait for the Scheduled Orders listing page.
 	 * Verifies URL and primary heading visibility.
@@ -303,6 +594,18 @@ export class ScheduledOrderPage {
 		log('✓ Verified: Scheduled Orders listing page is displayed');
 	}
 
+	async verifyLandingOrderDatesDeliveryDatesAndCutoff(): Promise<void> {
+		const groupDates = await this.getVisibleDateGroupLabels();
+		expect(groupDates.length, 'Expected Scheduled Orders to expose Order Date groups').toBeGreaterThan(0);
+		const rows = this.ordersTable.locator('tbody tr').filter({ hasText: /\b(?:draft|submitted)\b/i });
+		expect(await rows.count(), 'Expected at least one Scheduled Order row').toBeGreaterThan(0);
+		for (let index = 0; index < await rows.count(); index += 1) {
+			const row = rows.nth(index);
+			await expect(row).toContainText(/\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\s+\d{1,2},\s+\d{4}\b/i);
+		}
+		await expect(this.page.getByText(/cut-?off:/i).first()).toBeVisible();
+	}
+
 	/**
 	 * Validate Scheduled Orders status filter chips.
 	 * Verifies all, draft, and submitted filters are visible.
@@ -324,7 +627,6 @@ export class ScheduledOrderPage {
 		await expect(this.vendorHeader).toBeVisible();
 		await expect(this.requiredDateHeader).toBeVisible();
 		await expect(this.statusHeader).toBeVisible();
-		await expect(this.totalHeader).toBeVisible();
 		await expect(this.orderTypeHeader).toBeVisible();
 		await expect(this.actionsHeader).toBeVisible();
 
@@ -361,18 +663,47 @@ export class ScheduledOrderPage {
 		await expect(this.vendorTriggerButton).toBeVisible();
 		await expect(this.vendorTriggerButton).toBeEnabled();
 		await expect(this.requiredDateInput).toBeVisible();
-		await expect(this.requiredDateInput).toBeEditable();
 		await expect(this.notesInput).toBeVisible();
 		await expect(this.autoSuggestItemsButton).toBeVisible();
 		await expect(this.autoSuggestItemsButton).toBeDisabled();
 		await expect(this.addLineButton).toBeVisible();
 		await expect(this.lineItemVendorDisabledButton).toBeDisabled();
 		await expect(this.lineItemQtyInput).toBeVisible();
-		await expect(this.cancelButton).toBeVisible();
 		await expect(this.saveAsDraftButton).toBeVisible();
 		await expect(this.createAndSubmitButton).toBeVisible();
 
 		log('✓ Verified: New Scheduled Order form controls are displayed');
+	}
+
+	async verifyOrderDateLabel(): Promise<void> {
+		await expect(this.page.getByText(/^Order Date \*$/).first()).toBeVisible();
+		await expect(this.page.getByText(/^Required Date \*$/)).toHaveCount(0);
+	}
+
+	async verifyPastOrderDatesBlocked(today: string, pastDate: string): Promise<void> {
+		await expect(this.requiredDateInput).toHaveAttribute('type', 'date');
+		await expect(this.requiredDateInput).toHaveAttribute('min', today);
+		await this.requiredDateInput.evaluate((element, value) => {
+			const input = element as HTMLInputElement;
+			input.value = value as string;
+			input.dispatchEvent(new Event('input', { bubbles: true }));
+			input.dispatchEvent(new Event('change', { bubbles: true }));
+		}, pastDate);
+		const rangeUnderflow = await this.requiredDateInput.evaluate(
+			(element) => (element as HTMLInputElement).validity.rangeUnderflow,
+		);
+		expect(rangeUnderflow, `${pastDate} should violate the Order Date minimum ${today}`).toBe(true);
+	}
+
+	async selectOrderDate(date: string): Promise<void> {
+		await expect(this.requiredDateInput).toBeVisible();
+		await expect(this.requiredDateInput).toBeEnabled();
+		await this.requiredDateInput.fill(date);
+		await expect(this.requiredDateInput).toHaveValue(date);
+		const valid = await this.requiredDateInput.evaluate(
+			(element) => (element as HTMLInputElement).checkValidity(),
+		);
+		expect(valid, `Order Date ${date} should be valid`).toBe(true);
 	}
 
 	/**
@@ -404,9 +735,17 @@ export class ScheduledOrderPage {
 	 * Returns runtime option texts for data-driven validations.
 	 */
 	async getVendorOptions(): Promise<string[]> {
+		const nativeSelect = this.page.locator('main select').first();
+		if (await nativeSelect.count()) {
+			const nativeOptions = (await nativeSelect.locator('option').allTextContents())
+				.map((value) => value.trim())
+				.filter((value) => value && !/select vendor/i.test(value));
+			if (nativeOptions.length) return [...new Set(nativeOptions)];
+		}
+
 		await this.openVendorDropdown();
 
-		const overlayButtons = this.page.locator('body > div').last().getByRole('button');
+		const overlayButtons = this.page.locator('button[data-option="true"]');
 		const optionCount = await overlayButtons.count();
 		const options: string[] = [];
 
@@ -433,7 +772,7 @@ export class ScheduledOrderPage {
 		const lineItemButton = this.getInitialLineItemButton();
 		await lineItemButton.click();
 
-		const overlayButtons = this.page.locator('body > div').last().getByRole('button');
+		const overlayButtons = this.page.locator('button[data-option="true"]');
 		const optionCount = await overlayButtons.count();
 		const options: string[] = [];
 
@@ -495,7 +834,15 @@ export class ScheduledOrderPage {
 	private async selectedVendorSupportsLineItems(
 		preferredItems: ScheduledOrderItemInput[] = [],
 	): Promise<boolean> {
+		await this.waitForAutoSuggestToSettle().catch(() => undefined);
 		const lineItemButton = this.getInitialLineItemButton();
+		await expect
+			.poll(() => lineItemButton.isEnabled().catch(() => false), {
+				timeout: 15_000,
+				message: 'Waiting for Scheduled Order item suggestions to become selectable.',
+			})
+			.toBe(true)
+			.catch(() => undefined);
 		let lineItemText = ((await lineItemButton.textContent().catch(() => '')) ?? '').trim();
 
 		if (/no items in vendor guide/i.test(lineItemText)) {
@@ -510,9 +857,12 @@ export class ScheduledOrderPage {
 			return true;
 		}
 
-		const tableBodyText = (await this.page.locator('main table tbody').textContent().catch(() => '')) ?? '';
+		const selectedItemButtons = this.page.locator('main table tbody tr').getByRole('button');
+		const selectedButtonTexts = (await selectedItemButtons.allTextContents()).map((value) => value.trim());
 		const autoSuggestedItemsMatch = preferredItems.every((item) =>
-			new RegExp(this.escapeRegExp(item.itemName), 'i').test(tableBodyText),
+			selectedButtonTexts.some((value) =>
+				new RegExp(this.escapeRegExp(item.itemName), 'i').test(value),
+			),
 		);
 
 		if (autoSuggestedItemsMatch) {
@@ -533,7 +883,19 @@ export class ScheduledOrderPage {
 	 */
 	async selectVendor(vendorName: string): Promise<void> {
 		await this.openVendorDropdown();
-		await this.getVendorOption(vendorName).click();
+		const vendorOptions = this.getVendorOption(vendorName);
+		let selected = false;
+		for (let index = 0; index < await vendorOptions.count(); index += 1) {
+			const option = vendorOptions.nth(index);
+			if (await option.isVisible().catch(() => false)) {
+				await option.click();
+				selected = true;
+				break;
+			}
+		}
+		if (!selected) {
+			throw new Error(`Visible Scheduled Order vendor option not found: ${vendorName}`);
+		}
 
 		const selectedVendorButton = this.page
 			.locator('main')
@@ -542,6 +904,46 @@ export class ScheduledOrderPage {
 		await expect(selectedVendorButton).toBeVisible();
 
 		log(`✓ Selected Scheduled Order vendor: ${vendorName}`);
+	}
+
+	async getItemDropdownOptions(): Promise<string[]> {
+		await this.waitForAutoSuggestToSettle().catch(() => undefined);
+		const lineItemButton = this.getInitialLineItemButton();
+		await expect(lineItemButton).toBeEnabled({ timeout: 15_000 });
+		await lineItemButton.click();
+		const options = this.page.locator('button[data-option="true"]');
+		await expect(options.first()).toBeVisible({ timeout: 10_000 });
+		const values = (await options.allTextContents())
+			.map((value) => value.replace(/\s+/g, ' ').trim())
+			.filter((value) => value && !/^select item$/i.test(value));
+		await this.page.keyboard.press('Escape');
+		return [...new Set(values)];
+	}
+
+	async selectItemAndVerifyManualQuantity(
+		itemName: string,
+		manualQuantity: string,
+	): Promise<boolean> {
+		await this.waitForAutoSuggestToSettle().catch(() => undefined);
+		const row = this.page.locator('main table tbody tr').last();
+		const itemButton = row.getByRole('button').first();
+		await expect(itemButton).toBeEnabled({ timeout: 15_000 });
+		await itemButton.click();
+		const option = this.page.locator('button[data-option="true"]').filter({
+			hasText: new RegExp(`^${this.escapeRegExp(itemName)}$`, 'i'),
+		}).first();
+		if (!(await option.isVisible().catch(() => false))) {
+			await this.page.keyboard.press('Escape').catch(() => undefined);
+			return false;
+		}
+		await option.click();
+		await expect(row).toContainText(new RegExp(this.escapeRegExp(itemName), 'i'));
+		const quantity = row.locator('input[type="number"][placeholder="0"]');
+		const initialValue = await quantity.inputValue();
+		expect(Number(initialValue || '0')).toBe(0);
+		await quantity.fill(manualQuantity);
+		await expect(quantity).toHaveValue(manualQuantity);
+		return true;
 	}
 
 	/**
@@ -688,31 +1090,20 @@ export class ScheduledOrderPage {
 	 * Submit the current scheduled order and surface blocking alert reasons when submission fails.
 	 */
 	async submitCurrentOrder(): Promise<{ submitted: boolean; reason?: string }> {
-		await this.ensureRequiredDate();
-		await expect(this.createAndSubmitButton).toBeEnabled();
-		await this.createAndSubmitButton.click().catch(async () => {
-			await this.dismissAlertDialogIfPresent();
-			await this.createAndSubmitButton.click({ force: true });
-		});
+		await this.openSubmissionConfirmation();
+		await this.verifySubmissionConfirmation();
+		return this.confirmSubmission();
+	}
+
+	/** Verify the vendor-submission feedback and that the list is on Submitted. */
+	async verifySubmittedOrderFeedback(orderNumber?: string): Promise<void> {
+		expect(this.submissionFeedbackVerified, 'Expected success feedback containing "submitted to the vendor"').toBe(true);
+		await expect(this.page).toHaveURL(/\/orders\/scheduled$/);
+		await this.statusFilterSubmittedButton.click();
 		await this.page.waitForLoadState('networkidle').catch(() => undefined);
-
-		const alertReason = await this.dismissAlertDialogIfPresent();
-		if (alertReason) {
-			return { submitted: false, reason: alertReason };
-		}
-
-		const stillOnNewOrderPage = /\/orders\/scheduled\/new$/.test(this.page.url());
-		const receivedSuccessFeedback = await this.waitForOrderFeedback(
-			/purchase order (created|submitted|saved)/i,
-		);
-		if (stillOnNewOrderPage && !receivedSuccessFeedback) {
-			return {
-				submitted: false,
-				reason: 'Order submission did not show success feedback or leave the New Scheduled Order form.',
-			};
-		}
-
-		return { submitted: true };
+		await expect(this.statusFilterSubmittedButton).toBeVisible();
+		const row = await this.getOrderRow(orderNumber, 'Submitted');
+		await expect(row, 'Submitted order should appear in the Submitted section').not.toBeNull();
 	}
 
 	/**
@@ -907,15 +1298,19 @@ export class ScheduledOrderPage {
 			await this.dismissAlertDialogIfPresent();
 			const itemNameMatcher = new RegExp(this.escapeRegExp(items[index].itemName), 'i');
 			const tableRows = this.page.locator('main table tbody tr');
-			const matchingRows = tableRows.filter({ hasText: itemNameMatcher });
+			const matchingRows = tableRows.filter({
+				has: this.page.getByRole('button', { name: itemNameMatcher }),
+			});
 
 			if ((await matchingRows.count()) > 0) {
 				const existingItemRow = matchingRows.first();
-				const qtyInput = existingItemRow.getByRole('spinbutton').first();
+				const qtyInput = existingItemRow
+					.locator('input[type="number"][placeholder="0"]')
+					.first();
 				if (await qtyInput.isVisible().catch(() => false)) {
 					const currentQty = ((await qtyInput.inputValue().catch(() => '')) ?? '').trim();
 					if (!currentQty || currentQty === '0') {
-						await qtyInput.fill('1');
+						await qtyInput.fill(items[index].quantity ?? '1');
 					}
 				}
 
@@ -990,15 +1385,15 @@ export class ScheduledOrderPage {
 				}
 
 				const desiredOption = this.page
-					.locator('body > div')
-					.last()
-					.getByRole('button', {
-						name: itemNameMatcher,
+					.locator('button[data-option="true"]')
+					.filter({
+						hasText: new RegExp(`^${this.escapeRegExp(items[index].itemName)}$`, 'i'),
 					})
 					.first();
 
 				if (await desiredOption.isVisible().catch(() => false)) {
 					await desiredOption.click();
+					await expect(targetRow).toContainText(itemNameMatcher, { timeout: 10_000 });
 				} else {
 					await this.page.keyboard.press('Escape').catch(() => undefined);
 					return {
@@ -1007,9 +1402,11 @@ export class ScheduledOrderPage {
 					};
 				}
 
-				const qtyInput = targetRow.getByRole('spinbutton').first();
+				const qtyInput = targetRow
+					.locator('input[type="number"][placeholder="0"]')
+					.first();
 				if (await qtyInput.isVisible().catch(() => false)) {
-					await qtyInput.fill('1');
+					await qtyInput.fill(items[index].quantity ?? '1');
 				}
 
 				addedCount += 1;

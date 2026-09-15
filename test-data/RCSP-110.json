@@ -1,0 +1,27 @@
+{
+  "RCSP-110": {
+    "scenarioId": "RCSP-110",
+    "epic": "EPIC-RCSP-1",
+    "feature": "Inventory Setup - Menu Items, Recipes, and Master Items",
+    "sourceSheet": "RCSP-110",
+    "description": "Validate Inventory Setup catalog pages, table headers, row alignment, recipe mappings, master-item children, and navigation.",
+    "commonData": {
+      "hierarchy": {
+        "region": "1700 San Antonio 4126314",
+        "market": "1708 E Central SA 4126393",
+        "store": "WB Unit 1034"
+      }
+    },
+    "testCases": [
+      { "testCaseId": "TC_RCSP-110_01", "testName": "Menu Items page UI and headers", "testData": {} },
+      { "testCaseId": "TC_RCSP-110_02", "testName": "Menu Items data alignment", "testData": {} },
+      { "testCaseId": "TC_RCSP-110_03", "testName": "Recipes page UI and headers", "testData": {} },
+      { "testCaseId": "TC_RCSP-110_04", "testName": "Recipe data alignment", "testData": {} },
+      { "testCaseId": "TC_RCSP-110_05", "testName": "Recipe ingredient mappings", "testData": {} },
+      { "testCaseId": "TC_RCSP-110_06", "testName": "Master Items page UI and headers", "testData": {} },
+      { "testCaseId": "TC_RCSP-110_07", "testName": "Master Item data alignment", "testData": {} },
+      { "testCaseId": "TC_RCSP-110_08", "testName": "Master Item child items", "testData": {} },
+      { "testCaseId": "TC_RCSP-110_01", "testName": "Inventory Setup navigation regression", "testData": {} }
+    ]
+  }
+}
