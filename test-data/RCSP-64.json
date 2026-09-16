@@ -1,0 +1,25 @@
+{
+  "RCSP-64": {
+    "scenarioId": "RCSP-64",
+    "epic": "EPIC-RCSP-8",
+    "feature": "Scheduled Order line items and creation actions",
+    "commonData": {
+      "hierarchy": {
+        "region": "1700 San Antonio 4126314",
+        "market": "1708 E Central SA 4126393",
+        "store": "WB Unit 1034"
+      },
+      "vendor": "Flowers Baking Company",
+      "item": "SM BUN",
+      "quantity": "1",
+      "updatedQuantity": "2"
+    },
+    "testCases": [
+      { "testCaseId": "TC_RCSP-64_01", "testName": "New Scheduled Order fields and line controls", "testData": {} },
+      { "testCaseId": "TC_RCSP-64_02", "testName": "Vendor prepopulates line items and recommended quantity", "testData": {} },
+      { "testCaseId": "TC_RCSP-64_03", "testName": "Manual line populates details and read-only UOM", "testData": {} },
+      { "testCaseId": "TC_RCSP-64_04", "testName": "Save draft and update quantity", "testData": {} },
+      { "testCaseId": "TC_RCSP-64_05", "testName": "Create, cancel, and delete line actions", "testData": {} }
+    ]
+  }
+}

@@ -33,5 +33,5 @@
     "browserstack.global-setup.ts",
     "playwright.config.ts"
   ],
-  "exclude": ["node_modules", "dist", "test-results", "playwright-report"]
+  "exclude": ["node_modules", "dist", "test-results"]
 }

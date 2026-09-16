@@ -86,7 +86,7 @@ playwright-typescript_framework/
 │
 ├── test-data/                      # Test data files (Excel, JSON)
 ├── test-results/                   # Test execution artifacts
-├── playwright-report/              # HTML test reports
+├── test-results/                   # Screenshots, videos, and traces
 │
 ├── playwright.config.ts            # Playwright configuration
 ├── tsconfig.json                   # TypeScript configuration
@@ -408,7 +408,7 @@ defineConfig({
     { name: 'webkit', use: { ...devices['Desktop Safari'] } },
   ],
   
-  reporter: [['html', { outputFolder: 'playwright-report' }]],
+  reporter: [['list']],
 });
 ```
 
@@ -556,7 +556,7 @@ Benefits:
 After running tests, artifacts are captured:
 
 ```
-playwright-report/
+test-results/
 ├── index.html              # Main HTML report
 ├── data/
 │   └── test-results.json   # Detailed results

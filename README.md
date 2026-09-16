@@ -79,7 +79,7 @@ npm test -- -g "Draft"
 npm run report
 ```
 
-The local config is [playwright.config.ts](playwright.config.ts). Generated output is stored in `test-results/` and `playwright-report/`.
+The local config is [playwright.config.ts](playwright.config.ts). Generated screenshots, videos, and traces are stored in `test-results/`.
 
 ## Database-Backed Tests
 
@@ -232,7 +232,7 @@ npm run report
 npm test -- tests/path/example.spec.ts --headed
 
 # Remove generated artifacts
-rm -rf test-results playwright-report playwright-report-browserstack
+rm -rf test-results playwright-report-browserstack
 
 # Check test discovery
 npx playwright test --list --project=chromium

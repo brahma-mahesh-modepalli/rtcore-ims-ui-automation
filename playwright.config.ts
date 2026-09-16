@@ -35,11 +35,8 @@ export default defineConfig({
   /* Limit parallel workers – use 1 worker locally to see tests sequentially */
   workers: process.env.CI ? '50%' : 1,
 
-  /* Reporters – HTML report persisted to playwright-report/ */
-  reporter: [
-    ['html', { open: 'never', outputFolder: 'playwright-report' }],
-    ['list'],
-  ],
+  /* Console reporter; screenshots, videos, and traces remain in test-results/. */
+  reporter: [['list']],
 
   /* Shared settings applied to every project */
   use: {

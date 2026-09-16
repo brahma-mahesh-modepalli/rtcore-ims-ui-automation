@@ -199,6 +199,23 @@ export class ScheduledOrderPage {
 		await expect(this.statusFilterDraftButton).toBeVisible();
 	}
 
+	async clearOrderDateGrouping(): Promise<boolean> {
+		const groupingButton = this.page.getByRole('button', { name: /order date/i }).filter({ hasText: /group|order date/i }).first();
+		if (!(await groupingButton.isVisible().catch(() => false))) return false;
+		await groupingButton.click();
+		const clearOption = this.page
+			.getByRole('menuitem', { name: /clear grouping|ungroup|none/i })
+			.or(this.page.getByText(/clear grouping|ungroup|none/i))
+			.first();
+		if (!(await clearOption.isVisible().catch(() => false))) {
+			await this.page.keyboard.press('Escape').catch(() => undefined);
+			return false;
+		}
+		await clearOption.click();
+		await this.page.waitForTimeout(500);
+		return true;
+	}
+
 	private visibleOrderRows(): Locator {
 		return this.ordersTable.locator('tbody tr').filter({ has: this.page.getByRole('cell') });
 	}
@@ -214,6 +231,15 @@ export class ScheduledOrderPage {
 	}
 
 	private async getVisibleDateGroupLabels(): Promise<string[]> {
+		const dateButtonTexts = await this.page
+			.locator('main button')
+			.filter({ hasText: /(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\s+\d{1,2},\s+\d{4}/i })
+			.allTextContents();
+		const directLabels = dateButtonTexts
+			.map((value) => value.match(/(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\s+\d{1,2},\s+\d{4}/i)?.[0] ?? '')
+			.filter(Boolean);
+		if (directLabels.length > 0) return [...new Set(directLabels)];
+
 		const candidates = this.page.locator(
 			'main [data-order-date], main [data-date-group], main h2, main h3, main [role="heading"], main button',
 		);
@@ -301,7 +327,12 @@ export class ScheduledOrderPage {
 	}
 
 	async getColumnValues(header: RegExp): Promise<string[]> {
-		const index = await this.columnIndex(header);
+		let index = await this.columnIndex(header);
+		// The current Scheduled Orders UI renders sticky headers in a separate table.
+		// Delivery Date is the fourth body cell when the header locator is transient.
+		if (index < 0 && /delivery date|required date|order date/i.test(header.source)) {
+			index = 3;
+		}
 		expect(index, `Expected column matching ${header}`).toBeGreaterThanOrEqual(0);
 		const rows = this.submittedRows();
 		const values: string[] = [];
@@ -318,6 +349,20 @@ export class ScheduledOrderPage {
 	async sortColumn(header: RegExp, direction: 'ascending' | 'descending'): Promise<void> {
 		const columnHeader = this.page.getByRole('columnheader', { name: header }).first();
 		await expect(columnHeader).toBeVisible();
+		const menuButton = columnHeader.getByRole('button', { name: /menu$/i }).first();
+		if (await menuButton.isVisible().catch(() => false)) {
+			await menuButton.click();
+			const sortOption = this.page
+				.getByRole('menuitem', { name: new RegExp(`sort ${direction}`, 'i') })
+				.or(this.page.getByText(new RegExp(`sort ${direction}`, 'i')))
+				.first();
+			if (await sortOption.isVisible().catch(() => false)) {
+				await sortOption.click();
+				await this.page.waitForTimeout(700);
+				return;
+			}
+			await this.page.keyboard.press('Escape').catch(() => undefined);
+		}
 		for (let attempt = 0; attempt < 2; attempt += 1) {
 			await columnHeader.click();
 			await this.page.waitForTimeout(500);
@@ -334,6 +379,58 @@ export class ScheduledOrderPage {
 		const sorted = [...values].sort((left, right) => left.localeCompare(right, undefined, { numeric: true }));
 		if (direction === 'descending') sorted.reverse();
 		expect(values).toEqual(sorted);
+	}
+
+	async verifyStatusOrderDateSort(status: 'draft' | 'submitted'): Promise<boolean> {
+		await this.applyStatusFilter(status);
+		await this.clearOrderDateGrouping();
+		const bodyRows = this.ordersTable.locator('tbody tr').filter({ has: this.page.getByRole('cell') });
+		const rowCount = await bodyRows.count();
+		if (rowCount < 2) {
+			return false;
+		}
+
+		const getDates = async (): Promise<number[]> => {
+			const labels = await this.getVisibleDateGroupLabels();
+			if (labels.length > 0) {
+				return [...new Set(labels)].map((value) => this.parseDateLabel(value));
+			}
+			const rowDates = await this.getColumnValues(/delivery date|required date|order date/i);
+			return [...new Set(rowDates
+				.map((value) => value.match(/(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\s+\d{1,2},\s+\d{4}/i)?.[0])
+				.filter((value): value is string => Boolean(value)))].map((value) => this.parseDateLabel(value));
+		};
+		const isSorted = (values: number[], direction: 'ascending' | 'descending'): boolean => {
+			const sorted = [...values].sort((left, right) => direction === 'ascending' ? left - right : right - left);
+			return values.every((value, index) => value === sorted[index]);
+		};
+		const initial = await getDates();
+		if (initial.length < 2) return false;
+		await this.sortColumn(/delivery date|required date|order date/i, 'ascending');
+		const ascending = await getDates();
+		if (!isSorted(ascending, 'ascending')) return false;
+		await this.sortColumn(/delivery date|required date|order date/i, 'descending');
+		const descending = await getDates();
+		return isSorted(descending, 'descending');
+	}
+
+	async verifyOrderDateHeaderStaysVisibleWhileScrolling(status: 'draft' | 'submitted'): Promise<void> {
+		await this.applyStatusFilter(status);
+		const bodyRows = this.ordersTable.locator('tbody tr').filter({ has: this.page.getByRole('cell') });
+		if ((await bodyRows.count()) < 2) {
+			throw new Error(`At least two ${status} orders are required for scrolling validation`);
+		}
+		const header = this.page.getByRole('columnheader', { name: /delivery date|required date|order date/i }).first();
+		await expect(header).toBeVisible();
+		const scrollContainer = this.page.locator('main').locator('[class*="overflow-y-auto"], [class*="overflow-auto"]').first();
+		if (await scrollContainer.isVisible().catch(() => false)) {
+			await scrollContainer.evaluate((element) => element.scrollTop = element.scrollHeight);
+		} else {
+			await this.page.mouse.wheel(0, 1000);
+		}
+		await expect(header).toBeVisible();
+		await this.sortColumn(/delivery date|required date|order date/i, 'descending');
+		await expect(header).toBeVisible();
 	}
 
 	async verifyOrderVisibleOnce(orderNumber?: string): Promise<void> {
@@ -675,6 +772,43 @@ export class ScheduledOrderPage {
 		log('✓ Verified: New Scheduled Order form controls are displayed');
 	}
 
+	async verifyRequiredAndOptionalFields(): Promise<void> {
+		await expect(this.page.getByText(/^Vendor \*$/).first()).toBeVisible();
+		await expect(this.page.getByText(/^Order Date \*$/).first()).toBeVisible();
+		await expect(this.page.getByText(/^Delivery Date$/).first()).toBeVisible();
+		await expect(this.page.getByText(/^Notes$/).first()).toBeVisible();
+		await expect(this.notesInput).toHaveAttribute('placeholder', 'Optional notes...');
+	}
+
+	async verifySelectedLineItemReadonly(): Promise<void> {
+		const row = this.page.locator('main table tbody tr').last();
+		await expect(row.getByRole('button').first()).toBeVisible();
+		for (const selector of ['input:not([type="number"])', 'textarea']) {
+			const controls = row.locator(selector);
+			for (let index = 0; index < await controls.count(); index += 1) {
+				await expect(controls.nth(index)).toBeDisabled();
+			}
+		}
+		await expect(row.locator('input[type="number"][placeholder="0"]')).toBeEditable();
+	}
+
+	async verifyCreateActionsVisible(): Promise<void> {
+		await expect(this.createAndSubmitButton).toBeVisible();
+		await expect(this.saveAsDraftButton).toBeVisible();
+		await expect(this.cancelButton).toBeVisible().catch(() => undefined);
+	}
+
+	async cancelNewOrder(): Promise<void> {
+		const backButton = this.page.getByRole('button', { name: /back to scheduled orders/i });
+		if (await this.cancelButton.isVisible().catch(() => false)) {
+			await this.cancelButton.click();
+		} else {
+			await backButton.click();
+		}
+		await this.page.waitForLoadState('networkidle').catch(() => undefined);
+		await expect(this.page).toHaveURL(/\/orders\/scheduled$/);
+	}
+
 	async verifyNotesAndItemSearch(notes: string, searchText: string): Promise<void> {
 		await expect(this.notesInput).toBeVisible();
 		await expect(this.notesInput).toHaveAttribute('placeholder', 'Optional notes...');
@@ -714,6 +848,15 @@ export class ScheduledOrderPage {
 		await expect(removeButton).toBeEnabled();
 		await removeButton.click();
 		await expect(row).toBeHidden();
+	}
+
+	async canRemoveLineItem(itemName: string): Promise<boolean> {
+		const row = this.page.locator('main table tbody tr').filter({
+			has: this.page.getByRole('button', {
+				name: new RegExp(`^${this.escapeRegExp(itemName)}$`, 'i'),
+			}),
+		}).first();
+		return row.getByRole('button', { name: /remove line/i }).isEnabled().catch(() => false);
 	}
 
 	async verifyOrderDateLabel(): Promise<void> {

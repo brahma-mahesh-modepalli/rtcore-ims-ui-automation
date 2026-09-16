@@ -1,0 +1,19 @@
+{
+  "RCSP-583": {
+    "scenarioId": "RCSP-583",
+    "epic": "EPIC-RCSP-8",
+    "feature": "Scheduled Orders Order Date sorting",
+    "commonData": {
+      "hierarchy": {
+        "region": "1700 San Antonio 4126314",
+        "market": "1708 E Central SA 4126393",
+        "store": "WB Unit 1034"
+      }
+    },
+    "testCases": [
+      { "testCaseId": "TC_RCSP-583_01", "testName": "Draft Order Date defaults latest first and toggles sort", "testData": {} },
+      { "testCaseId": "TC_RCSP-583_02", "testName": "Submitted Order Date toggles ascending and descending", "testData": {} },
+      { "testCaseId": "TC_RCSP-583_03", "testName": "Order Date sorting remains after grid scrolling", "testData": {} }
+    ]
+  }
+}
