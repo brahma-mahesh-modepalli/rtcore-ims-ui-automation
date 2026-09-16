@@ -1,0 +1,21 @@
+{
+  "RCSP-553": {
+    "scenarioId": "RCSP-553",
+    "epic": "EPIC-RCSP-139",
+    "feature": "My Hierarchy Region, Market, and Store tree",
+    "commonData": {
+      "region": "1700 San Antonio 4126314",
+      "market": "1708 E Central SA 4126393",
+      "store": "WB Unit 1034",
+      "sampleMarkets": ["1701 W SA", "1702 Boerne/Fred", "1708 E Central SA 4126393"],
+      "sampleStores": ["WB Unit 1034"]
+    },
+    "testCases": [
+      { "testCaseId": "TC_RCSP-553_001", "testName": "Hierarchy structure and labels", "testData": {} },
+      { "testCaseId": "TC_RCSP-553_002", "testName": "Region markets and market stores", "testData": {} },
+      { "testCaseId": "TC_RCSP-553_003", "testName": "Hierarchy expand and collapse", "testData": {} },
+      { "testCaseId": "TC_RCSP-553_004", "testName": "No duplicate or orphan hierarchy entries", "testData": {} },
+      { "testCaseId": "TC_RCSP-553_005", "testName": "Hierarchy empty and error states are safe", "testData": {} }
+    ]
+  }
+}
