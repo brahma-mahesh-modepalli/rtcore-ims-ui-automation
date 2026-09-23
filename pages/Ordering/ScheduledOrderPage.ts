@@ -43,6 +43,7 @@ export class ScheduledOrderPage {
 	readonly actionsHeader: Locator;
 
 	readonly createOrderTitle: Locator;
+	readonly orderNumberHeadingByXPath: Locator;
 	readonly vendorTriggerButton: Locator;
 	readonly requiredDateInput: Locator;
 	readonly notesInput: Locator;
@@ -91,6 +92,9 @@ export class ScheduledOrderPage {
 		this.createOrderTitle = page.getByRole('heading', {
 			name: 'New Scheduled Order',
 		});
+		this.orderNumberHeadingByXPath = page.locator(
+			'xpath=/html/body/div[2]/div/main/div/div/div[1]/h1/span/span',
+		);
 		this.vendorTriggerButton = page
 			.locator('main')
 			.getByText('Vendor *', { exact: true })
@@ -1317,6 +1321,21 @@ export class ScheduledOrderPage {
 			saved: true,
 			orderNumber: await this.resolveOrderNumberFromCurrentContext('draft'),
 		};
+	}
+
+	/**
+	 * Read the dynamically generated PO# from the order detail heading.
+	 * Uses the exact XPath specified by RCSP-246 as the primary source,
+	 * with a role-based fallback for resilience.
+	 */
+	async getOrderNumberFromHeadingXPath(): Promise<string | undefined> {
+		const xpathText = (await this.orderNumberHeadingByXPath.textContent().catch(() => ''))?.trim();
+		if (xpathText) {
+			return this.extractOrderNumber(xpathText) ?? xpathText;
+		}
+
+		const headingText = (await this.page.getByRole('heading').filter({ hasText: /PO-/i }).first().textContent().catch(() => ''))?.trim();
+		return this.extractOrderNumber(headingText ?? '');
 	}
 
 	/**

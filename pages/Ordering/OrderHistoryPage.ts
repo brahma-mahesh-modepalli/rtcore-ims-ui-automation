@@ -541,4 +541,87 @@ export class OrderHistoryPage {
 		await expect.soft(dropdownLocator).toBeVisible();
 		await expect.soft(dropdownLocator).toBeDisabled();
 	}
+
+	/**
+	 * Verify the order detail view displays the required transaction fields.
+	 * Used by RCSP-248 to validate order/invoice/item transaction data.
+	 */
+	async verifyTransactionFieldsVisible(): Promise<void> {
+		const fieldPatterns = [
+			/vendor/i,
+			/order\s*(#|number)|po\s*#/i,
+			/order date/i,
+			/status/i,
+			/item (number|name)|whataburger item/i,
+			/description/i,
+			/quantity ordered|qty ordered/i,
+			/unit (of measure|price)|uom/i,
+		];
+
+		for (const pattern of fieldPatterns) {
+			await expect.soft(this.page.getByText(pattern).first()).toBeVisible({ timeout: 10_000 });
+		}
+	}
+
+	/** Line items grid within an opened order detail view. */
+	lineItemsTable(): Locator {
+		return this.page.getByRole('table').last();
+	}
+
+	async getLineItemRowTexts(): Promise<string[]> {
+		const rows = this.lineItemsTable().locator('tbody tr');
+		const count = await rows.count();
+		const texts: string[] = [];
+		for (let index = 0; index < count; index += 1) {
+			const text = (await rows.nth(index).innerText().catch(() => '')).replace(/\s+/g, ' ').trim();
+			if (text) texts.push(text);
+		}
+		return texts;
+	}
+
+	/** Displayed PO# values in current list order, top to bottom. */
+	async getVisibleOrderNumberSequence(): Promise<string[]> {
+		const rows = await this.getOrderRows();
+		const count = await rows.count();
+		const values: string[] = [];
+		for (let index = 0; index < count; index += 1) {
+			const text = (await rows.nth(index).innerText().catch(() => ''));
+			const match = text.match(/\bPO-[A-Z0-9-]+\b/i);
+			if (match) values.push(match[0]);
+		}
+		return values;
+	}
+
+	async getVisibleOrderCount(): Promise<number> {
+		return (await this.getOrderRows()).count();
+	}
+
+	/** Displayed Order Date values in current list order, top to bottom. */
+	async getVisibleOrderDateSequence(): Promise<number[]> {
+		const values = await this.getColumnValues(/order date/i).catch(() => [] as string[]);
+		return values.map((value) => Date.parse(value)).filter((value) => !Number.isNaN(value));
+	}
+
+	private async columnIndex(header: RegExp): Promise<number> {
+		const headers = this.page.getByRole('columnheader');
+		for (let index = 0; index < await headers.count(); index += 1) {
+			if (header.test((await headers.nth(index).innerText()).trim())) return index;
+		}
+		return -1;
+	}
+
+	private async getColumnValues(header: RegExp): Promise<string[]> {
+		const index = await this.columnIndex(header);
+		if (index < 0) return [];
+		const rows = await this.getOrderRows();
+		const values: string[] = [];
+		for (let rowIndex = 0; rowIndex < await rows.count(); rowIndex += 1) {
+			const cells = rows.nth(rowIndex).getByRole('cell');
+			if (await cells.count() > index) {
+				const value = (await cells.nth(index).innerText()).trim();
+				if (value) values.push(value);
+			}
+		}
+		return values;
+	}
 }
