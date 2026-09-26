@@ -1,4 +1,5 @@
 import { InventoryQueries } from './queries/InventoryQueries';
+import { OrderingQueries } from './queries/OrderingQueries';
 import { RecipeQueries } from './queries/RecipeQueries';
 import { StoreQueries } from './queries/StoreQueries';
 import { TransferQueries } from './queries/TransferQueries';
@@ -21,6 +22,7 @@ export const DBQueries = {
   ...StoreQueries,
   ...UserQueries,
   ...InventoryQueries,
+  ...OrderingQueries,
   ...TransferQueries,
   ...RecipeQueries,
   ...WastageQueries,

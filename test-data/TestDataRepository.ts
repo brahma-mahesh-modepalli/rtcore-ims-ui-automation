@@ -14,6 +14,7 @@
 import { DBConnection } from '../database/DBConnection';
 import {
   InventoryQueries,
+  OrderingQueries,
   RecipeQueries,
   StoreQueries,
   TransferQueries,
@@ -118,6 +119,11 @@ export interface VendorItemData {
   unit_cost: string;
   available_from: string | null;
   expires_at: string | null;
+}
+
+export interface SaleData {
+  new_order_number: number | string;
+  new_external_id: string;
 }
 
 export class TestDataRepository {
@@ -276,6 +282,32 @@ export class TestDataRepository {
 
   async getUomByAbbreviation(abbreviation: string): Promise<UomData | undefined> {
     return (await DBConnection.executeQuery<UomData>(UomQueries.getUomByAbbreviation, [abbreviation]))[0];
+  }
+
+  /** Return a unique next order number and external id for a store so a Xenial sale can be posted. */
+  async getUniqueSaleData(storeId: number): Promise<SaleData | undefined> {
+    try {
+      const rows = await DBConnection.executeQuery<SaleData>(
+        OrderingQueries.getUniqueSaleData,
+        [storeId],
+      );
+      const row = rows[0];
+      if (!row) {
+        return undefined;
+      }
+
+      return {
+        ...row,
+        new_order_number: Number(row.new_order_number),
+      };
+    } catch (error) {
+      Reporting.error(
+        `Database query failed. Query name: getUniqueSaleData. Environment: ${
+          process.env.ENVIRONMENT || 'stage'
+        }. Error: ${error instanceof Error ? error.message : String(error)}`,
+      );
+      throw error;
+    }
   }
 
   /** All vendor-item records (unfiltered) for a given vendor. Used for RCSP-283. */

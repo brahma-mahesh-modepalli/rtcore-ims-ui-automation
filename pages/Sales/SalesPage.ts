@@ -153,7 +153,12 @@ export class SalesPage {
 
   async openDashboard(): Promise<void> {
     log('Navigating to Dashboard');
-    await this.dashboardMenu.click();
+    const dashboardHref = await this.dashboardMenu.getAttribute('href');
+    if (dashboardHref) {
+      await this.page.goto(new URL(dashboardHref, this.page.url()).toString());
+    } else {
+      await this.dashboardMenu.click({ force: true });
+    }
     await this.page.waitForLoadState('domcontentloaded').catch(() => undefined);
   }
 
@@ -171,9 +176,15 @@ export class SalesPage {
     await this.page.waitForTimeout(700);
   }
 
-  async expandHierarchyPath(region: string, market: string): Promise<void> {
+  async expandHierarchyPath(region: string, market: string, expectedStore?: string): Promise<void> {
     log(`Expanding hierarchy: ${region} > ${market}`);
     const marketButton = this.hierarchyNodeButton(market);
+    const expectedStoreCode = expectedStore?.replace(/^WB Unit\s+/i, '').trim();
+    const storeLocator = expectedStoreCode
+      ? this.page
+        .getByText(new RegExp(`^WB Unit\\s+${expectedStoreCode}$`, 'i'))
+        .first()
+      : undefined;
     await this.expandHierarchyNode(region);
     if (!(await marketButton.isVisible().catch(() => false))) {
       await this.expandHierarchyNode(region);
@@ -182,11 +193,25 @@ export class SalesPage {
     await marketButton.scrollIntoViewIfNeeded();
     await marketButton.click();
     await this.page.waitForTimeout(800);
+
+    if (storeLocator) {
+      if (!(await storeLocator.isVisible().catch(() => false))) {
+        await marketButton.click();
+        await this.page.waitForTimeout(800);
+      }
+      await expect(storeLocator).toBeVisible({ timeout: 20000 });
+    }
   }
 
   async selectStoreFromHierarchy(store: string): Promise<void> {
     const storeCode = store.replace(/^WB Unit\s+/i, '').trim();
-    await this.page.getByText(store, { exact: true }).first().click({ force: true });
+
+    const storeLocator = this.page
+      .getByText(new RegExp(`^WB Unit\\s+${storeCode}$`, 'i'))
+      .first();
+
+    await expect(storeLocator).toBeVisible({ timeout: 20000 });
+    await storeLocator.click({ force: true });
     await this.page.waitForTimeout(2000);
 
     if (await this.isStoreContextActive(storeCode, store)) {
@@ -241,7 +266,7 @@ export class SalesPage {
 
   async switchStore(region: string, market: string, store: string): Promise<void> {
     await this.openMyHierarchy();
-    await this.expandHierarchyPath(region, market);
+    await this.expandHierarchyPath(region, market, store);
     await this.selectStoreFromHierarchy(store);
     await this.openDashboard();
     await this.verifyActiveStore(store);
