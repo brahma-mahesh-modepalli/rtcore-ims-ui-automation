@@ -1,4 +1,11 @@
 export const VendorItemQueries = {
+  getOrderingAllowedVendorNames: `
+    SELECT name
+    FROM public.vendor
+    WHERE ordering_allowed = true
+    ORDER BY name
+  `,
+
   /** All vendor-item records (unfiltered) for a given vendor. Used for RCSP-283 UI vs DB comparisons. */
   getVendorItemsByVendorId: `
     SELECT

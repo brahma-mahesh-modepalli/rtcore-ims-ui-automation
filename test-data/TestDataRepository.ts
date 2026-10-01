@@ -158,6 +158,30 @@ export interface SaleData {
   new_external_id: string;
 }
 
+export interface PurchaseOrderTypeData {
+  order_type: string;
+}
+
+export interface PurchaseOrderTypeColumnData {
+  exists: boolean;
+}
+
+export interface VendorNameData {
+  name: string;
+}
+
+export interface PurchaseOrderTypeData {
+  order_type: string;
+}
+
+export interface PurchaseOrderTypeColumnData {
+  exists: boolean;
+}
+
+export interface VendorNameData {
+  name: string;
+}
+
 export class TestDataRepository {
   /** Fetch a single store by its id. Returns undefined if no row is found. */
   async getStoreById(storeId: number): Promise<StoreData | undefined> {
@@ -428,6 +452,48 @@ export class TestDataRepository {
       );
       throw error;
     }
+  }
+
+  async hasPurchaseOrderTypeColumn(): Promise<boolean> {
+    const row = (await DBConnection.executeQuery<PurchaseOrderTypeColumnData>(
+      OrderingQueries.hasPurchaseOrderTypeColumn,
+    ))[0];
+    return row?.exists ?? false;
+  }
+
+  async getDistinctPurchaseOrderTypes(): Promise<string[]> {
+    const rows = await DBConnection.executeQuery<PurchaseOrderTypeData>(
+      OrderingQueries.getDistinctPurchaseOrderTypes,
+    );
+    return rows.map((row) => row.order_type);
+  }
+
+  async getOrderingAllowedVendorNames(): Promise<string[]> {
+    const rows = await DBConnection.executeQuery<VendorNameData>(
+      VendorItemQueries.getOrderingAllowedVendorNames,
+    );
+    return rows.map((row) => row.name);
+  }
+
+  async hasPurchaseOrderTypeColumn(): Promise<boolean> {
+    const row = (await DBConnection.executeQuery<PurchaseOrderTypeColumnData>(
+      OrderingQueries.hasPurchaseOrderTypeColumn,
+    ))[0];
+    return row?.exists ?? false;
+  }
+
+  async getDistinctPurchaseOrderTypes(): Promise<string[]> {
+    const rows = await DBConnection.executeQuery<PurchaseOrderTypeData>(
+      OrderingQueries.getDistinctPurchaseOrderTypes,
+    );
+    return rows.map((row) => row.order_type);
+  }
+
+  async getOrderingAllowedVendorNames(): Promise<string[]> {
+    const rows = await DBConnection.executeQuery<VendorNameData>(
+      VendorItemQueries.getOrderingAllowedVendorNames,
+    );
+    return rows.map((row) => row.name);
   }
 
   /** All vendor-item records (unfiltered) for a given vendor. Used for RCSP-283. */
