@@ -1,0 +1,56 @@
+{
+  "jalapenoBurger": {
+    "key": "jalapenoBurger",
+    "product_id": "131011",
+    "name": "#4 JALAPENO & CHZ WB ML",
+    "price": 10.49,
+    "quantity": 1,
+    "tax": 0.87,
+    "major_reporting_category": {
+      "name": "Breakfast",
+      "is_major": true,
+      "external_category_id": "71"
+    },
+    "minor_reporting_category": {
+      "name": "Taquito",
+      "is_major": false,
+      "external_category_id": "81"
+    }
+  },
+  "fries": {
+    "key": "fries",
+    "product_id": "130339",
+    "name": "MD FRIES",
+    "price": 0,
+    "quantity": 1,
+    "tax": 0,
+    "major_reporting_category": {
+      "name": "Breakfast",
+      "is_major": true,
+      "external_category_id": "71"
+    },
+    "minor_reporting_category": {
+      "name": "Taquito",
+      "is_major": false,
+      "external_category_id": "81"
+    }
+  },
+  "powerade": {
+    "key": "powerade",
+    "product_id": "130122",
+    "name": "MD POWERADE",
+    "price": 0,
+    "quantity": 1,
+    "tax": 0,
+    "major_reporting_category": {
+      "name": "Breakfast",
+      "is_major": true,
+      "external_category_id": "71"
+    },
+    "minor_reporting_category": {
+      "name": "Taquito",
+      "is_major": false,
+      "external_category_id": "81"
+    }
+  }
+}

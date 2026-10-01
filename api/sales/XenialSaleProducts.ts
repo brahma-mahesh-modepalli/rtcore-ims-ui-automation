@@ -1,4 +1,12 @@
+import xenialProductsJson from '../../test-data/xenial-products.json';
+
 export type XenialProductKey = 'jalapenoBurger' | 'fries' | 'powerade';
+
+export type XenialReportingCategory = {
+  name: string;
+  is_major: boolean;
+  external_category_id: string;
+};
 
 export type XenialProduct = {
   key: XenialProductKey;
@@ -7,34 +15,11 @@ export type XenialProduct = {
   price: number;
   quantity: number;
   tax: number;
+  major_reporting_category: XenialReportingCategory;
+  minor_reporting_category: XenialReportingCategory;
 };
 
-export const XENIAL_PRODUCTS: Record<XenialProductKey, XenialProduct> = {
-  jalapenoBurger: {
-    key: 'jalapenoBurger',
-    product_id: '131011',
-    name: '#4 JALAPENO & CHZ WB ML',
-    price: 10.49,
-    quantity: 1,
-    tax: 0.87,
-  },
-  fries: {
-    key: 'fries',
-    product_id: '130339',
-    name: 'MD FRIES',
-    price: 0,
-    quantity: 1,
-    tax: 0,
-  },
-  powerade: {
-    key: 'powerade',
-    product_id: '130122',
-    name: 'MD POWERADE',
-    price: 0,
-    quantity: 1,
-    tax: 0,
-  },
-};
+export const XENIAL_PRODUCTS = xenialProductsJson as Record<XenialProductKey, XenialProduct>;
 
 export const XENIAL_PRODUCT_COMBINATIONS: XenialProductKey[][] = [
   ['jalapenoBurger'],
@@ -56,6 +41,8 @@ export function buildXenialProductItems(
     item_count_quantity: product.quantity,
     item_type: 'standard',
     tags: '',
+    major_reporting_category: product.major_reporting_category,
+    minor_reporting_category: product.minor_reporting_category,
     name: product.name,
     order_item_id: crypto.randomUUID(),
     payment_status: 'paid',

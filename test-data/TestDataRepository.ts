@@ -83,11 +83,43 @@ export interface WasteableIngredientSkuData {
   sku: string;
 }
 
+export interface WasteableStockSkuData extends WasteableIngredientSkuData {
+  qty_on_hand: number;
+}
+
+export interface WasteableItemOtherStoreData extends WasteableIngredientData {
+  source_store_id: number;
+  source_qty_on_hand: number;
+}
+
+export interface StoreStockData {
+  store_id: number;
+  qty_on_hand: number;
+}
+
 export interface RecipeData {
   recipe_id: number;
   name: string;
   yield_uom_id: number | null;
   uom: string | null;
+}
+
+export interface RecipeSkuData {
+  recipe_id: number;
+  recipe_name: string;
+  sku: string;
+  uom: string | null;
+  recipe_ingredient_data: Record<string, unknown>;
+}
+
+export interface RecipeIngredientStockData {
+  sku: string;
+  qty_on_hand: number;
+}
+
+export interface RecipeChildLotStockData extends RecipeIngredientStockData {
+  qty_remaining: number;
+  created_at: string;
 }
 
 export interface WasteReasonData {
@@ -230,17 +262,73 @@ export class TestDataRepository {
     )[0];
   }
 
-  async getPositiveWasteableIngredient(storeName: string): Promise<WasteableIngredientData | undefined> {
+  async getPositiveWasteableIngredient(storeId: number): Promise<WasteableIngredientData | undefined> {
     return (await DBConnection.executeQuery<WasteableIngredientData>(
       InventoryQueries.getPositiveWasteableIngredient,
-      [storeName],
+      [storeId],
     ))[0];
   }
 
-  async getZeroStockWasteableIngredient(storeName: string): Promise<WasteableIngredientData | undefined> {
+  async getWasteableItemWithPositiveStockByStoreId(storeId: number): Promise<WasteableIngredientData | undefined> {
+    return (await DBConnection.executeQuery<WasteableIngredientData>(
+      InventoryQueries.getWasteableItemWithPositiveStockByStoreId,
+      [storeId],
+    ))[0];
+  }
+
+  async getWasteableItemWithOneStockByStoreId(storeId: number): Promise<WasteableStockSkuData | undefined> {
+    return (await DBConnection.executeQuery<WasteableStockSkuData>(
+      InventoryQueries.getWasteableItemWithOneStockByStoreId,
+      [storeId],
+    ))[0];
+  }
+
+  async getWasteableItemWithZeroStockByStoreId(storeId: number): Promise<WasteableIngredientData | undefined> {
+    return (await DBConnection.executeQuery<WasteableIngredientData>(
+      InventoryQueries.getWasteableItemWithZeroStockByStoreId,
+      [storeId],
+    ))[0];
+  }
+
+  async getWasteableItemWithNegativeStockByStoreId(storeId: number): Promise<WasteableIngredientData | undefined> {
+    return (await DBConnection.executeQuery<WasteableIngredientData>(
+      InventoryQueries.getWasteableItemWithNegativeStockByStoreId,
+      [storeId],
+    ))[0];
+  }
+
+  async getNonWasteableItemWithPositiveStockByStoreId(storeId: number): Promise<WasteableIngredientData | undefined> {
+    return (await DBConnection.executeQuery<WasteableIngredientData>(
+      InventoryQueries.getNonWasteableItemWithPositiveStockByStoreId,
+      [storeId],
+    ))[0];
+  }
+
+  async getWasteableItemPositiveElsewhereAndZeroHere(storeId: number): Promise<WasteableItemOtherStoreData | undefined> {
+    return (await DBConnection.executeQuery<WasteableItemOtherStoreData>(
+      InventoryQueries.getWasteableItemPositiveElsewhereAndZeroHere,
+      [storeId],
+    ))[0];
+  }
+
+  async getTransferableStockForSkuOutsideStore(sku: string, storeId: number): Promise<StoreStockData | undefined> {
+    return (await DBConnection.executeQuery<StoreStockData>(
+      InventoryQueries.getTransferableStockForSkuOutsideStore,
+      [sku, storeId],
+    ))[0];
+  }
+
+  async getWasteableStockBySkuAndStore(sku: string, storeId: number): Promise<WasteableIngredientData | undefined> {
+    return (await DBConnection.executeQuery<WasteableIngredientData>(
+      InventoryQueries.getWasteableStockBySkuAndStore,
+      [sku, storeId],
+    ))[0];
+  }
+
+  async getZeroStockWasteableIngredient(storeId: number): Promise<WasteableIngredientData | undefined> {
     return (await DBConnection.executeQuery<WasteableIngredientData>(
       InventoryQueries.getZeroStockWasteableIngredient,
-      [storeName],
+      [storeId],
     ))[0];
   }
 
@@ -254,10 +342,10 @@ export class TestDataRepository {
     return rows[0]?.sku;
   }
 
-  async getEligibleWasteableIngredients(storeName: string): Promise<WasteableIngredientData[]> {
+  async getEligibleWasteableIngredients(storeId: number): Promise<WasteableIngredientData[]> {
     return DBConnection.executeQuery<WasteableIngredientData>(
       InventoryQueries.getEligibleWasteableIngredients,
-      [storeName],
+      [storeId],
     );
   }
 
@@ -270,6 +358,38 @@ export class TestDataRepository {
 
   async getActiveRecipe(): Promise<RecipeData | undefined> {
     return (await DBConnection.executeQuery<RecipeData>(RecipeQueries.getActiveRecipe))[0];
+  }
+
+  async getRecipeNameAndSkuForWaste(): Promise<RecipeSkuData | undefined> {
+    return (await DBConnection.executeQuery<RecipeSkuData>(
+      RecipeQueries.getRecipeNameAndSkuForWaste,
+    ))[0];
+  }
+
+  async getLatestRecipeIngredientStockByParentSku(
+    parentSku: string,
+  ): Promise<RecipeIngredientStockData | undefined> {
+    return (await DBConnection.executeQuery<RecipeIngredientStockData>(
+      RecipeQueries.getLatestRecipeIngredientStockByParentSku,
+      [parentSku],
+    ))[0];
+  }
+
+  async getStockBySku(sku: string): Promise<RecipeIngredientStockData | undefined> {
+    return (await DBConnection.executeQuery<RecipeIngredientStockData>(
+      RecipeQueries.getMasterStockBySku,
+      [sku],
+    ))[0];
+  }
+
+  async getChildLotsByParentSku(
+    parentSku: string,
+    storeId: number,
+  ): Promise<RecipeChildLotStockData[]> {
+    return DBConnection.executeQuery<RecipeChildLotStockData>(
+      RecipeQueries.getChildLotsByParentSku,
+      [parentSku, storeId],
+    );
   }
 
   async getWasteReason(description: string): Promise<WasteReasonData | undefined> {

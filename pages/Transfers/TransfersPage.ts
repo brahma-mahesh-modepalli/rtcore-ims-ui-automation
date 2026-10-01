@@ -379,18 +379,25 @@ export class TransfersPage {
       .getByRole('row', { name: new RegExp(itemNameOrSku, 'i') })
       .first();
     await expect(row).toBeVisible({ timeout: 15000 });
-    const cells = row.getByRole('cell');
-    const count = await cells.count();
-    for (let i = 0; i < count; i++) {
-      const text = (await cells.nth(i).innerText()).trim().replace(/,/g, '');
-      if (/^-?\d+(\.\d+)?$/.test(text)) {
-        return Number(text);
+    const headers = this.inventoryTable.getByRole('columnheader');
+    const headerCount = await headers.count();
+    let onHandIndex = -1;
+    for (let index = 0; index < headerCount; index++) {
+      const headerText = (await headers.nth(index).innerText()).trim();
+      if (/^on hand$/i.test(headerText)) {
+        onHandIndex = index;
+        break;
       }
     }
-    const rowText = await row.innerText();
-    const match = rowText.match(/-?\d+(\.\d+)?/);
+    if (onHandIndex < 0) {
+      throw new Error('Unable to locate the ON HAND column in Inventory Balances');
+    }
+
+    const cell = row.getByRole('cell').nth(onHandIndex);
+    const text = (await cell.innerText()).trim().replace(/,/g, '');
+    const match = text.match(/-?\d+(\.\d+)?/);
     if (!match) {
-      throw new Error(`Unable to parse ON HAND for ${itemNameOrSku}`);
+      throw new Error(`Unable to parse ON HAND for ${itemNameOrSku}: ${text}`);
     }
     return Number(match[0]);
   }

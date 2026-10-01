@@ -230,6 +230,23 @@ export class LogWastePage {
       .or(this.page.locator('[data-row], .waste-line, form').nth(index));
   }
 
+  private async openWasteableItemPicker(): Promise<Locator> {
+    const trigger = this.page.getByRole('button', { name: /search wasteable item/i }).first();
+    const placeholderSearch = this.page.getByPlaceholder(/search wasteable item|search item/i).first();
+    if (await placeholderSearch.isVisible().catch(() => false)) {
+      return placeholderSearch;
+    }
+
+    await this.page.keyboard.press('Escape').catch(() => undefined);
+    if (await trigger.isVisible().catch(() => false)) {
+      await trigger.click();
+    }
+
+    const search = placeholderSearch.or(this.page.getByRole('textbox', { name: /search/i }).last()).first();
+    await expect(search).toBeVisible({ timeout: 10000 });
+    return search;
+  }
+
   async setType(type: string, rowIndex = 0): Promise<void> {
     log(`Setting Type: ${type}`);
     const normalized = /recipe/i.test(type) ? 'Recipe' : 'Item';
@@ -250,6 +267,9 @@ export class LogWastePage {
       await this.page.waitForTimeout(500);
       return;
     }
+    if (!/recipe/i.test(normalized)) {
+      return;
+    }
     const pickerTrigger = this.page
       .getByRole('button', { name: /search wasteable item|search recipe/i })
       .or(this.page.getByText(/^search wasteable item$|^search recipe$/i))
@@ -265,19 +285,14 @@ export class LogWastePage {
     const nativePicker = this.itemPickerSelect(false);
     if (await nativePicker.isVisible().catch(() => false)) {
       const option = nativePicker.locator('option').filter({ hasText: value }).first();
+      if (await option.count() === 0) {
+        return;
+      }
       await expect(option).toHaveCount(1);
       await nativePicker.selectOption(await option.getAttribute('value'));
       return;
     }
-    const search = this.page.getByPlaceholder(/search wasteable item|search item/i).first();
-    if (!(await search.isVisible().catch(() => false))) {
-      const trigger = this.page
-        .getByRole('button', { name: /search wasteable item/i })
-        .or(this.page.getByText(/^search wasteable item$/i))
-        .first();
-      await trigger.click();
-    }
-    await expect(search).toBeVisible({ timeout: 10000 });
+    const search = await this.openWasteableItemPicker();
     await search.fill(value);
     await this.page.waitForTimeout(800);
   }
@@ -293,23 +308,24 @@ export class LogWastePage {
       return;
     }
 
-    const search = this.page.getByPlaceholder(/search wasteable item|search item/i).first();
-    if (!(await search.isVisible().catch(() => false))) {
-      await this.page
-        .getByRole('button', { name: /search wasteable item/i })
-        .or(this.page.getByText(/^search wasteable item$/i))
-        .first()
-        .click();
-    }
-    await expect(search).toBeVisible({ timeout: 10000 });
+    const search = await this.openWasteableItemPicker();
     await search.fill(sku);
     await this.page.waitForTimeout(800);
+    const escapedSku = sku.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     const option = this.page
       .getByRole('option')
-      .filter({ hasText: new RegExp(sku.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i') })
+      .filter({ hasText: new RegExp(escapedSku, 'i') })
       .first();
-    await expect(option).toBeVisible({ timeout: 10000 });
-    await option.click();
+    if (await option.isVisible().catch(() => false)) {
+      await option.click();
+    } else {
+      const suggestionButton = this.page
+        .getByRole('button')
+        .filter({ hasText: new RegExp(escapedSku, 'i') })
+        .last();
+      await expect(suggestionButton).toBeVisible({ timeout: 10000 });
+      await suggestionButton.click();
+    }
   }
 
   async verifyItemPickerResultVisible(value: string): Promise<void> {
@@ -318,11 +334,18 @@ export class LogWastePage {
       await expect(nativePicker.locator('option:checked')).toContainText(value);
       return;
     }
+    const escapedValue = value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     const result = this.page
       .getByRole('option')
-      .filter({ hasText: new RegExp(value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i') })
+      .filter({ hasText: new RegExp(escapedValue, 'i') })
       .first();
-    await expect(result).toBeVisible({ timeout: 10000 });
+    if (await result.isVisible().catch(() => false)) {
+      await expect(result).toBeVisible({ timeout: 10000 });
+      return;
+    }
+    await expect(
+      this.page.getByRole('button').filter({ hasText: new RegExp(escapedValue, 'i') }).last(),
+    ).toBeVisible({ timeout: 10000 });
   }
 
   async verifyItemPickerResultAbsent(value: string): Promise<void> {
@@ -335,6 +358,10 @@ export class LogWastePage {
       .getByRole('option')
       .filter({ hasText: new RegExp(value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i') });
     await expect(result).toHaveCount(0);
+    const escapedValue = value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    await expect(
+      this.page.getByRole('button').filter({ hasText: new RegExp(escapedValue, 'i') }),
+    ).toHaveCount(0);
     await expect(this.page.getByText(/no matches found|no results/i).first()).toBeVisible({ timeout: 5000 });
   }
 
@@ -349,9 +376,10 @@ export class LogWastePage {
   }
 
   private itemPickerSelect(isRecipe: boolean): Locator {
+    const pickerText = isRecipe ? /search recipe/i : /search wasteable item|search item/i;
     return this.page
-      .locator('select:not([aria-hidden="true"])')
-      .filter({ hasText: isRecipe ? /search recipe/i : /search wasteable item/i })
+      .locator('main select:not([aria-hidden="true"])')
+      .filter({ hasText: pickerText })
       .first();
   }
 

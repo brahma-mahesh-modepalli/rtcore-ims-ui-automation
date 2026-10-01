@@ -20,6 +20,7 @@ import { TransfersPage } from '../pages/Transfers/TransfersPage';
 import { TestDataRepository } from '../test-data/TestDataRepository';
 
 export const ACTIVE_STORE_CONTEXT = {
+  storeId: 37,
   region: '1700 San Antonio 4126314',
   market: '1708 E Central SA 4126393',
   storeName: 'WB Unit 1034',

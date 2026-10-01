@@ -1,5 +1,6 @@
 import { test, expect } from '../../fixtures/baseTest';
 import { SalesPage } from '../../pages/Sales/SalesPage';
+import { TransfersPage } from '../../pages/Transfers/TransfersPage';
 import { TestDataRepository } from '../../test-data/TestDataRepository';
 import {
   buildXenialProductItems,
@@ -34,6 +35,8 @@ function buildSalePayload(
   const taxTotal = products.reduce((total, product) => total + product.tax * product.quantity, 0);
   const orderTotal = subtotal + taxTotal;
   const paymentId = crypto.randomUUID();
+  const orderTime = new Date(currentIso);
+  const mealPeriod = orderTime.getHours() < 11 ? 'Breakfast' : orderTime.getHours() < 15 ? 'Lunch' : 'Dinner';
 
   return {
     entityName: 'Order',
@@ -52,6 +55,17 @@ function buildSalePayload(
       business_date: businessDate,
       comment: '',
       company_id: '5aafe11e854bdf2600767304',
+      contributor_count: 1,
+      contributors: [
+        {
+          id: '5',
+          title: 'employee',
+          name: ' ',
+          type: 'employee',
+          time: currentIso,
+        },
+      ],
+      creation_point: 'xsREG5',
       creator: {
         employee: { id: '5', title: 'employee', name: ' ' },
         terminal: { id: '5', terminal_number: '5', title: 'xsREG5' },
@@ -66,6 +80,16 @@ function buildSalePayload(
           customer: { identification_method: 'code' },
         },
       },
+      day_part_info: {
+        business_date: businessDate,
+        day_part: mealPeriod,
+        day_part_type_name: mealPeriod,
+        external_id: mealPeriod === 'Breakfast' ? '2' : mealPeriod === 'Lunch' ? '3' : '4',
+        meal_period: mealPeriod,
+        stored: true,
+        time: currentIso,
+      },
+      deleted_items: [],
       destination: {
         external_id: '32',
         id: '32',
@@ -74,9 +98,16 @@ function buildSalePayload(
         consumption_type: 'OnPremises',
       },
       discount_info: { discounts: [], total: 0, total_unrounded: 0 },
+      discount_total: 0,
+      expo_number: 1,
       fulfillment_status: 'pending',
       guest_count: 1,
       items: buildXenialProductItems(products, currentIso),
+      kitchen_timing: {
+        created: currentIso,
+        sent: currentIso,
+        last_modified: currentIso,
+      },
       notification_status: 'paid',
       order_number: String(saleData.new_order_number),
       order_point: 'xsREG5',
@@ -88,6 +119,12 @@ function buildSalePayload(
       owner: { id: '5', title: 'employee', name: ' ' },
       payment_info: {
         change: 0,
+        change_info: {
+          expected: 0,
+          given: 0,
+          returned: 0,
+          status: 'not_required',
+        },
         tips: 0,
         total: orderTotal,
         payments: [
@@ -106,8 +143,10 @@ function buildSalePayload(
         ],
       },
       payment_status: 'paid',
+      sequential_order_number: saleData.new_order_number,
       site_info: {
         address: '17311 Bulverde Rd',
+        address2: '',
         city: 'San Antonio',
         company: { id: '5aafe11e854bdf2600767304' },
         id: '5af357c34b3258001aa6d87e',
@@ -116,6 +155,7 @@ function buildSalePayload(
         state: 'TX',
         store_number: storeNumber,
         timezone: 'US/Central',
+        zip: '78230',
       },
       state: 'closed',
       store_number: storeNumber,
@@ -186,6 +226,14 @@ test.describe('RCSP-317 - Xenial sale sync and IMS sales search', () => {
       new_external_id: externalId,
     }, selectedProducts, activeStoreContext.storeNumber, currentDate);
 
+    const transfersPage = new TransfersPage(page);
+    await transfersPage.openInventoryBalances();
+    const onHandBefore = new Map<string, number>();
+    for (const product of selectedProducts) {
+      await transfersPage.searchInventoryItem(product.product_id);
+      onHandBefore.set(product.product_id, await transfersPage.getOnHandValue(product.product_id));
+    }
+
     const response = await request.post('https://qa-backoffice.wbhq.com/api/v1/sales/xenial', {
       headers: {
         'Content-Type': 'application/json',
@@ -215,6 +263,21 @@ test.describe('RCSP-317 - Xenial sale sync and IMS sales search', () => {
     }, { timeout: 30000 }).toBeTruthy();
 
     await expect(page.getByText(String(orderNumber), { exact: true }).first()).toBeVisible({ timeout: 20000 });
+
+    await transfersPage.openInventoryBalances();
+    for (const product of selectedProducts) {
+      const expectedOnHand = onHandBefore.get(product.product_id)! - product.quantity;
+      await expect.poll(async () => {
+        await page.reload({ waitUntil: 'domcontentloaded' });
+        await transfersPage.openInventoryBalances();
+        await transfersPage.searchInventoryItem(product.product_id);
+        return transfersPage.getOnHandValue(product.product_id);
+      }, {
+        timeout: 60000,
+        intervals: [2000, 5000],
+        message: `Waiting for product ${product.product_id} On Hand to decrease to ${expectedOnHand}`,
+      }).toBe(expectedOnHand);
+    }
 
     console.log('Generated orderNumber:', orderNumber);
     console.log('Generated externalId:', externalId);

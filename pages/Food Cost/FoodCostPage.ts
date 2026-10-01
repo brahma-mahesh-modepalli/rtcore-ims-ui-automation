@@ -160,4 +160,106 @@ export class FoodCostPage {
     const text = await card.innerText();
     expect(text).not.toMatch(/\+\s*\$?\d/);
   }
+
+  async verifyDateRangeControls(): Promise<void> {
+    const dateInputs = this.mainContent.locator('input[type="date"]');
+    if (await dateInputs.count() >= 2) {
+      await expect(dateInputs.nth(0)).toBeVisible();
+      await expect(dateInputs.nth(1)).toBeVisible();
+    } else {
+      await expect(this.mainContent.getByLabel(/from|start date/i).first()).toBeVisible();
+      await expect(this.mainContent.getByLabel(/to|end date/i).first()).toBeVisible();
+    }
+    await expect(this.mainContent.getByRole('button', { name: /^apply$/i })).toBeVisible();
+  }
+
+  async applyDateRange(from: string, to: string): Promise<void> {
+    const dateInputs = this.mainContent.locator('input[type="date"]');
+    if (await dateInputs.count() >= 2) {
+      await dateInputs.nth(0).fill(from);
+      await dateInputs.nth(1).fill(to);
+    } else {
+      await this.mainContent.getByLabel(/from|start date/i).first().fill(from);
+      await this.mainContent.getByLabel(/to|end date/i).first().fill(to);
+    }
+    await this.mainContent.getByRole('button', { name: /^apply$/i }).click();
+    await this.page.waitForLoadState('networkidle').catch(() => undefined);
+    await expect(this.page.getByText(/loading/i).first()).not.toBeVisible({ timeout: 15_000 }).catch(() => undefined);
+  }
+
+  async verifyPriceDifferentialAbsent(): Promise<void> {
+    await expect(this.mainContent).not.toContainText(/price differential/i);
+  }
+
+  async verifyBreakdownCaption(): Promise<void> {
+    await expect(
+      this.mainContent.getByText(
+        'Theoretical Food Cost + Waste + Variance/Stat Loss + Condiment Usage',
+        { exact: false },
+      ).first(),
+    ).toBeVisible();
+  }
+
+  async verifyBreakdownComponents(): Promise<void> {
+    const requiredLabels = [
+      /theoretical food cost/i,
+      /^waste$/i,
+      /variance\s*\/\s*stat loss/i,
+      /condiment usage/i,
+      /^total$/i,
+    ];
+    for (const label of requiredLabels) {
+      await expect(this.mainContent.getByText(label).first()).toBeVisible();
+    }
+    await this.verifyPriceDifferentialAbsent();
+  }
+
+  async getDisplayedAmount(label: RegExp): Promise<number> {
+    const labelNode = this.mainContent.getByText(label).first();
+    await expect(labelNode).toBeVisible();
+    const ancestors = labelNode.locator('xpath=ancestor::*[self::div or self::section or self::article]');
+    const count = Math.min(await ancestors.count(), 8);
+    const currencyPattern = /\(?\s*-?\s*\$\s*[\d,]+(?:\.\d+)?\s*\)?/g;
+
+    for (let index = 0; index < count; index++) {
+      const text = await ancestors.nth(index).innerText();
+      const matches = text.match(currencyPattern);
+      if (matches?.length === 1) {
+        const raw = matches[0];
+        const amount = Number(raw.replace(/[^\d.]/g, ''));
+        return raw.includes('-') || raw.includes('(') ? -amount : amount;
+      }
+    }
+
+    throw new Error(`Could not find one currency value near dashboard label: ${label}`);
+  }
+
+  async getActualFoodCostBreakdownAmounts(): Promise<{
+    theoretical: number;
+    waste: number;
+    varianceStatLoss: number;
+    condimentUsage: number;
+    total: number;
+  }> {
+    return {
+      theoretical: await this.getDisplayedAmount(/theoretical food cost/i),
+      waste: await this.getDisplayedAmount(/^waste$/i),
+      varianceStatLoss: await this.getDisplayedAmount(/variance\s*\/\s*stat loss/i),
+      condimentUsage: await this.getDisplayedAmount(/condiment usage/i),
+      total: await this.getDisplayedAmount(/^total$/i),
+    };
+  }
+
+  async verifyWasteSection(title: RegExp, labels: RegExp[]): Promise<void> {
+    const sectionTitle = this.mainContent.getByText(title).first();
+    await expect(sectionTitle).toBeVisible();
+    for (const label of labels) {
+      await expect(this.mainContent.getByText(label).first()).toBeVisible();
+    }
+    const emptyState = this.mainContent.getByText(/no waste data for this period/i).first();
+    const emptyVisible = await emptyState.isVisible().catch(() => false);
+    if (emptyVisible) {
+      await expect(emptyState).toBeVisible();
+    }
+  }
 }
