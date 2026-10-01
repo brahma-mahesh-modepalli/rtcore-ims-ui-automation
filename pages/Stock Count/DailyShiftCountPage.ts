@@ -207,6 +207,18 @@ export class DailyShiftCountPage {
     throw new Error('No Daily Shift Count rows available to open');
   }
 
+  async openDailyShiftCount(identifier: string): Promise<void> {
+    const escaped = identifier.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const row = this.dailyCountTable
+      .getByRole('row')
+      .filter({ hasText: new RegExp(escaped, 'i') })
+      .first();
+    await expect(row).toBeVisible({ timeout: 15000 });
+    await row.click();
+    await this.page.waitForLoadState('networkidle').catch(() => undefined);
+    await expect(this.addItemButton.first()).toBeVisible({ timeout: 20000 });
+  }
+
   async openAddItemDialog(): Promise<void> {
     log('Opening + ADD ITEM on Daily Shift Count');
     await expect(this.addItemButton.first()).toBeVisible({ timeout: 15000 });
