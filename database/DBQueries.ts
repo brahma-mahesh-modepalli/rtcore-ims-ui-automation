@@ -1,4 +1,5 @@
 import { InventoryQueries } from './queries/InventoryQueries';
+import { CreditRequestQueries } from './queries/CreditRequestQueries';
 import { OrderingQueries } from './queries/OrderingQueries';
 import { RecipeQueries } from './queries/RecipeQueries';
 import { StoreQueries } from './queries/StoreQueries';
@@ -9,6 +10,7 @@ import { VendorItemQueries } from './queries/VendorItemQueries';
 import { WastageQueries } from './queries/WastageQueries';
 
 export { InventoryQueries } from './queries/InventoryQueries';
+export { CreditRequestQueries } from './queries/CreditRequestQueries';
 export { OrderingQueries } from './queries/OrderingQueries';
 export { RecipeQueries } from './queries/RecipeQueries';
 export { StoreQueries } from './queries/StoreQueries';
@@ -22,6 +24,7 @@ export const DBQueries = {
   ...StoreQueries,
   ...UserQueries,
   ...InventoryQueries,
+  ...CreditRequestQueries,
   ...OrderingQueries,
   ...TransferQueries,
   ...RecipeQueries,

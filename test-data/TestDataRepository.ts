@@ -14,6 +14,7 @@
 import { DBConnection } from '../database/DBConnection';
 import {
   InventoryQueries,
+  CreditRequestQueries,
   OrderingQueries,
   RecipeQueries,
   StoreQueries,
@@ -168,6 +169,10 @@ export interface PurchaseOrderTypeColumnData {
 
 export interface VendorNameData {
   name: string;
+}
+
+export interface EligibleCreditRequestPoData {
+  po_id: string;
 }
 
 export interface PurchaseOrderTypeData {
@@ -475,25 +480,11 @@ export class TestDataRepository {
     return rows.map((row) => row.name);
   }
 
-  async hasPurchaseOrderTypeColumn(): Promise<boolean> {
-    const row = (await DBConnection.executeQuery<PurchaseOrderTypeColumnData>(
-      OrderingQueries.hasPurchaseOrderTypeColumn,
-    ))[0];
-    return row?.exists ?? false;
-  }
-
-  async getDistinctPurchaseOrderTypes(): Promise<string[]> {
-    const rows = await DBConnection.executeQuery<PurchaseOrderTypeData>(
-      OrderingQueries.getDistinctPurchaseOrderTypes,
+  async getEligibleCreditRequestPurchaseOrderIds(): Promise<string[]> {
+    const rows = await DBConnection.executeQuery<EligibleCreditRequestPoData>(
+      CreditRequestQueries.getEligiblePurchaseOrderIds,
     );
-    return rows.map((row) => row.order_type);
-  }
-
-  async getOrderingAllowedVendorNames(): Promise<string[]> {
-    const rows = await DBConnection.executeQuery<VendorNameData>(
-      VendorItemQueries.getOrderingAllowedVendorNames,
-    );
-    return rows.map((row) => row.name);
+    return rows.map((row) => String(row.po_id)).filter(Boolean);
   }
 
   /** All vendor-item records (unfiltered) for a given vendor. Used for RCSP-283. */

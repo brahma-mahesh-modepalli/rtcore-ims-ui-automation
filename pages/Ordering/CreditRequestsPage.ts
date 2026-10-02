@@ -329,7 +329,7 @@ export class CreditRequestsPage {
     log('✓ Purchase Order with Received Items search section is visible');
   }
 
-  async searchAndSelectPurchaseOrder(poSearch: string): Promise<void> {
+  async searchAndSelectPurchaseOrder(poSearch: string): Promise<boolean> {
     if (!poSearch?.trim()) {
       throw new Error('receivedPoSearch is empty — set it in RCSP-595.json commonData');
     }
@@ -349,9 +349,13 @@ export class CreditRequestsPage {
         name: new RegExp(poSearch.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i'),
       })
       .or(this.page.getByText(new RegExp(poSearch, 'i')).first());
-    await expect(option.first()).toBeVisible({ timeout: 15000 });
+    if (!(await option.first().isVisible().catch(() => false))) {
+      log(`Purchase Order is not selectable in the received-items picker: ${poSearch}`);
+      return false;
+    }
     await option.first().click();
     log(`✓ Selected Purchase Order matching: ${poSearch}`);
+    return true;
   }
 
   async clickStartCreditRequest(): Promise<void> {
@@ -387,17 +391,79 @@ export class CreditRequestsPage {
     log(
       `${checked ? 'Selecting' : 'Unchecking'} Damaged checkbox${itemHint ? ` for ${itemHint}` : ''}`,
     );
-    const scope = this.itemRow(itemHint);
-    const damaged = scope
-      .getByRole('checkbox', { name: /damaged/i })
-      .or(scope.locator('label').filter({ hasText: /^damaged$/i }).locator('input'))
-      .or(this.page.getByRole('checkbox', { name: /damaged/i }).first());
-    const box = damaged.first();
-    await expect(box).toBeVisible({ timeout: 15000 });
-    const isChecked = await box.isChecked().catch(() => false);
-    if (isChecked !== checked) {
-      await box.click({ force: true });
+    let box: Locator;
+    let isNativeCheckbox = true;
+
+    if (itemHint?.trim()) {
+      const scope = this.itemRow(itemHint);
+      const nativeBox = scope
+        .getByRole('checkbox', { name: /damaged/i })
+        .or(scope.locator('label').filter({ hasText: /^damaged$/i }).locator('input[type="checkbox"]'))
+        .or(scope.locator('input[type="checkbox"]'))
+        .first();
+      if (await nativeBox.isVisible().catch(() => false)) {
+        box = nativeBox;
+      } else {
+        box = scope
+          .locator('div[class*="w-6"][class*="h-6"][class*="rounded-100"][class*="transition-colors"]')
+          .filter({ visible: true })
+          .first();
+        isNativeCheckbox = false;
+      }
+    } else {
+      const namedCheckboxes = this.page.getByRole('checkbox', { name: /damaged/i });
+      const namedCount = await namedCheckboxes.count();
+      if (namedCount > 0) {
+        box = namedCheckboxes.filter({ visible: true }).first();
+      } else {
+        const damageLabel = this.page
+          .getByText(/^damaged$/i)
+          .filter({ visible: true })
+          .first();
+        const customSelector = 'div[class*="w-6"][class*="h-6"][class*="rounded-100"][class*="transition-colors"]';
+        const scope = itemHint?.trim() ? this.itemRow(itemHint) : this.page;
+        const customBoxes = scope.locator(customSelector).filter({ visible: true });
+        if (await customBoxes.count() > 0) {
+          box = customBoxes.first();
+          isNativeCheckbox = false;
+        } else {
+          const containingItem = damageLabel.locator('xpath=ancestor::*[.//input[@type="checkbox"]][1]');
+          box = containingItem
+            .getByRole('checkbox')
+            .or(containingItem.locator('input[type="checkbox"]'))
+            .first();
+        }
+      }
     }
+
+    await expect(box).toBeVisible({ timeout: 15000 });
+    const isChecked = isNativeCheckbox
+      ? await box.isChecked().catch(() => false)
+      : await box.evaluate((element) => {
+          const className = element.className?.toString?.() ?? '';
+          return element.getAttribute('aria-checked') === 'true' ||
+            element.getAttribute('data-state') === 'checked' ||
+            /bg-[^\s]+/.test(className) ||
+            Boolean(element.querySelector('svg'));
+        }).catch(() => false);
+    if (isChecked !== checked) {
+      if (!isNativeCheckbox) {
+        await box.click();
+      } else {
+        const checkboxId = await box.getAttribute('id');
+        const associatedLabel = checkboxId
+          ? this.page.locator(`label[for="${checkboxId}"]`).first()
+          : this.page.locator('label').filter({ hasText: /^damaged$/i }).first();
+        if (await associatedLabel.isVisible().catch(() => false)) {
+          await associatedLabel.click();
+        } else {
+          const visibleDamageText = this.page.getByText(/^damaged$/i).filter({ visible: true }).first();
+          await expect(visibleDamageText).toBeVisible({ timeout: 5000 });
+          await visibleDamageText.click();
+        }
+      }
+    }
+    if (isNativeCheckbox) await expect(box).toBeChecked({ timeout: 5000 });
     await this.page.waitForTimeout(400);
   }
 
@@ -428,6 +494,7 @@ export class CreditRequestsPage {
     return scope
       .getByRole('combobox', { name: /uom/i })
       .or(scope.locator('label').filter({ hasText: /uom/i }).locator('..').getByRole('combobox'))
+      .or(scope.getByText(/^uom\s*\*?$/i).locator('xpath=following::button[1]'))
       .or(this.page.getByLabel(/^uom/i))
       .first();
   }
@@ -451,8 +518,26 @@ export class CreditRequestsPage {
 
   async selectUom(value: string, itemHint?: string): Promise<void> {
     log(`Selecting UOM: ${value}`);
+    const scope = itemHint ? this.itemRow(itemHint) : this.page.locator('main');
+    const nativeSelects = scope.locator('select');
+    for (let index = 0; index < await nativeSelects.count(); index += 1) {
+      const candidate = nativeSelects.nth(index);
+      const option = candidate.locator('option').filter({ hasText: new RegExp(`^${value}$`, 'i') });
+      if (await option.count() > 0) {
+        await candidate.selectOption({ label: value });
+        await expect(candidate.locator('option:checked')).toHaveText(new RegExp(`^${value}$`, 'i'));
+        return;
+      }
+    }
+
     const uom = this.uomControl(itemHint);
     await expect(uom).toBeVisible({ timeout: 15000 });
+    const tag = await uom.evaluate((element) => element.tagName.toLowerCase());
+    if (tag === 'select') {
+      await uom.selectOption({ label: value });
+      await expect(uom.locator('option:checked')).toHaveText(value);
+      return;
+    }
     await uom.click();
     const option = this.page
       .getByRole('option', { name: new RegExp(`^${value}$`, 'i') })
@@ -512,6 +597,65 @@ export class CreditRequestsPage {
   }
 
   private async fillLabeledControl(label: RegExp, value: string): Promise<void> {
+    if (/incident type/i.test(label.source)) {
+      const placeholder = this.page.getByText(/^select incident type$/i, { exact: true }).first();
+      const trigger = placeholder.locator('xpath=ancestor::button[1]');
+      const buttonByName = this.page.getByRole('button', { name: /select incident type/i }).first();
+      const dropdown = await trigger.isVisible().catch(() => false) ? trigger : buttonByName;
+      await expect(dropdown).toBeVisible({ timeout: 15000 });
+      await dropdown.click();
+      const optionSurfaces = [
+        this.page.getByRole('option').filter({ visible: true }),
+        this.page.locator('button[data-option="true"], [cmdk-item], [role="listbox"] button, [data-radix-popper-content-wrapper] button').filter({ visible: true }),
+      ];
+      let candidates: Locator | undefined;
+      let candidateCount = 0;
+      for (const surface of optionSurfaces) {
+        const count = await surface.count();
+        if (count > 0) {
+          candidates = surface;
+          candidateCount = count;
+          break;
+        }
+      }
+      const validOptions: Array<{ locator: Locator; text: string }> = [];
+      for (let index = 0; index < candidateCount; index += 1) {
+        const candidate = candidates!.nth(index);
+        const text = (await candidate.innerText()).trim();
+        if (text && !/^(select|choose)\s+incident type$/i.test(text)) {
+          validOptions.push({ locator: candidate, text });
+        }
+      }
+      if (validOptions.length === 0) {
+        throw new Error('No valid Incident Type options are visible in the dropdown');
+      }
+      const selected = validOptions[Math.floor(Math.random() * validOptions.length)];
+      log(`Randomly selected Incident Type: ${selected.text}`);
+      await selected.locator.click();
+      return;
+    }
+
+    if (/^qty|quantity/i.test(label.source)) {
+      const qty = this.page.locator('main').getByRole('spinbutton').first();
+      await expect(qty).toBeVisible({ timeout: 15000 });
+      await qty.fill(value);
+      return;
+    }
+
+    if (/can you use this product/i.test(label.source)) {
+      const field = this.page.locator('main textarea').nth(0);
+      await expect(field).toBeVisible({ timeout: 15000 });
+      await field.fill(value);
+      return;
+    }
+
+    if (/enough good product|iut from another unit/i.test(label.source)) {
+      const field = this.page.locator('main textarea').nth(1);
+      await expect(field).toBeVisible({ timeout: 15000 });
+      await field.fill(value);
+      return;
+    }
+
     const field = this.page
       .getByLabel(label)
       .or(
