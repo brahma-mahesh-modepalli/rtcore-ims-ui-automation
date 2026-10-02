@@ -478,6 +478,38 @@ export class CreditRequestsPage {
     log('✓ Damaged-item mandatory fields are visible');
   }
 
+  async getIncidentTypeOptions(): Promise<string[]> {
+    const placeholder = this.page.getByText(/^select incident type$/i, { exact: true }).first();
+    const trigger = placeholder.locator('xpath=ancestor::button[1]');
+    const buttonByName = this.page.getByRole('button', { name: /select incident type/i }).first();
+    const dropdown = await trigger.isVisible().catch(() => false) ? trigger : buttonByName;
+    await expect(dropdown).toBeVisible({ timeout: 15000 });
+    await dropdown.click();
+
+    const surfaces = [
+      this.page.getByRole('option').filter({ visible: true }),
+      this.page.locator('button[data-option="true"], [cmdk-item], [role="listbox"] button, [data-radix-popper-content-wrapper] button').filter({ visible: true }),
+    ];
+    let options: Locator | undefined;
+    let count = 0;
+    for (const surface of surfaces) {
+      const surfaceCount = await surface.count();
+      if (surfaceCount > 0) {
+        options = surface;
+        count = surfaceCount;
+        break;
+      }
+    }
+
+    const values: string[] = [];
+    for (let index = 0; index < count; index += 1) {
+      const value = (await options!.nth(index).innerText()).trim();
+      if (value && !/^(select|choose)\s+incident type$/i.test(value)) values.push(value);
+    }
+    await this.page.keyboard.press('Escape').catch(() => undefined);
+    return [...new Set(values)];
+  }
+
   async verifyDamagedFieldsHidden(expectedFields: string[]): Promise<void> {
     for (const field of expectedFields) {
       const loc = this.page.getByText(

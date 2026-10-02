@@ -1,4 +1,11 @@
 export const CreditRequestQueries = {
+  getActiveIncidentTypeDescriptions: `
+    SELECT
+      description
+    FROM public.incident_type
+    WHERE active = true
+  `,
+
   getEligiblePurchaseOrderIds: `
     SELECT po_id
     FROM public.truck_delivery

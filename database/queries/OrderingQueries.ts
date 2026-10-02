@@ -1,4 +1,30 @@
 export const OrderingQueries = {
+  getDraftPurchaseOrderLinesWithCategories: `
+    SELECT
+      po.po_id,
+      CONCAT('PO-', po.po_id::text) AS po_number,
+      pol.item_id,
+      i.sku,
+      i.name AS item_name,
+      ic.name AS category,
+      pol.ordered_qty
+    FROM public.purchase_order_line pol
+    JOIN public.purchase_order po ON po.po_id = pol.po_id
+    JOIN public.item i ON i.item_id = pol.item_id
+    LEFT JOIN public.item_category ic ON ic.category_id = i.category_id
+    WHERE pol.po_id = (
+      SELECT pol2.po_id
+      FROM public.purchase_order_line pol2
+      JOIN public.purchase_order po ON po.po_id = pol2.po_id
+      WHERE po.store_id = $1
+        AND po.status = 'draft'
+      GROUP BY pol2.po_id
+      ORDER BY COUNT(pol2.item_id) DESC
+      LIMIT 1
+    )
+    ORDER BY pol.item_id
+  `,
+
   hasPurchaseOrderTypeColumn: `
     SELECT EXISTS (
       SELECT 1

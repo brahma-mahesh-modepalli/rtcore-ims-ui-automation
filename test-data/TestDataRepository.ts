@@ -159,6 +159,16 @@ export interface SaleData {
   new_external_id: string;
 }
 
+export interface DraftPurchaseOrderLineData {
+  po_id: number | string;
+  po_number: string;
+  item_id: number;
+  sku: string;
+  item_name: string;
+  category: string | null;
+  ordered_qty: number | string;
+}
+
 export interface PurchaseOrderTypeData {
   order_type: string;
 }
@@ -173,6 +183,10 @@ export interface VendorNameData {
 
 export interface EligibleCreditRequestPoData {
   po_id: string;
+}
+
+export interface IncidentTypeDescriptionData {
+  description: string;
 }
 
 export interface PurchaseOrderTypeData {
@@ -459,6 +473,13 @@ export class TestDataRepository {
     }
   }
 
+  async getDraftPurchaseOrderLinesWithCategories(storeId: number): Promise<DraftPurchaseOrderLineData[]> {
+    return DBConnection.executeQuery<DraftPurchaseOrderLineData>(
+      OrderingQueries.getDraftPurchaseOrderLinesWithCategories,
+      [storeId],
+    );
+  }
+
   async hasPurchaseOrderTypeColumn(): Promise<boolean> {
     const row = (await DBConnection.executeQuery<PurchaseOrderTypeColumnData>(
       OrderingQueries.hasPurchaseOrderTypeColumn,
@@ -485,6 +506,13 @@ export class TestDataRepository {
       CreditRequestQueries.getEligiblePurchaseOrderIds,
     );
     return rows.map((row) => String(row.po_id)).filter(Boolean);
+  }
+
+  async getActiveIncidentTypeDescriptions(): Promise<string[]> {
+    const rows = await DBConnection.executeQuery<IncidentTypeDescriptionData>(
+      CreditRequestQueries.getActiveIncidentTypeDescriptions,
+    );
+    return rows.map((row) => row.description);
   }
 
   /** All vendor-item records (unfiltered) for a given vendor. Used for RCSP-283. */
