@@ -1,0 +1,37 @@
+{
+  "RCSP-462": {
+    "scenarioId": "RCSP-462",
+    "epic": "EPIC-RCSP-142",
+    "feature": "Vendor parent-child hierarchy and McLane ordering",
+    "commonData": {
+      "parentVendorName": "McLane",
+      "mappedStore": {
+        "region": "1700 San Antonio 4126314",
+        "market": "1708 E Central SA 4126393",
+        "store": "WB Unit 1034",
+        "storeId": 37,
+        "itemName": "SM BUN",
+        "resolvedDcVendorCode": ""
+      },
+      "unmappedStore": {
+        "region": "",
+        "market": "",
+        "store": "",
+        "storeId": 0,
+        "itemName": ""
+      }
+    },
+    "testCases": [
+      { "testCaseId": "TC_RCSP-462_01", "testName": "Child vendor hierarchy matches the database", "testData": {} },
+      { "testCaseId": "TC_RCSP-462_02", "testName": "Standalone vendors have no parent hierarchy", "testData": {} },
+      { "testCaseId": "TC_RCSP-462_03", "testName": "Child vendors cannot become parent vendors", "testData": {} },
+      { "testCaseId": "TC_RCSP-462_04", "testName": "Required fields and standalone vendor creation", "testData": {} },
+      { "testCaseId": "TC_RCSP-462_05", "testName": "Child vendor saves the selected parent mapping", "testData": {} },
+      { "testCaseId": "TC_RCSP-462_06", "testName": "Duplicate and whitespace vendor values are rejected", "testData": {} },
+      { "testCaseId": "TC_RCSP-462_07", "testName": "Cancel discards vendor edits", "testData": {} },
+      { "testCaseId": "TC_RCSP-462_08", "testName": "Ordering displays McLane once and hides its DC vendors", "testData": {} },
+      { "testCaseId": "TC_RCSP-462_09", "testName": "McLane order is saved against the store's resolved DC", "testData": {} },
+      { "testCaseId": "TC_RCSP-462_10", "testName": "Order is not created without a valid DC mapping", "testData": {} }
+    ]
+  }
+}

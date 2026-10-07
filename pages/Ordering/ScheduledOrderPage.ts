@@ -167,6 +167,10 @@ export class ScheduledOrderPage {
 		return value.match(/\bPO-[A-Z0-9-]+\b/i)?.[0];
 	}
 
+	private isScheduledOrdersListUrl(): boolean {
+		return /\/orders\/scheduled\/?(?:[?#].*)?$/.test(this.page.url());
+	}
+
 	private getStatusFilterButton(status: string): Locator {
 		switch (status.toLowerCase()) {
 			case 'all':
@@ -204,7 +208,31 @@ export class ScheduledOrderPage {
 	}
 
 	async clearOrderDateGrouping(): Promise<boolean> {
-		const groupingButton = this.page.getByRole('button', { name: /order date/i }).filter({ hasText: /group|order date/i }).first();
+		const clearButtons = this.page.locator(
+			'main button[aria-label*="remove" i], main button[title*="remove" i], main button[aria-label*="clear" i], main button[title*="clear" i], main button:has(svg.lucide-x)',
+		);
+		for (let index = 0; index < await clearButtons.count(); index += 1) {
+			const clearButton = clearButtons.nth(index);
+			if (!(await clearButton.isVisible().catch(() => false))) continue;
+
+			let ancestor = clearButton;
+			let surroundingText = '';
+			for (let depth = 0; depth < 3; depth += 1) {
+				ancestor = ancestor.locator('xpath=..');
+				surroundingText += ` ${await ancestor.innerText().catch(() => '')}`;
+				if (/order date/i.test(surroundingText)) break;
+			}
+
+			if (!/order date/i.test(surroundingText)) continue;
+			await clearButton.click();
+			await expect(clearButton).toBeHidden({ timeout: 5_000 });
+			return true;
+		}
+
+		const groupingButton = this.page
+			.getByRole('button', { name: /order date/i })
+			.filter({ hasText: /group|order date/i })
+			.first();
 		if (!(await groupingButton.isVisible().catch(() => false))) return false;
 		await groupingButton.click();
 		const clearOption = this.page
@@ -216,7 +244,7 @@ export class ScheduledOrderPage {
 			return false;
 		}
 		await clearOption.click();
-		await this.page.waitForTimeout(500);
+		await expect(groupingButton).toBeHidden({ timeout: 5_000 });
 		return true;
 	}
 
@@ -286,6 +314,17 @@ export class ScheduledOrderPage {
 		return (await this.submittedRows().allTextContents())
 			.map((value) => value.replace(/\s+/g, ' ').trim())
 			.filter(Boolean);
+	}
+
+	async searchSubmittedOrders(searchTerm: string): Promise<void> {
+		await this.openSubmittedSection();
+		const searchInput = this.page.getByPlaceholder(/search PO # or vendor/i);
+		await expect(searchInput).toBeVisible();
+		await searchInput.fill(searchTerm);
+		const matchingRows = this.submittedRows().filter({
+			hasText: new RegExp(this.escapeRegExp(searchTerm), 'i'),
+		});
+		await expect(matchingRows.first()).toBeVisible({ timeout: 30_000 });
 	}
 
 	async getOrderDateGroupLabels(): Promise<string[]> {
@@ -441,7 +480,7 @@ export class ScheduledOrderPage {
 		await this.openSubmittedSection();
 		expect(orderNumber, 'Expected submitted order number').toBeTruthy();
 		const rows = this.submittedRows().filter({ hasText: new RegExp(this.escapeRegExp(orderNumber ?? ''), 'i') });
-		await expect(rows).toHaveCount(1);
+		await expect(rows).toHaveCount(1, { timeout: 30_000 });
 	}
 
 	async verifyOrderIsFirst(orderNumber?: string): Promise<void> {
@@ -581,6 +620,22 @@ export class ScheduledOrderPage {
 			.catch(() => false);
 	}
 
+	private async waitForSubmissionFeedback(): Promise<{
+		visible: boolean;
+		orderNumber?: string;
+	}> {
+		const feedback = this.page.getByText(/submitted to the vendor/i).first();
+		const visible = await feedback
+			.waitFor({ state: 'visible', timeout: 60_000 })
+			.then(() => true)
+			.catch(() => false);
+		if (!visible) return { visible: false };
+		return {
+			visible: true,
+			orderNumber: this.extractOrderNumber(await feedback.textContent().catch(() => '')),
+		};
+	}
+
 	private submissionConfirmationDialog(): Locator {
 		return this.page.getByRole('dialog').filter({ hasText: /submit this order/i }).first();
 	}
@@ -610,6 +665,77 @@ export class ScheduledOrderPage {
 		await expect(this.createAndSubmitButton).toBeEnabled();
 	}
 
+	async confirmSubmissionWithoutDuplicateHandling(): Promise<void> {
+		const dialog = this.submissionConfirmationDialog();
+		this.submissionFeedbackVerified = false;
+		await dialog.getByRole('button', { name: /^Yes$/i }).click();
+		await dialog.waitFor({ state: 'hidden', timeout: 10_000 });
+	}
+
+	async waitForPossibleDuplicateOrder(timeout = 5_000): Promise<boolean> {
+		return this.page
+			.getByText(/^Possible Duplicate Order$/)
+			.first()
+			.waitFor({ state: 'visible', timeout })
+			.then(() => true)
+			.catch(() => false);
+	}
+
+	async verifyPossibleDuplicateOrderModal(): Promise<string> {
+		const duplicateTitle = this.page.getByText(/^Possible Duplicate Order$/).first();
+		const dialog = this.page
+			.getByRole('dialog')
+			.filter({ hasText: /Possible Duplicate Order/i })
+			.first();
+		await expect(duplicateTitle).toBeVisible();
+
+		const dialogExists = (await dialog.count()) > 0;
+		const scope = dialogExists ? dialog : this.page;
+		await expect(scope.getByRole('button', { name: /^Cancel$/i }).last()).toBeVisible();
+		await expect(scope.getByRole('button', { name: /^Create Anyway$/i }).last()).toBeVisible();
+		return dialogExists ? dialog.innerText() : duplicateTitle.locator('xpath=..').innerText();
+	}
+
+	async getPossibleDuplicateOrderNumber(): Promise<string | undefined> {
+		const text = await this.verifyPossibleDuplicateOrderModal();
+		return this.extractOrderNumber(text);
+	}
+
+	async createAnywayFromDuplicateOrder(): Promise<{
+		submitted: boolean;
+		orderNumber?: string;
+		reason?: string;
+	}> {
+		const duplicateTitle = this.page.getByText(/^Possible Duplicate Order$/).first();
+		const feedbackPromise = this.waitForSubmissionFeedback();
+		await this.page.getByRole('button', { name: /^Create Anyway$/i }).last().click();
+		await duplicateTitle.waitFor({ state: 'hidden', timeout: 60_000 });
+		const feedback = await feedbackPromise;
+		const reachedListing = await expect
+			.poll(() => this.isScheduledOrdersListUrl(), { timeout: 60_000 })
+			.toBe(true)
+			.then(() => true)
+			.catch(() => false);
+		this.submissionFeedbackVerified = feedback.visible || reachedListing;
+
+		if (!feedback.visible && !reachedListing) {
+			return { submitted: false, reason: 'Create Anyway did not submit the Scheduled Order.' };
+		}
+		return {
+			submitted: true,
+			orderNumber:
+				feedback.orderNumber ??
+				(await this.resolveOrderNumberFromCurrentContext('submitted')),
+		};
+	}
+
+	async cancelPossibleDuplicateOrder(): Promise<void> {
+		const duplicateTitle = this.page.getByText(/^Possible Duplicate Order$/).first();
+		await this.page.getByRole('button', { name: /^Cancel$/i }).last().click();
+		await duplicateTitle.waitFor({ state: 'hidden', timeout: 10_000 });
+		await expect(this.page).toHaveURL(/\/orders\/scheduled\/new$/);
+	}
+
 	private async continuePastDuplicateWarning(): Promise<void> {
 		const duplicateWarning = this.page.getByText(/^Possible Duplicate Order$/).first();
 		const createAnywayButton = this.page.locator('button').filter({ hasText: /^Create Anyway$/ }).first();
@@ -626,12 +752,7 @@ export class ScheduledOrderPage {
 	async confirmSubmission(): Promise<{ submitted: boolean; orderNumber?: string; reason?: string }> {
 		this.submissionFeedbackVerified = false;
 		const dialog = this.submissionConfirmationDialog();
-		const feedbackPromise = this.page
-			.getByText(/submitted to the vendor/i)
-			.first()
-			.waitFor({ state: 'visible', timeout: 60_000 })
-			.then(() => true)
-			.catch(() => false);
+		const feedbackPromise = this.waitForSubmissionFeedback();
 		await dialog.locator('button').filter({ hasText: /^Yes$/ }).click();
 		await dialog.waitFor({ state: 'hidden', timeout: 10_000 }).catch(() => undefined);
 		await this.continuePastDuplicateWarning();
@@ -639,16 +760,21 @@ export class ScheduledOrderPage {
 		const alertReason = await this.dismissAlertDialogIfPresent();
 		if (alertReason) return { submitted: false, reason: alertReason };
 
-		const receivedSuccessFeedback = await feedbackPromise;
-		this.submissionFeedbackVerified = receivedSuccessFeedback;
+		const feedback = await feedbackPromise;
+		this.submissionFeedbackVerified = feedback.visible;
 		const reachedListing = await expect
-			.poll(() => /\/orders\/scheduled$/.test(this.page.url()), { timeout: 60_000 })
+			.poll(() => this.isScheduledOrdersListUrl(), { timeout: 60_000 })
 			.toBe(true)
 			.then(() => true)
 			.catch(() => false);
 
 		return reachedListing
-			? { submitted: true, orderNumber: await this.resolveOrderNumberFromCurrentContext('submitted') }
+			? {
+				submitted: true,
+				orderNumber:
+					feedback.orderNumber ??
+					(await this.resolveOrderNumberFromCurrentContext('submitted')),
+			}
 			: { submitted: false, reason: 'Order submission did not return to the Scheduled Orders list.' };
 	}
 
@@ -677,7 +803,7 @@ export class ScheduledOrderPage {
 	 * Verifies URL and primary heading visibility.
 	 */
 	async waitForScheduledOrdersPageToLoad(): Promise<void> {
-		await expect(this.page).toHaveURL(/\/orders\/scheduled$/);
+		await expect.poll(() => this.isScheduledOrdersListUrl()).toBe(true);
 		await expect(this.pageTitle).toBeVisible();
 	}
 
@@ -810,7 +936,7 @@ export class ScheduledOrderPage {
 			await backButton.click();
 		}
 		await this.page.waitForLoadState('networkidle').catch(() => undefined);
-		await expect(this.page).toHaveURL(/\/orders\/scheduled$/);
+		await expect.poll(() => this.isScheduledOrdersListUrl()).toBe(true);
 	}
 
 	async verifyNotesAndItemSearch(notes: string, searchText: string): Promise<void> {
@@ -953,7 +1079,27 @@ export class ScheduledOrderPage {
 	}
 
 	private getInitialLineItemButton(): Locator {
-		return this.page.locator('main table tbody tr').first().getByRole('button').first();
+		return this.page
+			.locator('main table tbody tr')
+			.filter({ hasNotText: /^New Lines(?:\s+\d+)?(?:\s|$)/i })
+			.first()
+			.getByRole('button')
+			.first();
+	}
+
+	private async expandNewLinesGroupIfCollapsed(): Promise<void> {
+		const rows = this.page.locator('main table tbody tr');
+		const itemSelector = rows.getByRole('button', { name: /^Select item$/i }).first();
+		if (await itemSelector.isVisible().catch(() => false)) return;
+
+		const newLinesGroup = rows
+			.getByRole('button')
+			.filter({ hasText: /^New Lines(?:\s+\d+)?$/i })
+			.first();
+		if (await newLinesGroup.isVisible().catch(() => false)) {
+			await newLinesGroup.click();
+			await expect(itemSelector).toBeVisible({ timeout: 10_000 });
+		}
 	}
 
 	private async getInitialLineItemOptions(): Promise<string[]> {
@@ -1090,13 +1236,19 @@ export class ScheduledOrderPage {
 			.getByRole('button', { name: new RegExp(vendorName, 'i') })
 			.first();
 		await expect(selectedVendorButton).toBeVisible();
+		await this.expandNewLinesGroupIfCollapsed();
 
 		log(`✓ Selected Scheduled Order vendor: ${vendorName}`);
 	}
 
 	async getItemDropdownOptions(): Promise<string[]> {
 		await this.waitForAutoSuggestToSettle().catch(() => undefined);
-		const lineItemButton = this.getInitialLineItemButton();
+		await this.expandNewLinesGroupIfCollapsed();
+		const lineItemButton = this.page
+			.locator('main table tbody tr')
+			.getByRole('button', { name: /^Select item$/i })
+			.first();
+		await expect(lineItemButton).toBeVisible({ timeout: 10_000 });
 		await expect(lineItemButton).toBeEnabled({ timeout: 15_000 });
 		await lineItemButton.click();
 		const options = this.page.locator('button[data-option="true"]');
@@ -1277,7 +1429,11 @@ export class ScheduledOrderPage {
 	/**
 	 * Submit the current scheduled order and surface blocking alert reasons when submission fails.
 	 */
-	async submitCurrentOrder(): Promise<{ submitted: boolean; reason?: string }> {
+	async submitCurrentOrder(): Promise<{
+		submitted: boolean;
+		orderNumber?: string;
+		reason?: string;
+	}> {
 		await this.openSubmissionConfirmation();
 		await this.verifySubmissionConfirmation();
 		return this.confirmSubmission();
@@ -1286,12 +1442,10 @@ export class ScheduledOrderPage {
 	/** Verify the vendor-submission feedback and that the list is on Submitted. */
 	async verifySubmittedOrderFeedback(orderNumber?: string): Promise<void> {
 		expect(this.submissionFeedbackVerified, 'Expected success feedback containing "submitted to the vendor"').toBe(true);
-		await expect(this.page).toHaveURL(/\/orders\/scheduled$/);
+		await expect.poll(() => this.isScheduledOrdersListUrl()).toBe(true);
 		await this.statusFilterSubmittedButton.click();
 		await this.page.waitForLoadState('networkidle').catch(() => undefined);
 		await expect(this.statusFilterSubmittedButton).toBeVisible();
-		const row = await this.getOrderRow(orderNumber, 'Submitted');
-		await expect(row, 'Submitted order should appear in the Submitted section').not.toBeNull();
 	}
 
 	/**

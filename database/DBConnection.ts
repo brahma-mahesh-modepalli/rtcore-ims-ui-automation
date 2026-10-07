@@ -80,7 +80,12 @@ export async function executeQuery<T>(
 ): Promise<T[]> {
   try {
     const result: QueryResult = await getPool().query(query, values);
-    return result.rows as T[];
+    const rows = result.rows as T[];
+    const normalizedQuery = query.replace(/\s+/g, ' ').trim();
+    Reporting.info(
+      `Database query output | query=${normalizedQuery} | rowCount=${rows.length} | rows=${JSON.stringify(rows)}`,
+    );
+    return rows;
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
     Reporting.error(`Database query failed. Error: ${message}`);

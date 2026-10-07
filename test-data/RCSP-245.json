@@ -1,0 +1,23 @@
+{
+  "RCSP-245": {
+    "scenarioId": "RCSP-245",
+    "epic": "EPIC-RCSP-8",
+    "feature": "Scheduled Order submission and duplicate handling",
+    "commonData": {
+      "hierarchy": {
+        "region": "1700 San Antonio 4126314",
+        "market": "1708 E Central SA 4126393",
+        "store": "WB Unit 1034"
+      },
+      "flowersVendor": "Flowers Baking Company",
+      "mcLaneVendor": "McLane Foodservice Inc",
+      "quantity": "1"
+    },
+    "testCases": [
+      { "testCaseId": "TC_RCSP-245_01", "testName": "Submit Flowers Baking Company order and locate its PO", "testData": {} },
+      { "testCaseId": "TC_RCSP-245_02", "testName": "Accept the Possible Duplicate Order warning for Flowers", "testData": {} },
+      { "testCaseId": "TC_RCSP-245_03", "testName": "Submit McLane Foodservice Inc order and locate its PO", "testData": {} },
+      { "testCaseId": "TC_RCSP-245_04", "testName": "Cancel Possible Duplicate Order without submitting another PO", "testData": {} }
+    ]
+  }
+}

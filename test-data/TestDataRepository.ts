@@ -22,6 +22,7 @@ import {
   UomQueries,
   UserQueries,
   VendorItemQueries,
+  VendorQueries,
   WastageQueries,
 } from '../database/DBQueries';
 import { Reporting } from '../reporting/Reporting';
@@ -181,6 +182,31 @@ export interface VendorNameData {
   name: string;
 }
 
+export interface VendorData {
+  id: number;
+  code: string;
+  name: string;
+  parent_vendor_id: number | null;
+  parent_code: string | null;
+  parent_name: string | null;
+  parent_parent_vendor_id: number | null;
+}
+
+export interface McLaneVendorHierarchyData {
+  parent_id: number;
+  parent_code: string;
+  parent_name: string;
+  child_id: number | null;
+  child_code: string | null;
+  child_name: string | null;
+}
+
+export interface PurchaseOrderVendorData {
+  po_id: number;
+  store_id: number;
+  vendor_id: number;
+}
+
 export interface EligibleCreditRequestPoData {
   po_id: string;
 }
@@ -202,6 +228,58 @@ export interface VendorNameData {
 }
 
 export class TestDataRepository {
+  async getVendorsWithParent(): Promise<VendorData[]> {
+    return DBConnection.executeQuery<VendorData>(VendorQueries.getVendorsWithParent);
+  }
+
+  async getStandaloneVendors(): Promise<VendorData[]> {
+    return DBConnection.executeQuery<VendorData>(VendorQueries.getStandaloneVendors);
+  }
+
+  async getAnyVendor(): Promise<VendorData | undefined> {
+    const rows = await DBConnection.executeQuery<VendorData>(VendorQueries.getAnyVendor);
+    return rows[0];
+  }
+
+  async getVendorByCode(code: string): Promise<VendorData | undefined> {
+    const rows = await DBConnection.executeQuery<VendorData>(
+      VendorQueries.getVendorByCode,
+      [code],
+    );
+    return rows[0];
+  }
+
+  async getMcLaneVendorHierarchy(parentName: string): Promise<{
+    parent: McLaneVendorHierarchyData;
+    children: McLaneVendorHierarchyData[];
+  } | undefined> {
+    const rows = await DBConnection.executeQuery<McLaneVendorHierarchyData>(
+      VendorQueries.getMcLaneVendorHierarchy,
+      [`%${parentName}%`],
+    );
+    if (rows.length === 0) return undefined;
+    return {
+      parent: rows[0],
+      children: rows.filter((row) => row.child_id !== null),
+    };
+  }
+
+  async getPurchaseOrderById(poId: number): Promise<PurchaseOrderVendorData | undefined> {
+    const rows = await DBConnection.executeQuery<PurchaseOrderVendorData>(
+      VendorQueries.getPurchaseOrderById,
+      [poId],
+    );
+    return rows[0];
+  }
+
+  async getPurchaseOrderIdsForStore(storeId: number): Promise<number[]> {
+    const rows = await DBConnection.executeQuery<{ po_id: number }>(
+      VendorQueries.getPurchaseOrderIdsForStore,
+      [storeId],
+    );
+    return rows.map((row) => row.po_id);
+  }
+
   /** Fetch a single store by its id. Returns undefined if no row is found. */
   async getStoreById(storeId: number): Promise<StoreData | undefined> {
     try {
