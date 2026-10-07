@@ -1,4 +1,27 @@
 export const OrderingQueries = {
+  getApprovedPurchaseOrdersWithTruckDeliveries: `
+    SELECT DISTINCT
+      po.po_id,
+      td.truck_number
+    FROM public.purchase_order po
+    JOIN public.truck_delivery td ON td.po_id = po.po_id
+    WHERE po.store_id = $1
+      AND po.status = 'approved'
+    ORDER BY po.po_id DESC
+  `,
+
+  getPurchaseOrderLinesByPoId: `
+    SELECT po_id
+    FROM public.purchase_order_line
+    WHERE po_id = $1
+    ORDER BY po_id
+  `,
+
+  getNextNonExistingPurchaseOrderId: `
+    SELECT COALESCE(MAX(po_id), 0) + 1 AS invalid_po_id
+    FROM public.purchase_order
+  `,
+
   getDraftPurchaseOrderLinesWithCategories: `
     SELECT
       po.po_id,

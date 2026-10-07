@@ -207,6 +207,15 @@ export interface PurchaseOrderVendorData {
   vendor_id: number;
 }
 
+export interface ApprovedPurchaseOrderTruckData {
+  po_id: number;
+  truck_number: string | null;
+}
+
+export interface PurchaseOrderLineData {
+  po_id: number;
+}
+
 export interface EligibleCreditRequestPoData {
   po_id: string;
 }
@@ -228,6 +237,30 @@ export interface VendorNameData {
 }
 
 export class TestDataRepository {
+  async getApprovedPurchaseOrdersWithTruckDeliveries(
+    storeId: number,
+  ): Promise<ApprovedPurchaseOrderTruckData[]> {
+    return DBConnection.executeQuery<ApprovedPurchaseOrderTruckData>(
+      OrderingQueries.getApprovedPurchaseOrdersWithTruckDeliveries,
+      [storeId],
+    );
+  }
+
+  async getPurchaseOrderLinesByPoId(poId: number): Promise<PurchaseOrderLineData[]> {
+    return DBConnection.executeQuery<PurchaseOrderLineData>(
+      OrderingQueries.getPurchaseOrderLinesByPoId,
+      [poId],
+    );
+  }
+
+  async getNextNonExistingPurchaseOrderId(): Promise<number> {
+    const rows = await DBConnection.executeQuery<{ invalid_po_id: number }>(
+      OrderingQueries.getNextNonExistingPurchaseOrderId,
+    );
+    if (rows.length === 0) throw new Error('Unable to generate a non-existing PO ID');
+    return rows[0].invalid_po_id;
+  }
+
   async getVendorsWithParent(): Promise<VendorData[]> {
     return DBConnection.executeQuery<VendorData>(VendorQueries.getVendorsWithParent);
   }

@@ -1,0 +1,18 @@
+{
+  "RCSP-455": {
+    "scenarioId": "RCSP-455",
+    "epic": "EPIC-RCSP-8",
+    "feature": "Purchase Order API truck delivery details",
+    "commonData": {
+      "storeId": 37,
+      "apiPath": "/api/v1/purchase-orders/{poId}",
+      "approvedStatus": "approved"
+    },
+    "testCases": [
+      { "testCaseId": "TC_RCSP-455_01", "testName": "Approved PO API returns its truck delivery details", "testData": {} },
+      { "testCaseId": "TC_RCSP-455_02", "testName": "Multiple approved POs return truck delivery attributes", "testData": {} },
+      { "testCaseId": "TC_RCSP-455_03", "testName": "PO API returns line identifier and truck delivery attributes", "testData": {} },
+      { "testCaseId": "TC_RCSP-455_04", "testName": "API rejects a non-existing purchase order ID", "testData": {} }
+    ]
+  }
+}
