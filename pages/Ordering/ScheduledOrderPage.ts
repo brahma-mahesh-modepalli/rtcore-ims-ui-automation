@@ -1,5 +1,5 @@
 import { type Locator, type Page, expect } from '@playwright/test';
-import { log } from '../../utils/helpers';
+import { collectScrollableOptionTexts, log } from '../../utils/helpers';
 
 type ScheduledOrderItemInput = {
 	itemName: string;
@@ -1091,12 +1091,15 @@ export class ScheduledOrderPage {
 		const rows = this.page.locator('main table tbody tr');
 		const itemSelector = rows.getByRole('button', { name: /^Select item$/i }).first();
 		if (await itemSelector.isVisible().catch(() => false)) return;
+		const unavailableRow = rows.filter({ hasText: /no items in vendor guide|select a vendor first/i }).first();
+		if (await unavailableRow.isVisible().catch(() => false)) return;
 
 		const newLinesGroup = rows
 			.getByRole('button')
 			.filter({ hasText: /^New Lines(?:\s+\d+)?$/i })
 			.first();
 		if (await newLinesGroup.isVisible().catch(() => false)) {
+			if ((await newLinesGroup.getAttribute('aria-expanded')) === 'true') return;
 			await newLinesGroup.click();
 			await expect(itemSelector).toBeVisible({ timeout: 10_000 });
 		}
@@ -1236,28 +1239,36 @@ export class ScheduledOrderPage {
 			.getByRole('button', { name: new RegExp(vendorName, 'i') })
 			.first();
 		await expect(selectedVendorButton).toBeVisible();
+		await this.page.waitForLoadState('networkidle').catch(() => undefined);
+		await this.waitForAutoSuggestToSettle().catch(() => undefined);
 		await this.expandNewLinesGroupIfCollapsed();
 
 		log(`✓ Selected Scheduled Order vendor: ${vendorName}`);
 	}
 
-	async getItemDropdownOptions(): Promise<string[]> {
+	async getAllItemDropdownOptions(): Promise<string[]> {
 		await this.waitForAutoSuggestToSettle().catch(() => undefined);
 		await this.expandNewLinesGroupIfCollapsed();
 		const lineItemButton = this.page
 			.locator('main table tbody tr')
 			.getByRole('button', { name: /^Select item$/i })
 			.first();
+		if (!(await lineItemButton.isVisible().catch(() => false))) return [];
 		await expect(lineItemButton).toBeVisible({ timeout: 10_000 });
 		await expect(lineItemButton).toBeEnabled({ timeout: 15_000 });
+		await lineItemButton.scrollIntoViewIfNeeded();
 		await lineItemButton.click();
+		log('Opened Scheduled Order Select item dropdown');
 		const options = this.page.locator('button[data-option="true"]');
-		await expect(options.first()).toBeVisible({ timeout: 10_000 });
-		const values = (await options.allTextContents())
-			.map((value) => value.replace(/\s+/g, ' ').trim())
-			.filter((value) => value && !/^select item$/i.test(value));
+		await expect(options.first(), 'Scheduled Order item dropdown should show its options').toBeVisible({ timeout: 10_000 });
+		const values = await collectScrollableOptionTexts(this.page, options);
 		await this.page.keyboard.press('Escape');
-		return [...new Set(values)];
+		log(`Scheduled Order item dropdown options (${values.length}): ${values.join(' | ')}`);
+		return values;
+	}
+
+	async getItemDropdownOptions(): Promise<string[]> {
+		return [...new Set(await this.getAllItemDropdownOptions())];
 	}
 
 	async selectItemAndVerifyManualQuantity(

@@ -27,9 +27,9 @@ export class VendorSetupPage {
   }
 
   private vendorRow(code: string): Locator {
-    return this.vendorTable
+    return this.page
       .getByRole('row')
-      .filter({ hasText: new RegExp(`(^|\\s)${this.escapeRegExp(code)}(\\s|$)`) })
+      .filter({ has: this.page.getByRole('cell', { name: code, exact: true }) })
       .first();
   }
 
@@ -57,6 +57,108 @@ export class VendorSetupPage {
       timeout: 15_000,
     });
     await expect(this.vendorTable).toBeVisible();
+  }
+
+  async searchVendorByCode(code: string): Promise<void> {
+    const search = this.page
+      .getByPlaceholder(/search vendors?/i)
+      .or(this.page.getByRole('textbox', { name: /search/i }))
+      .first();
+    if (await search.isVisible().catch(() => false)) {
+      await search.fill(code);
+    }
+    await expect(this.vendorRow(code)).toBeVisible({ timeout: 15_000 });
+  }
+
+  async openDeliveryDatesForVendor(code: string, vendorName: string): Promise<void> {
+    await this.searchVendorByCode(code);
+    await this.openVendorRecord(code, vendorName);
+
+    const deliveryDatesControl = this.page
+      .getByRole('button', { name: /delivery dates/i })
+      .or(this.page.getByRole('tab', { name: /delivery dates/i }))
+      .or(this.page.getByRole('link', { name: /delivery dates/i }))
+      .first();
+    await expect(deliveryDatesControl).toBeVisible({ timeout: 15_000 });
+    await deliveryDatesControl.click();
+    await expect(this.page.getByText(/delivery window/i).first()).toBeVisible({
+      timeout: 15_000,
+    });
+  }
+
+  async openVendorRecord(code: string, vendorName: string): Promise<void> {
+    const row = this.vendorRow(code);
+    await expect(row).toBeVisible();
+    await row.getByRole('cell', { name: code, exact: true }).click();
+    await expect(
+      this.page.getByRole('heading', { name: new RegExp(this.escapeRegExp(vendorName), 'i') }),
+    ).toBeVisible();
+    await expect(this.page.getByText(`Code: ${code}`, { exact: true })).toBeVisible();
+  }
+
+  async selectThisWeekDeliveryWindow(): Promise<void> {
+    const thisWeekSelected = this.page.getByRole('button', { name: /^this week$/i }).first();
+    if (await thisWeekSelected.isVisible().catch(() => false)) return;
+
+    const deliveryWindow = this.page
+      .getByLabel(/delivery window/i)
+      .or(this.page.getByRole('combobox', { name: /delivery window/i }))
+      .first();
+    await expect(deliveryWindow).toBeVisible();
+    const tagName = await deliveryWindow.evaluate((element) => element.tagName);
+    if (tagName === 'SELECT') {
+      await deliveryWindow.selectOption({ label: 'This Week' });
+    } else {
+      await deliveryWindow.click();
+      await this.page.getByRole('option', { name: /^this week$/i }).click();
+    }
+  }
+
+  async searchDeliveryDatesByStore(storeName: string): Promise<void> {
+    const search = this.page
+      .getByPlaceholder(/search.*store|search/i)
+      .or(this.page.getByRole('textbox', { name: /search/i }))
+      .last();
+    await expect(search).toBeVisible();
+    await search.fill(storeName);
+    await this.page.waitForLoadState('networkidle').catch(() => undefined);
+  }
+
+  async getDeliveryDateTextsForStore(storeName: string): Promise<string[]> {
+    const tables = this.page.getByRole('table');
+    const headerTable = tables.first();
+    const rowsTable = tables.last();
+    const headers = (await headerTable.getByRole('columnheader').allTextContents())
+      .map((header) => header.replace(/\s+/g, ' ').trim());
+    const dateColumn = headers.findIndex((header) => /^delivery date$/i.test(header));
+    expect(dateColumn, 'Delivery Dates table should expose a date column').toBeGreaterThanOrEqual(0);
+
+    const dates: string[] = [];
+    for (let pageIndex = 0; pageIndex < 50; pageIndex += 1) {
+      const rows = rowsTable.getByRole('row').filter({
+        has: this.page.getByRole('cell'),
+      });
+      for (let rowIndex = 0; rowIndex < await rows.count(); rowIndex += 1) {
+        const row = rows.nth(rowIndex);
+        if (!(await row.getByText(storeName, { exact: false }).count())) continue;
+        const cells = row.getByRole('cell');
+        if (await cells.count() > dateColumn) {
+          const dateText = (await cells.nth(dateColumn).innerText()).trim();
+          if (dateText) dates.push(dateText);
+        }
+      }
+
+      const nextButton = this.page.getByRole('button', { name: /next(?: page)?/i }).last();
+      if (
+        !(await nextButton.isVisible().catch(() => false)) ||
+        !(await nextButton.isEnabled().catch(() => false))
+      ) {
+        break;
+      }
+      await nextButton.click();
+      await this.page.waitForLoadState('networkidle').catch(() => undefined);
+    }
+    return dates;
   }
 
   async openNewVendor(): Promise<void> {
@@ -97,7 +199,7 @@ export class VendorSetupPage {
   async openEditVendor(code: string): Promise<void> {
     const row = this.vendorRow(code);
     await expect(row).toBeVisible();
-    await row.getByRole('button').last().click();
+    await row.getByRole('button', { name: /^Edit\b/i }).click();
     await expect(this.vendorCodeInput).toBeVisible();
   }
 

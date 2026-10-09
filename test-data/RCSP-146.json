@@ -1,0 +1,23 @@
+{
+  "RCSP-146": {
+    "scenarioId": "RCSP-146",
+    "epic": "EPIC-RCSP-144",
+    "feature": "Scheduled Orders landing and new-order UI",
+    "commonData": {
+      "hierarchy": {
+        "region": "1700 San Antonio 4126314",
+        "market": "1708 E Central SA 4126393",
+        "store": "WB Unit 1034"
+      },
+      "expectedVendors": [
+        "Flowers Baking Company",
+        "McLane Foodservice Inc"
+      ],
+      "expectedRecommendation": "Recommended quantities are calculated using the average ordered quantity from your last three same-weekday orders for this vendor"
+    },
+    "testCases": [
+      { "testCaseId": "TC_RCSP-146_01", "testName": "Landing page UI and navigation to New Scheduled Order", "testData": {} },
+      { "testCaseId": "TC_RCSP-146_02", "testName": "New Scheduled Order fields and default controls", "testData": {} }
+    ]
+  }
+}

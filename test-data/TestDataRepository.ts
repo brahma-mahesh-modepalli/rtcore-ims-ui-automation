@@ -216,6 +216,19 @@ export interface PurchaseOrderLineData {
   po_id: number;
 }
 
+export interface OrderGuideItemData {
+  vendor_id: number;
+  vendor_code: string;
+  vendor_name: string;
+  item_id: number;
+  item_sku: string;
+  item_name: string;
+}
+
+export interface VendorDeliveryDateData {
+  delivery_date: string;
+}
+
 export interface EligibleCreditRequestPoData {
   po_id: string;
 }
@@ -237,6 +250,38 @@ export interface VendorNameData {
 }
 
 export class TestDataRepository {
+  async getVendorDeliveryDatesForCurrentWeek(
+    storeId: number,
+    vendorId: number,
+  ): Promise<string[]> {
+    const rows = await DBConnection.executeQuery<VendorDeliveryDateData>(
+      OrderingQueries.getVendorDeliveryDatesForCurrentWeek,
+      [storeId, vendorId],
+    );
+    return rows.map((row) => row.delivery_date);
+  }
+
+  async getVendorDeliveryDatesOutsideCurrentWeek(
+    storeId: number,
+    vendorId: number,
+  ): Promise<string[]> {
+    const rows = await DBConnection.executeQuery<VendorDeliveryDateData>(
+      OrderingQueries.getVendorDeliveryDatesOutsideCurrentWeek,
+      [storeId, vendorId],
+    );
+    return rows.map((row) => row.delivery_date);
+  }
+
+  async getActiveOrderGuideItemsByStoreAndVendorName(
+    storeId: number,
+    vendorName: string,
+  ): Promise<OrderGuideItemData[]> {
+    return DBConnection.executeQuery<OrderGuideItemData>(
+      OrderingQueries.getActiveOrderGuideItemsByStoreAndVendorName,
+      [storeId, vendorName],
+    );
+  }
+
   async getApprovedPurchaseOrdersWithTruckDeliveries(
     storeId: number,
   ): Promise<ApprovedPurchaseOrderTruckData[]> {

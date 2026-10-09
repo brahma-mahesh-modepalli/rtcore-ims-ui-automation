@@ -1,5 +1,5 @@
 import { type Locator, type Page, expect } from '@playwright/test';
-import { log } from '../../utils/helpers';
+import { collectScrollableOptionTexts, log } from '../../utils/helpers';
 
 type HotShotOrderSubmitResult = {
 	submitted: boolean;
@@ -67,7 +67,10 @@ export class HotShotOrderPage {
 	}
 
 	private getVendorOption(option: string): Locator {
-		return this.page.getByRole('button', { name: option, exact: true });
+		return this.page
+			.locator('body > div')
+			.last()
+			.getByRole('button', { name: option, exact: true });
 	}
 
 	private getInitialLineItemButton(): Locator {
@@ -185,6 +188,48 @@ export class HotShotOrderPage {
 		return true;
 	}
 
+	private async expandNewLinesGroupIfCollapsed(): Promise<void> {
+		const rows = this.page.locator('main table tbody tr');
+		const itemSelector = rows.getByRole('button', { name: /^Select item$/i }).first();
+		if (await itemSelector.isVisible().catch(() => false)) return;
+		const unavailableRow = rows.filter({ hasText: /no items in vendor guide|select a vendor first/i }).first();
+		if (await unavailableRow.isVisible().catch(() => false)) return;
+
+		const newLinesGroup = rows
+			.getByRole('button')
+			.filter({ hasText: /^New Lines(?:\s+\d+)?$/i })
+			.first();
+		if (await newLinesGroup.isVisible().catch(() => false)) {
+			if ((await newLinesGroup.getAttribute('aria-expanded')) === 'true') return;
+			await newLinesGroup.click();
+			await expect(itemSelector).toBeVisible({ timeout: 10_000 });
+		}
+	}
+
+	async getItemDropdownOptions(): Promise<string[]> {
+		await this.waitForAutoSuggestToSettle().catch(() => undefined);
+		await this.expandNewLinesGroupIfCollapsed();
+		const itemSelector = this.page
+			.locator('main table tbody tr')
+			.getByRole('button', { name: /^Select item$/i })
+			.first();
+		const lineItemButton = this.getInitialLineItemButton();
+		const lineItemText = ((await lineItemButton.textContent().catch(() => '')) ?? '').trim();
+		if (/select a vendor first|no items in vendor guide/i.test(lineItemText)) return [];
+		if (!(await itemSelector.isVisible().catch(() => false))) return [];
+
+		await expect(itemSelector).toBeEnabled({ timeout: 15_000 });
+		await itemSelector.scrollIntoViewIfNeeded();
+		await itemSelector.click();
+		log('Opened Hot Shot Select item dropdown');
+		const options = this.page.locator('button[data-option="true"]');
+		await expect(options.first(), 'Hot Shot item dropdown should show its options').toBeVisible({ timeout: 10_000 });
+		const values = await collectScrollableOptionTexts(this.page, options);
+		await this.page.keyboard.press('Escape');
+		log(`Hot Shot item dropdown options (${values.length}): ${values.join(' | ')}`);
+		return values;
+	}
+
 	/**
 	 * Wait for the Hot Shot Order page.
 	 * Verifies URL and page heading visibility.
@@ -277,6 +322,8 @@ export class HotShotOrderPage {
 			.getByRole('button', { name: new RegExp(this.escapeRegExp(vendorName), 'i') })
 			.first();
 		await expect(selectedVendorButton).toBeVisible();
+		await this.page.waitForLoadState('networkidle').catch(() => undefined);
+		await this.waitForAutoSuggestToSettle().catch(() => undefined);
 
 		log(`✓ Selected Hot Shot vendor: ${vendorName}`);
 	}

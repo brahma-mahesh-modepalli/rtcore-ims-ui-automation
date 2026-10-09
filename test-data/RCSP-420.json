@@ -1,0 +1,28 @@
+{
+  "RCSP-420": {
+    "scenarioId": "RCSP-420",
+    "epic": "EPIC-RCSP-8",
+    "feature": "Database-mapped vendor item dropdowns",
+    "commonData": {
+      "storeId": 37,
+      "hierarchy": {
+        "region": "1700 San Antonio 4126314",
+        "market": "1708 E Central SA 4126393",
+        "store": "WB Unit 1034"
+      },
+      "flowersVendor": "Flowers Baking Company",
+      "mclaneDatabaseVendor": "McLane Foodservice Inc - SA Corp",
+      "mclaneUiVendorPattern": "McLane Foodservice Inc"
+    },
+    "testCases": [
+      { "testCaseId": "TC_RCSP-420_01", "testName": "Scheduled Order shows database-mapped Flowers items", "testData": {} },
+      { "testCaseId": "TC_RCSP-420_02", "testName": "Scheduled Order shows database-mapped McLane items", "testData": {} },
+      { "testCaseId": "TC_RCSP-420_03", "testName": "Scheduled Order refreshes items when switching vendors", "testData": {} },
+      { "testCaseId": "TC_RCSP-420_04", "testName": "Hot Shot Order shows database-mapped Flowers items", "testData": {} },
+      { "testCaseId": "TC_RCSP-420_05", "testName": "Hot Shot Order shows database-mapped McLane items", "testData": {} },
+      { "testCaseId": "TC_RCSP-420_06", "testName": "Hot Shot Order refreshes items when switching vendors", "testData": {} },
+      { "testCaseId": "TC_RCSP-420_07", "testName": "Scheduled Order does not show items before vendor selection", "testData": {} },
+      { "testCaseId": "TC_RCSP-420_08", "testName": "Hot Shot Order does not show items before vendor selection", "testData": {} }
+    ]
+  }
+}

@@ -1,4 +1,44 @@
 export const OrderingQueries = {
+  getVendorDeliveryDatesForCurrentWeek: `
+    SELECT TO_CHAR(delivery_date, 'DD/MM/YYYY') AS delivery_date
+    FROM public.delivery_date
+    WHERE store_id = $1
+      AND vendor_id = $2
+      AND delivery_date >= DATE_TRUNC('week', CURRENT_DATE)
+      AND delivery_date < DATE_TRUNC('week', CURRENT_DATE) + INTERVAL '1 week'
+    ORDER BY delivery_date ASC
+  `,
+
+  getVendorDeliveryDatesOutsideCurrentWeek: `
+    SELECT TO_CHAR(delivery_date, 'DD/MM/YYYY') AS delivery_date
+    FROM public.delivery_date
+    WHERE store_id = $1
+      AND vendor_id = $2
+      AND (
+        delivery_date < DATE_TRUNC('week', CURRENT_DATE)
+        OR delivery_date >= DATE_TRUNC('week', CURRENT_DATE) + INTERVAL '1 week'
+      )
+    ORDER BY delivery_date ASC
+  `,
+
+  getActiveOrderGuideItemsByStoreAndVendorName: `
+    SELECT
+      og.vendor_id,
+      v.code AS vendor_code,
+      v.name AS vendor_name,
+      og.item_id,
+      i.sku AS item_sku,
+      i.name AS item_name
+    FROM public.order_guide og
+    JOIN public.vendor v ON og.vendor_id = v.vendor_id
+    JOIN public.item i ON og.item_id = i.item_id
+    WHERE og.store_id = $1
+      AND og.active = true
+      AND v.active = true
+      AND v.name = $2
+    ORDER BY i.name
+  `,
+
   getApprovedPurchaseOrdersWithTruckDeliveries: `
     SELECT DISTINCT
       po.po_id,

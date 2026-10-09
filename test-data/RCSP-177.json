@@ -1,0 +1,19 @@
+{
+  "RCSP-177": {
+    "scenarioId": "RCSP-177",
+    "epic": "EPIC-RCSP-142",
+    "feature": "Vendor delivery dates for This Week",
+    "commonData": {
+      "storeId": 37,
+      "storeName": "WB Unit 1034",
+      "vendorId": 3,
+      "vendorCode": "1515719",
+      "vendorName": "McLane Foodservice Inc - SA Corp",
+      "dateFormat": "DD/MM/YYYY"
+    },
+    "testCases": [
+      { "testCaseId": "TC_RCSP-177_01", "testName": "McLane delivery dates for This Week match the database", "testData": {} },
+      { "testCaseId": "TC_RCSP-177_02", "testName": "This Week excludes dates outside the current week", "testData": {} }
+    ]
+  }
+}
